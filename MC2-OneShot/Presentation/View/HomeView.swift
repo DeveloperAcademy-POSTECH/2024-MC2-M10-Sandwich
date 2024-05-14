@@ -27,6 +27,7 @@ struct HomeView: View {
 //                Text("\(party.title)")
 //            }
             Text("HomeView")
+                 .pretendard(.extraBold, 30)
             .navigationDestination(for: PathType.self) { path in
                 switch path {
                 case .partySet: PartySetView()

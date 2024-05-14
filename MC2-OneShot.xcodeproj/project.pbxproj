@@ -30,6 +30,7 @@
 		BFB5340D2BF342840013E9FE /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB534042BF342840013E9FE /* Pretendard-ExtraBold.otf */; };
 		BFB5340E2BF342840013E9FE /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB534052BF342840013E9FE /* Pretendard-Black.otf */; };
 		BFB5340F2BF342840013E9FE /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB534062BF342840013E9FE /* Pretendard-ExtraLight.otf */; };
+		BFB534132BF3451B0013E9FE /* Helper+CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB534122BF3451B0013E9FE /* Helper+CustomFont.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		BFB534052BF342840013E9FE /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
 		BFB534062BF342840013E9FE /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		BFB534102BF342BE0013E9FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BFB534122BF3451B0013E9FE /* Helper+CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+CustomFont.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				8264EA1E2BF2008400586FA0 /* Model */,
 				8264EA1D2BF2007F00586FA0 /* Presentation */,
 				8264EA202BF2009800586FA0 /* Resource */,
+				BFB534112BF344ED0013E9FE /* Helper */,
 				8264EA152BF2000A00586FA0 /* Preview Content */,
 			);
 			path = "MC2-OneShot";
@@ -180,6 +183,14 @@
 				BFB533FF2BF342830013E9FE /* Pretendard-Thin.otf */,
 			);
 			path = Font;
+			sourceTree = "<group>";
+		};
+		BFB534112BF344ED0013E9FE /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				BFB534122BF3451B0013E9FE /* Helper+CustomFont.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +279,7 @@
 				8264EA2E2BF2016500586FA0 /* CommentPopupView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
 				8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */,
+				BFB534132BF3451B0013E9FE /* Helper+CustomFont.swift in Sources */,
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
