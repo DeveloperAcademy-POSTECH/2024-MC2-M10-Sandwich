@@ -44,7 +44,7 @@ class Party: Identifiable {
     }
 }
 
-class Step {
+class Step: Identifiable {
     var mediaList: [Media]
     
     init(mediaList: [Media]) {
