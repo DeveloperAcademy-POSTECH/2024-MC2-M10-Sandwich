@@ -12,17 +12,17 @@ struct HomeView: View {
     @StateObject private var pathModel: PathModel = .init()
     
     @State private var searchText = ""
+    @State private var isPartySetViewPresented = false
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
             VStack {
                 ListView()
-                Spacer()
                 ActionButton(
                     title: "GO STEP!",
                     buttonType:.primary
                 ) {
-                    pathModel.paths.append(.partySet)
+                    isPartySetViewPresented.toggle()
                 }
                 .padding(.horizontal, 16)
             }
@@ -34,6 +34,9 @@ struct HomeView: View {
                 case .partyList: PartyListView()
                 case .partyResult: PartyResultView()
                 }
+            }
+            .sheet(isPresented: $isPartySetViewPresented) {
+                PartySetView()
             }
             .searchable(
                 text: $searchText,
@@ -61,6 +64,7 @@ private struct ListView: View {
                 }
             }
         }
+        .padding(.top, 8)
         .padding(.bottom, 16)
     }
 }
