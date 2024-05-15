@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDC2BF32F46001B416A /* OneShotData.swift */; };
+		825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDF2BF486BE001B416A /* ActionButton.swift */; };
 		8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */; };
 		8264EA122BF2000900586FA0 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA112BF2000900586FA0 /* HomeView.swift */; };
 		8264EA142BF2000A00586FA0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8264EA132BF2000A00586FA0 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		825F0BDC2BF32F46001B416A /* OneShotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneShotData.swift; sourceTree = "<group>"; };
+		825F0BDF2BF486BE001B416A /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		8264EA0C2BF2000900586FA0 /* MC2-OneShot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MC2-OneShot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MC2_OneShotApp.swift; sourceTree = "<group>"; };
 		8264EA112BF2000900586FA0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -75,6 +77,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		825F0BDE2BF486AB001B416A /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				825F0BDF2BF486BE001B416A /* ActionButton.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
 		8264EA032BF2000800586FA0 = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +128,7 @@
 			children = (
 				8264EA222BF200CC00586FA0 /* View */,
 				8264EA212BF200C000586FA0 /* Popup */,
+				825F0BDE2BF486AB001B416A /* Component */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -289,6 +300,7 @@
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
 				825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
+				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
