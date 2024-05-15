@@ -49,7 +49,7 @@ private struct ListView: View {
     var body: some View {
         ScrollView {
             ForEach(dummyPartys) { party in
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(spacing: 0) {
                     ListCellView(
                         thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
                         title: party.title,
@@ -82,18 +82,20 @@ private struct ListCellView: View {
                 .frame(width: 68, height: 68)
                 .clipShape(RoundedRectangle(cornerRadius: 7.5))
             
+            Spacer()
+                .frame(width: 8)
+            
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
                     .pretendard(.bold, 17)
                     .foregroundStyle(.shotFF)
                 
-                Text("\(captureDate)")
+                Text("\(captureDate.yearMonthDay)")
                     .pretendard(.regular, 14)
                     .foregroundStyle(.shot6D)
             }
             
             Spacer()
-                .frame(width: 8)
             
             VStack(spacing: 6) {
                 PartyStateInfoLabel(
@@ -113,6 +115,7 @@ private struct ListCellView: View {
 // MARK: - PartyStateInfoLabel
 private struct PartyStateInfoLabel: View {
     
+    /// 술자리 상태를 나타내는 열거형
     enum StateInfo: String {
         case live
         case end
