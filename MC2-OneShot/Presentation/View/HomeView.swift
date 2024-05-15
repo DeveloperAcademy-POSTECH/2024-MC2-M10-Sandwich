@@ -55,6 +55,7 @@ private struct ListView: View {
                         title: party.title,
                         captureDate: party.startDate,
                         isLive: party.isLive,
+                        stepCount: party.stepList.count,
                         notiCycle: party.notiCycle
                     )
                 }
@@ -71,6 +72,7 @@ private struct ListCellView: View {
     let title: String
     let captureDate: Date
     let isLive: Bool
+    let stepCount: Int
     let notiCycle: Int
     
     var body: some View {
@@ -94,11 +96,10 @@ private struct ListCellView: View {
                 .frame(width: 8)
             
             VStack(spacing: 6) {
-                Button {
-                    
-                } label: {
-                    Text("LIVE")
-                }
+                PartyStateInfoLabel(
+                    stateInfo: isLive ? .live : .end,
+                    stepCount: stepCount
+                )
                 
                 Text("\(notiCycle)min")
                     .pretendard(.regular, 14)
@@ -106,6 +107,27 @@ private struct ListCellView: View {
             }
         }
         .padding(.horizontal, 16)
+    }
+}
+
+// MARK: - PartyStateInfoLabel
+private struct PartyStateInfoLabel: View {
+    
+    enum StateInfo: String {
+        case live
+        case end
+    }
+    
+    let stateInfo: StateInfo
+    let stepCount: Int
+    
+    var body: some View {
+        Text(stateInfo == .live ? "LIVE" : "STEP_\(stepCount)")
+            .frame(width: 76, height: 22)
+            .pretendard(.bold, 14)
+            .background(stateInfo == .live ? .shotBlue : .shotGreen)
+            .foregroundStyle(stateInfo == .live ? .shotFF : .shot00)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
