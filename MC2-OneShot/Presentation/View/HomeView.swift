@@ -11,7 +11,6 @@ struct HomeView: View {
     
     @StateObject private var pathModel: PathModel = .init()
     
-    @State private var searchText = ""
     @State private var isPartySetViewPresented = false
     
     var body: some View {
@@ -38,10 +37,7 @@ struct HomeView: View {
             .sheet(isPresented: $isPartySetViewPresented) {
                 PartySetView()
             }
-            .searchable(
-                text: $searchText,
-                prompt: "술자리를 검색해보세요"
-            )
+            
         }
         .environmentObject(pathModel)
     }
@@ -49,21 +45,33 @@ struct HomeView: View {
 
 // MARK: - ListView
 private struct ListView: View {
+    
+    @State private var searchText = ""
+    
     var body: some View {
-        ScrollView {
-            ForEach(dummyPartys) { party in
-                VStack(spacing: 0) {
-                    ListCellView(
-                        thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
-                        title: party.title,
-                        captureDate: party.startDate,
-                        isLive: party.isLive,
-                        stepCount: party.stepList.count,
-                        notiCycle: party.notiCycle
-                    )
+        List(dummyPartys) { party in
+            ListCellView(
+                thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
+                title: party.title,
+                captureDate: party.startDate,
+                isLive: party.isLive,
+                stepCount: party.stepList.count,
+                notiCycle: party.notiCycle
+            )
+            .swipeActions {
+                Button {
+                    // TODO: 술자리 데이터 삭제 Alert 출력
+                } label: {
+                    Text("삭제하기")
                 }
+                .tint(.red)
             }
         }
+        .searchable(
+            text: $searchText,
+            prompt: "술자리를 검색해보세요"
+        )
+        .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
     }
@@ -112,7 +120,6 @@ private struct ListCellView: View {
                     .foregroundStyle(.shot6D)
             }
         }
-        .padding(.horizontal, 16)
     }
 }
 
