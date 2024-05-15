@@ -11,22 +11,28 @@ struct HomeView: View {
     
     @StateObject private var pathModel: PathModel = .init()
     
+    @State private var searchText = ""
+    
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
-            Text("HomeView")
-                .pretendard(.extraBold, 30)
-                .foregroundStyle(.shot1C)
-                .navigationDestination(for: PathType.self) { path in
-                    switch path {
-                    case .partySet: PartySetView()
-                    case .partyCamera: PartyCameraView()
-                    case .partyList: PartyListView()
-                    case .partyResult: PartyResultView()
-                    }
+            VStack {
+                
+            }
+            .navigationTitle("ONE SHOT")
+            .navigationDestination(for: PathType.self) { path in
+                switch path {
+                case .partySet: PartySetView()
+                case .partyCamera: PartyCameraView()
+                case .partyList: PartyListView()
+                case .partyResult: PartyResultView()
                 }
+            }
+            .searchable(
+                text: $searchText,
+                prompt: "술자리를 검색해보세요"
+            )
         }
         .environmentObject(pathModel)
-        .background(Color.shot00)
     }
 }
 
