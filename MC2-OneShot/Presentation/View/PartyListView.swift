@@ -14,72 +14,72 @@ struct PartyListView: View {
     @EnvironmentObject private var pathModel: PathModel
     
     var body: some View {
-            ZStack {
-                Color.black.ignoresSafeArea()
-                
-                VStack(spacing: 0) {
-                    HStack {
-                        Text(party.title)
-                            .pretendard(.bold, 25)
+        ZStack {
+            Color.black.ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                HStack {
+                    Text(party.title)
+                        .pretendard(.bold, 25)
+                        .foregroundStyle(.shotFF)
+                    Spacer()
+                    Button {
+                        isMemberPopupPresented.toggle()
+                    } label: {
+                        Image(systemName: "circle")
+                            .resizable()
+                            .frame(width: 32, height: 32)
                             .foregroundStyle(.shotFF)
-                        Spacer()
-                        Button {
-                            isMemberPopupPresented.toggle()
-                        } label: {
-                             Image(systemName: "circle")
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                                .foregroundStyle(.shotFF)
-                        }
                     }
-                    .padding(.top, 3)
-                    .padding(.bottom, 8)
-                    .padding(.horizontal, 16)
-                    
-                    ScrollView {
-                        ForEach(Array(dummyParties[0].stepList.enumerated()), id: \.offset) { index, step in
-                            
-                            StepCell(index: index, step: step)
-                        }
-                        .padding(16)
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button(action: {
-                                isFinishPopupPresented = true
-                                // FinishPopupView()
-                            }, label: {
-                                if isFinishPopupPresented == false {
-                                    Text("술자리 종료")
-                                        .pretendard(.bold, 16.5)
-                                        .foregroundStyle(.shotGreen)
-                                } else {
-                                    Image(systemName: "text.bubble")
-                                        .pretendard(.bold, 16.5)
-                                        .foregroundStyle(.shotGreen)
-                                }
-                            })
-                            .fullScreenCover(isPresented: $isFinishPopupPresented) {
-                                FinishPopupView(isFinishPopupPresented: $isFinishPopupPresented)
-                                    .foregroundStyle(.shotFF)
-                                    .presentationBackground(.black.opacity(0.7))
-                            }
-                            .transaction { transaction in
-                                transaction.disablesAnimations = true
-                            }
-                        }
-                    }
-                    .navigationBarTitleDisplayMode(.inline)
                 }
+                .padding(.top, 3)
+                .padding(.bottom, 8)
+                .padding(.horizontal, 16)
+                
+                ScrollView {
+                    ForEach(Array(dummyParties[0].stepList.enumerated()), id: \.offset) { index, step in
+                        
+                        StepCell(index: index, step: step)
+                    }
+                    .padding(16)
+                }
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: {
+                            isFinishPopupPresented = true
+                            // FinishPopupView()
+                        }, label: {
+                            if isFinishPopupPresented == false {
+                                Text("술자리 종료")
+                                    .pretendard(.bold, 16.5)
+                                    .foregroundStyle(.shotGreen)
+                            } else {
+                                Image(systemName: "text.bubble")
+                                    .pretendard(.bold, 16.5)
+                                    .foregroundStyle(.shotGreen)
+                            }
+                        })
+                        .fullScreenCover(isPresented: $isFinishPopupPresented) {
+                            FinishPopupView(isFinishPopupPresented: $isFinishPopupPresented)
+                                .foregroundStyle(.shotFF)
+                                .presentationBackground(.black.opacity(0.7))
+                        }
+                        .transaction { transaction in
+                            transaction.disablesAnimations = true
+                        }
+                    }
+                }
+                .navigationBarTitleDisplayMode(.inline)
             }
-            .fullScreenCover(isPresented: $isMemberPopupPresented) {
-                MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
-                    .foregroundStyle(.shotFF)
-                    .presentationBackground(.black.opacity(0.7))
-            }
-            .transaction { transaction in
-                transaction.disablesAnimations = true
-            }
+        }
+        .fullScreenCover(isPresented: $isMemberPopupPresented) {
+            MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
+                .foregroundStyle(.shotFF)
+                .presentationBackground(.black.opacity(0.7))
+        }
+        .transaction { transaction in
+            transaction.disablesAnimations = true
+        }
     }
 }
 
@@ -138,14 +138,22 @@ struct StepCell: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 15) {
-                    ForEach(1...3, id: \.self) { index in
-                        VStack {
+                    ForEach(1...12, id: \.self) { index in
+                        ZStack(alignment: .topTrailing) {
                             Rectangle()
                                 .foregroundStyle(.shotBlue)
                                 .frame(width: 361, height: 361)
                                 .cornerRadius(10)
                             
-                            DotsView(selectedIndex: index)
+                            Text("\(index) / \(12)")
+                                .pretendard(.regular, 12)
+                                .padding(5)
+                                .foregroundColor(.white)
+                                .background(.black.opacity(0.5))
+                                .cornerRadius(50)
+                                .padding(.top, 15)
+                                .padding(.trailing, 20)
+                            
                         }
                     }
                 }
@@ -153,28 +161,29 @@ struct StepCell: View {
             .scrollTargetLayout()
             .scrollTargetBehavior(.viewAligned)
             .padding(.top, 20)
+            .padding(.bottom, 30)
         }
     }
 }
 
-struct DotsView: View {
-    let selectedIndex: Int
-    
-    var body: some View {
-        HStack(spacing: 5) {
-            ForEach(1...3, id: \.self) { dotIndex in
-                Circle()
-                    .frame(width: 10, height: 10)
-                    .padding(.horizontal, 5)
-                    .foregroundColor(dotIndex == selectedIndex ? Color.shotC6 : Color.shot2D)
-            }
-        }
-        .scrollTransition(.animated, axis: .horizontal) { content, phase in
-            content
-                .scaleEffect(phase.isIdentity ? 1.0 : 0.8)
-        }
-    }
-}
+//struct DotsView: View {
+//    let selectedIndex: Int
+//    
+//    var body: some View {
+//        HStack(spacing: 5) {
+//            ForEach(1...3, id: \.self) { dotIndex in
+//                Circle()
+//                    .frame(width: 10, height: 10)
+//                    .padding(.horizontal, 5)
+//                    .foregroundColor(dotIndex == selectedIndex ? Color.shotC6 : Color.shot2D)
+//            }
+//        }
+//        .scrollTransition(.animated, axis: .horizontal) { content, phase in
+//            content
+//                .scaleEffect(phase.isIdentity ? 1.0 : 0.8)
+//        }
+//    }
+//}
 
 // 더미데이터
 let dummyParties: [Party] = [
