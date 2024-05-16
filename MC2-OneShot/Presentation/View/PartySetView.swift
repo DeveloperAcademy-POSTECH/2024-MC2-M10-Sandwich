@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PartySetView: View {
+    @Binding var isPartySetViewPresented: Bool
+    @EnvironmentObject private var pathModel: PathModel
     
     let rows = [
         GridItem(.flexible())
@@ -45,7 +47,8 @@ struct PartySetView: View {
             }
             Spacer()
             ActionButton(title: "GO STEP!", buttonType: .primary) {
-                //
+                isPartySetViewPresented.toggle()
+                pathModel.paths.append(.partyCamera)
             }.padding(16)
         }
     }
@@ -53,5 +56,5 @@ struct PartySetView: View {
 
 
 #Preview {
-    PartySetView()
+    PartySetView(isPartySetViewPresented: .constant(true))
 }
