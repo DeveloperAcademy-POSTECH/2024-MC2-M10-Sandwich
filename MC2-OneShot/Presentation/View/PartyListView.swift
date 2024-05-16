@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PartyListView: View {
-    
     var party: Party = Party(title: "", startDate: Date(), notiCycle: 30)
     @State private var showSettings = false
     
@@ -32,7 +31,6 @@ struct PartyListView: View {
                     .padding(.bottom, 8)
                     .padding(.horizontal, 16)
                     
-                    
                     ScrollView {
                         ForEach(Array(dummyParties[0].stepList.enumerated()), id: \.offset) { index, step in
                             
@@ -46,15 +44,20 @@ struct PartyListView: View {
                                 showSettings = true
                                 // FinishPopupView()
                             }, label: {
-                                Text("술자리 종료")
-                                    .pretendard(.bold, 16.5)
-                                    .foregroundStyle(.shotGreen)
+                                if showSettings == false {
+                                    Text("술자리 종료")
+                                        .pretendard(.bold, 16.5)
+                                        .foregroundStyle(.shotGreen)
+                                } else {
+                                    Image(systemName: "text.bubble")
+                                        .pretendard(.bold, 16.5)
+                                        .foregroundStyle(.shotGreen)
+                                }
                             })
                             .fullScreenCover(isPresented: $showSettings) {
                                 Text("진정 종료하시렵니까")
                                     .foregroundStyle(.shotFF)
                                     .presentationBackground(.black.opacity(0.7))
-                                
                             }
                         }
                     }
@@ -63,9 +66,6 @@ struct PartyListView: View {
         }
     }
 }
-
-
-
 
 struct StepCell: View {
     var index: Int
@@ -171,7 +171,7 @@ struct DotsView: View {
     }
 }
 
-
+// 더미데이터
 let dummyParties: [Party] = [
     Party(
         title: "Birthday Bash",
@@ -275,7 +275,6 @@ let dummyParties: [Party] = [
         comment: "Welcome to the team!"
     )
 ]
-
 
 
 #Preview {
