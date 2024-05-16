@@ -15,4 +15,19 @@ extension Date {
         formatter.dateFormat = "yyyy. MM. dd"
         return formatter.string(from: self)
     }
+    
+    /// 2024년 5월 13일 (월) 형식의 문자열을 반환합니다.
+    var yearMonthdayweekDay: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월 dd일 (E)"
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter.string(from: self)
+    }
+    
+    /// 18:03 형식의 문자열을 반환합니다.
+    var hourMinute: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: self)
+    }
 }

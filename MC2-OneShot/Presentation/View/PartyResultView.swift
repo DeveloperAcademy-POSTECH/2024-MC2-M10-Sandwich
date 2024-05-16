@@ -9,14 +9,9 @@ import SwiftUI
 
 struct PartyResultView: View {
     
-    let rows = [
-        GridItem(.flexible())
-    ]
-    
-    let members : [String] = ["김민준","곽민준","오띵진","정혜정"]
+    @EnvironmentObject private var pathModel: PathModel
     
     @State private var isShutDown: Bool = true
-    
     
     var body: some View {
         VStack{
@@ -73,81 +68,22 @@ struct PartyResultView: View {
             }
             .padding(.vertical, 8)
                 
-            List{
-                Section{
-                    VStack(alignment: .leading){
-                        HStack{
-                            Circle()
-                                .frame(width: 16, height: 16)
-                                .foregroundColor(.shotGreen)
-                            
-                            Text("날짜")
-                                .pretendard(.bold, 20)
-                            
-                        }
-                        
-                        Text("2024년 5월 13일 (월)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(.leading, 24)
-                        
-                    }
-                    
-                    VStack(alignment: .leading){
-                        HStack{
-                            Circle()
-                                .frame(width: 16, height: 16)
-                                .foregroundColor(.shotGreen)
-                            
-                            Text("진행 시간")
-                                .pretendard(.bold, 20)
-                            
-                        }
-                        
-                        Text("18:30 ~ 2:00")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(.leading, 24)
-                        
-                    }
-                }
-                
-                Section{
-                    VStack(alignment: .leading){
-                        HStack{
-                            Circle()
-                                .frame(width: 16, height: 16)
-                                .foregroundColor(.shotGreen)
-                            
-                            Text("함께한 사람들")
-                                .pretendard(.bold, 20)
-                            
-                        }
-                        
-                        LazyHGrid(rows: rows){
-                            ForEach(members, id: \.self){ member in
-                                
-                                Circle()
-                                    .frame(width: 54, height: 54)
-                                
-                            }
-                            
-                        }
-                        
-                    }
-                }
-            }
+            ListView()
             
             HStack(spacing: 8) {
                 ActionButton(
                     title: "홈으로 돌아가기",
                     buttonType: .secondary
-                ) {}
+                ) {
+                    pathModel.paths.removeAll()
+                }
                 
                 ActionButton(
                     title: "그룹으로 이동",
                     buttonType: .primary
-                ) {}
+                ) {
+                    pathModel.paths.append(.partyList)
+                }
             }
             .padding()
             
@@ -155,6 +91,106 @@ struct PartyResultView: View {
     }
 }
 
+
+// MARK: - totalTime
+func totalTime() -> String {
+    
+    
+    let startTime = dummyPartys[0].startDate.hourMinute
+    let stepCount = dummyPartys[0].stepList.count
+//    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
+//    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
+    
+    // 일단 강제 종료일 경우
+    let allSteptime = (stepCount + 1) * dummyPartys[0].notiCycle
+    
+    let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: dummyPartys[0].startDate).hourMinute
+    
+    
+    
+    return "\(startTime) ~ \(finishTime)"
+}
+
+// MARK: - PartyTime List View
+private struct ListView: View {
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+      ]
+    
+    var body: some View {
+        List{
+            Section{
+                VStack(alignment: .leading){
+                    HStack{
+                        Circle()
+                            .frame(width: 16, height: 16)
+                            .foregroundColor(.shotGreen)
+                        
+                        Text("날짜")
+                            .pretendard(.bold, 20)
+                        
+                    }
+                    
+                    Text("\(dummyPartys[0].startDate.yearMonthdayweekDay)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.leading, 24)
+                    
+                }
+                
+                VStack(alignment: .leading){
+                    HStack{
+                        Circle()
+                            .frame(width: 16, height: 16)
+                            .foregroundColor(.shotGreen)
+                        
+                        Text("진행 시간")
+                            .pretendard(.bold, 20)
+                        
+                    }
+                    
+                    Text(totalTime())
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.leading, 24)
+                    
+                }
+            }
+            
+            Section{
+                VStack(alignment: .leading){
+                    HStack{
+                        Circle()
+                            .frame(width: 16, height: 16)
+                            .foregroundColor(.shotGreen)
+                        
+                        Text("함께한 사람들")
+                            .pretendard(.bold, 20)
+                        
+                    }
+                    
+                    LazyVGrid(columns: columns){
+                        ForEach(dummyPartys[0].memberList!, id: \.profileImage){ member in
+                            
+                            Circle()
+                                .frame(width: 54, height: 54)
+                            
+                        }
+                        
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
+
 #Preview {
     PartyResultView()
+        .environmentObject(PathModel())
 }
