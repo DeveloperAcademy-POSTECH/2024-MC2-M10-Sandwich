@@ -8,10 +8,49 @@
 import SwiftUI
 
 struct PartySetView: View {
+    
+    let rows = [
+        GridItem(.flexible())
+    ]
+    
+    let members : [String] = ["김민준","곽민준","오띵진","정혜정"]
+    @State var titleText: String = ""
     var body: some View {
-        Text("PartySetView")
+        
+        VStack(alignment: .leading) {
+            Form {
+                Section {
+                    TextField("제목", text: $titleText)
+                }
+                
+                Section {
+                    VStack(alignment: .leading){
+                        Text("사람 추가")
+                            .pretendard(.regular, 17)
+                            .foregroundStyle(.shotFF)
+                        Spacer()
+                            .frame(height: 16)
+                        
+                        HStack(spacing: 24) {
+                            ForEach(members, id: \.self) { member in
+                                Circle()
+                                    .frame (width: 60)
+                            }
+                            
+                        }
+                    }
+                }
+                .padding(10)
+
+            }
+            Spacer()
+            ActionButton(title: "GO STEP!", buttonType: .primary) {
+                //
+            }.padding(16)
+        }
     }
 }
+
 
 #Preview {
     PartySetView()

@@ -36,6 +36,8 @@ struct HomeView: View {
             }
             .sheet(isPresented: $isPartySetViewPresented) {
                 PartySetView()
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
             }
             
         }
@@ -97,7 +99,7 @@ private struct ListCellView: View {
             Spacer()
                 .frame(width: 8)
             
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .pretendard(.bold, 17)
                     .foregroundStyle(.shotFF)
@@ -109,7 +111,7 @@ private struct ListCellView: View {
             
             Spacer()
             
-            VStack(spacing: 6) {
+            VStack(spacing: 4) {
                 PartyStateInfoLabel(
                     stateInfo: isLive ? .live : .end,
                     stepCount: stepCount
