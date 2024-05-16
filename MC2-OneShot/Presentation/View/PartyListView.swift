@@ -66,13 +66,11 @@ struct PartyListView: View {
                             .transaction { transaction in
                                 transaction.disablesAnimations = true
                             }
-                            
-                            
                         }
                     }
+                    .navigationBarTitleDisplayMode(.inline)
                 }
             }
-        
     }
 }
 
