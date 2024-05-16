@@ -14,6 +14,7 @@ struct ActionButton: View {
     enum ButtonType {
         case primary
         case secondary
+        case disabled
     }
     
     /// 버튼 타이틀
@@ -30,6 +31,15 @@ struct ActionButton: View {
         switch buttonType {
         case .primary: return .shotGreen
         case .secondary: return .shotD8
+        case .disabled: return .shot33
+        }
+    }
+    
+    /// 글자 색상 결정 로직
+    private var titleColor: Color {
+        switch buttonType {
+        case .primary, .secondary: return .shot00
+        case .disabled: return .secondary
         }
     }
     
@@ -41,10 +51,11 @@ struct ActionButton: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
                 .background(backgroundColor)
-                .foregroundStyle(.shot00)
+                .foregroundStyle(titleColor)
                 .pretendard(.semiBold, 17)
                 .clipShape(RoundedRectangle(cornerRadius: 11))
         }
+        .disabled(buttonType == .disabled)
     }
 }
 
@@ -62,6 +73,11 @@ struct ActionButton: View {
             ActionButton(
                 title: "끝내기",
                 buttonType: .primary
+            ) {}
+            
+            ActionButton(
+                title: "비활성화",
+                buttonType: .disabled
             ) {}
         }
         .padding(.horizontal, 16)
