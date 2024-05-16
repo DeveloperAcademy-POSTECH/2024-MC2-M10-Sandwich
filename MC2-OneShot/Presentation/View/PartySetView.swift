@@ -88,7 +88,11 @@ struct PartySetView: View {
                 
                 Spacer()
                 
-                ActionButton(title: "GO STEP!", buttonType: .primary) {
+                ActionButton(
+                    title: "GO STEP!",
+                    buttonType: titleText.isEmpty
+                    ? .disabled : .primary
+                ) {
                     isPartySetViewPresented.toggle()
                     pathModel.paths.append(.partyCamera)
                 }
