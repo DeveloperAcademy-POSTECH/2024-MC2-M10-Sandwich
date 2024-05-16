@@ -38,7 +38,6 @@ struct PartyListView: View {
                 
                 ScrollView {
                     ForEach(Array(dummyParties[0].stepList.enumerated()), id: \.offset) { index, step in
-                        
                         StepCell(index: index, step: step)
                     }
                     .padding(16)
@@ -115,7 +114,6 @@ struct StepCell: View {
                         Text(step.mediaList[0].captureDate.aHourMinute)
                             .pretendard(.regular, 14)
                             .foregroundStyle(.shotCE)
-                        
                     }
                     .padding(.top, 4)
                 }
@@ -125,14 +123,13 @@ struct StepCell: View {
                 Button(action: {}, label: {
                     ZStack {
                         Image(.icnSave)
-                        Image(systemName: "square.and.arrow.up")
+                        Image(systemName: "square.and.arrow.down")
                             .resizable()
                             .frame(width: 14, height: 18)
                             .pretendard(.semiBold, 16)
                             .foregroundStyle(.shotC6)
                     }
                 }
-                       
                 )
             }
             
@@ -153,7 +150,6 @@ struct StepCell: View {
                                 .cornerRadius(50)
                                 .padding(.top, 15)
                                 .padding(.trailing, 20)
-                            
                         }
                     }
                 }
@@ -168,7 +164,7 @@ struct StepCell: View {
 
 //struct DotsView: View {
 //    let selectedIndex: Int
-//    
+//
 //    var body: some View {
 //        HStack(spacing: 5) {
 //            ForEach(1...3, id: \.self) { dotIndex in
