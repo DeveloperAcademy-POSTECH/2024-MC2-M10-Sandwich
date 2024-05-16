@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PartyListView: View {
-    var party: Party = Party(title: "", startDate: Date(), notiCycle: 30)
+    var party: Party = Party(title: "포항공대애애앵", startDate: Date(), notiCycle: 30)
     @State private var showSettings = false
     
     var body: some View {
@@ -55,7 +55,7 @@ struct PartyListView: View {
                                 }
                             })
                             .fullScreenCover(isPresented: $showSettings) {
-                                Text("진정 종료하시렵니까")
+                                FinishPopupView()
                                     .foregroundStyle(.shotFF)
                                     .presentationBackground(.black.opacity(0.7))
                             }
