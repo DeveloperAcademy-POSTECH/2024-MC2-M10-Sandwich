@@ -8,17 +8,33 @@
 import SwiftUI
 
 struct PartyResultView: View {
+    @State private var isHelpMessagePresented = false
     
     @EnvironmentObject private var pathModel: PathModel
     
     var body: some View {
         VStack{
             if dummyPartys[0].isShutdown{
+                
                 HStack{
                     Spacer()
-                    Image(systemName: "questionmark.circle")
+                    
+                    Button{
+                        isHelpMessagePresented.toggle()
+                    } label: {
+                        Image(systemName: "questionmark.circle")
+                            .foregroundColor(.shotFF)
+                    }
                 }
                 .padding(.trailing)
+                .fullScreenCover(isPresented: $isHelpMessagePresented) {
+                    ShutdownPopupView(isHelpMessagePresented: $isHelpMessagePresented)
+                        .foregroundStyle(.shotFF)
+                        .presentationBackground(.black.opacity(0.7))
+                }
+                .transaction { transaction in
+                    transaction.disablesAnimations = true
+                }
             }
             
             Circle()
@@ -82,6 +98,7 @@ struct PartyResultView: View {
             }
             .padding()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
