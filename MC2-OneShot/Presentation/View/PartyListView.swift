@@ -9,10 +9,10 @@ import SwiftUI
 
 struct PartyListView: View {
     var party: Party = Party(title: "포항공대애애앵", startDate: Date(), notiCycle: 30)
-    @State private var showSettings = false
+    @State private var isFinishPopupPresented = false
     
     var body: some View {
-        NavigationStack {
+     
             ZStack {
                 Color.black.ignoresSafeArea()
                 
@@ -22,10 +22,14 @@ struct PartyListView: View {
                             .pretendard(.bold, 25)
                             .foregroundStyle(.shotFF)
                         Spacer()
-                        Image(systemName: "circle")
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                            .foregroundStyle(.shotFF)
+                        Button {
+                            //
+                        } label: {
+                             Image(systemName: "circle")
+                                .resizable()
+                                .frame(width: 32, height: 32)
+                                .foregroundStyle(.shotFF)
+                        }
                     }
                     .padding(.top, 3)
                     .padding(.bottom, 8)
@@ -41,10 +45,10 @@ struct PartyListView: View {
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             Button(action: {
-                                showSettings = true
+                                isFinishPopupPresented = true
                                 // FinishPopupView()
                             }, label: {
-                                if showSettings == false {
+                                if isFinishPopupPresented == false {
                                     Text("술자리 종료")
                                         .pretendard(.bold, 16.5)
                                         .foregroundStyle(.shotGreen)
@@ -54,16 +58,21 @@ struct PartyListView: View {
                                         .foregroundStyle(.shotGreen)
                                 }
                             })
-                            .fullScreenCover(isPresented: $showSettings) {
-                                FinishPopupView()
+                            .fullScreenCover(isPresented: $isFinishPopupPresented) {
+                                FinishPopupView(isFinishPopupPresented: $isFinishPopupPresented)
                                     .foregroundStyle(.shotFF)
                                     .presentationBackground(.black.opacity(0.7))
                             }
+                            .transaction { transaction in
+                                transaction.disablesAnimations = true
+                            }
+                            
+                            
                         }
                     }
                 }
             }
-        }
+        
     }
 }
 

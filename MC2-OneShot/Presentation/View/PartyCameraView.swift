@@ -11,6 +11,8 @@ struct PartyCameraView: View {
     
     @State private var iscamera: Bool = true
     @State private var isbolt: Bool = false
+    @State private var isFinishPopupPresented: Bool = false
+    @EnvironmentObject private var pathModel: PathModel
     
     var body: some View {
         
@@ -18,7 +20,7 @@ struct PartyCameraView: View {
             ZStack{
                 HStack{
                     Button{
-                        print("home")
+                        pathModel.paths.removeAll()
                     } label: {
                         Image(systemName: "chevron.down")
                             .resizable()
@@ -30,7 +32,7 @@ struct PartyCameraView: View {
                     Spacer()
                     
                     Button{
-                        print("술자리 종료")
+                        isFinishPopupPresented.toggle()
                     } label: {
                         Text("술자리 종료")
                             .pretendard(.extraBold, 15)
@@ -51,6 +53,14 @@ struct PartyCameraView: View {
                         .foregroundColor(.shot6D)
                 }
             }
+            .fullScreenCover(isPresented: $isFinishPopupPresented) {
+                FinishPopupView(isFinishPopupPresented: $isFinishPopupPresented)
+                    .foregroundStyle(.shotFF)
+                    .presentationBackground(.black.opacity(0.7))
+            }
+            .transaction { transaction in
+                transaction.disablesAnimations = true
+            }
             
             Rectangle()
                 .frame(width: 360, height: 360)
@@ -58,7 +68,7 @@ struct PartyCameraView: View {
                 .padding(.top, 36)
             
             Button{
-                print("리스트 가기")
+                pathModel.paths.append(.partyList)
             } label: {
                 HStack{
                     Text("포항공대 축제")
@@ -151,6 +161,7 @@ struct PartyCameraView: View {
             .padding(.top)
             .padding(.horizontal)
         }
+        .navigationBarBackButtonHidden()
         .padding(16)
         
     }

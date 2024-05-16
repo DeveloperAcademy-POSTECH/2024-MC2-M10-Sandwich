@@ -28,14 +28,14 @@ struct HomeView: View {
             .navigationTitle("ONE SHOT")
             .navigationDestination(for: PathType.self) { path in
                 switch path {
-                case .partySet: PartySetView()
+                case .partySet: PartySetView(isPartySetViewPresented: .constant(false))
                 case .partyCamera: PartyCameraView()
                 case .partyList: PartyListView()
                 case .partyResult: PartyResultView()
                 }
             }
             .sheet(isPresented: $isPartySetViewPresented) {
-                PartySetView()
+                PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }

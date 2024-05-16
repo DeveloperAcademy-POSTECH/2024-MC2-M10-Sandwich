@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct FinishPopupView: View {
+    
+    @EnvironmentObject private var pathModel: PathModel
+    @Binding var isFinishPopupPresented: Bool
+    
     var body: some View {
         VStack {
             ZStack {
@@ -38,12 +42,18 @@ struct FinishPopupView: View {
                         ActionButton(
                             title: "더 마시기",
                             buttonType: .secondary
-                        ) {}
+                        ) {
+                            isFinishPopupPresented.toggle()
+                        }
                         
                         ActionButton(
                             title: "끝내기",
                             buttonType: .primary
-                        ) {}
+                        ) {
+                            isFinishPopupPresented.toggle()
+                            pathModel.paths.append(.partyResult)
+                        
+                        }
                     }
                     .padding(.horizontal, 33)
                     .padding(.top, 50)   
@@ -55,5 +65,5 @@ struct FinishPopupView: View {
 }
 
 #Preview {
-    FinishPopupView()
+    FinishPopupView(isFinishPopupPresented: .constant(true))
 }
