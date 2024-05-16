@@ -20,6 +20,7 @@ struct PartyCameraView: View {
             ZStack{
                 HStack{
                     Button{
+                        
                         pathModel.paths.removeAll()
                     } label: {
                         Image(systemName: "chevron.down")
@@ -28,6 +29,7 @@ struct PartyCameraView: View {
                             .frame(width: 24, height: 24)
                             .foregroundColor(.shotFF)
                     }
+                    
                     
                     Spacer()
                     
@@ -42,13 +44,15 @@ struct PartyCameraView: View {
                 .padding(.horizontal, 8)
                 
                 VStack{
+                    
+                    // TODO: - check 활성 비활성화 만들기
                     Image(systemName: "checkmark.circle.fill")
                         .padding(.bottom, 4)
                         .foregroundColor(.shotGreen)
-                    Text("STEP 01")
+                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
                         .pretendard(.extraBold, 20)
                         .foregroundColor(.shotFF)
-                    Text("120min")
+                    Text("\(dummyPartys[0].notiCycle)min")
                         .pretendard(.light, 15)
                         .foregroundColor(.shot6D)
                 }
@@ -71,7 +75,7 @@ struct PartyCameraView: View {
                 pathModel.paths.append(.partyList)
             } label: {
                 HStack{
-                    Text("포항공대 축제")
+                    Text("\(dummyPartys[0].title)")
                         .pretendard(.bold, 20)
                         .foregroundColor(.shotFF)
                     Image(systemName: "chevron.right")
