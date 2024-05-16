@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PartySetView: View {
     var body: some View {
-        Text("PartySetView")
+        Text("PartySetViewREAL START! hI!")
     }
 }
 
