@@ -9,8 +9,9 @@ import SwiftUI
 
 struct PartyResultView: View {
     
-    @State private var isShutDown: Bool = true
+    @EnvironmentObject private var pathModel: PathModel
     
+    @State private var isShutDown: Bool = true
     
     var body: some View {
         VStack{
@@ -73,18 +74,23 @@ struct PartyResultView: View {
                 ActionButton(
                     title: "홈으로 돌아가기",
                     buttonType: .secondary
-                ) {}
+                ) {
+                    pathModel.paths.removeAll()
+                }
                 
                 ActionButton(
                     title: "그룹으로 이동",
                     buttonType: .primary
-                ) {}
+                ) {
+                    pathModel.paths.append(.partyList)
+                }
             }
             .padding()
             
         }
     }
 }
+
 
 // MARK: - totalTime
 func totalTime() -> String {
@@ -107,9 +113,13 @@ func totalTime() -> String {
 
 // MARK: - PartyTime List View
 private struct ListView: View {
-//    let rows = [
-//        GridItem(.flexible())
-//    ]
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+      ]
     
     var body: some View {
         List{
@@ -163,7 +173,7 @@ private struct ListView: View {
                         
                     }
                     
-                    LazyHGrid(rows: [GridItem(.flexible())]){
+                    LazyVGrid(columns: columns){
                         ForEach(dummyPartys[0].memberList!, id: \.profileImage){ member in
                             
                             Circle()
@@ -180,86 +190,7 @@ private struct ListView: View {
 }
 
 
-//// MARK: - ListView
-//private struct ListView: View {
-//    
-//    @State private var searchText = ""
-//    
-//    var body: some View {
-//        List(dummyPartys) { party in
-//            ListCellView(
-//                title: party.title,
-//                captureDate: party.startDate,
-//                isLive: party.isLive,
-//                stepCount: party.stepList.count,
-//                notiCycle: party.notiCycle
-//            )
-//            .swipeActions {
-//                Button {
-//                    // TODO: 술자리 데이터 삭제 Alert 출력
-//                } label: {
-//                    Text("삭제하기")
-//                }
-//                .tint(.red)
-//            }
-//        }
-//        .searchable(
-//            text: $searchText,
-//            prompt: "술자리를 검색해보세요"
-//        )
-//        .listStyle(.plain)
-//        .padding(.top, 8)
-//        .padding(.bottom, 16)
-//    }
-//}
-
-//
-//// MARK: - ListCellView
-//private struct ListCellView: View {
-//    
-//    let thumbnail: String
-//    let title: String
-//    let captureDate: Date
-//    let isLive: Bool
-//    let stepCount: Int
-//    let notiCycle: Int
-//    
-//    var body: some View {
-//        HStack {
-//            Image(systemName: "wineglass.fill")
-//                .resizable()
-//                .frame(width: 68, height: 68)
-//                .clipShape(RoundedRectangle(cornerRadius: 7.5))
-//            
-//            Spacer()
-//                .frame(width: 8)
-//            
-//            VStack(alignment: .leading, spacing: 6) {
-//                Text(title)
-//                    .pretendard(.bold, 17)
-//                    .foregroundStyle(.shotFF)
-//                
-//                Text("\(captureDate.yearMonthDay)")
-//                    .pretendard(.regular, 14)
-//                    .foregroundStyle(.shot6D)
-//            }
-//            
-//            Spacer()
-//            
-//            VStack(spacing: 6) {
-//                PartyStateInfoLabel(
-//                    stateInfo: isLive ? .live : .end,
-//                    stepCount: stepCount
-//                )
-//                
-//                Text("\(notiCycle)min")
-//                    .pretendard(.regular, 14)
-//                    .foregroundStyle(.shot6D)
-//            }
-//        }
-//    }
-//}
-
 #Preview {
     PartyResultView()
+        .environmentObject(PathModel())
 }
