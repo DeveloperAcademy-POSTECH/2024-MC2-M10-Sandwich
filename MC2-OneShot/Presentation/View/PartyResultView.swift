@@ -11,18 +11,15 @@ struct PartyResultView: View {
     
     @EnvironmentObject private var pathModel: PathModel
     
-    @State private var isShutDown: Bool = true
-    
     var body: some View {
         VStack{
-            if isShutDown{
+            if dummyPartys[0].isShutdown{
                 HStack{
                     Spacer()
                     Image(systemName: "questionmark.circle")
                 }
                 .padding(.trailing)
             }
-            
             
             Circle()
                 .stroke(Color.shotGreen, lineWidth: 2)
@@ -47,24 +44,22 @@ struct PartyResultView: View {
                                 .fill(.shot00)
                                 .padding(4))
                             
-                        Text("STEP 12")
+                        Text("STEP \(dummyPartys[0].stepList.count)")
                             .foregroundColor(.shot00)
                             .pretendard(.bold, 20)
                     }
                 )
-            // Circle()
             
             VStack{
-                Text("포항공대 축제")
+                Text("\(dummyPartys[0].title)")
                     .foregroundColor(.shotFF)
                     .pretendard(.extraBold, 20)
                 
-                if isShutDown{
+                if dummyPartys[0].isShutdown{
                     Text("시간이 지나 술자리를 종료했어요!")
                         .foregroundColor(.shot6D)
                         .pretendard(.bold, 14)
                 }
-                
             }
             .padding(.vertical, 8)
                 
@@ -86,7 +81,6 @@ struct PartyResultView: View {
                 }
             }
             .padding()
-            
         }
     }
 }
@@ -106,15 +100,12 @@ func totalTime() -> String {
     
     let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: dummyPartys[0].startDate).hourMinute
     
-    
-    
     return "\(startTime) ~ \(finishTime)"
 }
 
 // MARK: - PartyTime List View
 private struct ListView: View {
     let columns = [
-        GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -150,14 +141,12 @@ private struct ListView: View {
                         
                         Text("진행 시간")
                             .pretendard(.bold, 20)
-                        
                     }
                     
                     Text(totalTime())
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .padding(.leading, 24)
-                    
                 }
             }
             
@@ -180,9 +169,7 @@ private struct ListView: View {
                                 .frame(width: 54, height: 54)
                             
                         }
-                        
-                    }
-                    
+                    }       
                 }
             }
         }
