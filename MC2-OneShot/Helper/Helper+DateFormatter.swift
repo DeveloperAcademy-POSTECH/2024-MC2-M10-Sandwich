@@ -30,4 +30,20 @@ extension Date {
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: self)
     }
+    
+    /// 2024.05.15 형식의 문자열을 반환합니다. (붙여씀)
+    var yearMonthDayNoSpace: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy.MM.dd"
+        return formatter.string(from: self)
+    }
+    
+    /// PM 08:17 형식의 문자열을 반환합니다.
+    var aHourMinute: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "a hh:mm"
+        return formatter.string(from: self)
+    }
+    
+    
 }

@@ -78,17 +78,6 @@ struct StepCell: View {
     var index: Int
     var step: Step
     
-    func formatForDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YY.MM.dd"
-        return dateFormatter.string(from: date)
-    }
-    func formatForTime(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "a hh:mm"
-        return dateFormatter.string(from: date)
-    }
-    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -104,8 +93,8 @@ struct StepCell: View {
                     }
                     
                     HStack(spacing: 0) {
-                        Text(formatForDate(date: step.mediaList[0].captureDate))
-                            .pretendard(.semiBold, 14)
+                        Text(step.mediaList[0].captureDate.yearMonthDayNoSpace)
+                            .pretendard(.regular, 14)
                             .foregroundStyle(.shotCE)
                         
                         Rectangle()
@@ -114,8 +103,8 @@ struct StepCell: View {
                             .cornerRadius(10)
                             .padding(.horizontal, 6)
                         
-                        Text(formatForTime(date: step.mediaList[0].captureDate))
-                            .pretendard(.semiBold, 14)
+                        Text(step.mediaList[0].captureDate.aHourMinute)
+                            .pretendard(.regular, 14)
                             .foregroundStyle(.shotCE)
                         
                     }
