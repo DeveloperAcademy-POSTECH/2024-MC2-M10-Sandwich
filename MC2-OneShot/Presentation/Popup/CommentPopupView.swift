@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CommentPopupView: View {
-    
     @State var content: String = ""
     
     var body: some View {
@@ -48,6 +47,7 @@ struct CommentPopupView: View {
                     
                     ZStack {
                         Image(.imgLogo)
+                            .resizable()
                             .frame(width: 225, height: 225).opacity(0.1)
                         
                         Rectangle()
@@ -56,14 +56,15 @@ struct CommentPopupView: View {
                             .padding(.top, 6)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         
-//                        TextEditor(text: $content)
-//                            .foregroundColor(.white)
-//                            .background(Color.clear)
-//                            .clipShape(RoundedRectangle(cornerRadius: 12))
-//                            .frame(width: 331, height: 260)
-//                            .pretendard(.semiBold, 17)
-//                            .multilineTextAlignment(.leading)
-//                            .padding(.top, 6)
+                        TextField(text: $content, axis: .vertical) {
+                            Color.clear
+                        }
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .frame(width: 331, height: 260, alignment: .top)
+                        .pretendard(.semiBold, 17)
+                        .multilineTextAlignment(.leading)
+                        .padding(.top, 6)
                     }
                 }
                 .padding(.horizontal, 16)
