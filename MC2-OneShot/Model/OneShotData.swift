@@ -62,7 +62,7 @@ class Media {
     }
 }
 
-class Member {
+class Member: Identifiable {
     let profileImage: String // TODO: 어떤 타입이 들어갈 수 있는지 리서치
     
     init(profileImage: String) {
