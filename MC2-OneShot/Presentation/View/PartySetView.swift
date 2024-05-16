@@ -93,6 +93,8 @@ struct PartySetView: View {
                     buttonType: titleText.isEmpty
                     ? .disabled : .primary
                 ) {
+                    // TODO: 술자리가 시작했다는 변수 업데이트
+                    // TODO: 술자리 데이터 생성
                     isPartySetViewPresented.toggle()
                     pathModel.paths.append(.partyCamera)
                 }

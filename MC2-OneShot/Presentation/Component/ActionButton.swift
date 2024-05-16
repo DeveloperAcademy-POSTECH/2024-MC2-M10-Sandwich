@@ -31,7 +31,7 @@ struct ActionButton: View {
         switch buttonType {
         case .primary: return .shotGreen
         case .secondary: return .shotD8
-        case .disabled: return .shot1C
+        case .disabled: return .shot33
         }
     }
     
@@ -39,7 +39,7 @@ struct ActionButton: View {
     private var titleColor: Color {
         switch buttonType {
         case .primary, .secondary: return .shot00
-        case .disabled: return .shot33
+        case .disabled: return .secondary
         }
     }
     
@@ -55,6 +55,7 @@ struct ActionButton: View {
                 .pretendard(.semiBold, 17)
                 .clipShape(RoundedRectangle(cornerRadius: 11))
         }
+        .disabled(buttonType == .disabled)
     }
 }
 
