@@ -72,12 +72,26 @@ struct PartySetView: View {
                             LazyVGrid(columns: columns, spacing: 30) {
                                 ForEach(memberButtons, id: \.self) { member in
                                     if member == .add {
-                                        Circle()
-                                            .frame (width: 60)
-                                            .foregroundStyle(.red)
+                                        Button {
+                                         //카메라 연결
+                                        } label: {
+                                            ZStack{
+
+                                                Circle()
+                                                    .frame (width: 60)
+                                                    .foregroundStyle(.shot33)
+                                                Image(systemName: "plus")
+                                                    .resizable()
+                                                    .frame(width: 32, height: 32)
+                                                    .foregroundStyle(.blue)
+                                            }
+                                        }
+                                        
                                     } else {
-                                        Circle()
-                                            .frame (width: 60)
+                                        Image(.test)
+                                            .resizable()
+                                            .frame (width: 60, height: 60)
+                                            .clipShape(Circle())
                                     }
                                 }
                             }
