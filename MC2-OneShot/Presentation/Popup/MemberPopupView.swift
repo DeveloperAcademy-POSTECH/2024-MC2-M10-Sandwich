@@ -17,6 +17,8 @@ struct MemberPopupView: View {
         GridItem(.flexible(), spacing: 20)
     ]
     
+    @Binding var isMemberPopupPresented: Bool
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -38,7 +40,7 @@ struct MemberPopupView: View {
                         Spacer()
                         
                         Button(action: {
-                            // 창 닫기 ToDo
+                            isMemberPopupPresented.toggle()
                         }, label: {
                             ZStack {
                                 Circle()
@@ -86,5 +88,5 @@ struct PeopleCell: View {
 }
 
 #Preview {
-    MemberPopupView()
+    MemberPopupView(isMemberPopupPresented: .constant(true))
 }

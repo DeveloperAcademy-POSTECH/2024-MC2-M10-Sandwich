@@ -10,6 +10,8 @@ import SwiftUI
 struct PartyListView: View {
     var party: Party = Party(title: "포항공대애애앵", startDate: Date(), notiCycle: 30)
     @State private var isFinishPopupPresented = false
+    @State private var isMemberPopupPresented = false
+    @EnvironmentObject private var pathModel: PathModel
     
     var body: some View {
      
@@ -23,7 +25,7 @@ struct PartyListView: View {
                             .foregroundStyle(.shotFF)
                         Spacer()
                         Button {
-                            //
+                            isMemberPopupPresented.toggle()
                         } label: {
                              Image(systemName: "circle")
                                 .resizable()
@@ -70,6 +72,14 @@ struct PartyListView: View {
                     }
                     .navigationBarTitleDisplayMode(.inline)
                 }
+            }
+            .fullScreenCover(isPresented: $isMemberPopupPresented) {
+                MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
+                    .foregroundStyle(.shotFF)
+                    .presentationBackground(.black.opacity(0.7))
+            }
+            .transaction { transaction in
+                transaction.disablesAnimations = true
             }
     }
 }
