@@ -8,22 +8,44 @@
 import SwiftUI
 
 struct PartySetView: View {
-    @Binding var isPartySetViewPresented: Bool
+    
     @EnvironmentObject private var pathModel: PathModel
-    
-    let rows = [
-        GridItem(.flexible())
-    ]
-    
-    let members : [String] = ["김민준","곽민준","오띵진","정혜정"]
     
     @State private var titleText: String = ""
     @State private var notiCycle = 30
     
+    @Binding var isPartySetViewPresented: Bool
+    
+    enum MemberForm: Hashable {
+        case member(name: String)
+        case add
+    }
+    
+    let memberForms: [MemberForm] = [
+        .member(name: "김민준"),
+        .member(name: "오띵진"),
+        .member(name: "정혜정"),
+        .member(name: "김유빈"),
+        .member(name: "장종현"),
+        .member(name: "김여운"),
+    ]
+    
+    let columns: [GridItem] = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
+    var memberButtons: [MemberForm] {
+        var memberArray = memberForms
+        memberArray.append(.add)
+        return memberArray
+    }
+    
     var body: some View {
         NavigationView {
             VStack(alignment: .center, spacing: 0) {
-                
                 Spacer()
                     .frame(height: 30)
                 
@@ -42,17 +64,25 @@ struct PartySetView: View {
                             Text("사람 추가")
                                 .pretendard(.regular, 17)
                                 .foregroundStyle(.shotFF)
+                                .padding(.top, 6)
+                            
                             Spacer()
                                 .frame(height: 16)
                             
-                            HStack(spacing: 24) {
-                                ForEach(members, id: \.self) { member in
-                                    Circle()
-                                        .frame (width: 60)
+                            LazyVGrid(columns: columns, spacing: 30) {
+                                ForEach(memberButtons, id: \.self) { member in
+                                    if member == .add {
+                                        Circle()
+                                            .frame (width: 60)
+                                            .foregroundStyle(.red)
+                                    } else {
+                                        Circle()
+                                            .frame (width: 60)
+                                    }
                                 }
                             }
+                            .padding(.bottom, 8)
                         }
-                        .padding(10)
                     } footer: {
                         Text("술자리를 함께하는 일행의 사진을 찍어봐요")
                             .pretendard(.regular, 14)
@@ -103,7 +133,6 @@ struct PartySetView: View {
         }
     }
 }
-
 
 #Preview {
     PartySetView(isPartySetViewPresented: .constant(true))
