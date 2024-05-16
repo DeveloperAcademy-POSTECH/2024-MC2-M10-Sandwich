@@ -14,7 +14,6 @@ struct PartyListView: View {
     @EnvironmentObject private var pathModel: PathModel
     
     var body: some View {
-     
             ZStack {
                 Color.black.ignoresSafeArea()
                 
@@ -42,8 +41,8 @@ struct PartyListView: View {
                             
                             StepCell(index: index, step: step)
                         }
+                        .padding(16)
                     }
-                    .padding(16)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             Button(action: {
