@@ -16,7 +16,6 @@ class CameraViewManager: ObservableObject {
     let cameraPreview: AnyView
 
     @Published var recentImage: UIImage? // 추가
-    @Published var isFlashOn = false
     @Published var isSilentModeOn = false
     
     // 초기 세팅
@@ -24,10 +23,27 @@ class CameraViewManager: ObservableObject {
         manager.requestAndCheckPermissions()
     }
     
+    
     // 플래시 온오프
-    func switchFlash() {
-        isFlashOn.toggle()
+    func toggleFlash() {
+        if let device = AVCaptureDevice.default(for: .video), device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                try device.setTorchModeOn(level: 1.0) // 플래시 켜기
+                
+                //3초후에 플래시 끄기
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    device.unlockForConfiguration()
+                }
+                
+            } catch {
+                print("플래시를 제어할 수 없습니다: \(error)")
+            }
+        }
     }
+    
+    
+
     
     // 사진 촬영
     func capturePhoto() {
@@ -43,6 +59,7 @@ class CameraViewManager: ObservableObject {
     
     // 전후면 카메라 스위칭
     func changeCamera() {
+        manager.changeCamera()
         print("[CameraViewModel]: Camera changed!")
     }
     

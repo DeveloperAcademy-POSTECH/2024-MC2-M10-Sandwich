@@ -12,6 +12,7 @@ struct PartyCameraView: View {
     
     @State private var iscamera: Bool = true
     @State private var isbolt: Bool = false
+    @State private var isface: Bool = false
     @State private var isFinishPopupPresented: Bool = false
     @EnvironmentObject private var pathModel: PathModel
     
@@ -166,7 +167,9 @@ struct PartyCameraView: View {
                     } else{
                         Button{
                             print("플래시")
-                            isbolt.toggle()
+                            if !isface{
+                                isbolt.toggle()
+                            }
                         } label: {
                             if isbolt {
                                 Image(systemName: "bolt")
@@ -189,6 +192,11 @@ struct PartyCameraView: View {
                     if !isShot{
                         Button{
                             print("화면전환")
+                            viewManager.changeCamera()
+                            isface.toggle()
+                            if isface {
+                                isbolt = false
+                            }
                         } label: {
                             Image(systemName: "arrow.triangle.2.circlepath")
                                 .resizable()
@@ -206,7 +214,9 @@ struct PartyCameraView: View {
                         if isShot {
                             viewManager.retakePhoto()
                         }
-                        
+                        if isbolt{
+                            viewManager.toggleFlash()
+                        }
                         isShot.toggle()
                         
                     } label: {
