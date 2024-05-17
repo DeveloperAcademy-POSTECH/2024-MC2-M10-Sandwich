@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		82016BE92BF49CA000BF01CF /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BE82BF49CA000BF01CF /* DummyData.swift */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
-		82016BF12BF6DCDF00BF01CF /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF02BF6DCDF00BF01CF /* TimeManager.swift */; };
-		82016BF32BF6E62200BF01CF /* LifeCycleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF22BF6E62200BF01CF /* LifeCycleManager.swift */; };
+		82016BF12BF6DCDF00BF01CF /* StepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF02BF6DCDF00BF01CF /* StepManager.swift */; };
+		82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF62BF7034A00BF01CF /* NotiCycle.swift */; };
 		825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDC2BF32F46001B416A /* OneShotData.swift */; };
 		825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDF2BF486BE001B416A /* ActionButton.swift */; };
 		8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */; };
@@ -43,8 +43,8 @@
 /* Begin PBXFileReference section */
 		82016BE82BF49CA000BF01CF /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
-		82016BF02BF6DCDF00BF01CF /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
-		82016BF22BF6E62200BF01CF /* LifeCycleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeCycleManager.swift; sourceTree = "<group>"; };
+		82016BF02BF6DCDF00BF01CF /* StepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepManager.swift; sourceTree = "<group>"; };
+		82016BF62BF7034A00BF01CF /* NotiCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiCycle.swift; sourceTree = "<group>"; };
 		825F0BDC2BF32F46001B416A /* OneShotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneShotData.swift; sourceTree = "<group>"; };
 		825F0BDF2BF486BE001B416A /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		8264EA0C2BF2000900586FA0 /* MC2-OneShot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MC2-OneShot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,8 +90,7 @@
 		82016BEF2BF6DCC200BF01CF /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				82016BF02BF6DCDF00BF01CF /* TimeManager.swift */,
-				82016BF22BF6E62200BF01CF /* LifeCycleManager.swift */,
+				82016BF02BF6DCDF00BF01CF /* StepManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -156,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				8264EA332BF2021D00586FA0 /* PathModel.swift */,
+				82016BF62BF7034A00BF01CF /* NotiCycle.swift */,
 				825F0BDC2BF32F46001B416A /* OneShotData.swift */,
 				82016BE82BF49CA000BF01CF /* DummyData.swift */,
 			);
@@ -314,6 +314,7 @@
 				8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */,
 				82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */,
 				8264EA282BF2013000586FA0 /* PartyResultView.swift in Sources */,
+				82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */,
 				82016BE92BF49CA000BF01CF /* DummyData.swift in Sources */,
 				8264EA122BF2000900586FA0 /* HomeView.swift in Sources */,
 				8264EA2E2BF2016500586FA0 /* CommentPopupView.swift in Sources */,
@@ -324,11 +325,10 @@
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
-				82016BF12BF6DCDF00BF01CF /* TimeManager.swift in Sources */,
+				82016BF12BF6DCDF00BF01CF /* StepManager.swift in Sources */,
 				825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
-				82016BF32BF6E62200BF01CF /* LifeCycleManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,7 +477,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot-thinkyside";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -508,7 +508,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot-thinkyside";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

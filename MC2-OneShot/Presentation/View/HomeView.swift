@@ -13,7 +13,7 @@ struct HomeView: View {
     @StateObject private var pathModel: PathModel = .init()
     @State private var isPartySetViewPresented = false
     
-    private var lifeCycleManager: LifeCycleManager = .init()
+    private var stepManager = StepManager(startDate: Date(), notiCycle: .min30)
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
@@ -23,7 +23,8 @@ struct HomeView: View {
                     title: "GO STEP!",
                     buttonType:.primary
                 ) {
-                    isPartySetViewPresented.toggle()
+                    print(stepManager.currentStep)
+                    // isPartySetViewPresented.toggle()
                 }
                 .padding(.horizontal, 16)
             }
@@ -40,9 +41,6 @@ struct HomeView: View {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
-            }
-            .onReceive(lifeCycleManager.mergeLifeCyclePublishers()) { event in
-                print("\(event.name)")
             }
         }
         .environmentObject(pathModel)
