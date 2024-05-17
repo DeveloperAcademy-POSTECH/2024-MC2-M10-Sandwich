@@ -12,11 +12,9 @@ class CameraManager: NSObject, ObservableObject {
     var session = AVCaptureSession()
     var videoDeviceInput: AVCaptureDeviceInput!
     let output = AVCapturePhotoOutput()
-    var photoData = Data(count: 0)
     
-    var flashMode: AVCaptureDevice.FlashMode = .off
-    
-    @Published var recentImage: UIImage? // 추가
+    @Published var arr: [Data] = []
+    @Published var recentImage: UIImage?
     
     // 카메라 셋업 과정을 담당하는 함수,
     func setUpCamera() {
@@ -30,8 +28,9 @@ class CameraManager: NSObject, ObservableObject {
                 
                 if session.canAddOutput(output) {
                     session.addOutput(output)
-                    output.isHighResolutionCaptureEnabled = true
-                    output.maxPhotoQualityPrioritization = .quality
+//                    // 일단 필요없는 부분(추후 사용 가능)
+//                    output.isHighResolutionCaptureEnabled = true
+//                    output.maxPhotoQualityPrioritization = .quality
                 }
                 session.startRunning() // 세션 시작
             } catch {
@@ -78,32 +77,36 @@ class CameraManager: NSObject, ObservableObject {
         print("[Camera]: Photo's taken")
     }
     
+    // 화면 다시 촬영
     func retakePhoto(){
-        
         DispatchQueue.global(qos: .background).async{
-            self.session.startRunning() // 화면 다시 촬영
+            self.session.startRunning()
         }
-
     }
     
     func changeCamera() {
-        let currentPosition = self.videoDeviceInput.device.position
-        let preferredPosition: AVCaptureDevice.Position
+        let currentPosition = self.videoDeviceInput.device.position // 현재 카메라 위치 가져오기
+        let preferredPosition: AVCaptureDevice.Position // 선호하는 카메라 위치 변수 선언
         
+        // 현재 카메라 위치에 따라 동작 결정
         switch currentPosition {
+        // 위치가 명시되지 않았거나, 전면 카메라인 경우
         case .unspecified, .front:
             print("후면카메라로 전환합니다.")
-            preferredPosition = .back
+            preferredPosition = .back // 선호하는 위치를 후면 카메라로 설정
             
+        // 위치가 후면 카메라인 경우
         case .back:
             print("전면카메라로 전환합니다.")
-            preferredPosition = .front
+            preferredPosition = .front // 선호하는 위치를 전면 카메라로 설정
             
+        // 알 수 없는 경우
         @unknown default:
             print("알 수 없는 포지션. 후면카메라로 전환합니다.")
-            preferredPosition = .back
+            preferredPosition = .back // 선호하는 위치를 후면 카메라로 설정
         }
         
+        // 선호하는 카메라 위치로 AVCaptureDevice 인스턴스 가져오기
         if let videoDevice = AVCaptureDevice
             .default(.builtInWideAngleCamera,
                      for: .video, position: preferredPosition) {
@@ -111,27 +114,28 @@ class CameraManager: NSObject, ObservableObject {
                 let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
                 self.session.beginConfiguration()
                 
-                if let inputs = session.inputs as? [AVCaptureDeviceInput] {
-                    for input in inputs {
-                        session.removeInput(input)
-                    }
-                }
-                if self.session.canAddInput(videoDeviceInput) {
-                    self.session.addInput(videoDeviceInput)
-                    self.videoDeviceInput = videoDeviceInput
-                } else {
-                    self.session.addInput(self.videoDeviceInput)
-                }
-                
-                if let connection =
-                    self.output.connection(with: .video) {
-                    if connection.isVideoStabilizationSupported {
-                        connection.preferredVideoStabilizationMode = .auto
-                    }
-                }
-                
-                output.isHighResolutionCaptureEnabled = true
-                output.maxPhotoQualityPrioritization = .quality
+//                // 일단 필요없는 부분(추후 사용 가능)
+//                if let inputs = session.inputs as? [AVCaptureDeviceInput] {
+//                    for input in inputs {
+//                        session.removeInput(input)
+//                    }
+//                }
+//                if self.session.canAddInput(videoDeviceInput) {
+//                    self.session.addInput(videoDeviceInput)
+//                    self.videoDeviceInput = videoDeviceInput
+//                } else {
+//                    self.session.addInput(self.videoDeviceInput)
+//                }
+//                
+//                if let connection =
+//                    self.output.connection(with: .video) {
+//                    if connection.isVideoStabilizationSupported {
+//                        connection.preferredVideoStabilizationMode = .auto
+//                    }
+//                }
+//                
+//                output.isHighResolutionCaptureEnabled = true
+//                output.maxPhotoQualityPrioritization = .quality
                 
                 self.session.commitConfiguration()
             } catch {
@@ -139,29 +143,15 @@ class CameraManager: NSObject, ObservableObject {
             }
         }
     }
-//    func savePhoto(_ imageData: Data) {
-//        guard let image = UIImage(data: imageData) else { return }
-//        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-//
-//        // 사진 저장하기
-//        print("[Camera]: Photo's saved")
-//    }
 }
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, willBeginCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-    }
-    
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let imageData = photo.fileDataRepresentation() else { return }
-        self.recentImage = UIImage(data: imageData) // 추가
-//        self.savePhoto(imageData)
+        
+        if let image = UIImage(data: imageData) {
+            self.recentImage = image // 최근 사진 반영
+        }
         
         DispatchQueue.global(qos: .background).async{
             self.session.stopRunning() // 화면멈춤

@@ -23,14 +23,11 @@ struct PartyCameraView: View {
     @State private var isShot = false
     
     var body: some View {
-        
         VStack{
             ZStack{
                 HStack{
-                    
                     if !isShot{
                         Button{
-                            
                             pathModel.paths.removeAll()
                         } label: {
                             Image(systemName: "chevron.down")
@@ -40,7 +37,6 @@ struct PartyCameraView: View {
                                 .foregroundColor(.shotFF)
                         }
                     }
-                    
                     
                     Spacer()
                     
@@ -79,10 +75,6 @@ struct PartyCameraView: View {
                 transaction.disablesAnimations = true
             }
             
-//            Rectangle()
-//                .frame(width: 360, height: 360)
-//                .cornerRadius(25)
-//                .padding(.top, 36)
             VStack {
                 viewManager.cameraPreview.ignoresSafeArea()
                     .onAppear {
@@ -156,14 +148,11 @@ struct PartyCameraView: View {
                                 viewManager.retakePhoto()
                             }
                             isShot.toggle()
-
                         } label: {
                             Text("다시찍기")
                                 .foregroundColor(.shotFF)
                                 .pretendard(.extraBold, 20)
-                            
                         }
-                        
                     } else{
                         Button{
                             print("플래시")
@@ -213,10 +202,13 @@ struct PartyCameraView: View {
                         
                         if isShot {
                             viewManager.retakePhoto()
+                            viewManager.saveImage()
                         }
+                        
                         if isBolt{
                             viewManager.toggleFlash()
                         }
+                        
                         isShot.toggle()
                         
                     } label: {
@@ -224,7 +216,7 @@ struct PartyCameraView: View {
                             Circle()
                                 .fill(isShot ? Color.shotGreen : Color.shotFF)
                                 .frame(width: 112, height: 112)
-                        
+                            
                             if isShot{
                                 Image(systemName: "arrow.up.forward")
                                     .resizable()
@@ -252,7 +244,7 @@ struct PartyCameraView: View {
 struct CameraPreviewView: UIViewRepresentable {
     class VideoPreviewView: UIView {
         override class var layerClass: AnyClass {
-             AVCaptureVideoPreviewLayer.self
+            AVCaptureVideoPreviewLayer.self
         }
         
         var videoPreviewLayer: AVCaptureVideoPreviewLayer {
@@ -261,7 +253,7 @@ struct CameraPreviewView: UIViewRepresentable {
     }
     
     let session: AVCaptureSession
-   
+    
     func makeUIView(context: Context) -> VideoPreviewView {
         let view = VideoPreviewView()
         
@@ -270,7 +262,7 @@ struct CameraPreviewView: UIViewRepresentable {
         view.videoPreviewLayer.videoGravity = .resizeAspectFill
         view.videoPreviewLayer.cornerRadius = 0
         view.videoPreviewLayer.connection?.videoOrientation = .portrait
-
+        
         return view
     }
     
@@ -282,3 +274,28 @@ struct CameraPreviewView: UIViewRepresentable {
 #Preview {
     PartyCameraView()
 }
+
+
+// TODO: - 나중에 PartyListView에 적용
+//@ObservedObject var viewManager = CameraViewManager()
+//
+//var body: some View {
+//    VStack {
+//        ScrollView {
+//            VStack {
+//                ForEach(viewManager.arr, id: \.self) { data in
+//                    if let image = UIImage(data: data) {
+//                        Image(uiImage: image)
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 100, height: 100)
+//                            .cornerRadius(10)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    .onAppear {
+//        viewManager.configure()  // Ensure the camera manager is configured when the view appears
+//    }
+//}
