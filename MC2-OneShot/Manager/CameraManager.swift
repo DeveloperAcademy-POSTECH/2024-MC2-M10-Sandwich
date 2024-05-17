@@ -76,6 +76,13 @@ class CameraManager: NSObject, ObservableObject {
         print("[Camera]: Photo's taken")
     }
     
+    func retakePhoto(){
+        
+        DispatchQueue.global(qos: .background).async{
+            self.session.startRunning() // 화면 다시 촬영
+        }
+
+    }
 //    func savePhoto(_ imageData: Data) {
 //        guard let image = UIImage(data: imageData) else { return }
 //        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
@@ -100,9 +107,9 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         self.recentImage = UIImage(data: imageData) // 추가
 //        self.savePhoto(imageData)
         
-//        DispatchQueue.global(qos: .background).async{
-//            self.session.stopRunning() // 화면멈춤
-//        }
+        DispatchQueue.global(qos: .background).async{
+            self.session.stopRunning() // 화면멈춤
+        }
         
         print("[CameraModel]: Capture routine's done")
     }

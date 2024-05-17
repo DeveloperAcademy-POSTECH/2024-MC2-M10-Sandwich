@@ -10,7 +10,7 @@ import AVFoundation
 import Combine
 
 class CameraViewManager: ObservableObject {
-    private let model: CameraManager
+    private let manager: CameraManager
     private let session: AVCaptureSession
     private var subscriptions = Set<AnyCancellable>() // 추가
     let cameraPreview: AnyView
@@ -21,7 +21,7 @@ class CameraViewManager: ObservableObject {
     
     // 초기 세팅
     func configure() {
-        model.requestAndCheckPermissions()
+        manager.requestAndCheckPermissions()
     }
     
     // 플래시 온오프
@@ -31,9 +31,15 @@ class CameraViewManager: ObservableObject {
     
     // 사진 촬영
     func capturePhoto() {
-        model.capturePhoto()
+        manager.capturePhoto()
         print("[CameraViewModel]: Photo captured!")
     }
+    
+    func retakePhoto(){
+        manager.retakePhoto()
+        print("[CameraViewManager] : Photo retaker!")
+    }
+    
     
     // 전후면 카메라 스위칭
     func changeCamera() {
@@ -41,11 +47,11 @@ class CameraViewManager: ObservableObject {
     }
     
     init() {
-        model = CameraManager()
-        session = model.session
+        manager = CameraManager()
+        session = manager.session
         cameraPreview = AnyView(CameraPreviewView(session: session))
         
-        model.$recentImage.sink { [weak self] (photo) in // 추가
+        manager.$recentImage.sink { [weak self] (photo) in // 추가
             guard let pic = photo else { return }
             // 이미지를 정사각형 모양으로 가져옴
             if let croppedImage = self?.cropImageToSquare(image: pic) {

@@ -16,7 +16,7 @@ struct PartyCameraView: View {
     @EnvironmentObject private var pathModel: PathModel
     
     // camera
-    @ObservedObject var viewModel = CameraViewManager()
+    @ObservedObject var viewManager = CameraViewManager()
     
     @State private var isShowingImageModal = false
     @State private var isShot = false
@@ -83,9 +83,9 @@ struct PartyCameraView: View {
 //                .cornerRadius(25)
 //                .padding(.top, 36)
             VStack {
-                viewModel.cameraPreview.ignoresSafeArea()
+                viewManager.cameraPreview.ignoresSafeArea()
                     .onAppear {
-                        viewModel.configure()
+                        viewManager.configure()
                     }
                     .frame(width: 360, height: 360)
                     .aspectRatio(1, contentMode: .fit)
@@ -151,7 +151,11 @@ struct PartyCameraView: View {
                 HStack{
                     if isShot {
                         Button{
+                            if isShot{
+                                viewManager.retakePhoto()
+                            }
                             isShot.toggle()
+
                         } label: {
                             Text("다시찍기")
                                 .foregroundColor(.shotFF)
@@ -197,8 +201,14 @@ struct PartyCameraView: View {
                 
                 VStack{
                     Button{
-                        viewModel.capturePhoto()
+                        viewManager.capturePhoto()
+                        
+                        if isShot {
+                            viewManager.retakePhoto()
+                        }
+                        
                         isShot.toggle()
+                        
                     } label: {
                         ZStack{
                             Circle()
