@@ -25,8 +25,8 @@ struct HomeView: View {
                 ) {
                     print("현재 단계: \(stepManager.currentStep)")
                     print("시작 시간: \(stepManager.startDate.hourMinute)")
-                    print("종료 10분 전: \(stepManager.shutdownWarningDate.hourMinute)")
-                    print("종료 시간: \(stepManager.shutdownDate.hourMinute)")
+                    print("종료 10분 전: \(stepManager.currentShutdownWarningDate.hourMinute)")
+                    print("종료 시간: \(stepManager.currentShutdownDate.hourMinute)")
                     // isPartySetViewPresented.toggle()
                 }
                 .padding(.horizontal, 16)
