@@ -31,7 +31,7 @@ extension Date {
         return formatter.string(from: self)
     }
     
-    /// 2024.05.15 형식의 문자열을 반환합니다. (붙여씀)
+    /// 24.05.15 형식의 문자열을 반환합니다. (붙여씀)
     var yearMonthDayNoSpace: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yy.MM.dd"
