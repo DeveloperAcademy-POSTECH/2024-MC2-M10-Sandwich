@@ -10,9 +10,9 @@ import AVFoundation
 
 struct PartyCameraView: View {
     
-    @State private var iscamera: Bool = true
-    @State private var isbolt: Bool = false
-    @State private var isface: Bool = false
+    @State private var isCamera: Bool = true
+    @State private var isBolt: Bool = false
+    @State private var isFace: Bool = false
     @State private var isFinishPopupPresented: Bool = false
     @EnvironmentObject private var pathModel: PathModel
     
@@ -116,33 +116,33 @@ struct PartyCameraView: View {
                 if !isShot{
                     Button{
                         print("사진")
-                        iscamera = true
+                        isCamera = true
                     } label: {
                         Text("사진")
                             .pretendard(.bold, 17)
-                            .foregroundColor(iscamera ? .shotFF : .shot6D)
+                            .foregroundColor(isCamera ? .shotFF : .shot6D)
                             .frame(width: 64, height: 40)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .fill(iscamera ? Color.shot7B : Color.clear)
+                                    .fill(isCamera ? Color.shot7B : Color.clear)
                                     .overlay(RoundedRectangle(cornerRadius: 20)
-                                        .stroke(iscamera ? Color.shotGreen : Color.shot6D, lineWidth: 0.33)))
+                                        .stroke(isCamera ? Color.shotGreen : Color.shot6D, lineWidth: 0.33)))
                         
                     }
                     
                     Button{
                         print("비디오")
-                        iscamera = false
+                        isCamera = false
                     } label: {
                         Text("비디오")
                             .pretendard(.bold, 17)
-                            .foregroundColor(iscamera ? .shot6D : .shotFF)
+                            .foregroundColor(isCamera ? .shot6D : .shotFF)
                             .frame(width: 64, height: 40)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .fill(iscamera ? Color.clear : Color.shot7B)
+                                    .fill(isCamera ? Color.clear : Color.shot7B)
                                     .overlay(RoundedRectangle(cornerRadius: 20)
-                                        .stroke(iscamera ? Color.shot6D : Color.shotGreen, lineWidth: 0.33)))
+                                        .stroke(isCamera ? Color.shot6D : Color.shotGreen, lineWidth: 0.33)))
                     }
                 }
             }
@@ -167,11 +167,11 @@ struct PartyCameraView: View {
                     } else{
                         Button{
                             print("플래시")
-                            if !isface{
-                                isbolt.toggle()
+                            if !isFace{
+                                isBolt.toggle()
                             }
                         } label: {
-                            if isbolt {
+                            if isBolt {
                                 Image(systemName: "bolt")
                                     .resizable()
                                     .scaledToFit()
@@ -193,9 +193,9 @@ struct PartyCameraView: View {
                         Button{
                             print("화면전환")
                             viewManager.changeCamera()
-                            isface.toggle()
-                            if isface {
-                                isbolt = false
+                            isFace.toggle()
+                            if isFace {
+                                isBolt = false
                             }
                         } label: {
                             Image(systemName: "arrow.triangle.2.circlepath")
@@ -214,7 +214,7 @@ struct PartyCameraView: View {
                         if isShot {
                             viewManager.retakePhoto()
                         }
-                        if isbolt{
+                        if isBolt{
                             viewManager.toggleFlash()
                         }
                         isShot.toggle()
