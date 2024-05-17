@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFADD702BF6DE6500E333AD /* NotificationManager.swift */; };
+		1EFADD732BF6E34B00E333AD /* customSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* customSound.mp3 */; };
 		82016BE92BF49CA000BF01CF /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BE82BF49CA000BF01CF /* DummyData.swift */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
 		82016BF12BF6DCDF00BF01CF /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF02BF6DCDF00BF01CF /* TimeManager.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1EFADD702BF6DE6500E333AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		1EFADD722BF6E34B00E333AD /* customSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = customSound.mp3; sourceTree = "<group>"; };
 		82016BE82BF49CA000BF01CF /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
 		82016BF02BF6DCDF00BF01CF /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
@@ -89,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				82016BF02BF6DCDF00BF01CF /* TimeManager.swift */,
+				1EFADD702BF6DE6500E333AD /* NotificationManager.swift */,
+				1EFADD722BF6E34B00E333AD /* customSound.mp3 */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -293,6 +299,7 @@
 				BFB5340E2BF342840013E9FE /* Pretendard-Black.otf in Resources */,
 				BFB5340C2BF342840013E9FE /* Pretendard-SemiBold.otf in Resources */,
 				BFB534072BF342840013E9FE /* Pretendard-Light.otf in Resources */,
+				1EFADD732BF6E34B00E333AD /* customSound.mp3 in Resources */,
 				BFB5340B2BF342840013E9FE /* Pretendard-Regular.otf in Resources */,
 				BFB534082BF342840013E9FE /* Pretendard-Thin.otf in Resources */,
 				BFB5340A2BF342840013E9FE /* Pretendard-Medium.otf in Resources */,
@@ -325,6 +332,7 @@
 				825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
+				1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
