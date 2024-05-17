@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		82016BE92BF49CA000BF01CF /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BE82BF49CA000BF01CF /* DummyData.swift */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
+		82016BF12BF6DCDF00BF01CF /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF02BF6DCDF00BF01CF /* TimeManager.swift */; };
 		825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDC2BF32F46001B416A /* OneShotData.swift */; };
 		825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDF2BF486BE001B416A /* ActionButton.swift */; };
 		8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		82016BE82BF49CA000BF01CF /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
+		82016BF02BF6DCDF00BF01CF /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
 		825F0BDC2BF32F46001B416A /* OneShotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneShotData.swift; sourceTree = "<group>"; };
 		825F0BDF2BF486BE001B416A /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		8264EA0C2BF2000900586FA0 /* MC2-OneShot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MC2-OneShot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +85,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		82016BEF2BF6DCC200BF01CF /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				82016BF02BF6DCDF00BF01CF /* TimeManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		825F0BDE2BF486AB001B416A /* Component */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,12 +120,12 @@
 		8264EA0E2BF2000900586FA0 /* MC2-OneShot */ = {
 			isa = PBXGroup;
 			children = (
-				BFB534102BF342BE0013E9FE /* Info.plist */,
 				8264EA1F2BF2008C00586FA0 /* App */,
 				8264EA1E2BF2008400586FA0 /* Model */,
 				8264EA1D2BF2007F00586FA0 /* Presentation */,
-				8264EA202BF2009800586FA0 /* Resource */,
 				BFB534112BF344ED0013E9FE /* Helper */,
+				82016BEF2BF6DCC200BF01CF /* Manager */,
+				8264EA202BF2009800586FA0 /* Resource */,
 				8264EA152BF2000A00586FA0 /* Preview Content */,
 			);
 			path = "MC2-OneShot";
@@ -152,6 +162,7 @@
 		8264EA1F2BF2008C00586FA0 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				BFB534102BF342BE0013E9FE /* Info.plist */,
 				8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */,
 			);
 			path = App;
@@ -310,6 +321,7 @@
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
+				82016BF12BF6DCDF00BF01CF /* TimeManager.swift in Sources */,
 				825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
@@ -449,7 +461,7 @@
 				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "MC2-OneShot/Info.plist";
+				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -480,7 +492,7 @@
 				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "MC2-OneShot/Info.plist";
+				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
