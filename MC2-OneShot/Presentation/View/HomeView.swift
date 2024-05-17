@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 struct HomeView: View {
     
     @StateObject private var pathModel: PathModel = .init()
-    
     @State private var isPartySetViewPresented = false
+    
+    private var lifeCycleManager: LifeCycleManager = .init()
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
@@ -39,7 +41,9 @@ struct HomeView: View {
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
-            
+            .onReceive(lifeCycleManager.mergeLifeCyclePublishers()) { event in
+                print("\(event.name)")
+            }
         }
         .environmentObject(pathModel)
     }
