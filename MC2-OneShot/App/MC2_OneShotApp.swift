@@ -11,7 +11,8 @@ import SwiftUI
 struct MC2_OneShotApp: App {
     var body: some Scene {
         WindowGroup {
-           HomeView()
+//           HomeView()
+            LocalPushNotification()
         }
     }
 }

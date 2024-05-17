@@ -17,7 +17,7 @@ struct LocalPushNotification: View {
                 manager.requestAuthorization()
             }
             Button("알림 예약") {
-                manager.scheduleNotification(trigger: .time)
+                manager.scheduleNotification(trigger: .calender)
             }
             Button("삭제") {
                 manager.cancelNotification()
@@ -46,17 +46,19 @@ class NotificationManager {
     }
     
     enum TriggerType: String {
-        case time = "time"
+        case calender = "calender"
         
         var trigger: UNNotificationTrigger {
             switch self {
-            case .time:
-                return UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false) // 알림 주기 입력
+            case .calender:
+                let dateComponent = DateComponents(year: 2024, month: 5, day: 17, hour: 15, minute: 43)
+                return UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
             }
         }
     }
     
     func scheduleNotification(trigger: TriggerType) {
+        
         let content = UNMutableNotificationContent()
         content.title = "알림 주기가 다가왔습니다"
         content.subtitle = "사진을 찍어주세요!"
@@ -70,11 +72,12 @@ class NotificationManager {
         } else {
             print("사운드 파일을 찾을 수 없습니다.")
         }
-
+        
         content.badge = 1
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger.trigger)
         UNUserNotificationCenter.current().add(request)
+        
     }
     
     func cancelNotification() {
