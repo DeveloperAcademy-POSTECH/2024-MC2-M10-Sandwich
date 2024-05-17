@@ -13,7 +13,7 @@ struct HomeView: View {
     @StateObject private var pathModel: PathModel = .init()
     @State private var isPartySetViewPresented = false
     
-    private var stepManager = StepManager(startDate: Date(), notiCycle: .min30)
+    private var stepManager = StepManager(startDate: Date(), notiCycle: .min60)
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
@@ -23,7 +23,10 @@ struct HomeView: View {
                     title: "GO STEP!",
                     buttonType:.primary
                 ) {
-                    print(stepManager.currentStep)
+                    print("현재 단계: \(stepManager.currentStep)")
+                    print("시작 시간: \(stepManager.startDate.hourMinute)")
+                    print("종료 10분 전: \(stepManager.shutdownWarningDate.hourMinute)")
+                    print("종료 시간: \(stepManager.shutdownDate.hourMinute)")
                     // isPartySetViewPresented.toggle()
                 }
                 .padding(.horizontal, 16)

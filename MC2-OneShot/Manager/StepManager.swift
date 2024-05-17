@@ -61,4 +61,17 @@ extension StepManager {
         // 2. currentStep = (지난 시간 / NotiCycle) + 1
         return durationTime / (notiCycle.rawValue * 60) + 1
     }
+    
+    /// 강제 종료 시간을 반환하는 계산 속성
+    var shutdownDate: Date {
+        let shutdownStepSecond = TimeInterval(currentStep * notiCycle.rawValue * 60)
+        let shutdownSecond = startDate.timeIntervalSince1970 + shutdownStepSecond
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
+    /// 강제 종료 10분전 시점 - 경고
+    var shutdownWarningDate: Date {
+        let shutDownWarningSecond = shutdownDate.timeIntervalSince1970 - TimeInterval(600)
+        return Date(timeIntervalSince1970: shutDownWarningSecond)
+    }
 }
