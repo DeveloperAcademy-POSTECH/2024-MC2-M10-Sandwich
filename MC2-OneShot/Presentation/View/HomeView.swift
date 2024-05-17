@@ -17,7 +17,29 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
-            VStack {
+            
+            VStack(alignment: .leading) {
+                HStack{
+                    Spacer()
+                    // 추후 SearchView로 이동
+                    Button {
+                        print("search")
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.shotFF)
+                            .padding(.trailing, 16)
+                    }
+                }
+                HStack{
+                    Image("appLogo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 35)
+                        .padding(.leading, 16)
+                        .padding(.top, 20)
+                }
                 ListView()
                 ActionButton(
                     title: "GO STEP!",
@@ -31,7 +53,6 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 16)
             }
-            .navigationTitle("ONE SHOT")
             .navigationDestination(for: PathType.self) { path in
                 switch path {
                 case .partySet: PartySetView(isPartySetViewPresented: .constant(false))
@@ -74,10 +95,6 @@ private struct ListView: View {
                 .tint(.red)
             }
         }
-        .searchable(
-            text: $searchText,
-            prompt: "술자리를 검색해보세요"
-        )
         .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
@@ -96,13 +113,13 @@ private struct ListCellView: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "wineglass.fill")
+            Image(.test)
                 .resizable()
                 .frame(width: 68, height: 68)
                 .clipShape(RoundedRectangle(cornerRadius: 7.5))
             
             Spacer()
-                .frame(width: 8)
+                .frame(width: 12)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
@@ -113,7 +130,7 @@ private struct ListCellView: View {
                     .pretendard(.regular, 14)
                     .foregroundStyle(.shot6D)
             }
-            
+
             Spacer()
             
             VStack(spacing: 4) {
@@ -146,8 +163,8 @@ private struct PartyStateInfoLabel: View {
         Text(stateInfo == .live ? "LIVE" : "STEP_\(stepCount)")
             .frame(width: 76, height: 22)
             .pretendard(.bold, 14)
-            .background(stateInfo == .live ? .shotBlue : .shotGreen)
-            .foregroundStyle(stateInfo == .live ? .shotFF : .shot00)
+            .background(stateInfo == .live ? .shotGreen : .shot33)
+            .foregroundStyle(stateInfo == .live ? .shot00 : .shotD8)
             .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
