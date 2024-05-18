@@ -26,13 +26,17 @@ struct HomeView: View {
     @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var pathModel: PathModel = .init()
     @State private var isPartySetViewPresented = false
+    @State private var searchText = ""
+
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
             
             VStack(alignment: .leading) {
+                
                 HStack{
                     Spacer()
+                  
                     Button {
                         // TODO: SearchView 이동
                     } label: {
@@ -52,6 +56,7 @@ struct HomeView: View {
                         .padding(.top, 20)
                 }
                 ListView()
+                   
                 ActionButton(
                     title: "GO STEP!",
                     buttonType:.primary
@@ -72,6 +77,7 @@ struct HomeView: View {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
+                
             }
         }
         .environmentObject(pathModel)
@@ -107,6 +113,7 @@ private struct ListView: View {
         .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
+        
     }
 }
 
