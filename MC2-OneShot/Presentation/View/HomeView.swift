@@ -12,6 +12,8 @@ struct HomeView: View {
     
     @StateObject private var pathModel: PathModel = .init()
     @State private var isPartySetViewPresented = false
+    @State private var searchText = ""
+
     
     private var stepManager = StepManager(startDate: Date(), notiCycle: .min60)
     
@@ -19,17 +21,22 @@ struct HomeView: View {
         NavigationStack(path: $pathModel.paths) {
             
             VStack(alignment: .leading) {
+                
                 HStack{
                     Spacer()
+                    
+                
                     // 추후 SearchView로 이동
-                    Button {
-                        print("search")
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.shotFF)
-                            .padding(.trailing, 16)
+                    Button(action: {
+                    
+                    }) {
+                        NavigationLink(destination: SearchView()) {
+                            Image(systemName: "magnifyingglass")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundStyle(.shotFF)
+                                .padding(.trailing, 16)
+                        }
                     }
                 }
                 HStack{
@@ -41,6 +48,7 @@ struct HomeView: View {
                         .padding(.top, 20)
                 }
                 ListView()
+                   
                 ActionButton(
                     title: "GO STEP!",
                     buttonType:.primary
@@ -65,6 +73,7 @@ struct HomeView: View {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
+                
             }
         }
         .environmentObject(pathModel)
@@ -73,10 +82,9 @@ struct HomeView: View {
 
 // MARK: - ListView
 private struct ListView: View {
-    
-    @State private var searchText = ""
-    
+
     var body: some View {
+        
         List(dummyPartys) { party in
             ListCellView(
                 thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
@@ -98,6 +106,7 @@ private struct ListView: View {
         .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
+        
     }
 }
 
