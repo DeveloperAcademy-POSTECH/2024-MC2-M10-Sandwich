@@ -6,16 +6,28 @@
 //
 
 import SwiftUI
-import Combine
+import SwiftData
+
+struct InitialView: View {
+    
+    var modelContainer: ModelContainer
+    
+    var body: some View {
+        HomeView(
+            persistentDataManager: PersistentDataManager(
+                modelContext: modelContainer.mainContext
+            )
+        )
+    }
+}
 
 struct HomeView: View {
     
+    @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var pathModel: PathModel = .init()
     @State private var isPartySetViewPresented = false
     @State private var searchText = ""
 
-    
-    private var stepManager = StepManager(startDate: Date(), notiCycle: .min60)
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
@@ -24,19 +36,15 @@ struct HomeView: View {
                 
                 HStack{
                     Spacer()
-                    
-                
-                    // 추후 SearchView로 이동
-                    Button(action: {
-                    
-                    }) {
-                        NavigationLink(destination: SearchView()) {
-                            Image(systemName: "magnifyingglass")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .foregroundStyle(.shotFF)
-                                .padding(.trailing, 16)
-                        }
+                  
+                    Button {
+                        // TODO: SearchView 이동
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.shotFF)
+                            .padding(.trailing, 16)
                     }
                 }
                 HStack{
@@ -53,11 +61,7 @@ struct HomeView: View {
                     title: "GO STEP!",
                     buttonType:.primary
                 ) {
-                    print("현재 단계: \(stepManager.currentStep)")
-                    print("시작 시간: \(stepManager.startDate.hourMinute)")
-                    print("종료 10분 전: \(stepManager.currentShutdownWarningDate.hourMinute)")
-                    print("종료 시간: \(stepManager.currentStepEndDate.hourMinute)")
-                    // isPartySetViewPresented.toggle()
+                    isPartySetViewPresented.toggle()
                 }
                 .padding(.horizontal, 16)
             }
@@ -77,15 +81,18 @@ struct HomeView: View {
             }
         }
         .environmentObject(pathModel)
+        .environmentObject(persistentDataManager)
     }
 }
 
 // MARK: - ListView
 private struct ListView: View {
-
+    
+    @Query private var partys: [Party]
+    @State private var searchText = ""
+    
     var body: some View {
-        
-        List(dummyPartys) { party in
+        List(partys) { party in
             ListCellView(
                 thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
                 title: party.title,
@@ -139,7 +146,7 @@ private struct ListCellView: View {
                     .pretendard(.regular, 14)
                     .foregroundStyle(.shot6D)
             }
-
+            
             Spacer()
             
             VStack(spacing: 4) {
@@ -179,6 +186,7 @@ private struct PartyStateInfoLabel: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(persistentDataManager: PersistentDataManager(modelContext: ModelContext(MockModelContainer.mockModelContainer)))
         .environmentObject(PathModel())
+        .modelContainer(MockModelContainer.mockModelContainer)
 }

@@ -8,7 +8,20 @@
 import SwiftUI
 
 struct MemberPopupView: View {
-    var party: Party = Party(title: "포항공대애애앵", startDate: Date(), notiCycle: 30, memberList: [Member(profileImage: "member1.jpg"), Member(profileImage: "member2.jpg"), Member(profileImage: "member2.jpg"), Member(profileImage: "member2.jpg"), Member(profileImage: "member2.jpg"), Member(profileImage: "member2.jpg"),Member(profileImage: "member2.jpg")])
+    var party: Party = Party(
+        title: "포항공대애애앵",
+        startDate: Date(),
+        notiCycle: 30,
+        memberList: [
+            Member(profileImageData: Data()),
+            Member(profileImageData: Data()),
+            Member(profileImageData: Data()),
+            Member(profileImageData: Data()),
+            Member(profileImageData: Data()),
+            Member(profileImageData: Data()),
+            Member(profileImageData: Data())
+        ]
+    )
     
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 20),
@@ -62,11 +75,9 @@ struct MemberPopupView: View {
                             .padding(.bottom, 12)
                         
                         LazyVGrid(columns: columns, spacing: 30) {
-                            if let memberList = party.memberList {
-                                ForEach(memberList.indices, id: \.self) { index in
-                                    PeopleCell(member: memberList[index])
+                                ForEach(party.memberList.indices, id: \.self) { index in
+                                    PeopleCell(member: party.memberList[index])
                                 }
-                            }
                         }
                         .padding(.top, 30)
                     }

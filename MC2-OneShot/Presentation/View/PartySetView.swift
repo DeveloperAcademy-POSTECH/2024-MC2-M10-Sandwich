@@ -10,8 +10,10 @@ import SwiftUI
 struct PartySetView: View {
     
     @EnvironmentObject private var pathModel: PathModel
+    @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @State private var titleText: String = ""
+    @State private var notiCycle: NotiCycle = .min30
     
     @Binding var isPartySetViewPresented: Bool
     
@@ -28,7 +30,7 @@ struct PartySetView: View {
                 List {
                     TextField("제목", text: $titleText)
                     MemberListView()
-                    NotiCycleView()
+                    NotiCycleView(notiCycle: $notiCycle)
                 }
                 
                 Spacer()
@@ -38,8 +40,13 @@ struct PartySetView: View {
                     buttonType: titleText.isEmpty
                     ? .disabled : .primary
                 ) {
-                    // TODO: 술자리가 시작했다는 변수 업데이트
                     // TODO: 술자리 데이터 생성
+                    persistentDataManager.createParty(
+                        title: titleText,
+                        notiCycle: notiCycle
+                    )
+                    
+                    // TODO: 술자리가 시작했다는 변수 업데이트
                     isPartySetViewPresented.toggle()
                     pathModel.paths.append(.partyCamera)
                 }
@@ -135,7 +142,7 @@ private struct MemberListView: View {
 // MARK: - NotiCycleView
 private struct NotiCycleView: View {
     
-    @State private var notiCycle = 30
+    @Binding var notiCycle: NotiCycle
     
     var body: some View {
         Section {
@@ -145,13 +152,13 @@ private struct NotiCycleView: View {
                 Spacer()
                 
                 Menu {
-                    Button("30분") { notiCycle = 30 }
-                    Button("60분") { notiCycle = 60 }
-                    Button("90분") {notiCycle = 90 }
-                    Button("120분") { notiCycle = 120 }
+                    Button("30분") { notiCycle = .min30 }
+                    Button("60분") { notiCycle = .min60 }
+                    Button("90분") {notiCycle = .min90 }
+                    Button("120분") { notiCycle = .min120 }
                 } label: {
                     HStack {
-                        Text("\(notiCycle)분")
+                        Text("\(notiCycle.rawValue)분")
                             .pretendard(.regular, 17)
                         
                         Image(systemName: "chevron.up.chevron.down")
@@ -168,4 +175,5 @@ private struct NotiCycleView: View {
 
 #Preview {
     PartySetView(isPartySetViewPresented: .constant(true))
+        .modelContainer(MockModelContainer.mockModelContainer)
 }

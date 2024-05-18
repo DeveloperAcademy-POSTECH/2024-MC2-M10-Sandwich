@@ -6,21 +6,21 @@
 //
 
 import Foundation
-// import SwiftData
+import SwiftData
 
-// @Model
+@Model
 class Party: Identifiable {
-    let id: UUID = .init()
+    @Attribute(.unique) let id: UUID
     
     let title: String
     let startDate: Date
     let notiCycle: Int
-    var stepList: [Step]
+    @Relationship(deleteRule: .cascade) var stepList: [Step]
     
     var isLive: Bool
     var isShutdown: Bool
     
-    let memberList: [Member]?
+    @Relationship(deleteRule: .cascade) var memberList: [Member]
     var comment: String?
     
     init(
@@ -30,9 +30,10 @@ class Party: Identifiable {
         stepList: [Step] = [],
         isLive: Bool = true,
         isShutdown: Bool = false,
-        memberList: [Member]? = nil,
+        memberList: [Member] = [],
         comment: String? = nil
     ) {
+        self.id = UUID()
         self.title = title
         self.startDate = startDate
         self.notiCycle = notiCycle
@@ -44,28 +45,31 @@ class Party: Identifiable {
     }
 }
 
+@Model
 class Step: Identifiable {
-    var mediaList: [Media]
+    @Relationship(deleteRule: .cascade) var mediaList: [Media]
     
     init(mediaList: [Media]) {
         self.mediaList = mediaList
     }
 }
 
-class Media {
-    var fileData: String // TODO: 어떤 타입이 들어갈 수 있는지 리서치
+@Model
+class Media: Identifiable {
+    var fileData: Data
     var captureDate: Date
     
-    init(fileData: String, captureDate: Date) {
+    init(fileData: Data, captureDate: Date) {
         self.fileData = fileData
         self.captureDate = captureDate
     }
 }
 
+@Model
 class Member: Identifiable {
-    let profileImage: String // TODO: 어떤 타입이 들어갈 수 있는지 리서치
+    let profileImageData: Data
     
-    init(profileImage: String) {
-        self.profileImage = profileImage
+    init(profileImageData: Data) {
+        self.profileImageData = profileImageData
     }
 }
