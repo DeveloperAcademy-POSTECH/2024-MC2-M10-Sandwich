@@ -98,8 +98,6 @@
 			children = (
 				82016BF82BF742C300BF01CF /* PartyService.swift */,
 				82016BF02BF6DCDF00BF01CF /* StepManager.swift */,
-        82016BF82BF742C300BF01CF /* PartyService.swift */,
-				82016BF02BF6DCDF00BF01CF /* StepManager.swift */,
 				98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */,
 				98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */,
 			);
@@ -476,7 +474,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -509,7 +507,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";

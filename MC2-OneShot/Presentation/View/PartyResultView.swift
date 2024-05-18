@@ -42,9 +42,9 @@ struct PartyResultView: View {
                 .foregroundColor(.shotGreen)
                 .frame(width: 120, height: 120)
                 .overlay(
-                Circle()
-                    .foregroundColor(.shotGreen)
-                    .padding(8)
+                    Circle()
+                        .foregroundColor(.shotGreen)
+                        .padding(8)
                 )
                 .overlay(
                     VStack{
@@ -54,12 +54,12 @@ struct PartyResultView: View {
                             .frame(width: 36, height: 36)
                             .padding(.bottom, 4)
                             .foregroundColor(.shotFF)
-                            
+                        
                             .background(
                                 Circle()
-                                .fill(.shot00)
-                                .padding(4))
-                            
+                                    .fill(.shot00)
+                                    .padding(4))
+                        
                         Text("STEP \(dummyPartys[0].stepList.count)")
                             .foregroundColor(.shot00)
                             .pretendard(.bold, 20)
@@ -78,7 +78,7 @@ struct PartyResultView: View {
                 }
             }
             .padding(.vertical, 8)
-                
+            
             ListView()
             
             HStack(spacing: 8) {
@@ -109,8 +109,8 @@ func totalTime() -> String {
     
     let startTime = dummyPartys[0].startDate.hourMinute
     let stepCount = dummyPartys[0].stepList.count
-//    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
-//    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
+    //    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
+    //    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
     
     // 일단 강제 종료일 경우
     let allSteptime = (stepCount + 1) * dummyPartys[0].notiCycle
@@ -127,7 +127,7 @@ private struct ListView: View {
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())
-      ]
+    ]
     
     var body: some View {
         List{
@@ -180,13 +180,12 @@ private struct ListView: View {
                     }
                     
                     LazyVGrid(columns: columns){
-                        ForEach(dummyPartys[0].memberList!, id: \.profileImage){ member in
-                            
+                        ForEach(dummyPartys[0].memberList!){ member in
                             Circle()
                                 .frame(width: 54, height: 54)
                             
                         }
-                    }       
+                    }
                 }
             }
         }

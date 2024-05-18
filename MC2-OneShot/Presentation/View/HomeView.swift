@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 struct HomeView: View {
     
@@ -45,11 +44,7 @@ struct HomeView: View {
                     title: "GO STEP!",
                     buttonType:.primary
                 ) {
-                    print("현재 단계: \(stepManager.currentStep)")
-                    print("시작 시간: \(stepManager.startDate.hourMinute)")
-                    print("종료 10분 전: \(stepManager.currentShutdownWarningDate.hourMinute)")
-                    print("종료 시간: \(stepManager.currentStepEndDate.hourMinute)")
-                    // isPartySetViewPresented.toggle()
+                    isPartySetViewPresented.toggle()
                 }
                 .padding(.horizontal, 16)
             }
