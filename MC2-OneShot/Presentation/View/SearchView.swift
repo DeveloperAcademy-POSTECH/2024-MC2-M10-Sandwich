@@ -12,8 +12,22 @@ import SwiftUI
 struct SearchView: View {
     @State private var searchText = ""
     var body: some View {
-       ListView()
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+        
+        Group{
+            if searchText.isEmpty{
+                Text("찾고싶은 술자리 이름을 검색해주세요")
+                  
+                Spacer()
+                
+            
+            } else{
+                ListView()
+   
+            }
+        }.searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+        
+        
+       
             
     }
 }
