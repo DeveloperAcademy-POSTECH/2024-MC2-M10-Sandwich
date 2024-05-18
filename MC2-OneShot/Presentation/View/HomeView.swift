@@ -38,7 +38,7 @@ struct HomeView: View {
                     Spacer()
                   
                     Button {
-                        // TODO: SearchView 이동
+                        pathModel.paths.append(.searchView)
                     } label: {
                         Image(systemName: "magnifyingglass")
                             .resizable()
@@ -71,6 +71,7 @@ struct HomeView: View {
                 case .partyCamera: PartyCameraView()
                 case .partyList: PartyListView()
                 case .partyResult: PartyResultView()
+                case .searchView: SearchView()
                 }
             }
             .sheet(isPresented: $isPartySetViewPresented) {
