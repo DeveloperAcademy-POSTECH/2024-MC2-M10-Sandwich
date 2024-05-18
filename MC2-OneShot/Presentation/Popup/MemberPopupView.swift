@@ -75,11 +75,9 @@ struct MemberPopupView: View {
                             .padding(.bottom, 12)
                         
                         LazyVGrid(columns: columns, spacing: 30) {
-                            if let memberList = party.memberList {
-                                ForEach(memberList.indices, id: \.self) { index in
-                                    PeopleCell(member: memberList[index])
+                                ForEach(party.memberList.indices, id: \.self) { index in
+                                    PeopleCell(member: party.memberList[index])
                                 }
-                            }
                         }
                         .padding(.top, 30)
                     }

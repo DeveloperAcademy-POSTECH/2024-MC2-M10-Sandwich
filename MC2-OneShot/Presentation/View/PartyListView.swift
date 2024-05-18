@@ -182,5 +182,5 @@ struct StepCell: View {
 //}
 
 #Preview {
-    PartyListView(party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 30))
+    PartyListView(party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60))
 }

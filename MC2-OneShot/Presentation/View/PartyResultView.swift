@@ -180,7 +180,7 @@ private struct ListView: View {
                     }
                     
                     LazyVGrid(columns: columns){
-                        ForEach(dummyPartys[0].memberList!){ member in
+                        ForEach(dummyPartys[0].memberList){ member in
                             Circle()
                                 .frame(width: 54, height: 54)
                             

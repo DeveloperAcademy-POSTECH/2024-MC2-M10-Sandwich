@@ -20,7 +20,7 @@ class Party: Identifiable {
     var isLive: Bool
     var isShutdown: Bool
     
-    @Relationship(deleteRule: .cascade) let memberList: [Member]?
+    @Relationship(deleteRule: .cascade) var memberList: [Member]
     var comment: String?
     
     init(
@@ -30,7 +30,7 @@ class Party: Identifiable {
         stepList: [Step] = [],
         isLive: Bool = true,
         isShutdown: Bool = false,
-        memberList: [Member]? = nil,
+        memberList: [Member] = [],
         comment: String? = nil
     ) {
         self.id = UUID()
@@ -55,7 +55,7 @@ class Step: Identifiable {
 }
 
 @Model
-class Media {
+class Media: Identifiable {
     var fileData: Data
     var captureDate: Date
     

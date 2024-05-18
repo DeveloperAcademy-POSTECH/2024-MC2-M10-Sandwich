@@ -8,8 +8,22 @@
 import SwiftUI
 import SwiftData
 
+struct InitialView: View {
+    
+    var modelContainer: ModelContainer
+    
+    var body: some View {
+        HomeView(
+            persistentDataManager: PersistentDataManager(
+                modelContext: modelContainer.mainContext
+            )
+        )
+    }
+}
+
 struct HomeView: View {
     
+    @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var pathModel: PathModel = .init()
     @State private var isPartySetViewPresented = false
     
@@ -19,9 +33,8 @@ struct HomeView: View {
             VStack(alignment: .leading) {
                 HStack{
                     Spacer()
-                    // 추후 SearchView로 이동
                     Button {
-                        print("search")
+                        // TODO: SearchView 이동
                     } label: {
                         Image(systemName: "magnifyingglass")
                             .resizable()
@@ -62,6 +75,7 @@ struct HomeView: View {
             }
         }
         .environmentObject(pathModel)
+        .environmentObject(persistentDataManager)
     }
 }
 
@@ -165,7 +179,7 @@ private struct PartyStateInfoLabel: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(persistentDataManager: PersistentDataManager(modelContext: ModelContext(MockModelContainer.mockModelContainer)))
         .environmentObject(PathModel())
         .modelContainer(MockModelContainer.mockModelContainer)
 }

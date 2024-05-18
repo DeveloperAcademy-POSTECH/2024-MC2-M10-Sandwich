@@ -11,10 +11,11 @@ import SwiftData
 @main
 struct MC2_OneShotApp: App {
     
+    /// SwiftData ModelContainer 생성
     var modelContainer: ModelContainer = {
         
         // 1. Scehema 및 ModelConfiguration 생성
-        let schema = Schema([Party.self])
+        let schema = Schema([Party.self, Member.self])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         
         // 2. ModelContainer 생성
@@ -27,7 +28,7 @@ struct MC2_OneShotApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            InitialView(modelContainer: modelContainer)
         }
         .modelContainer(modelContainer)
     }
