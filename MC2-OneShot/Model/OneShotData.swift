@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Party: Identifiable {
-    let id: UUID
+    @Attribute(.unique) let id: UUID
     
     let title: String
     let startDate: Date

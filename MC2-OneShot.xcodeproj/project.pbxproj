@@ -27,6 +27,7 @@
 		8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA2F2BF2016B00586FA0 /* MemberPopupView.swift */; };
 		8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA312BF2017300586FA0 /* ShutdownPopupView.swift */; };
 		8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA332BF2021D00586FA0 /* PathModel.swift */; };
+		82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE12BF88A7B00119628 /* MockModelContainer.swift */; };
 		98BA9D4C2BF6DF3900BEEDCC /* CameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */; };
 		98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
@@ -65,6 +66,7 @@
 		8264EA2F2BF2016B00586FA0 /* MemberPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberPopupView.swift; sourceTree = "<group>"; };
 		8264EA312BF2017300586FA0 /* ShutdownPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutdownPopupView.swift; sourceTree = "<group>"; };
 		8264EA332BF2021D00586FA0 /* PathModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathModel.swift; sourceTree = "<group>"; };
+		82B49BE12BF88A7B00119628 /* MockModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockModelContainer.swift; sourceTree = "<group>"; };
 		98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewManager.swift; sourceTree = "<group>"; };
 		98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				82016BF62BF7034A00BF01CF /* NotiCycle.swift */,
 				825F0BDC2BF32F46001B416A /* OneShotData.swift */,
 				82016BE82BF49CA000BF01CF /* DummyData.swift */,
+				82B49BE12BF88A7B00119628 /* MockModelContainer.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				98BA9D4C2BF6DF3900BEEDCC /* CameraViewManager.swift in Sources */,
 				8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */,
 				82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */,
+				82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */,
 				8264EA282BF2013000586FA0 /* PartyResultView.swift in Sources */,
 				82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */,
 				82016BE92BF49CA000BF01CF /* DummyData.swift in Sources */,

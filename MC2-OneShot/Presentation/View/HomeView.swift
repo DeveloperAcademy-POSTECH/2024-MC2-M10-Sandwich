@@ -6,13 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     
     @StateObject private var pathModel: PathModel = .init()
     @State private var isPartySetViewPresented = false
-    
-    private var stepManager = StepManager(startDate: Date(), notiCycle: .min60)
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
@@ -69,10 +68,11 @@ struct HomeView: View {
 // MARK: - ListView
 private struct ListView: View {
     
+    @Query private var partys: [Party]
     @State private var searchText = ""
     
     var body: some View {
-        List(dummyPartys) { party in
+        List(partys) { party in
             ListCellView(
                 thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
                 title: party.title,
@@ -125,7 +125,7 @@ private struct ListCellView: View {
                     .pretendard(.regular, 14)
                     .foregroundStyle(.shot6D)
             }
-
+            
             Spacer()
             
             VStack(spacing: 4) {
@@ -167,4 +167,5 @@ private struct PartyStateInfoLabel: View {
 #Preview {
     HomeView()
         .environmentObject(PathModel())
+        .modelContainer(MockModelContainer.mockModelContainer)
 }
