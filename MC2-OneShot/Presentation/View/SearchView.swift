@@ -1,82 +1,34 @@
 //
-//  HomeView.swift
+//  SearchView.swift
 //  MC2-OneShot
 //
-//  Created by 김민준 on 5/13/24.
+//  Created by p_go.ne on 5/18/24.
 //
 
 import SwiftUI
-import Combine
 
-struct HomeView: View {
-    
-    @StateObject private var pathModel: PathModel = .init()
-    @State private var isPartySetViewPresented = false
+
+
+struct SearchView: View {
     @State private var searchText = ""
-
-    
-    private var stepManager = StepManager(startDate: Date(), notiCycle: .min60)
-    
     var body: some View {
-        NavigationStack(path: $pathModel.paths) {
+        
+        Group{
+            if searchText.isEmpty{
+                Text("찾고싶은 술자리 이름을 검색해주세요")
+                  
+                Spacer()
+                
             
-            VStack(alignment: .leading) {
-                
-                HStack{
-                    Spacer()
-                    
-                
-                    // 추후 SearchView로 이동
-                    Button(action: {
-                    
-                    }) {
-                        NavigationLink(destination: SearchView()) {
-                            Image(systemName: "magnifyingglass")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .foregroundStyle(.shotFF)
-                                .padding(.trailing, 16)
-                        }
-                    }
-                }
-                HStack{
-                    Image("appLogo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 35)
-                        .padding(.leading, 16)
-                        .padding(.top, 20)
-                }
+            } else{
                 ListView()
-                   
-                ActionButton(
-                    title: "GO STEP!",
-                    buttonType:.primary
-                ) {
-                    print("현재 단계: \(stepManager.currentStep)")
-                    print("시작 시간: \(stepManager.startDate.hourMinute)")
-                    print("종료 10분 전: \(stepManager.currentShutdownWarningDate.hourMinute)")
-                    print("종료 시간: \(stepManager.currentStepEndDate.hourMinute)")
-                    // isPartySetViewPresented.toggle()
-                }
-                .padding(.horizontal, 16)
+   
             }
-            .navigationDestination(for: PathType.self) { path in
-                switch path {
-                case .partySet: PartySetView(isPartySetViewPresented: .constant(false))
-                case .partyCamera: PartyCameraView()
-                case .partyList: PartyListView()
-                case .partyResult: PartyResultView()
-                }
-            }
-            .sheet(isPresented: $isPartySetViewPresented) {
-                PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
-                
-            }
-        }
-        .environmentObject(pathModel)
+        }.searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+        
+        
+       
+            
     }
 }
 
@@ -84,7 +36,6 @@ struct HomeView: View {
 private struct ListView: View {
 
     var body: some View {
-        
         List(dummyPartys) { party in
             ListCellView(
                 thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
@@ -107,6 +58,7 @@ private struct ListView: View {
         .padding(.top, 8)
         .padding(.bottom, 16)
         
+       
     }
 }
 
@@ -178,7 +130,8 @@ private struct PartyStateInfoLabel: View {
     }
 }
 
+
+
 #Preview {
-    HomeView()
-        .environmentObject(PathModel())
+    SearchView()
 }
