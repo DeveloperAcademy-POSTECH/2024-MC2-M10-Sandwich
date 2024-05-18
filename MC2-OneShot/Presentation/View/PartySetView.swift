@@ -47,9 +47,8 @@ struct PartySetView: View {
                     )
                     
                     // TODO: 술자리가 시작했다는 변수 업데이트
-                    
                     isPartySetViewPresented.toggle()
-                    // pathModel.paths.append(.partyCamera)
+                    pathModel.paths.append(.partyCamera)
                 }
                 .padding(16)
             }

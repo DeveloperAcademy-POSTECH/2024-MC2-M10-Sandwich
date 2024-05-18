@@ -19,9 +19,10 @@ final class PersistentDataManager: ObservableObject {
     }
 }
 
-// MARK: - Method
+// MARK: - PartySetView Method
 extension PersistentDataManager {
     
+    /// 술자리를 시작할 때 생성하는 Party 데이터입니다.
     func createParty(title: String, notiCycle: NotiCycle) {
         let newParty = Party(
             title: title,
@@ -30,6 +31,5 @@ extension PersistentDataManager {
         )
         
         modelContext.insert(newParty)
-        try? modelContext.save()
     }
 }
