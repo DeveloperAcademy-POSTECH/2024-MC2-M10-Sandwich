@@ -13,6 +13,7 @@ enum PathType: Hashable {
     case partyCamera /// 파티 카메라 View
     case partyResult /// 파티 결과(완료) View
     case partyList /// 파티 리스트  View
+    case searchView
 }
 
 /// 화면 데이터 흐름을 감지하기 위한 Model

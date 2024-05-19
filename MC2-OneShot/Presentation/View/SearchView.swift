@@ -16,6 +16,7 @@ struct SearchView: View {
         Group{
             if searchText.isEmpty{
                 Text("찾고싶은 술자리 이름을 검색해주세요")
+                    .foregroundStyle(.shot33)
                   
                 Spacer()
                 
