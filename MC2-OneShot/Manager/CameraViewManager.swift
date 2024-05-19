@@ -65,6 +65,7 @@ class CameraViewManager: ObservableObject {
         if let croppedImage = cropImageToSquare(image: image),
            let imageData = croppedImage.jpegData(compressionQuality: 1.0) {
             self.arr.append(imageData)
+//            dummyPartys[0].stepList[0].mediaList.append(Media(fileData: imageData, captureDate: Date.now))
         }
     }
     

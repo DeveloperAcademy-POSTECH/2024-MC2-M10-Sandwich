@@ -32,4 +32,7 @@ extension PersistentDataManager {
         
         modelContext.insert(newParty)
     }
+    
+    /// 찍은 사진을 해당 스텝에 저장합니다.
+    
 }
