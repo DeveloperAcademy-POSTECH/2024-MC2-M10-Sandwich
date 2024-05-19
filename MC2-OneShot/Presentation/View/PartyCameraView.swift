@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 import AVFoundation
 
 struct PartyCameraView: View {
+    @Query private var partys: [Party]
     
     @State private var isCamera: Bool = true
     @State private var isBolt: Bool = false
@@ -58,10 +60,12 @@ struct PartyCameraView: View {
                     Image(systemName: "checkmark.circle.fill")
                         .padding(.bottom, 4)
                         .foregroundColor(.shotGreen)
-                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
+//                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
+                    Text("STEP \(partys.last?.stepList.count ?? 2)")
                         .pretendard(.extraBold, 20)
                         .foregroundColor(.shotFF)
-                    Text("\(dummyPartys[0].notiCycle)min")
+//                    Text("\(dummyPartys[0].notiCycle)min")
+                    Text("\(partys.last?.notiCycle ?? 60)min")
                         .pretendard(.light, 15)
                         .foregroundColor(.shot6D)
                 }
@@ -87,7 +91,8 @@ struct PartyCameraView: View {
             .padding(.top, 36)
             
             if isShot{
-                Text("\(dummyPartys[0].title)")
+//                Text("\(dummyPartys[0].title)")
+                Text(partys.last?.title ?? "제목입니당")
                     .pretendard(.bold, 20)
                     .foregroundColor(.shotFF)
             } else {
@@ -95,7 +100,8 @@ struct PartyCameraView: View {
                     pathModel.paths.append(.partyList)
                 } label: {
                     HStack{
-                        Text("\(dummyPartys[0].title)")
+//                        Text("\(dummyPartys[0].title)")
+                        Text(partys.last?.title ?? "제목입니당")
                             .pretendard(.bold, 20)
                             .foregroundColor(.shotFF)
                         Image(systemName: "chevron.right")

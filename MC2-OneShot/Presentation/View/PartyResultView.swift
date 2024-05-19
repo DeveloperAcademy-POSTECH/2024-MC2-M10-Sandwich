@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct PartyResultView: View {
+    @Query private var partys: [Party]
+    
     @State private var isHelpMessagePresented = false
     
     @EnvironmentObject private var pathModel: PathModel
     
     var body: some View {
         VStack{
-            if dummyPartys[0].isShutdown{
+            if ((partys.last?.isShutdown) != nil){
                 
                 HStack{
                     Spacer()
@@ -60,18 +63,20 @@ struct PartyResultView: View {
                                     .fill(.shot00)
                                     .padding(4))
                         
-                        Text("STEP \(dummyPartys[0].stepList.count)")
+                        //                        Text("STEP \(dummyPartys[0].stepList.count)")
+                        Text("STEP \(partys.last?.stepList.count ?? 3)")
                             .foregroundColor(.shot00)
                             .pretendard(.bold, 20)
                     }
                 )
             
             VStack{
-                Text("\(dummyPartys[0].title)")
+                //                Text("\(dummyPartys[0].title)")
+                Text(partys.last?.title ?? "제목입니당")
                     .foregroundColor(.shotFF)
                     .pretendard(.extraBold, 20)
                 
-                if dummyPartys[0].isShutdown{
+                if ((partys.last?.isShutdown) != nil){
                     Text("시간이 지나 술자리를 종료했어요!")
                         .foregroundColor(.shot6D)
                         .pretendard(.bold, 14)
@@ -103,25 +108,11 @@ struct PartyResultView: View {
 }
 
 
-// MARK: - totalTime
-func totalTime() -> String {
-    
-    
-    let startTime = dummyPartys[0].startDate.hourMinute
-    let stepCount = dummyPartys[0].stepList.count
-    //    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
-    //    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
-    
-    // 일단 강제 종료일 경우
-    let allSteptime = (stepCount + 1) * dummyPartys[0].notiCycle
-    
-    let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: dummyPartys[0].startDate).hourMinute
-    
-    return "\(startTime) ~ \(finishTime)"
-}
 
 // MARK: - PartyTime List View
 private struct ListView: View {
+    @Query private var partys: [Party]
+    
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -143,7 +134,8 @@ private struct ListView: View {
                         
                     }
                     
-                    Text("\(dummyPartys[0].startDate.yearMonthdayweekDay)")
+                    //                        Text("\(dummyPartys[0].startDate.yearMonthdayweekDay)")
+                    Text((partys.last?.startDate ?? Date()).yearMonthdayweekDay)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .padding(.leading, 24)
@@ -180,7 +172,7 @@ private struct ListView: View {
                     }
                     
                     LazyVGrid(columns: columns){
-                        ForEach(dummyPartys[0].memberList){ member in
+                        ForEach(partys.last?.memberList ?? []){ member in
                             Circle()
                                 .frame(width: 54, height: 54)
                             
@@ -189,6 +181,32 @@ private struct ListView: View {
                 }
             }
         }
+    }
+    // MARK: - totalTime
+    func totalTime() -> String {
+        //    let startTime = dummyPartys[0].startDate.hourMinute
+        //    let stepCount = dummyPartys[0].stepList.count
+        //    //    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
+        //    //    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
+        //
+        //    // 일단 강제 종료일 경우
+        //    let allSteptime = (stepCount + 1) * dummyPartys[0].notiCycle
+        //
+        //    let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: dummyPartys[0].startDate).hourMinute
+        //
+        //    return "\(startTime) ~ \(finishTime)"
+        
+        let startTime = (partys.last?.startDate ?? Date()).hourMinute
+        let stepCount = partys.last?.stepList.count ?? 3
+        //    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
+        //    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
+        
+        // 일단 강제 종료일 경우
+        let allSteptime = (stepCount + 1) * (partys.last?.notiCycle ?? 60)
+        
+        let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: partys.last?.startDate ?? Date()).hourMinute
+        
+        return "\(startTime) ~ \(finishTime)"
     }
 }
 
