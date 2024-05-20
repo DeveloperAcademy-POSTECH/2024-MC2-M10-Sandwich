@@ -25,20 +25,30 @@ class CameraViewManager: ObservableObject {
     
     // 플래시 온오프
     func toggleFlash() {
-        if let device = AVCaptureDevice.default(for: .video), device.hasTorch {
-            do {
-                try device.lockForConfiguration()
-                try device.setTorchModeOn(level: 1.0) // 플래시 밝기(켜기)
-                
-                //3초후에 플래시 끄기
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+                guard device.hasTorch else { return }
+
+                do {
+                    try device.lockForConfiguration()
+                    device.torchMode = device.isTorchActive ? .off : .on
                     device.unlockForConfiguration()
+                } catch {
+                    print("플래시를 제어할 수 없습니다: \(error)")
                 }
-                
-            } catch {
-                print("플래시를 제어할 수 없습니다: \(error)")
-            }
-        }
+//        if let device = AVCaptureDevice.default(for: .video), device.hasTorch {
+//            do {
+//                try device.lockForConfiguration()
+//                try device.setTorchModeOn(level: 1.0) // 플래시 밝기(켜기)
+//                
+//                //3초후에 플래시 끄기 -> 3초후 꺼지는게 오히려 이질감이 들어서 그냥 일단 뺌
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//                    device.unlockForConfiguration()
+//                }
+//                
+//            } catch {
+//                print("플래시를 제어할 수 없습니다: \(error)")
+//            }
+//        }
     }
     
     // 사진 촬영
