@@ -11,7 +11,6 @@
 		1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFADD702BF6DE6500E333AD /* NotificationManager.swift */; };
 		1EFADD732BF6E34B00E333AD /* customSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* customSound.mp3 */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
-		82016BF12BF6DCDF00BF01CF /* StepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF02BF6DCDF00BF01CF /* StepManager.swift */; };
 		82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF62BF7034A00BF01CF /* NotiCycle.swift */; };
 		82016BF92BF742C300BF01CF /* PartyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF82BF742C300BF01CF /* PartyService.swift */; };
 		825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDC2BF32F46001B416A /* OneShotData.swift */; };
@@ -52,7 +51,6 @@
 		1EFADD702BF6DE6500E333AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		1EFADD722BF6E34B00E333AD /* customSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = customSound.mp3; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
-		82016BF02BF6DCDF00BF01CF /* StepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepManager.swift; sourceTree = "<group>"; };
 		82016BF62BF7034A00BF01CF /* NotiCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiCycle.swift; sourceTree = "<group>"; };
 		82016BF82BF742C300BF01CF /* PartyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyService.swift; sourceTree = "<group>"; };
 		825F0BDC2BF32F46001B416A /* OneShotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneShotData.swift; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				1EFADD702BF6DE6500E333AD /* NotificationManager.swift */,
 				1EFADD722BF6E34B00E333AD /* customSound.mp3 */,
 				82016BF82BF742C300BF01CF /* PartyService.swift */,
-				82016BF02BF6DCDF00BF01CF /* StepManager.swift */,
 				98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */,
 				98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */,
 			);
@@ -352,7 +349,6 @@
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
-				82016BF12BF6DCDF00BF01CF /* StepManager.swift in Sources */,
 				825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,

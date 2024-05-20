@@ -40,19 +40,33 @@ struct PartySetView: View {
                     buttonType: titleText.isEmpty
                     ? .disabled : .primary
                 ) {
-                    // TODO: 술자리 데이터 생성
-                    persistentDataManager.createParty(
-                        title: titleText,
-                        notiCycle: notiCycle
-                    )
-                    
-                    // TODO: 술자리가 시작했다는 변수 업데이트
-                    isPartySetViewPresented.toggle()
-                    pathModel.paths.append(.partyCamera)
+                    goStep()
                 }
                 .padding(16)
             }
         }
+    }
+    
+    /// GO STEP! 버튼 클릭 시 호출되는 함수입니다.
+    func goStep() {
+        
+        // TODO: 술자리가 시작했다는 변수 업데이트(UserDefault)
+        
+        let today = Date.now
+        
+        persistentDataManager.createParty(
+            title: titleText,
+            startDate: today,
+            notiCycle: notiCycle
+        )
+        
+        PartyService.shared.startParty(
+            startDate: today,
+            notiCycle: notiCycle
+        )
+        
+        isPartySetViewPresented.toggle()
+        pathModel.paths.append(.partyCamera)
     }
 }
 
