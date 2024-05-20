@@ -47,7 +47,7 @@ struct HomeView: View {
                     }
                 }
                 
-                Image("appLogo")
+                Image(.appLogo)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 35)
@@ -95,7 +95,7 @@ private struct ListView: View {
     var body: some View {
         List(partys) { party in
             ListCellView(
-                thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
+                thumbnail: firstThumbnail(party),
                 title: party.title,
                 captureDate: party.startDate,
                 isLive: party.isLive,
@@ -119,12 +119,23 @@ private struct ListView: View {
         .padding(.top, 8)
         .padding(.bottom, 16)
     }
+    
+    /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
+    func firstThumbnail(_ party: Party) -> Data {
+        guard let firstStep = party.stepList.first,
+              let firstMedia = firstStep.mediaList.first else {
+            print("썸네일 반환에 실패했습니다.")
+            return Data()
+        }
+        
+        return firstMedia.fileData
+    }
 }
 
 // MARK: - ListCellView
 private struct ListCellView: View {
     
-    let thumbnail: String
+    let thumbnail: Data
     let title: String
     let captureDate: Date
     let isLive: Bool
@@ -133,7 +144,7 @@ private struct ListCellView: View {
     
     var body: some View {
         HStack {
-            Image(.test)
+            Image(uiImage: UIImage(data: thumbnail) ?? UIImage())
                 .resizable()
                 .frame(width: 68, height: 68)
                 .clipShape(RoundedRectangle(cornerRadius: 7.5))
