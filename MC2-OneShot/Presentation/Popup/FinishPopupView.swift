@@ -9,8 +9,8 @@ import SwiftUI
 
 struct FinishPopupView: View {
     
-    @State private var isPartyResultViewPresented = false
     @Binding var isFinishPopupPresented: Bool
+    @Binding var isPartyEnd: Bool
     
     var body: some View {
         VStack {
@@ -50,8 +50,10 @@ struct FinishPopupView: View {
                             title: "끝내기",
                             buttonType: .primary
                         ) {
+                            UserDefaults.standard.updatePartyLive(isLive: false)
+                            
                             isFinishPopupPresented = false
-                            isPartyResultViewPresented = true
+                            isPartyEnd = true
                         }
                     }
                     .padding(.horizontal, 33)
@@ -59,12 +61,12 @@ struct FinishPopupView: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $isPartyResultViewPresented) {
-            PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
-        }
     }
 }
 
 #Preview {
-    FinishPopupView(isFinishPopupPresented: .constant(true))
+    FinishPopupView(
+        isFinishPopupPresented: .constant(true),
+        isPartyEnd: .constant(false)
+    )
 }

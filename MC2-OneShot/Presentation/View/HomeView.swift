@@ -71,10 +71,7 @@ struct HomeView: View {
             }
             .navigationDestination(for: HomePathType.self) { path in
                 switch path {
-                case let .partyList(party): PartyListView(
-                    pathModel: homePathModel,
-                    party: party
-                )
+                case let .partyList(party): PartyListView(party: party, isCameraViewPresented: .constant(false))
                 case .searchList: SearchView()
                 }
             }

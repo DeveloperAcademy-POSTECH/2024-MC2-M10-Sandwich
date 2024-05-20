@@ -10,7 +10,7 @@ import SwiftData
 
 struct PartyResultView: View {
     
-    @EnvironmentObject private var cameraPathModel: CameraPathModel
+    @EnvironmentObject private var homePathModel: HomePathModel
     
     @Query private var partys: [Party]
     @State private var isHelpMessagePresented = false
@@ -92,14 +92,15 @@ struct PartyResultView: View {
                     title: "홈으로 돌아가기",
                     buttonType: .secondary
                 ) {
-                    cameraPathModel.paths.removeAll()
+                    isPartyResultViewPresented = false
                 }
                 
                 ActionButton(
                     title: "그룹으로 이동",
                     buttonType: .primary
                 ) {
-                    cameraPathModel.paths.append(.partyList(party: partys.last!))
+                    isPartyResultViewPresented = false
+                    homePathModel.paths.append(.partyList(party: partys.last!))
                 }
             }
             .padding()

@@ -11,7 +11,6 @@ import AVFoundation
 
 struct PartyCameraView: View {
     
-    @EnvironmentObject private var homePathModel: HomePathModel
     @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
@@ -19,13 +18,15 @@ struct PartyCameraView: View {
     
     @Query private var partys: [Party]
     
-    @State private var isCamera: Bool = true
-    @State private var isBolt: Bool = false
-    @State private var isFace: Bool = false
+    @State private var isCamera = true
+    @State private var isBolt = false
+    @State private var isFace = false
     @State private var isShot = false
+    @State private var isPartyEnd = false
     
     @State private var isShowingImageModal = false
-    @State private var isFinishPopupPresented: Bool = false
+    @State private var isFinishPopupPresented = false
+    @State private var isPartyResultViewPresented = false
     
     @Binding var isCameraViewPresented: Bool
     
@@ -36,7 +37,6 @@ struct PartyCameraView: View {
                     HStack{
                         if !isShot{
                             Button{
-                                homePathModel.paths.removeAll()
                                 isCameraViewPresented.toggle()
                             } label: {
                                 Image(systemName: "chevron.down")
@@ -77,11 +77,18 @@ struct PartyCameraView: View {
                             .foregroundColor(.shot6D)
                     }
                 }
-                .fullScreenCover(isPresented: $isFinishPopupPresented) {
-                    FinishPopupView(isFinishPopupPresented: $isFinishPopupPresented)
-                        .foregroundStyle(.shotFF)
-                        .presentationBackground(.black.opacity(0.7))
-                }
+                .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
+                    if isPartyEnd {
+                        isPartyResultViewPresented.toggle()
+                    }
+                }, content: {
+                    FinishPopupView(
+                        isFinishPopupPresented: $isFinishPopupPresented,
+                        isPartyEnd: $isPartyEnd
+                    )
+                    .foregroundStyle(.shotFF)
+                    .presentationBackground(.black.opacity(0.7))
+                })
                 .transaction { transaction in
                     transaction.disablesAnimations = true
                 }
@@ -260,11 +267,14 @@ struct PartyCameraView: View {
             .padding(16)
             .navigationDestination(for: CameraPathType.self) { path in
                 switch path {
-                case let .partyList(party): PartyListView(
-                    pathModel: cameraPathModel,
-                    party: party
-                )
+                case let .partyList(party):
+                    PartyListView(party: party, isCameraViewPresented: $isCameraViewPresented)
                 }
+            }
+            .fullScreenCover(isPresented: $isPartyResultViewPresented) {
+                isCameraViewPresented = false
+            } content: {
+                PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
         }
     }
