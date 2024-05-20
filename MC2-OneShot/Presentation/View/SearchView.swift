@@ -6,38 +6,35 @@
 //
 
 import SwiftUI
-
-
+import SwiftData
 
 struct SearchView: View {
     @State private var searchText = ""
     var body: some View {
-        
         Group{
             if searchText.isEmpty{
                 Text("찾고싶은 술자리 이름을 검색해주세요")
+                    .pretendard(.semiBold, 17)
                     .foregroundStyle(.shot33)
-                  
-                Spacer()
                 
-            
+                Spacer()
             } else{
                 ListView()
-   
             }
-        }.searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-        
-        
-       
-            
+        }.searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always)
+        )
     }
 }
 
 // MARK: - ListView
 private struct ListView: View {
+    
+    @Query private var partys: [Party]
 
     var body: some View {
-        List(dummyPartys) { party in
+        List(partys) { party in
             ListCellView(
                 thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
                 title: party.title,
@@ -58,8 +55,6 @@ private struct ListView: View {
         .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
-        
-       
     }
 }
 
@@ -130,8 +125,6 @@ private struct PartyStateInfoLabel: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
-
-
 
 #Preview {
     SearchView()

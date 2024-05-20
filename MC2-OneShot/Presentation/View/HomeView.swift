@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - InitialView
+/// PersistentDataManager 생성을 위한 View
 struct InitialView: View {
     
     var modelContainer: ModelContainer
@@ -21,22 +23,20 @@ struct InitialView: View {
     }
 }
 
+// MARK: - HomeView
 struct HomeView: View {
     
     @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var pathModel: PathModel = .init()
+    
     @State private var isPartySetViewPresented = false
     @State private var searchText = ""
-
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
-            
             VStack(alignment: .leading) {
-                
                 HStack{
                     Spacer()
-                  
                     Button {
                         pathModel.paths.append(.searchView)
                     } label: {
@@ -47,16 +47,16 @@ struct HomeView: View {
                             .padding(.trailing, 16)
                     }
                 }
-                HStack{
-                    Image("appLogo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 35)
-                        .padding(.leading, 16)
-                        .padding(.top, 20)
-                }
+                
+                Image("appLogo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 35)
+                    .padding(.leading, 16)
+                    .padding(.top, 20)
+                
                 ListView()
-                   
+                
                 ActionButton(
                     title: "GO STEP!",
                     buttonType:.primary
@@ -67,9 +67,9 @@ struct HomeView: View {
             }
             .navigationDestination(for: PathType.self) { path in
                 switch path {
-                case .partySet: PartySetView(isPartySetViewPresented: .constant(false))
+                case .partySet: PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
                 case .partyCamera: PartyCameraView()
-                case .partyList: PartyListView()
+                case let .partyList(party): PartyListView(party: party)
                 case .partyResult: PartyResultView()
                 case .searchView: SearchView()
                 }
@@ -89,6 +89,9 @@ struct HomeView: View {
 // MARK: - ListView
 private struct ListView: View {
     
+    @EnvironmentObject private var pathModel: PathModel
+    @EnvironmentObject var persistentDataManager: PersistentDataManager
+    
     @Query private var partys: [Party]
     @State private var searchText = ""
     
@@ -102,9 +105,13 @@ private struct ListView: View {
                 stepCount: party.stepList.count,
                 notiCycle: party.notiCycle
             )
+            .onTapGesture {
+                pathModel.paths.append(.partyList(party: party))
+            }
             .swipeActions {
                 Button {
                     // TODO: 술자리 데이터 삭제 Alert 출력
+                    persistentDataManager.deleteParty(party)
                 } label: {
                     Text("삭제하기")
                 }

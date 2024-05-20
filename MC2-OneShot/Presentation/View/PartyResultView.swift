@@ -98,7 +98,7 @@ struct PartyResultView: View {
                     title: "그룹으로 이동",
                     buttonType: .primary
                 ) {
-                    pathModel.paths.append(.partyList)
+                    pathModel.paths.append(.partyList(party: partys.last!))
                 }
             }
             .padding()
