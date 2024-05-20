@@ -17,6 +17,7 @@ struct PartyCameraView: View {
     @State private var isFace: Bool = false
     @State private var isFinishPopupPresented: Bool = false
     @EnvironmentObject private var pathModel: PathModel
+    @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     // camera
     @ObservedObject var viewManager = CameraViewManager()
@@ -208,7 +209,11 @@ struct PartyCameraView: View {
                         
                         if isShot {
                             viewManager.retakePhoto()
-                            viewManager.saveImage()
+//                            viewManager.saveImage()
+                            
+                            if let lastParty = partys.last{
+                                persistentDataManager.saveImage(party: partys.last ?? lastParty , imageData: viewManager.cropImage()!)
+                            }
                         }
                         
                         if isBolt{
@@ -236,6 +241,8 @@ struct PartyCameraView: View {
                         }
                     }
                 }
+                
+                
             }
             .padding(.top)
             .padding(.horizontal)
@@ -283,25 +290,21 @@ struct CameraPreviewView: UIViewRepresentable {
 
 
 // TODO: - 나중에 PartyListView에 적용
-//@ObservedObject var viewManager = CameraViewManager()
-//
-//var body: some View {
-//    VStack {
-//        ScrollView {
-//            VStack {
-//                ForEach(viewManager.arr, id: \.self) { data in
-//                    if let image = UIImage(data: data) {
-//                        Image(uiImage: image)
-//                            .resizable()
-//                            .scaledToFit()
-//                            .frame(width: 100, height: 100)
-//                            .cornerRadius(10)
+//struct testView: View {
+//    @Query private var partys: [Party]
+//    
+//    @Binding var istestPresent: Bool
+//    var body: some View {
+//        VStack {
+//            ForEach(partys.last?.stepList.last?.mediaList ?? [] ) { data in
+//                if let image = UIImage(data: data.fileData) {
+//                                Image(uiImage: image)
+//                                    .resizable()
+//                                    .scaledToFit()
+//                                    .frame(width: 100, height: 100)
+//                                    .cornerRadius(10)
+//                            }
+//                        }
 //                    }
-//                }
-//            }
-//        }
-//    }
-//    .onAppear {
-//        viewManager.configure()  // Ensure the camera manager is configured when the view appears
 //    }
 //}

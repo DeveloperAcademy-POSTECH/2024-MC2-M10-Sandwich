@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1DAF42BF88ADA00C53D8C /* SearchView.swift */; };
 		1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFADD702BF6DE6500E333AD /* NotificationManager.swift */; };
 		1EFADD732BF6E34B00E333AD /* customSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* customSound.mp3 */; };
-    19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1DAF42BF88ADA00C53D8C /* SearchView.swift */; };
 		82016BE92BF49CA000BF01CF /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BE82BF49CA000BF01CF /* DummyData.swift */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
 		82016BF12BF6DCDF00BF01CF /* StepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF02BF6DCDF00BF01CF /* StepManager.swift */; };
@@ -49,9 +49,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		19A1DAF42BF88ADA00C53D8C /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		1EFADD702BF6DE6500E333AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		1EFADD722BF6E34B00E333AD /* customSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = customSound.mp3; sourceTree = "<group>"; };
-    19A1DAF42BF88ADA00C53D8C /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		82016BE82BF49CA000BF01CF /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
 		82016BF02BF6DCDF00BF01CF /* StepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepManager.swift; sourceTree = "<group>"; };
@@ -107,13 +107,12 @@
 			isa = PBXGroup;
 			children = (
 				82B49BE32BF88E1700119628 /* PersistentDataManager.swift */,
-				82016BF02BF6DCDF00BF01CF /* TimeManager.swift */,
 				1EFADD702BF6DE6500E333AD /* NotificationManager.swift */,
 				1EFADD722BF6E34B00E333AD /* customSound.mp3 */,
 				82016BF82BF742C300BF01CF /* PartyService.swift */,
 				82016BF02BF6DCDF00BF01CF /* StepManager.swift */,
+				98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */,
 				98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */,
-				98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -495,7 +494,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = 9XG4S4XZWN;
+				DEVELOPMENT_TEAM = JM9P9XHM2P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -528,7 +527,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = 9XG4S4XZWN;
+				DEVELOPMENT_TEAM = JM9P9XHM2P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
