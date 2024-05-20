@@ -11,6 +11,8 @@ import SwiftData
 @main
 struct MC2_OneShotApp: App {
     
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     /// SwiftData ModelContainer 생성
     var modelContainer: ModelContainer = {
         
