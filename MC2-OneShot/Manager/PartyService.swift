@@ -8,16 +8,32 @@
 import Foundation
 
 protocol PartyServiceProtocol {
-    func startParty()
+    func startParty(startDate: Date, notiCycle: NotiCycle)
     func stepComplete()
     func continueParty()
     func endParty()
 }
 
-struct PartyService: PartyServiceProtocol {
+final class PartyService: PartyServiceProtocol {
+    
+    static let shared = PartyService()
+    private init() {}
+    
+    /// 술자리 시작 날짜
+    private var startDate: Date = .now
+    
+    /// 알림 주기
+    private var notiCycle: NotiCycle = .min30
+}
+
+// MARK: - Protocol Method
+extension PartyService {
     
     /// 술자리 처음 시작(혹은 재시작)
-    func startParty() {
+    func startParty(startDate: Date, notiCycle: NotiCycle) {
+        
+        self.startDate = startDate
+        self.notiCycle = notiCycle
         
         // PUSH 알림
         // 1. 강제 종료 10분전 예약 - 소리+배너
@@ -27,7 +43,7 @@ struct PartyService: PartyServiceProtocol {
         // 1. 이번 STEP 종료 시간에 작동할 타이머 실행
         
         // 사진 저장
-        // 
+        //
     }
     
     /// 사진을 촬영했을 때(STEP을 완료했을 때)
@@ -55,5 +71,45 @@ struct PartyService: PartyServiceProtocol {
         
         // 타이머
         // 1. 돌아가던 타이머 취소
+    }
+}
+
+// MARK: - 현재 STEP 계산
+extension PartyService {
+    
+    /// 현재 스텝이 몇번째인지 반환하는 계산 속성
+    var currentStep: Int {
+        let durationTime = Int(Date().timeIntervalSince1970 - startDate.timeIntervalSince1970)
+        return durationTime / notiCycle.toSeconds + 1
+    }
+    
+    /// 현재 STEP의 마지막 시점 Date를 반환하는 계산 속성
+    var currentStepEndDate: Date {
+        let shutdownStepSecond = TimeInterval(currentStep * notiCycle.toSeconds)
+        let shutdownSecond = startDate.timeIntervalSince1970 + shutdownStepSecond
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
+    /// 현재 STEP의 강제 종료 10분전 시점 Date를 반환하는 계산 속성
+    var currentShutdownWarningDate: Date {
+        let shutDownWarningSecond = currentStepEndDate.timeIntervalSince1970 - TimeInterval(600)
+        return Date(timeIntervalSince1970: shutDownWarningSecond)
+    }
+}
+
+// MARK: - 다음 STEP 계산
+extension PartyService {
+    
+    /// 다음 STEP의 마지막 시점 Date를 반환하는 계산 속성
+    var nextStepEndDate: Date {
+        let shutdownStepSecond = TimeInterval((currentStep + 1) * notiCycle.toSeconds)
+        let shutdownSecond = startDate.timeIntervalSince1970 + shutdownStepSecond
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
+    /// 다음 STEP의 강제 종료 10분전 시점 Date를 반환하는 계산 속성
+    var nextShutdownWarningDate: Date {
+        let shutDownWarningSecond = nextStepEndDate.timeIntervalSince1970 - TimeInterval(600)
+        return Date(timeIntervalSince1970: shutDownWarningSecond)
     }
 }
