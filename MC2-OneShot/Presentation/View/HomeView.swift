@@ -27,17 +27,18 @@ struct InitialView: View {
 struct HomeView: View {
     
     @StateObject var persistentDataManager: PersistentDataManager
-    @StateObject private var pathModel: PathModel = .init()
+    @StateObject private var homePathModel: HomePathModel = .init()
     
     @State private var isPartySetViewPresented = false
+    @State private var isCameraViewPresented = false
     
     var body: some View {
-        NavigationStack(path: $pathModel.paths) {
+        NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
                 HStack{
                     Spacer()
                     Button {
-                        pathModel.paths.append(.searchView)
+                        homePathModel.paths.append(.searchList)
                     } label: {
                         Image(systemName: "magnifyingglass")
                             .resizable()
@@ -64,22 +65,28 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 16)
             }
-            .navigationDestination(for: PathType.self) { path in
+            .navigationDestination(for: HomePathType.self) { path in
                 switch path {
-                case .partySet: PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
-                case .partyCamera: PartyCameraView()
-                case let .partyList(party): PartyListView(party: party)
-                case .partyResult: PartyResultView()
-                case .searchView: SearchView()
+                case let .partyList(party): PartyListView(
+                    pathModel: homePathModel,
+                    party: party
+                )
+                case .searchList: SearchView()
                 }
             }
-            .sheet(isPresented: $isPartySetViewPresented) {
+            
+            .sheet(isPresented: $isPartySetViewPresented, onDismiss: {
+                if UserDefaults.standard.isPartyLive {
+                    isCameraViewPresented.toggle()
+                }
+            }, content: {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
+            })
+            .fullScreenCover(isPresented: $isCameraViewPresented) {
+                PartyCameraView(isCameraViewPresented: $isCameraViewPresented)
             }
         }
-        .environmentObject(pathModel)
+        .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
     }
 }
@@ -87,7 +94,7 @@ struct HomeView: View {
 // MARK: - ListView
 private struct ListView: View {
     
-    @EnvironmentObject private var pathModel: PathModel
+    @EnvironmentObject private var homePathModel: HomePathModel
     @EnvironmentObject var persistentDataManager: PersistentDataManager
     
     @Query private var partys: [Party]
@@ -103,7 +110,7 @@ private struct ListView: View {
                 notiCycle: party.notiCycle
             )
             .onTapGesture {
-                pathModel.paths.append(.partyList(party: party))
+                homePathModel.paths.append(.partyList(party: party))
             }
             .swipeActions {
                 Button {
@@ -124,7 +131,7 @@ private struct ListView: View {
     func firstThumbnail(_ party: Party) -> Data {
         guard let firstStep = party.stepList.first,
               let firstMedia = firstStep.mediaList.first else {
-            print("썸네일 반환에 실패했습니다.")
+            // print("썸네일 반환에 실패했습니다.")
             return Data()
         }
         
@@ -202,6 +209,6 @@ private struct PartyStateInfoLabel: View {
 
 #Preview {
     HomeView(persistentDataManager: PersistentDataManager(modelContext: ModelContext(MockModelContainer.mockModelContainer)))
-        .environmentObject(PathModel())
+        .environmentObject(HomePathModel())
         .modelContainer(MockModelContainer.mockModelContainer)
 }

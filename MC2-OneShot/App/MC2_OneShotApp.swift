@@ -29,6 +29,9 @@ struct MC2_OneShotApp: App {
     var body: some Scene {
         WindowGroup {
             InitialView(modelContainer: modelContainer)
+                .onAppear {
+                    print("현재 파티 상태는: \(UserDefaults.standard.isPartyLive) 입니다.")
+                }
         }
         .modelContainer(modelContainer)
     }

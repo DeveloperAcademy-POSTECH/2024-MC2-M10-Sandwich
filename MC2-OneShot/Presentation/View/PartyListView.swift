@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct PartyListView: View {
-//    var party: Party = Party(title: "포항공대애애앵", startDate: Date(), notiCycle: 30)
-    let party: Party
+    
+    var pathModel: any PathModel
     
     @State private var isFinishPopupPresented = false
     @State private var isMemberPopupPresented = false
-    @EnvironmentObject private var pathModel: PathModel
+    
+    let party: Party
     
     var body: some View {
         ZStack {
@@ -194,5 +195,8 @@ struct StepCell: View {
 //}
 
 #Preview {
-    PartyListView(party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60))
+    PartyListView(
+        pathModel: HomePathModel(),
+        party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60)
+    )
 }

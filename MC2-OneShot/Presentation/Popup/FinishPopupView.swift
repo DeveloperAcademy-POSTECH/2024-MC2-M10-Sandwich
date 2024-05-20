@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FinishPopupView: View {
     
-    @EnvironmentObject private var pathModel: PathModel
+    @State private var isPartyResultViewPresented = false
     @Binding var isFinishPopupPresented: Bool
     
     var body: some View {
@@ -50,16 +50,17 @@ struct FinishPopupView: View {
                             title: "끝내기",
                             buttonType: .primary
                         ) {
-                            isFinishPopupPresented.toggle()
-                            pathModel.paths.append(.partyResult)
-                        
+                            isFinishPopupPresented = false
+                            isPartyResultViewPresented = true
                         }
                     }
                     .padding(.horizontal, 33)
                     .padding(.top, 50)   
                 }
             }
-            
+        }
+        .fullScreenCover(isPresented: $isPartyResultViewPresented) {
+            PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
         }
     }
 }

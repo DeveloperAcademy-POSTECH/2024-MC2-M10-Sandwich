@@ -30,6 +30,8 @@
 		8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA332BF2021D00586FA0 /* PathModel.swift */; };
 		82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE12BF88A7B00119628 /* MockModelContainer.swift */; };
 		82B49BE42BF88E1700119628 /* PersistentDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE32BF88E1700119628 /* PersistentDataManager.swift */; };
+		82D564502BFB80880091C2BC /* Helper+Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5644F2BFB80880091C2BC /* Helper+Constant.swift */; };
+		82D564532BFB81610091C2BC /* Helper+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D564522BFB81610091C2BC /* Helper+UserDefaults.swift */; };
 		98BA9D4C2BF6DF3900BEEDCC /* CameraViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */; };
 		98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
@@ -71,6 +73,8 @@
 		8264EA332BF2021D00586FA0 /* PathModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathModel.swift; sourceTree = "<group>"; };
 		82B49BE12BF88A7B00119628 /* MockModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockModelContainer.swift; sourceTree = "<group>"; };
 		82B49BE32BF88E1700119628 /* PersistentDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataManager.swift; sourceTree = "<group>"; };
+		82D5644F2BFB80880091C2BC /* Helper+Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+Constant.swift"; sourceTree = "<group>"; };
+		82D564522BFB81610091C2BC /* Helper+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+UserDefaults.swift"; sourceTree = "<group>"; };
 		98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewManager.swift; sourceTree = "<group>"; };
 		98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
@@ -104,7 +108,6 @@
 			children = (
 				82B49BE32BF88E1700119628 /* PersistentDataManager.swift */,
 				1EFADD702BF6DE6500E333AD /* NotificationManager.swift */,
-				1EFADD722BF6E34B00E333AD /* customSound.mp3 */,
 				82016BF82BF742C300BF01CF /* PartyService.swift */,
 				98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */,
 				98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */,
@@ -192,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				BFB533FD2BF342270013E9FE /* Font */,
+				82D564512BFB812D0091C2BC /* Sound */,
 				8264EA132BF2000A00586FA0 /* Assets.xcassets */,
 				BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */,
 			);
@@ -213,13 +217,21 @@
 			isa = PBXGroup;
 			children = (
 				8264EA112BF2000900586FA0 /* HomeView.swift */,
+				19A1DAF42BF88ADA00C53D8C /* SearchView.swift */,
 				8264EA232BF200E200586FA0 /* PartySetView.swift */,
 				8264EA252BF200EB00586FA0 /* PartyCameraView.swift */,
 				8264EA272BF2013000586FA0 /* PartyResultView.swift */,
 				8264EA292BF2014200586FA0 /* PartyListView.swift */,
-				19A1DAF42BF88ADA00C53D8C /* SearchView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		82D564512BFB812D0091C2BC /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				1EFADD722BF6E34B00E333AD /* customSound.mp3 */,
+			);
+			path = Sound;
 			sourceTree = "<group>";
 		};
 		BFB533FD2BF342270013E9FE /* Font */ = {
@@ -241,9 +253,11 @@
 		BFB534112BF344ED0013E9FE /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				82D5644F2BFB80880091C2BC /* Helper+Constant.swift */,
 				BFB534122BF3451B0013E9FE /* Helper+CustomFont.swift */,
 				82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */,
 				98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */,
+				82D564522BFB81610091C2BC /* Helper+UserDefaults.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -337,6 +351,7 @@
 				82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */,
 				8264EA282BF2013000586FA0 /* PartyResultView.swift in Sources */,
 				82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */,
+				82D564532BFB81610091C2BC /* Helper+UserDefaults.swift in Sources */,
 				8264EA122BF2000900586FA0 /* HomeView.swift in Sources */,
 				8264EA2E2BF2016500586FA0 /* CommentPopupView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
@@ -346,6 +361,7 @@
 				19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */,
 				98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */,
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
+				82D564502BFB80880091C2BC /* Helper+Constant.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
@@ -486,7 +502,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = JM9P9XHM2P;
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -518,7 +534,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = JM9P9XHM2P;
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
