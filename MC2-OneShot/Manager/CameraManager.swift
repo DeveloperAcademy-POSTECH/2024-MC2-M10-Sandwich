@@ -114,28 +114,28 @@ class CameraManager: NSObject, ObservableObject {
                 let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
                 self.session.beginConfiguration()
                 
-//                // 일단 필요없는 부분(추후 사용 가능)
-//                if let inputs = session.inputs as? [AVCaptureDeviceInput] {
-//                    for input in inputs {
-//                        session.removeInput(input)
-//                    }
-//                }
-//                if self.session.canAddInput(videoDeviceInput) {
-//                    self.session.addInput(videoDeviceInput)
-//                    self.videoDeviceInput = videoDeviceInput
-//                } else {
-//                    self.session.addInput(self.videoDeviceInput)
-//                }
-//                
-//                if let connection =
-//                    self.output.connection(with: .video) {
-//                    if connection.isVideoStabilizationSupported {
-//                        connection.preferredVideoStabilizationMode = .auto
-//                    }
-//                }
-//                
-//                output.isHighResolutionCaptureEnabled = true
-//                output.maxPhotoQualityPrioritization = .quality
+                // 일단 필요없는 부분(추후 사용 가능)
+                if let inputs = session.inputs as? [AVCaptureDeviceInput] {
+                    for input in inputs {
+                        session.removeInput(input)
+                    }
+                }
+                if self.session.canAddInput(videoDeviceInput) {
+                    self.session.addInput(videoDeviceInput)
+                    self.videoDeviceInput = videoDeviceInput
+                } else {
+                    self.session.addInput(self.videoDeviceInput)
+                }
+                
+                if let connection =
+                    self.output.connection(with: .video) {
+                    if connection.isVideoStabilizationSupported {
+                        connection.preferredVideoStabilizationMode = .auto
+                    }
+                }
+                
+                output.isHighResolutionCaptureEnabled = true
+                output.maxPhotoQualityPrioritization = .quality
                 
                 self.session.commitConfiguration()
             } catch {
