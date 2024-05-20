@@ -13,17 +13,19 @@ struct PartyCameraView: View {
     @Query private var partys: [Party]
     
     @State private var isCamera: Bool = true
+    @State private var isShot: Bool = false
     @State private var isBolt: Bool = false
     @State private var isFace: Bool = false
+    @State private var isShotDisabled: Bool = false
     @State private var isFinishPopupPresented: Bool = false
+    
+    @State private var croppedImage: UIImage? = nil
+    
     @EnvironmentObject private var pathModel: PathModel
     @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     // camera
     @ObservedObject var viewManager = CameraViewManager()
-    
-    @State private var isShowingImageModal = false
-    @State private var isShot = false
     
     var body: some View {
         VStack{
@@ -61,11 +63,11 @@ struct PartyCameraView: View {
                     Image(systemName: "checkmark.circle.fill")
                         .padding(.bottom, 4)
                         .foregroundColor(.shotGreen)
-//                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
+                    //                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
                     Text("STEP \(partys.last?.stepList.count ?? 2)")
                         .pretendard(.extraBold, 20)
                         .foregroundColor(.shotFF)
-//                    Text("\(dummyPartys[0].notiCycle)min")
+                    //                    Text("\(dummyPartys[0].notiCycle)min")
                     Text("\(partys.last?.notiCycle ?? 60)min")
                         .pretendard(.light, 15)
                         .foregroundColor(.shot6D)
@@ -92,7 +94,7 @@ struct PartyCameraView: View {
             .padding(.top, 36)
             
             if isShot{
-//                Text("\(dummyPartys[0].title)")
+                //                Text("\(dummyPartys[0].title)")
                 Text(partys.last?.title ?? "제목입니당")
                     .pretendard(.bold, 20)
                     .foregroundColor(.shotFF)
@@ -103,7 +105,7 @@ struct PartyCameraView: View {
                     }
                 } label: {
                     HStack{
-//                        Text("\(dummyPartys[0].title)")
+                        //                        Text("\(dummyPartys[0].title)")
                         Text(partys.last?.title ?? "제목입니당")
                             .pretendard(.bold, 20)
                             .foregroundColor(.shotFF)
@@ -166,7 +168,7 @@ struct PartyCameraView: View {
                         Button{
                             print("플래시")
                             if !isFace{
-//                                viewManager.toggleFlash()
+                                //                                viewManager.toggleFlash()
                                 isBolt.toggle()
                             }
                         } label: {
@@ -208,42 +210,46 @@ struct PartyCameraView: View {
                 
                 VStack{
                     Button{
-                        if isBolt && !isShot{
-                            viewManager.toggleFlash()
-                        }
-                        
                         if isShot {
                             viewManager.retakePhoto()
-//                            viewManager.saveImage()
-                            
                             
                             if let lastParty = partys.last{
                                 persistentDataManager.saveMedia(party: lastParty , imageData: viewManager.cropImage()!)
                             }
                         } else {
+
+                            if isBolt{
+                                viewManager.toggleFlash()
+                            }
+                            
                             viewManager.capturePhoto()
                         }
                         
                         isShot.toggle()
+                        delayButton()
                         
                     } label: {
                         ZStack{
-                            Circle()
-                                .fill(isShot ? Color.shotGreen : Color.shotFF)
-                                .frame(width: 112, height: 112)
-                            
                             if isShot{
+                                Circle()
+                                    .fill(Color.shotGreen)
+                                    .frame(width: 112, height: 112)
                                 Image(systemName: "arrow.up.forward")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(height: 36)
                                     .foregroundColor(.shot00)
                             } else{
+                                Circle()
+                                    .fill(Color.shotFF)
+                                    .frame(width: 112, height: 112)
+                                
                                 Circle().stroke(Color.shotGreen, lineWidth: 10)
                                     .padding(12)
                             }
                         }
                     }
+                    .disabled(isShotDisabled)
                 }
                 
                 
@@ -254,6 +260,18 @@ struct PartyCameraView: View {
         .navigationBarBackButtonHidden()
         .padding(16)
         
+    }
+    
+    private func delayButton() {
+        print("버튼 눌림")
+        
+        // 버튼을 비활성화
+        isShotDisabled = true
+        
+        // 0.5초 후에 버튼을 다시 활성화
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            isShotDisabled = false
+        }
     }
 }
 
@@ -296,7 +314,7 @@ struct CameraPreviewView: UIViewRepresentable {
 // TODO: - 나중에 PartyListView에 적용
 //struct testView: View {
 //    @Query private var partys: [Party]
-//    
+//
 //    @Binding var istestPresent: Bool
 //    var body: some View {
 //        VStack {
