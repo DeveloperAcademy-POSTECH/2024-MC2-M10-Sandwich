@@ -27,7 +27,7 @@ class Party: Identifiable {
         title: String,
         startDate: Date,
         notiCycle: Int,
-        stepList: [Step] = [],
+        stepList: [Step] = [Step(mediaList: [])],
         isLive: Bool = true,
         isShutdown: Bool = false,
         memberList: [Member] = [],

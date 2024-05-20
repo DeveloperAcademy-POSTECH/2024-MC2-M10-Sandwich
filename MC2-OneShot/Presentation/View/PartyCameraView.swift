@@ -211,8 +211,9 @@ struct PartyCameraView: View {
                             viewManager.retakePhoto()
 //                            viewManager.saveImage()
                             
+                            
                             if let lastParty = partys.last{
-                                persistentDataManager.saveImage(party: partys.last ?? lastParty , imageData: viewManager.cropImage()!)
+                                persistentDataManager.saveMedia(party: lastParty , imageData: viewManager.cropImage()!)
                             }
                         }
                         

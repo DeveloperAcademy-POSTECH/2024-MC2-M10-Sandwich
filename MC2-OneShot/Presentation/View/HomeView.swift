@@ -90,6 +90,7 @@ struct HomeView: View {
 private struct ListView: View {
     
     @EnvironmentObject private var pathModel: PathModel
+    @EnvironmentObject var persistentDataManager: PersistentDataManager
     
     @Query private var partys: [Party]
     @State private var searchText = ""
@@ -110,6 +111,7 @@ private struct ListView: View {
             .swipeActions {
                 Button {
                     // TODO: 술자리 데이터 삭제 Alert 출력
+                    persistentDataManager.deleteParty(party)
                 } label: {
                     Text("삭제하기")
                 }
