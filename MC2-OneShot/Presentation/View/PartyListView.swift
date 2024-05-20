@@ -87,6 +87,9 @@ struct StepCell: View {
     var index: Int
     var step: Step
     
+    @State private var visibleMediaIndex = 0
+    @State private var captureDates: [Date] = []
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -102,7 +105,7 @@ struct StepCell: View {
                     }
                     
                     HStack(spacing: 0) {
-                        Text(step.mediaList[0].captureDate.yearMonthDayNoSpace)
+                        Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].yearMonthDayNoSpace)
                             .pretendard(.regular, 14)
                             .foregroundStyle(.shotCE)
                         
@@ -112,7 +115,7 @@ struct StepCell: View {
                             .cornerRadius(10)
                             .padding(.horizontal, 6)
                         
-                        Text(step.mediaList[0].captureDate.aHourMinute)
+                        Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].aHourMinute)
                             .pretendard(.regular, 14)
                             .foregroundStyle(.shotCE)
                     }
@@ -130,8 +133,7 @@ struct StepCell: View {
                             .pretendard(.semiBold, 16)
                             .foregroundStyle(.shotC6)
                     }
-                }
-                )
+                })
             }
             
             ScrollView(.horizontal, showsIndicators: false) {
@@ -154,6 +156,12 @@ struct StepCell: View {
                                 .cornerRadius(50)
                                 .padding(.top, 15)
                                 .padding(.trailing, 20)
+                                .onAppear {
+                                    captureDates.append(media.captureDate)
+                                }
+                        }
+                        .onAppear {
+                            visibleMediaIndex = index
                         }
                     }
                 }
