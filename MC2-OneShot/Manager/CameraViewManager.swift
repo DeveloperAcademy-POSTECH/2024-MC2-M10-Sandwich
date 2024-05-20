@@ -68,7 +68,7 @@ class CameraViewManager: ObservableObject {
     }
     
     init() {
-        manager = CameraManager()
+        manager = CameraManager.shared
         session = manager.session
         cameraPreview = AnyView(CameraPreviewView(session: session))
         
