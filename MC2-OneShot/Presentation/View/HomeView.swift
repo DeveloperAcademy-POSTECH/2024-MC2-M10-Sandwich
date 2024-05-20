@@ -58,10 +58,14 @@ struct HomeView: View {
                 ListView()
                 
                 ActionButton(
-                    title: "GO STEP!",
-                    buttonType:.primary
+                    title: UserDefaults.standard.isPartyLive ? "술자리 돌아가기" : "GO STEP!",
+                    buttonType: UserDefaults.standard.isPartyLive ? .secondary : .primary
                 ) {
-                    isPartySetViewPresented.toggle()
+                    if UserDefaults.standard.isPartyLive {
+                        isCameraViewPresented.toggle()
+                    } else {
+                        isPartySetViewPresented.toggle()
+                    }
                 }
                 .padding(.horizontal, 16)
             }
