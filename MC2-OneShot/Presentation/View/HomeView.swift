@@ -30,7 +30,6 @@ struct HomeView: View {
     @StateObject private var pathModel: PathModel = .init()
     
     @State private var isPartySetViewPresented = false
-    @State private var searchText = ""
     
     var body: some View {
         NavigationStack(path: $pathModel.paths) {
@@ -78,7 +77,6 @@ struct HomeView: View {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
-                
             }
         }
         .environmentObject(pathModel)
@@ -93,7 +91,6 @@ private struct ListView: View {
     @EnvironmentObject var persistentDataManager: PersistentDataManager
     
     @Query private var partys: [Party]
-    @State private var searchText = ""
     
     var body: some View {
         List(partys) { party in
@@ -121,7 +118,6 @@ private struct ListView: View {
         .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
-        
     }
 }
 
