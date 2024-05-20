@@ -61,12 +61,10 @@ class CameraViewManager: ObservableObject {
     
     // 사진 저장(업로드)
     func cropImage() -> Data? {
-        guard let image = recentImage else { return nil}
-        if let croppedImage = cropImageToSquare(image: image),
-           let imageData = croppedImage.jpegData(compressionQuality: 1.0) {
-            return imageData
-        }
-        return nil
+        let croppedImage = cropImageToSquare(image: recentImage!)
+        let imageData = croppedImage?.jpegData(compressionQuality: 1.0)
+        
+        return imageData
     }
     
     init() {

@@ -17,6 +17,7 @@ final class PersistentDataManager: ObservableObject {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
+    
 }
 
 // MARK: - PartySetView Method
@@ -34,15 +35,22 @@ extension PersistentDataManager {
     }
     
     /// 찍은 사진을 저장하는 데이터입니다.
-    func saveImage(party: Party, imageData: Data) {
-        
-        guard let currentStep = party.stepList.last else{
+    func saveMedia(party: Party, imageData: Data) {
+        let newMedia = Media(fileData: imageData, captureDate: Date.now)
+        party.stepList.last?.mediaList.append(newMedia)
+    }
+    
+    /// StepList에 빈배열을 추가하는 데이터입니다.
+    func addStep(party: Party, currentStep: Int) {
+        // step 추가
+        if (party.stepList.count) < currentStep{
             let newStep = Step(mediaList: [])
             party.stepList.append(newStep)
-            
-            return
         }
-        currentStep.mediaList.append(Media(fileData: imageData, captureDate: Date.now))
-        
+    }
+    
+    /// 술자리 Party 데이터를 지울때 사용합니다.
+    func deleteParty(party: Party) {
+        modelContext.delete(party)
     }
 }
