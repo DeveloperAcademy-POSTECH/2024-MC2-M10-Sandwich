@@ -12,7 +12,7 @@ enum PathType: Hashable {
     case partySet ///  파티 설정(생성) View
     case partyCamera /// 파티 카메라 View
     case partyResult /// 파티 결과(완료) View
-    case partyList /// 파티 리스트  View
+    case partyList(party: Party) /// 파티 리스트  View
     case searchView
 }
 

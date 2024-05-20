@@ -98,7 +98,9 @@ struct PartyCameraView: View {
                     .foregroundColor(.shotFF)
             } else {
                 Button{
-                    pathModel.paths.append(.partyList)
+                    if let lastParty = partys.last {
+                        pathModel.paths.append(.partyList(party: lastParty))
+                    }
                 } label: {
                     HStack{
 //                        Text("\(dummyPartys[0].title)")

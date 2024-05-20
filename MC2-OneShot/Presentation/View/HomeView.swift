@@ -69,7 +69,7 @@ struct HomeView: View {
                 switch path {
                 case .partySet: PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
                 case .partyCamera: PartyCameraView()
-                case .partyList: PartyListView()
+                case let .partyList(party): PartyListView(party: party)
                 case .partyResult: PartyResultView()
                 case .searchView: SearchView()
                 }
@@ -105,7 +105,7 @@ private struct ListView: View {
                 notiCycle: party.notiCycle
             )
             .onTapGesture {
-                pathModel.paths.append(.partyList)
+                pathModel.paths.append(.partyList(party: party))
             }
             .swipeActions {
                 Button {
