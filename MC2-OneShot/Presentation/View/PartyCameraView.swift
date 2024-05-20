@@ -207,7 +207,6 @@ struct PartyCameraView: View {
                 
                 VStack{
                     Button{
-                        viewManager.capturePhoto()
                         
                         if isShot {
                             viewManager.retakePhoto()
@@ -217,6 +216,8 @@ struct PartyCameraView: View {
                             if let lastParty = partys.last{
                                 persistentDataManager.saveMedia(party: lastParty , imageData: viewManager.cropImage()!)
                             }
+                        } else {
+                            viewManager.capturePhoto()
                         }
                         
                         if isBolt{

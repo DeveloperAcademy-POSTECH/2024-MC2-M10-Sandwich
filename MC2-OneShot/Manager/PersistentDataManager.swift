@@ -50,7 +50,7 @@ extension PersistentDataManager {
     }
     
     /// 술자리 Party 데이터를 지울때 사용합니다.
-    func deleteParty(party: Party) {
+    func deleteParty(_ party: Party) {
         modelContext.delete(party)
     }
 }

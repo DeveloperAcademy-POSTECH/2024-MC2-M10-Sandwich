@@ -57,19 +57,12 @@ struct ShutdownPopupView: View {
                             .foregroundStyle(.shot1C).opacity(0.6)
                             .padding(.top, 6)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
-                
+                        
                         Text("진행 되어있는  스탭을 기준으로 바로 다음 스탭이 일정 시간동안 완료되지 않아 술자리가 끝난 것 같아 종료했어요 ㅎㅎ! 님 또 취한듯 ㅋ.")
                             .foregroundColor(.shotFF)
                             .pretendard(.bold, 16)
                             .lineSpacing(20)
                             .padding()
-                            
-                        
-                                
-                            
-                            
-                        
-                        
                     }
                 }
                 .padding(.horizontal, 16)

@@ -9,6 +9,9 @@ import AVFoundation
 
 // NSObject 추가
 class CameraManager: NSObject, ObservableObject {
+    static let shared = CameraManager()
+    private override init() {}
+    
     var session = AVCaptureSession()
     var videoDeviceInput: AVCaptureDeviceInput!
     let output = AVCapturePhotoOutput()
@@ -32,7 +35,9 @@ class CameraManager: NSObject, ObservableObject {
 //                    output.isHighResolutionCaptureEnabled = true
 //                    output.maxPhotoQualityPrioritization = .quality
                 }
-                session.startRunning() // 세션 시작
+                DispatchQueue.global(qos: .background).async{
+                    self.session.startRunning()
+                }
             } catch {
                 print(error) // 에러 프린트
             }
