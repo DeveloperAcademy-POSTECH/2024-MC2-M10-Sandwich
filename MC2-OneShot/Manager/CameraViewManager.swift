@@ -16,7 +16,6 @@ class CameraViewManager: ObservableObject {
     
     @Published var arr: [Data] = []
     @Published var recentImage: UIImage?
-    @Published var isSilentModeOn = false
     
     // 초기 세팅
     func configure() {
@@ -53,7 +52,10 @@ class CameraViewManager: ObservableObject {
     
     // 사진 촬영
     func capturePhoto() {
-        manager.capturePhoto()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            self.manager.capturePhoto()
+            print("찰칵")
+        }
         print("[CameraViewModel]: Photo captured!")
     }
     

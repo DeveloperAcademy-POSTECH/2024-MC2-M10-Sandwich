@@ -22,14 +22,17 @@ struct PartyCameraView: View {
     @State private var isBolt = false
     @State private var isFace = false
     @State private var isShot = false
+    @State private var isShotDisabled = false
     @State private var isPartyEnd = false
     
     @State private var isShowingImageModal = false
     @State private var isFinishPopupPresented = false
     @State private var isPartyResultViewPresented = false
+  
+    @State private var croppedImage: UIImage? = nil
     
     @Binding var isCameraViewPresented: Bool
-    
+
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack{
@@ -62,22 +65,22 @@ struct PartyCameraView: View {
                     .padding(.horizontal, 8)
                     
                     VStack{
-                        
-                        // TODO: - check 활성 비활성화 만들기
-                        Image(systemName: "checkmark.circle.fill")
-                            .padding(.bottom, 4)
-                            .foregroundColor(.shotGreen)
-    //                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
-                        Text("STEP \(partys.last?.stepList.count ?? 2)")
-                            .pretendard(.extraBold, 20)
-                            .foregroundColor(.shotFF)
-    //                    Text("\(dummyPartys[0].notiCycle)min")
-                        Text("\(partys.last?.notiCycle ?? 60)min")
-                            .pretendard(.light, 15)
-                            .foregroundColor(.shot6D)
-                    }
+                      
+                    // TODO: - check 활성 비활성화 만들기
+                    Image(systemName: "checkmark.circle.fill")
+                        .padding(.bottom, 4)
+                        .foregroundColor(.shotGreen)
+                    //                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
+                    Text("STEP \(partys.last?.stepList.count ?? 2)")
+                        .pretendard(.extraBold, 20)
+                        .foregroundColor(.shotFF)
+                    //                    Text("\(dummyPartys[0].notiCycle)min")
+                    Text("\(partys.last?.notiCycle ?? 60)min")
+                        .pretendard(.light, 15)
+                        .foregroundColor(.shot6D)
                 }
-                .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
+            }
+            .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
                     if isPartyEnd {
                         isPartyResultViewPresented.toggle()
                     }
@@ -92,17 +95,17 @@ struct PartyCameraView: View {
                 .transaction { transaction in
                     transaction.disablesAnimations = true
                 }
-                
-                VStack {
-                    viewManager.cameraPreview.ignoresSafeArea()
-                        .onAppear {
-                            viewManager.configure()
-                        }
-                        .frame(width: 360, height: 360)
-                        .aspectRatio(1, contentMode: .fit)
-                        .cornerRadius(25)
-                }
-                .padding(.top, 36)
+            
+            VStack {
+                viewManager.cameraPreview.ignoresSafeArea()
+                    .onAppear {
+                        viewManager.configure()
+                    }
+                    .frame(width: 360, height: 360)
+                    .aspectRatio(1, contentMode: .fit)
+                    .cornerRadius(25)
+            }
+            .padding(.top, 36)
                 
                 if isShot{
     //                Text("\(dummyPartys[0].title)")
@@ -145,8 +148,11 @@ struct PartyCameraView: View {
                         }
                         
                         Button{
-                            print("비디오")
-                            isCamera = false
+                            print("플래시")
+                            if !isFace{
+                                //                                viewManager.toggleFlash()
+                                isBolt.toggle()
+                            }
                         } label: {
                             Text("비디오")
                                 .pretendard(.bold, 17)
@@ -224,42 +230,47 @@ struct PartyCameraView: View {
                             if isBolt && !isShot{
                                 viewManager.toggleFlash()
                             }
+                          
+                          if isShot {
+                            viewManager.retakePhoto()
                             
-                            if isShot {
-                                viewManager.retakePhoto()
-    //                            viewManager.saveImage()
-                                
-                                
-                                if let lastParty = partys.last{
-                                    persistentDataManager.saveMedia(party: lastParty , imageData: viewManager.cropImage()!)
-                                }
-                            } else {
-                                viewManager.capturePhoto()
+                            if let lastParty = partys.last{
+                                persistentDataManager.saveMedia(party: lastParty , imageData: viewManager.cropImage()!)
+                            }
+                        } else {
+
+                            if isBolt{
+                                viewManager.toggleFlash()
                             }
                             
-                            isShot.toggle()
-                            
-                        } label: {
-                            ZStack{
+                            viewManager.capturePhoto()
+                        }
+                        
+                        isShot.toggle()
+                        delayButton()
+                        
+                    } label: {
+                        ZStack{
+                            if isShot{
                                 Circle()
-                                    .fill(isShot ? Color.shotGreen : Color.shotFF)
+                                    .fill(Color.shotGreen)
+                                    .frame(width: 112, height: 112)
+                                Image(systemName: "arrow.up.forward")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 36)
+                                    .foregroundColor(.shot00)
+                            } else{
+                                Circle()
+                                    .fill(Color.shotFF)
                                     .frame(width: 112, height: 112)
                                 
-                                if isShot{
-                                    Image(systemName: "arrow.up.forward")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 36)
-                                        .foregroundColor(.shot00)
-                                } else{
-                                    Circle().stroke(Color.shotGreen, lineWidth: 10)
-                                        .padding(12)
-                                }
+                                Circle().stroke(Color.shotGreen, lineWidth: 10)
+                                    .padding(12)
                             }
                         }
                     }
-                    
-                    
+                    .disabled(isShotDisabled)
                 }
                 .padding(.top)
                 .padding(.horizontal)
@@ -269,13 +280,32 @@ struct PartyCameraView: View {
                 switch path {
                 case let .partyList(party):
                     PartyListView(party: party, isCameraViewPresented: $isCameraViewPresented)
+                        } label: {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 48, height: 48)
+                                .foregroundColor(.shotFF)
+                        }
+                    }
                 }
-            }
             .fullScreenCover(isPresented: $isPartyResultViewPresented) {
                 isCameraViewPresented = false
             } content: {
                 PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
+        }
+    }
+    
+    private func delayButton() {
+        print("버튼 눌림")
+        
+        // 버튼을 비활성화
+        isShotDisabled = true
+        
+        // 0.5초 후에 버튼을 다시 활성화
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            isShotDisabled = false
         }
     }
 }
@@ -318,7 +348,7 @@ struct CameraPreviewView: UIViewRepresentable {
 // TODO: - 나중에 PartyListView에 적용
 //struct testView: View {
 //    @Query private var partys: [Party]
-//    
+//
 //    @Binding var istestPresent: Bool
 //    var body: some View {
 //        VStack {

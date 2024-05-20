@@ -103,12 +103,15 @@ struct StepCell: View {
     var index: Int
     var step: Step
     
+    @State private var visibleMediaIndex = 0
+    @State private var captureDates: [Date] = []
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 0) {
-                        Text("STEP_")
+                        Text("STEP ")
                             .pretendard(.bold, 22)
                             .foregroundStyle(.shotC6)
                         
@@ -118,7 +121,7 @@ struct StepCell: View {
                     }
                     
                     HStack(spacing: 0) {
-                        Text(step.mediaList[0].captureDate.yearMonthDayNoSpace)
+                        Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].yearMonthDayNoSpace)
                             .pretendard(.regular, 14)
                             .foregroundStyle(.shotCE)
                         
@@ -128,7 +131,7 @@ struct StepCell: View {
                             .cornerRadius(10)
                             .padding(.horizontal, 6)
                         
-                        Text(step.mediaList[0].captureDate.aHourMinute)
+                        Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].aHourMinute)
                             .pretendard(.regular, 14)
                             .foregroundStyle(.shotCE)
                     }
@@ -146,19 +149,13 @@ struct StepCell: View {
                             .pretendard(.semiBold, 16)
                             .foregroundStyle(.shotC6)
                     }
-                }
-                )
+                })
             }
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 15) {
-                    ForEach(Array(step.mediaList.enumerated()), id: \.offset) { index, media in
+                    ForEach(Array(step.mediaList.sorted(by: { $0.captureDate < $1.captureDate }).enumerated()), id: \.offset) { index, media in
                         ZStack(alignment: .topTrailing) {
-//                            Rectangle()
-//                                .foregroundStyle(.shotBlue)
-//                                .frame(width: 361, height: 361)
-//                                .cornerRadius(10)
-                            
                             if let image = UIImage(data: media.fileData) {
                                 Image(uiImage: image)
                                     .resizable()
@@ -166,8 +163,6 @@ struct StepCell: View {
                                     .frame(width: 361, height: 361)
                                     .cornerRadius(10)
                             }
-
-                            
                             
                             Text("\(index+1) / \(step.mediaList.count)")
                                 .pretendard(.regular, 12)
@@ -177,6 +172,12 @@ struct StepCell: View {
                                 .cornerRadius(50)
                                 .padding(.top, 15)
                                 .padding(.trailing, 20)
+                                .onAppear {
+                                    captureDates.append(media.captureDate)
+                                }
+                        }
+                        .onAppear {
+                            visibleMediaIndex = index
                         }
                     }
                 }
@@ -188,25 +189,6 @@ struct StepCell: View {
         }
     }
 }
-
-//struct DotsView: View {
-//    let selectedIndex: Int
-//
-//    var body: some View {
-//        HStack(spacing: 5) {
-//            ForEach(1...3, id: \.self) { dotIndex in
-//                Circle()
-//                    .frame(width: 10, height: 10)
-//                    .padding(.horizontal, 5)
-//                    .foregroundColor(dotIndex == selectedIndex ? Color.shotC6 : Color.shot2D)
-//            }
-//        }
-//        .scrollTransition(.animated, axis: .horizontal) { content, phase in
-//            content
-//                .scaleEffect(phase.isIdentity ? 1.0 : 0.8)
-//        }
-//    }
-//}
 
 #Preview {
     PartyListView(
