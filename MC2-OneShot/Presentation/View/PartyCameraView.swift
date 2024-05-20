@@ -166,6 +166,7 @@ struct PartyCameraView: View {
                         Button{
                             print("플래시")
                             if !isFace{
+//                                viewManager.toggleFlash()
                                 isBolt.toggle()
                             }
                         } label: {
@@ -207,6 +208,9 @@ struct PartyCameraView: View {
                 
                 VStack{
                     Button{
+                        if isBolt && !isShot{
+                            viewManager.toggleFlash()
+                        }
                         
                         if isShot {
                             viewManager.retakePhoto()
@@ -218,10 +222,6 @@ struct PartyCameraView: View {
                             }
                         } else {
                             viewManager.capturePhoto()
-                        }
-                        
-                        if isBolt{
-                            viewManager.toggleFlash()
                         }
                         
                         isShot.toggle()
