@@ -33,6 +33,16 @@ extension PersistentDataManager {
         modelContext.insert(newParty)
     }
     
-    /// 찍은 사진을 해당 스텝에 저장합니다.
-    
+    /// 찍은 사진을 저장하는 데이터입니다.
+    func saveImage(party: Party, imageData: Data) {
+        
+        guard let currentStep = party.stepList.last else{
+            let newStep = Step(mediaList: [])
+            party.stepList.append(newStep)
+            
+            return
+        }
+        currentStep.mediaList.append(Media(fileData: imageData, captureDate: Date.now))
+        
+    }
 }

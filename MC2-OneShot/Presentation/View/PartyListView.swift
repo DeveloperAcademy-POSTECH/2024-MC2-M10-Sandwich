@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct PartyListView: View {
-    var party: Party = Party(title: "포항공대애애앵", startDate: Date(), notiCycle: 30)
+//    var party: Party = Party(title: "포항공대애애앵", startDate: Date(), notiCycle: 30)
+    let party: Party
+    
     @State private var isFinishPopupPresented = false
     @State private var isMemberPopupPresented = false
     @EnvironmentObject private var pathModel: PathModel
@@ -37,7 +39,7 @@ struct PartyListView: View {
                 .padding(.horizontal, 16)
                 
                 ScrollView {
-                    ForEach(Array(dummyPartys[0].stepList.enumerated()), id: \.offset) { index, step in
+                    ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step)
                     }
                     .padding(16)
@@ -135,14 +137,24 @@ struct StepCell: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 15) {
-                    ForEach(1...12, id: \.self) { index in
+                    ForEach(Array(step.mediaList.enumerated()), id: \.offset) { index, media in
                         ZStack(alignment: .topTrailing) {
-                            Rectangle()
-                                .foregroundStyle(.shotBlue)
-                                .frame(width: 361, height: 361)
-                                .cornerRadius(10)
+//                            Rectangle()
+//                                .foregroundStyle(.shotBlue)
+//                                .frame(width: 361, height: 361)
+//                                .cornerRadius(10)
                             
-                            Text("\(index) / \(12)")
+                            if let image = UIImage(data: media.fileData) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 361, height: 361)
+                                    .cornerRadius(10)
+                            }
+
+                            
+                            
+                            Text("\(index+1) / \(step.mediaList.count)")
                                 .pretendard(.regular, 12)
                                 .padding(5)
                                 .foregroundColor(.white)
