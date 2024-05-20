@@ -54,7 +54,7 @@ class NotificationManager {
         content.title = "알림 주기가 다가왔습니다"
         content.subtitle = "사진을 찍어주세요!"
         
-        let soundName = "customSound"
+        let soundName = "CustomSound"
         let soundExtension = "mp3"
         
         if let soundURL = Bundle.main.url(forResource: soundName, withExtension: soundExtension) {
