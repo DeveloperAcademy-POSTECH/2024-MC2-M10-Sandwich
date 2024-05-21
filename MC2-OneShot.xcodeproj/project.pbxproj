@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1DAF42BF88ADA00C53D8C /* SearchView.swift */; };
+		1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E49DAA32BFC662200553A15 /* AppDelegate.swift */; };
 		1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFADD702BF6DE6500E333AD /* NotificationManager.swift */; };
-		1EFADD732BF6E34B00E333AD /* customSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* customSound.mp3 */; };
+		1EFADD732BF6E34B00E333AD /* CustomSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
 		82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF62BF7034A00BF01CF /* NotiCycle.swift */; };
 		82016BF92BF742C300BF01CF /* PartyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF82BF742C300BF01CF /* PartyService.swift */; };
@@ -51,8 +52,9 @@
 
 /* Begin PBXFileReference section */
 		19A1DAF42BF88ADA00C53D8C /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		1E49DAA32BFC662200553A15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EFADD702BF6DE6500E333AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
-		1EFADD722BF6E34B00E333AD /* customSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = customSound.mp3; sourceTree = "<group>"; };
+		1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CustomSound.mp3; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
 		82016BF62BF7034A00BF01CF /* NotiCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiCycle.swift; sourceTree = "<group>"; };
 		82016BF82BF742C300BF01CF /* PartyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyService.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 			children = (
 				BFB534102BF342BE0013E9FE /* Info.plist */,
 				8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */,
+				1E49DAA32BFC662200553A15 /* AppDelegate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -232,7 +235,7 @@
 		82D564512BFB812D0091C2BC /* Sound */ = {
 			isa = PBXGroup;
 			children = (
-				1EFADD722BF6E34B00E333AD /* customSound.mp3 */,
+				1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -331,7 +334,7 @@
 				BFB5340E2BF342840013E9FE /* Pretendard-Black.otf in Resources */,
 				BFB5340C2BF342840013E9FE /* Pretendard-SemiBold.otf in Resources */,
 				BFB534072BF342840013E9FE /* Pretendard-Light.otf in Resources */,
-				1EFADD732BF6E34B00E333AD /* customSound.mp3 in Resources */,
+				1EFADD732BF6E34B00E333AD /* CustomSound.mp3 in Resources */,
 				BFB5340B2BF342840013E9FE /* Pretendard-Regular.otf in Resources */,
 				BFB534082BF342840013E9FE /* Pretendard-Thin.otf in Resources */,
 				BFB5340A2BF342840013E9FE /* Pretendard-Medium.otf in Resources */,
@@ -350,6 +353,7 @@
 				8264EA262BF200EB00586FA0 /* PartyCameraView.swift in Sources */,
 				98BA9D4C2BF6DF3900BEEDCC /* CameraViewManager.swift in Sources */,
 				8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */,
+				1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */,
 				82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */,
 				82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */,
 				8264EA282BF2013000586FA0 /* PartyResultView.swift in Sources */,

@@ -7,38 +7,11 @@
 
 import SwiftUI
 import UserNotifications
-import CoreLocation
-
-struct LocalPushNotification: View {
-    
-    let dummyDate = Date() + 15
-    
-    let manager = NotificationManager.instance
-    var body: some View {
-        VStack(spacing: 40) {
-            Button("알림 권한 설정") {
-                manager.requestAuthorization()
-            }
-            Button("알림 예약") {
-                print("now: ", Date())
-                print("alarmTime: ", dummyDate)
-                manager.scheduleNotification(date: dummyDate)
-            }
-            Button("삭제") {
-                manager.cancelNotification()
-            }
-        }
-        .onAppear {
-            UNUserNotificationCenter.current().setBadgeCount(0, withCompletionHandler: nil)
-        }
-    }
-}
 
 class NotificationManager {
     static let instance = NotificationManager()
     private init() {}
     
-    // 알림 설정 허용 여부
     func requestAuthorization() {
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         UNUserNotificationCenter.current().requestAuthorization(options: options) { (success, error) in
@@ -50,25 +23,12 @@ class NotificationManager {
         }
     }
     
-    //    enum TriggerType: String {
-    //        case calender = "calender"
-    //
-    //        var trigger: UNNotificationTrigger {
-    //            switch self {
-    //            case .calender:
-    //                let dateComponent = DateComponents(year: 2024, month: 5, day: 17, hour: 15, minute: 43)
-    //                return UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
-    //            }
-    //        }
-    //    }
-    
-    func scheduleNotification(date: Date) {
-        
+    func scheduleNotification(date: Date, title: String, subtitle: String) {
         let content = UNMutableNotificationContent()
-        content.title = "알림 주기가 다가왔습니다"
-        content.subtitle = "사진을 찍어주세요!"
+        content.title = title
+        content.subtitle = subtitle
         
-        let soundName = "customSound"
+        let soundName = "CustomSound"
         let soundExtension = "mp3"
         
         if let soundURL = Bundle.main.url(forResource: soundName, withExtension: soundExtension) {
@@ -85,17 +45,28 @@ class NotificationManager {
         
         let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
-        print("type: ", type(of: dateComponents))
         print("dateComponents: ", dateComponents)
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
-        
     }
     
     func cancelNotification() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests() // 삭제
+    }
+    
+    func scheduleFunction(date: Date, handler: @escaping () -> Void) {
+        // 예약된 시간에 함수 실행
+        let timerInterval = date.timeIntervalSinceNow
+        if timerInterval > 0 {
+            let timer = Timer(fire: date, interval: 0, repeats: false) { _ in
+                handler()
+            }
+            RunLoop.main.add(timer, forMode: .common)
+        } else {
+            print("The scheduled date is in the past.")
+        }
     }
 }
