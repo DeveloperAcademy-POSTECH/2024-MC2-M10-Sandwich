@@ -28,8 +28,10 @@ struct PartySetView: View {
             
             List {
                 TextField("제목", text: $titleText)
-                MemberListView()
+               
+                // 위치 변경
                 NotiCycleView(notiCycle: $notiCycle)
+                MemberListView()
             }
             
             Spacer()
@@ -128,7 +130,8 @@ private struct MemberListView: View {
                                     Image(systemName: "plus")
                                         .resizable()
                                         .frame(width: 32, height: 32)
-                                        .foregroundStyle(.blue)
+                                    // plus color 변경
+                                        .foregroundStyle(.shot6D)
                                 }
                             }
                         }
@@ -179,8 +182,22 @@ private struct NotiCycleView: View {
                 }
             }
         } footer: {
-            Text("알림 주기마다 PUSH 알림을 보내드려요")
-                .pretendard(.regular, 14)
+            
+            // 인포 문구 추가
+            VStack(alignment: .leading){
+                HStack{
+                    Image(systemName: "questionmark.circle")
+                    Text("알림 주기마다 PUSH 알림을 보내드려요.")
+                        .pretendard(.regular, 14)
+                }
+                
+                HStack{
+                    Image(systemName: "exclamationmark.circle")
+                    Text("무음모드를 해제해주세요!")
+                        .pretendard(.regular, 14)
+                }
+            }
+            
         }
     }
 }
