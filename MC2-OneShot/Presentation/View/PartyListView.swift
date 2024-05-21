@@ -30,14 +30,16 @@ struct PartyListView: View {
                         .pretendard(.bold, 25)
                         .foregroundStyle(.shotFF)
                     Spacer()
-                    Button {
-                        isMemberPopupPresented.toggle()
-                    } label: {
-                        Image(systemName: "circle")
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                            .foregroundStyle(.shotFF)
-                    }
+//                    Button {
+//                        isMemberPopupPresented.toggle()
+//                    } label: {
+//                        Image(.dummyProfile)
+//                            .resizable()
+//                            .frame(width: 32, height: 32)
+//                    }
+                    Image(.dummyProfile)
+                        .resizable()
+                        .frame(width: 32, height: 32)
                 }
                 .padding(.top, 3)
                 .padding(.bottom, 14)
