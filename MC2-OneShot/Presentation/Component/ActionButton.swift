@@ -15,6 +15,7 @@ struct ActionButton: View {
         case primary
         case secondary
         case disabled
+        case popupfinish
     }
     
     /// 버튼 타이틀
@@ -32,6 +33,7 @@ struct ActionButton: View {
         case .primary: return .shotGreen
         case .secondary: return .shotD8
         case .disabled: return .shot33
+        case .popupfinish: return .shot41
         }
     }
     
@@ -40,6 +42,7 @@ struct ActionButton: View {
         switch buttonType {
         case .primary, .secondary: return .shot00
         case .disabled: return .secondary
+        case .popupfinish: return .shotFF
         }
     }
     
@@ -64,7 +67,7 @@ struct ActionButton: View {
         Color(.shot00)
             .ignoresSafeArea()
         
-        HStack(spacing: 8) {
+        VStack(spacing: 8) {
             ActionButton(
                 title: "더 마시기",
                 buttonType: .secondary
@@ -78,6 +81,10 @@ struct ActionButton: View {
             ActionButton(
                 title: "비활성화",
                 buttonType: .disabled
+            ) {}
+            ActionButton(
+                title: "닫기",
+                buttonType: .popupfinish
             ) {}
         }
         .padding(.horizontal, 16)
