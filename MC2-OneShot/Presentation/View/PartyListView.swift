@@ -14,6 +14,8 @@ struct PartyListView: View {
     @State private var isPartyResultViewPresented = false
     @State private var isPartyEnd = false
     
+    @Environment(\.presentationMode) var presentationMode
+    
     let party: Party
     
     @Binding var isCameraViewPresented: Bool
@@ -38,7 +40,7 @@ struct PartyListView: View {
                     }
                 }
                 .padding(.top, 3)
-                .padding(.bottom, 8)
+                .padding(.bottom, 14)
                 .padding(.horizontal, 16)
                 .fullScreenCover(isPresented: $isMemberPopupPresented) {
                     MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
@@ -49,11 +51,14 @@ struct PartyListView: View {
                     transaction.disablesAnimations = true
                 }
                 
+                Divider()
+                
                 ScrollView {
                     ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step)
+                        
+                        Divider()
                     }
-                    .padding(16)
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -95,6 +100,17 @@ struct PartyListView: View {
                     PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
                 }
             }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.white)
+                    }
+                }
+            }
         }
     }
 }
@@ -122,8 +138,9 @@ struct StepCell: View {
                     
                     HStack(spacing: 0) {
                         Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].yearMonthDayNoSpace)
-                            .pretendard(.regular, 14)
-                            .foregroundStyle(.shotCE)
+                            .pretendard(.semiBold, 14)
+                            .foregroundStyle(.shotC6)
+                            .opacity(0.4)
                         
                         Rectangle()
                             .foregroundStyle(.shot33)
@@ -132,8 +149,9 @@ struct StepCell: View {
                             .padding(.horizontal, 6)
                         
                         Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].aHourMinute)
-                            .pretendard(.regular, 14)
-                            .foregroundStyle(.shotCE)
+                            .pretendard(.semiBold, 14)
+                            .foregroundStyle(.shotC6)
+                            .opacity(0.4)
                     }
                     .padding(.top, 4)
                 }
@@ -143,7 +161,7 @@ struct StepCell: View {
                 Button(action: {}, label: {
                     ZStack {
                         Image(.icnSave)
-                        Image(systemName: "square.and.arrow.down")
+                        Image(systemName: "square.and.arrow.up")
                             .resizable()
                             .frame(width: 14, height: 18)
                             .pretendard(.semiBold, 16)
@@ -151,27 +169,29 @@ struct StepCell: View {
                     }
                 })
             }
+            .padding(16)
             
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 15) {
+                LazyHStack {
                     ForEach(Array(step.mediaList.sorted(by: { $0.captureDate < $1.captureDate }).enumerated()), id: \.offset) { index, media in
                         ZStack(alignment: .topTrailing) {
                             if let image = UIImage(data: media.fileData) {
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 361, height: 361)
-                                    .cornerRadius(10)
+                                    .frame(width: .infinity, height: 393)
+                                    .cornerRadius(15)
                             }
                             
                             Text("\(index+1) / \(step.mediaList.count)")
-                                .pretendard(.regular, 12)
-                                .padding(5)
-                                .foregroundColor(.white)
+                                .pretendard(.regular, 17)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .foregroundStyle(.shotFF)
                                 .background(.black.opacity(0.5))
                                 .cornerRadius(50)
-                                .padding(.top, 15)
-                                .padding(.trailing, 20)
+                                .padding(.top, 16)
+                                .padding(.trailing, 16)
                                 .onAppear {
                                     captureDates.append(media.captureDate)
                                 }
@@ -184,8 +204,7 @@ struct StepCell: View {
             }
             .scrollTargetLayout()
             .scrollTargetBehavior(.viewAligned)
-            .padding(.top, 20)
-            .padding(.bottom, 30)
+            .padding(.bottom, 16)
         }
     }
 }
