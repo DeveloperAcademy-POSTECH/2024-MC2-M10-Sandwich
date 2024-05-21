@@ -148,9 +148,17 @@ private struct MemberListView: View {
                 .padding(.bottom, 8)
             }
         } footer: {
-            Text("술자리를 함께하는 일행의 사진을 찍어봐요")
-                .pretendard(.regular, 14)
-        }
+            
+            // footer 변경
+            HStack{
+                Image(systemName: "camera.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 14, height: 14)
+                Text("술자리를 함께하는 일행의 사진을 찍어봐요!")
+                    .pretendard(.regular, 12)
+            }
+        }.padding(4)
     }
 }
 
@@ -181,24 +189,31 @@ private struct NotiCycleView: View {
                     .foregroundStyle(.shotFF).opacity(0.6)
                 }
             }
-        } footer: {
+        } 
+       
+    footer: {
             
             // 인포 문구 추가
             VStack(alignment: .leading){
                 HStack{
-                    Image(systemName: "questionmark.circle")
+                    Image(systemName: "questionmark.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 14, height: 14)
                     Text("알림 주기마다 PUSH 알림을 보내드려요.")
-                        .pretendard(.regular, 14)
+                        .pretendard(.regular, 12)
                 }
                 
                 HStack{
-                    Image(systemName: "exclamationmark.circle")
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 14, height: 14)
                     Text("무음모드를 해제해주세요!")
-                        .pretendard(.regular, 14)
+                        .pretendard(.regular, 12)
                 }
             }
-            
-        }
+        } .padding(4)
     }
 }
 
