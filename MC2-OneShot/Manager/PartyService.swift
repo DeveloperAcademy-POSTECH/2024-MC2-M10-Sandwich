@@ -52,8 +52,6 @@ extension PartyService {
         
         print(#function)
         
-        UserDefaults.standard.updatePartyLive(isLive: true)
-        
         setPartyService(startDate: startDate, notiCycle: notiCycle)
         
         // PUSH 알림

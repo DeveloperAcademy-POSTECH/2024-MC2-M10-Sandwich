@@ -14,6 +14,22 @@ struct InitialView: View {
     
     @Query private var partys: [Party]
     
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party? {
+        return partys.last
+    }
+    
+    /// 현재 파티가 라이브인지 확인하는 계산 속성
+    var isCurrentPartyLive: Bool {
+        if let safeParty = currentParty {
+            return safeParty.isLive
+        } else {
+            return false
+        }
+    }
+    
+    
+    
     var modelContainer: ModelContainer
     
     var body: some View {
@@ -26,7 +42,7 @@ struct InitialView: View {
             NotificationManager.instance.requestAuthorization()
             
             // 라이브 중일 때 함수 호출
-            if UserDefaults.standard.isPartyLive {
+            if isCurrentPartyLive {
                 updatePartyService()
             }
         }
@@ -123,7 +139,6 @@ struct HomeView: View {
                     
                     NotificationManager.instance.scheduleFunction(date: PartyService.shared.testDate) {
                         isPartyResultViewPresented.toggle()
-                        UserDefaults.standard.updatePartyLive(isLive: false)
                     }
                 }
             }, content: {
