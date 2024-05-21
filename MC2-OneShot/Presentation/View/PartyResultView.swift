@@ -46,9 +46,10 @@ struct PartyResultView: View {
             .padding(.top,12)
             
             // 상단 STEP
+            // TODO: - 병뚜껑 색 바꿔야함
             VStack{
                 ZStack{
-                    Image("Greenbottle")
+                    Image("icnSave")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 30,height: 30)
@@ -69,11 +70,11 @@ struct PartyResultView: View {
                 }
                 
                 HStack{
-//                     preview crash 
+                    // preview crash 
 //                    Text("30min")
                     Text("\((partys.last?.notiCycle)!)min")
                         .foregroundStyle(.shotC6)
-                        .pretendard(.regular, 17)
+                        .pretendard(.bold, 12)
                 }
                 
             }
