@@ -45,7 +45,6 @@ class NotificationManager {
         
         let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
-        print("type: ", type(of: dateComponents))
         print("dateComponents: ", dateComponents)
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
@@ -56,5 +55,18 @@ class NotificationManager {
     
     func cancelNotification() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests() // 삭제
+    }
+    
+    func scheduleFunction(date: Date, handler: @escaping () -> Void) {
+        // 예약된 시간에 함수 실행
+        let timerInterval = date.timeIntervalSinceNow
+        if timerInterval > 0 {
+            let timer = Timer(fire: date, interval: 0, repeats: false) { _ in
+                handler()
+            }
+            RunLoop.main.add(timer, forMode: .common)
+        } else {
+            print("The scheduled date is in the past.")
+        }
     }
 }
