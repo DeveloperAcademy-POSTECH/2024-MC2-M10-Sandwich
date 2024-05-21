@@ -26,7 +26,7 @@ class NotificationManager {
     func scheduleNotification(date: Date, title: String, subtitle: String) {
         let content = UNMutableNotificationContent()
         content.title = title
-        content.subtitle = subtitle
+        content.body = subtitle
         
         let soundName = "CustomSound"
         let soundExtension = "mp3"
