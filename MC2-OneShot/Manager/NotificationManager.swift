@@ -7,7 +7,6 @@
 
 import SwiftUI
 import UserNotifications
-import CoreLocation
 
 struct LocalPushNotification: View {
     
@@ -38,7 +37,6 @@ class NotificationManager {
     static let instance = NotificationManager()
     private init() {}
     
-    // 알림 설정 허용 여부
     func requestAuthorization() {
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         UNUserNotificationCenter.current().requestAuthorization(options: options) { (success, error) in
@@ -50,25 +48,13 @@ class NotificationManager {
         }
     }
     
-    //    enum TriggerType: String {
-    //        case calender = "calender"
-    //
-    //        var trigger: UNNotificationTrigger {
-    //            switch self {
-    //            case .calender:
-    //                let dateComponent = DateComponents(year: 2024, month: 5, day: 17, hour: 15, minute: 43)
-    //                return UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
-    //            }
-    //        }
-    //    }
-    
     func scheduleNotification(date: Date) {
         
         let content = UNMutableNotificationContent()
         content.title = "알림 주기가 다가왔습니다"
         content.subtitle = "사진을 찍어주세요!"
         
-        let soundName = "customSound"
+        let soundName = "CustomSound"
         let soundExtension = "mp3"
         
         if let soundURL = Bundle.main.url(forResource: soundName, withExtension: soundExtension) {
