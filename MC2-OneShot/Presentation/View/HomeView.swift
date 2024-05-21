@@ -20,6 +20,9 @@ struct InitialView: View {
                 modelContext: modelContainer.mainContext
             )
         )
+        .onAppear {
+            NotificationManager.instance.requestAuthorization()
+        }
     }
 }
 
@@ -89,6 +92,11 @@ struct HomeView: View {
         }
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
+        .onAppear {
+            if UserDefaults.standard.isPartyLive {
+                isCameraViewPresented.toggle()
+            }
+        }
     }
 }
 
