@@ -8,31 +8,6 @@
 import SwiftUI
 import UserNotifications
 
-struct LocalPushNotification: View {
-    
-    let dummyDate = Date() + 15
-    
-    let manager = NotificationManager.instance
-    var body: some View {
-        VStack(spacing: 40) {
-            Button("알림 권한 설정") {
-                manager.requestAuthorization()
-            }
-            Button("알림 예약") {
-                print("now: ", Date())
-                print("alarmTime: ", dummyDate)
-                manager.scheduleNotification(date: dummyDate)
-            }
-            Button("삭제") {
-                manager.cancelNotification()
-            }
-        }
-        .onAppear {
-            UNUserNotificationCenter.current().setBadgeCount(0, withCompletionHandler: nil)
-        }
-    }
-}
-
 class NotificationManager {
     static let instance = NotificationManager()
     private init() {}
@@ -48,11 +23,10 @@ class NotificationManager {
         }
     }
     
-    func scheduleNotification(date: Date) {
-        
+    func scheduleNotification(date: Date, title: String, subtitle: String) {
         let content = UNMutableNotificationContent()
-        content.title = "알림 주기가 다가왔습니다"
-        content.subtitle = "사진을 찍어주세요!"
+        content.title = title
+        content.subtitle = subtitle
         
         let soundName = "CustomSound"
         let soundExtension = "mp3"
@@ -78,7 +52,6 @@ class NotificationManager {
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
-        
     }
     
     func cancelNotification() {

@@ -1,5 +1,5 @@
 //
-//  PartyManager.swift
+//  PartyService.swift
 //  MC2-OneShot
 //
 //  Created by 김민준 on 5/17/24.
@@ -44,10 +44,10 @@ extension PartyService {
         
         // PUSH 알림
         // 1. 강제 종료 10분전 예약 - 소리+배너
-        notificationManager.scheduleNotification(date: currentShutdownWarningDate)
+        notificationManager.scheduleNotification(date: currentShutdownWarningDate, title: "", subtitle: "")
         
         // 2. 강제 종료 되었을 때 예약 - 배너
-        notificationManager.scheduleNotification(date: currentStepEndDate)
+        notificationManager.scheduleNotification(date: currentStepEndDate, title: "", subtitle: "")
         
         // 비동기 이벤트 예약
         // 1. 이번 STEP 종료 시간에 작동할 함수 실행(Notification)
@@ -63,13 +63,13 @@ extension PartyService {
         notificationManager.cancelNotification()
         
         // 2. 다음 STEP 알림을 예약 - 소리 + 배너
-        notificationManager.scheduleNotification(date: currentStepEndDate)
+        notificationManager.scheduleNotification(date: currentStepEndDate, title: "", subtitle: "")
         
         // 3. 다음 스텝 강제 종료 10분전 예약 - 소리+배너
-        notificationManager.scheduleNotification(date: nextShutdownWarningDate)
+        notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: "", subtitle: "")
         
         // 4. 다음 스텝 강제 종료 되었을 때 예약 - 배너
-        notificationManager.scheduleNotification(date: nextStepEndDate)
+        notificationManager.scheduleNotification(date: nextStepEndDate, title: "", subtitle: "")
     }
     
     /// 다음 STEP으로 넘어갔을 때
