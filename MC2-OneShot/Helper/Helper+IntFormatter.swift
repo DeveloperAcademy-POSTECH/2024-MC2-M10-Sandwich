@@ -16,3 +16,12 @@ extension View {
         return str
     }
 }
+
+extension Int {
+    // 숫자 형식을 9를 09로 반환합니다.
+    var intformatter: String {
+        let str = String(format: "%02d", self)
+        
+        return str
+    }
+}

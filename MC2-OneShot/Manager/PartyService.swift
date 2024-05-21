@@ -7,6 +7,16 @@
 
 import Foundation
 
+private enum NotificationTitle {
+    static let shutdownWarningTitle = "10분뒤에 술자리가 종료됩니다."
+    static let shutdownWarningSubTitle = "취했냐?ㅋㅋ 이번 Step에서 사진을 찍지 않으면, 10분뒤에 술자리가 종료되는 걸로 알겠습니당~ㅋ"
+    
+    static let shutdownTitle = "사진을 찍지 않아 술자리가 종료되었습니다."
+    static let shutdownSubTitle = "취했네ㅋㅋㅋㅋㅌㅋ 포항항ꉂꉂ(ᵔᗜᵔ*)ㅋㅋㅋㅋ포항항항포핳핳항⚓⛴포항항ꉂꉂ(ᵔᗜᵔ*)ㅋㅋㅋㅋ"
+    
+    static let continuePartySubTitle = "사진을 찍어주세요!"
+}
+
 protocol PartyServiceProtocol {
     func startParty(startDate: Date, notiCycle: NotiCycle)
     func stepComplete()
@@ -44,10 +54,10 @@ extension PartyService {
         
         // PUSH 알림
         // 1. 강제 종료 10분전 예약 - 소리+배너
-        notificationManager.scheduleNotification(date: currentShutdownWarningDate, title: "", subtitle: "")
+        notificationManager.scheduleNotification(date: currentShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
         
         // 2. 강제 종료 되었을 때 예약 - 배너
-        notificationManager.scheduleNotification(date: currentStepEndDate, title: "", subtitle: "")
+        notificationManager.scheduleNotification(date: currentStepEndDate, title: NotificationTitle.shutdownTitle, subtitle: NotificationTitle.shutdownSubTitle)
         
         // 비동기 이벤트 예약
         // 1. 이번 STEP 종료 시간에 작동할 함수 실행(Notification)
@@ -63,13 +73,13 @@ extension PartyService {
         notificationManager.cancelNotification()
         
         // 2. 다음 STEP 알림을 예약 - 소리 + 배너
-        notificationManager.scheduleNotification(date: currentStepEndDate, title: "", subtitle: "")
+        notificationManager.scheduleNotification(date: currentStepEndDate, title: "STEP \(currentStep.intformatter)", subtitle: NotificationTitle.continuePartySubTitle)
         
         // 3. 다음 스텝 강제 종료 10분전 예약 - 소리+배너
-        notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: "", subtitle: "")
+        notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
         
         // 4. 다음 스텝 강제 종료 되었을 때 예약 - 배너
-        notificationManager.scheduleNotification(date: nextStepEndDate, title: "", subtitle: "")
+        notificationManager.scheduleNotification(date: nextStepEndDate, title: NotificationTitle.shutdownTitle, subtitle: NotificationTitle.shutdownSubTitle)
     }
     
     /// 다음 STEP으로 넘어갔을 때
