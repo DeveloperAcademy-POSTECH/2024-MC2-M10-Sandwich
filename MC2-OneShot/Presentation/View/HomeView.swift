@@ -12,6 +12,8 @@ import SwiftData
 /// PersistentDataManager 생성을 위한 View
 struct InitialView: View {
     
+    @Query private var partys: [Party]
+    
     var modelContainer: ModelContainer
     
     var body: some View {
@@ -22,7 +24,26 @@ struct InitialView: View {
         )
         .onAppear {
             NotificationManager.instance.requestAuthorization()
+            
+            // 라이브 중일 때 함수 호출
+            if UserDefaults.standard.isPartyLive {
+                updatePartyService()
+            }
         }
+    }
+    
+    /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
+    func updatePartyService() {
+        
+        guard let party = partys.last else {
+            print("파티 없음")
+            return
+        }
+        
+        let currentStartDate = party.startDate
+        let currentNotiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
+        
+        PartyService.shared.setPartyService(startDate: currentStartDate, notiCycle: currentNotiCycle)
     }
 }
 
@@ -34,6 +55,23 @@ struct HomeView: View {
     
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
+    @State private var isPartyResultViewPresented = false
+    
+    @Query private var partys: [Party]
+    
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party? {
+        return partys.last
+    }
+    
+    /// 현재 파티가 라이브인지 확인하는 계산 속성
+    var isCurrentPartyLive: Bool {
+        if let safeParty = currentParty {
+            return safeParty.isLive
+        } else {
+            return false
+        }
+    }
     
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
@@ -61,10 +99,10 @@ struct HomeView: View {
                 ListView()
                 
                 ActionButton(
-                    title: UserDefaults.standard.isPartyLive ? "술자리 돌아가기" : "GO STEP!",
-                    buttonType: UserDefaults.standard.isPartyLive ? .secondary : .primary
+                    title: isCurrentPartyLive ? "술자리 돌아가기" : "술자리 생성하기",
+                    buttonType: isCurrentPartyLive ? .secondary : .primary
                 ) {
-                    if UserDefaults.standard.isPartyLive {
+                    if isCurrentPartyLive {
                         isCameraViewPresented.toggle()
                     } else {
                         isPartySetViewPresented.toggle()
@@ -80,23 +118,28 @@ struct HomeView: View {
             }
             
             .sheet(isPresented: $isPartySetViewPresented, onDismiss: {
-                if UserDefaults.standard.isPartyLive {
+                if isCurrentPartyLive {
                     isCameraViewPresented.toggle()
+                    
+                    NotificationManager.instance.scheduleFunction(date: PartyService.shared.testDate) {
+                        isPartyResultViewPresented.toggle()
+                        UserDefaults.standard.updatePartyLive(isLive: false)
+                    }
                 }
             }, content: {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
             })
             .fullScreenCover(isPresented: $isCameraViewPresented) {
-                PartyCameraView(isCameraViewPresented: $isCameraViewPresented)
+                PartyCameraView(isCameraViewPresented: $isCameraViewPresented, isPartyResultViewPresented: $isPartyResultViewPresented)
+            }
+            .fullScreenCover(isPresented: $isPartyResultViewPresented) {
+                isCameraViewPresented = false
+            } content: {
+                PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
         }
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
-        .onAppear {
-            if UserDefaults.standard.isPartyLive {
-                isCameraViewPresented.toggle()
-            }
-        }
     }
 }
 

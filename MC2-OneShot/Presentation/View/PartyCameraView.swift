@@ -24,14 +24,15 @@ struct PartyCameraView: View {
     @State private var isShotDisabled = false
     @State private var isPartyEnd = false
     
-    @State private var isShowingImageModal = false
+//    @State private var isShowingImageModal = false
     @State private var isFinishPopupPresented = false
-    @State private var isPartyResultViewPresented = false
+    
     
     @State private var croppedImage: UIImage? = nil
     
     @Binding var isCameraViewPresented: Bool
-    
+    @Binding var isPartyResultViewPresented: Bool
+
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack{
@@ -308,6 +309,6 @@ struct PartyCameraView: View {
     }
 }
 
-#Preview {
-    PartyCameraView(isCameraViewPresented: .constant(true))
-}
+//#Preview {
+//    PartyCameraView(isCameraViewPresented: .constant(true))
+//}

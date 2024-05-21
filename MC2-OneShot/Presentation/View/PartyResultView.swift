@@ -16,6 +16,11 @@ struct PartyResultView: View {
     @State private var isHelpMessagePresented = false
     @Binding var isPartyResultViewPresented: Bool
     
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party {
+        return partys.last ?? Party(title: "잘못된 파티", startDate: .now, notiCycle: 30)
+    }
+    
     var body: some View {
         VStack{
             if ((partys.last?.isShutdown) != nil){
@@ -106,6 +111,9 @@ struct PartyResultView: View {
             .padding()
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            currentParty.isLive = false
+        }
     }
 }
 
