@@ -35,6 +35,9 @@ struct HomeView: View {
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
     
+    // 리스트 생성시 이미지 삭제
+    @State private var isFirstInfoVisible = true
+    
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
@@ -57,11 +60,17 @@ struct HomeView: View {
                     .frame(height: 35)
                     .padding(.leading, 16)
                     .padding(.top, 20)
-                
-                ListView()
-                
+                ZStack{
+                    // 리스트 생성시 이미지 삭제
+                    if isFirstInfoVisible{
+                        Image(.firstInfo)
+                    }
+                    ListView()
+                }
+
                 ActionButton(
-                    title: UserDefaults.standard.isPartyLive ? "술자리 돌아가기" : "GO STEP!",
+                    // 버튼 이름 변경
+                    title: UserDefaults.standard.isPartyLive ? "술자리 돌아가기" : "술자리 생성하기",
                     buttonType: UserDefaults.standard.isPartyLive ? .secondary : .primary
                 ) {
                     if UserDefaults.standard.isPartyLive {
@@ -69,6 +78,8 @@ struct HomeView: View {
                     } else {
                         isPartySetViewPresented.toggle()
                     }
+                    // 리스트 생성시 이미지 삭제
+                    isFirstInfoVisible = false
                 }
                 .padding(.horizontal, 16)
             }
