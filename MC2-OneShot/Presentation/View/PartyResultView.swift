@@ -17,73 +17,68 @@ struct PartyResultView: View {
     @Binding var isPartyResultViewPresented: Bool
     
     var body: some View {
+        
         VStack{
-            if ((partys.last?.isShutdown) != nil){
+            ZStack{
+                if ((partys.last?.isShutdown) == true){
+                    
+                    HStack{
+                        Spacer()
+                        
+                        Button{
+                            isHelpMessagePresented.toggle()
+                        } label: {
+                            Image(systemName: "questionmark.circle")
+                                .foregroundColor(.shot33)
+                        }
+                    }
+                    .padding(.trailing)
+                    .fullScreenCover(isPresented: $isHelpMessagePresented) {
+                        ShutdownPopupView(isHelpMessagePresented: $isHelpMessagePresented)
+                            .foregroundStyle(.shotFF)
+                            .presentationBackground(.black.opacity(0.7))
+                    }
+                    .transaction { transaction in
+                        transaction.disablesAnimations = true
+                    }
+                }
+            }
+            .padding(.top,12)
+            
+            // 상단 STEP
+            // TODO: - 병뚜껑 색 바꿔야함
+            VStack{
+                ZStack{
+                    Image("icnSave")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30,height: 30)
+                    
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.shot00)
+                }
                 
                 HStack{
-                    Spacer()
+                    Text("STEP ")
+                        .foregroundColor(.shotFF)
+                        .pretendard(.bold, 32)
                     
-                    Button{
-                        isHelpMessagePresented.toggle()
-                    } label: {
-                        Image(systemName: "questionmark.circle")
-                            .foregroundColor(.shotFF)
-                    }
-                }
-                .padding(.trailing)
-                .fullScreenCover(isPresented: $isHelpMessagePresented) {
-                    ShutdownPopupView(isHelpMessagePresented: $isHelpMessagePresented)
-                        .foregroundStyle(.shotFF)
-                        .presentationBackground(.black.opacity(0.7))
-                }
-                .transaction { transaction in
-                    transaction.disablesAnimations = true
-                }
-            }
-            
-            Circle()
-                .stroke(Color.shotGreen, lineWidth: 2)
-                .foregroundColor(.shotGreen)
-                .frame(width: 120, height: 120)
-                .overlay(
-                    Circle()
+                    Text("\((partys.last?.stepList.count ?? 1).intformatter)")
                         .foregroundColor(.shotGreen)
-                        .padding(8)
-                )
-                .overlay(
-                    VStack{
-                        Image(systemName: "checkmark.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 36, height: 36)
-                            .padding(.bottom, 4)
-                            .foregroundColor(.shotFF)
-                        
-                            .background(
-                                Circle()
-                                    .fill(.shot00)
-                                    .padding(4))
-                        
-                        //                        Text("STEP \(dummyPartys[0].stepList.count)")
-                        Text("STEP \(partys.last?.stepList.count ?? 3)")
-                            .foregroundColor(.shot00)
-                            .pretendard(.bold, 20)
-                    }
-                )
-            
-            VStack{
-                //                Text("\(dummyPartys[0].title)")
-                Text(partys.last?.title ?? "제목입니당")
-                    .foregroundColor(.shotFF)
-                    .pretendard(.extraBold, 20)
-                
-                if ((partys.last?.isShutdown) != nil){
-                    Text("시간이 지나 술자리를 종료했어요!")
-                        .foregroundColor(.shot6D)
-                        .pretendard(.bold, 14)
+                        .pretendard(.bold, 32)
+                    
                 }
+                
+                HStack{
+                    // preview crash 
+//                    Text("30min")
+                    Text("\((partys.last?.notiCycle)!)min")
+                        .foregroundStyle(.shotC6)
+                        .pretendard(.bold, 12)
+                }
+                
             }
-            .padding(.vertical, 8)
+            .padding(.top,20)
             
             ListView()
             
@@ -96,7 +91,7 @@ struct PartyResultView: View {
                 }
                 
                 ActionButton(
-                    title: "그룹으로 이동",
+                    title: "술자리 다시보기",
                     buttonType: .primary
                 ) {
                     isPartyResultViewPresented = false
@@ -127,37 +122,67 @@ private struct ListView: View {
             Section{
                 VStack(alignment: .leading){
                     HStack{
-                        Circle()
-                            .frame(width: 16, height: 16)
-                            .foregroundColor(.shotGreen)
-                        
-                        Text("날짜")
-                            .pretendard(.bold, 20)
+                        Text("술자리")
+                            .pretendard(.bold, 14)
+                            .foregroundColor(.shotC6)
                         
                     }
+                    .padding(.leading, 24)
                     
-                    //                        Text("\(dummyPartys[0].startDate.yearMonthdayweekDay)")
-                    Text((partys.last?.startDate ?? Date()).yearMonthdayweekDay)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .padding(.leading, 24)
+                    HStack{
+                        Circle()
+                            .frame(width: 8, height: 8)
+                            .foregroundColor(.shotGreen)
+                        
+                        Text(partys.last?.title ?? "시몬스바보")
+                            .pretendard(.bold, 16)
+                            .foregroundStyle(.shotFF)
+                            .padding(.leading,8)
+                    }
                     
                 }
                 
                 VStack(alignment: .leading){
                     HStack{
+                        Text("날짜")
+                            .pretendard(.bold, 14)
+                            .foregroundColor(.shotC6)
+                        
+                    }
+                    .padding(.leading, 24)
+                    
+                    HStack{
                         Circle()
-                            .frame(width: 16, height: 16)
+                            .frame(width: 8, height: 8)
                             .foregroundColor(.shotGreen)
                         
-                        Text("진행 시간")
-                            .pretendard(.bold, 20)
+                        Text((partys.last?.startDate ?? Date()).yearMonthdayweekDay)
+                            .pretendard(.bold, 16)
+                            .foregroundStyle(.shotFF)
+                            .padding(.leading,8)
                     }
                     
-                    Text(totalTime())
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .padding(.leading, 24)
+                }
+                
+                VStack(alignment: .leading){
+                    HStack{
+                        Text("진행시간")
+                            .pretendard(.bold, 14)
+                            .foregroundColor(.shotC6)
+                        
+                    }
+                    .padding(.leading, 24)
+                    
+                    HStack{
+                        Circle()
+                            .frame(width: 8, height: 8)
+                            .foregroundColor(.shotGreen)
+                        
+                        Text(totalTime())
+                            .pretendard(.bold, 16)
+                            .foregroundStyle(.shotFF)
+                            .padding(.leading,8)
+                    }
                 }
             }
             
@@ -165,11 +190,13 @@ private struct ListView: View {
                 VStack(alignment: .leading){
                     HStack{
                         Circle()
-                            .frame(width: 16, height: 16)
+                            .frame(width: 8, height: 8)
                             .foregroundColor(.shotGreen)
                         
                         Text("함께한 사람들")
-                            .pretendard(.bold, 20)
+                            .pretendard(.bold, 14)
+                            .foregroundColor(.shotC6)
+                            .padding(.leading,8)
                         
                     }
                     
@@ -184,6 +211,7 @@ private struct ListView: View {
             }
         }
     }
+    
     // MARK: - totalTime
     func totalTime() -> String {
         //    let startTime = dummyPartys[0].startDate.hourMinute
