@@ -161,11 +161,15 @@ struct StepCell: View {
                 Button(action: {}, label: {
                     ZStack {
                         Image(.icnSave)
+                            .resizable()
+                            .frame(width: 35, height: 35)
+                        
                         Image(systemName: "square.and.arrow.up")
                             .resizable()
-                            .frame(width: 14, height: 18)
+                            .frame(width: 16, height: 20)
                             .pretendard(.semiBold, 16)
                             .foregroundStyle(.shotC6)
+                            .offset(y: -1)
                     }
                 })
             }
