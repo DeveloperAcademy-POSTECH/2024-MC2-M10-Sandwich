@@ -233,6 +233,11 @@ struct PartyCameraView: View {
                             if isShot {
                                 viewManager.retakePhoto()
                                 
+                                // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
+                                if ((partys.last?.stepList.last?.mediaList.isEmpty) != nil) {
+                                    PartyService.shared.stepComplete()
+                                }
+                                
                                 if let lastParty = partys.last{
                                     persistentDataManager.saveMedia(party: lastParty , imageData: viewManager.cropImage()!)
                                 }
@@ -302,7 +307,7 @@ struct PartyCameraView: View {
         }
     }
 }
-    
-    #Preview {
-        PartyCameraView(isCameraViewPresented: .constant(true))
-    }
+
+#Preview {
+    PartyCameraView(isCameraViewPresented: .constant(true))
+}

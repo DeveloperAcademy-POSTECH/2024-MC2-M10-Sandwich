@@ -22,7 +22,7 @@ struct PartySetView: View {
             Spacer()
                 .frame(height: 30)
             
-            Text("술자리 만들기")
+            Text("술자리 생성하기")
                 .pretendard(.semiBold, 17)
                 .foregroundStyle(.shotFF)
             
@@ -35,7 +35,7 @@ struct PartySetView: View {
             Spacer()
             
             ActionButton(
-                title: "GO STEP!",
+                title: "술자리 시작하기",
                 buttonType: titleText.isEmpty
                 ? .disabled : .primary
             ) {
@@ -48,21 +48,22 @@ struct PartySetView: View {
     /// GO STEP! 버튼 클릭 시 호출되는 함수입니다.
     func goStep() {
         
-        UserDefaults.standard.updatePartyLive(isLive: true)
-        
         let today = Date.now
         
+        // 1. 영구 저장 데이터에 새로운 파티 데이터 생성
         persistentDataManager.createParty(
             title: titleText,
             startDate: today,
             notiCycle: notiCycle
         )
         
+        // 2. 파티 서비스 시작
         PartyService.shared.startParty(
             startDate: today,
             notiCycle: notiCycle
         )
         
+        // 3. 화면 띄우기
         isPartySetViewPresented = false
     }
 }

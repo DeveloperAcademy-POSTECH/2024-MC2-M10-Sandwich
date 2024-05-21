@@ -50,8 +50,7 @@ struct FinishPopupView: View {
                             title: "끝내기",
                             buttonType: .primary
                         ) {
-                            UserDefaults.standard.updatePartyLive(isLive: false)
-                            
+                            PartyService.shared.endParty()
                             isFinishPopupPresented = false
                             isPartyEnd = true
                         }

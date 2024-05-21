@@ -24,6 +24,9 @@ final class PartyService: PartyServiceProtocol {
     
     /// 알림 주기
     private var notiCycle: NotiCycle = .min30
+    
+    /// Noti 알림 매니저
+    private let notificationManager = NotificationManager.instance
 }
 
 // MARK: - Protocol Method
@@ -32,12 +35,19 @@ extension PartyService {
     /// 술자리 처음 시작(혹은 재시작)
     func startParty(startDate: Date, notiCycle: NotiCycle) {
         
+        print(#function)
+        
+        UserDefaults.standard.updatePartyLive(isLive: true)
+        
         self.startDate = startDate
         self.notiCycle = notiCycle
         
         // PUSH 알림
         // 1. 강제 종료 10분전 예약 - 소리+배너
+        notificationManager.scheduleNotification(date: currentShutdownWarningDate)
+        
         // 2. 강제 종료 되었을 때 예약 - 배너
+        notificationManager.scheduleNotification(date: currentStepEndDate)
         
         // 비동기 이벤트 예약
         // 1. 이번 STEP 종료 시간에 작동할 함수 실행(Notification)
@@ -46,11 +56,20 @@ extension PartyService {
     /// 사진을 촬영했을 때(STEP을 완료했을 때)
     func stepComplete() {
         
+        print(#function)
+        
         // PUSH 알림
         // 1. 원래 예약 되어있었던 알림 모두 취소
+        notificationManager.cancelNotification()
+        
         // 2. 다음 STEP 알림을 예약 - 소리 + 배너
+        notificationManager.scheduleNotification(date: currentStepEndDate)
+        
         // 3. 다음 스텝 강제 종료 10분전 예약 - 소리+배너
+        notificationManager.scheduleNotification(date: nextShutdownWarningDate)
+        
         // 4. 다음 스텝 강제 종료 되었을 때 예약 - 배너
+        notificationManager.scheduleNotification(date: nextStepEndDate)
     }
     
     /// 다음 STEP으로 넘어갔을 때
@@ -63,8 +82,11 @@ extension PartyService {
     /// STEP을 종료했을 때
     func endParty() {
         
+        UserDefaults.standard.updatePartyLive(isLive: false)
+        
         // PUSH 알림
         // 1. 원래 예약 되어있었던 알림 모두 취소
+        notificationManager.cancelNotification()
         
         // 비동기 이벤트 예약
         // 1. 예약되어있던 함수 취소
@@ -108,5 +130,15 @@ extension PartyService {
     var nextShutdownWarningDate: Date {
         let shutDownWarningSecond = nextStepEndDate.timeIntervalSince1970 - TimeInterval(600)
         return Date(timeIntervalSince1970: shutDownWarningSecond)
+    }
+}
+
+// MARK: - 테스트용 STEP 계산
+extension PartyService {
+    
+    /// 테스트용 술자리 시작 후 1분 뒤 날짜입니다.
+    var testDate: Date {
+        let testSecond = startDate.timeIntervalSince1970 + TimeInterval(30)
+        return Date(timeIntervalSince1970: testSecond)
     }
 }
