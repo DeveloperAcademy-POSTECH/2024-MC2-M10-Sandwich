@@ -16,7 +16,7 @@ struct MC2_OneShotApp: App {
         
         // 1. Scehema 및 ModelConfiguration 생성
         let schema = Schema([Party.self])
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         
         // 2. ModelContainer 생성
         do {
@@ -29,6 +29,9 @@ struct MC2_OneShotApp: App {
     var body: some Scene {
         WindowGroup {
             InitialView(modelContainer: modelContainer)
+                .onAppear {
+                    print("현재 파티 상태는: \(UserDefaults.standard.isPartyLive) 입니다.")
+                }
         }
         .modelContainer(modelContainer)
     }

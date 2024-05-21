@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PartySetView: View {
     
-    @EnvironmentObject private var pathModel: PathModel
+    @EnvironmentObject private var homePathModel: HomePathModel
     @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @State private var titleText: String = ""
@@ -18,39 +18,37 @@ struct PartySetView: View {
     @Binding var isPartySetViewPresented: Bool
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .center, spacing: 0) {
-                Spacer()
-                    .frame(height: 30)
-                
-                Text("술자리 만들기")
-                    .pretendard(.semiBold, 17)
-                    .foregroundStyle(.shotFF)
-                
-                List {
-                    TextField("제목", text: $titleText)
-                    MemberListView()
-                    NotiCycleView(notiCycle: $notiCycle)
-                }
-                
-                Spacer()
-                
-                ActionButton(
-                    title: "GO STEP!",
-                    buttonType: titleText.isEmpty
-                    ? .disabled : .primary
-                ) {
-                    goStep()
-                }
-                .padding(16)
+        VStack(alignment: .center, spacing: 0) {
+            Spacer()
+                .frame(height: 30)
+            
+            Text("술자리 만들기")
+                .pretendard(.semiBold, 17)
+                .foregroundStyle(.shotFF)
+            
+            List {
+                TextField("제목", text: $titleText)
+                MemberListView()
+                NotiCycleView(notiCycle: $notiCycle)
             }
+            
+            Spacer()
+            
+            ActionButton(
+                title: "GO STEP!",
+                buttonType: titleText.isEmpty
+                ? .disabled : .primary
+            ) {
+                goStep()
+            }
+            .padding(16)
         }
     }
     
     /// GO STEP! 버튼 클릭 시 호출되는 함수입니다.
     func goStep() {
         
-        // TODO: 술자리가 시작했다는 변수 업데이트(UserDefault)
+        UserDefaults.standard.updatePartyLive(isLive: true)
         
         let today = Date.now
         
@@ -65,8 +63,7 @@ struct PartySetView: View {
             notiCycle: notiCycle
         )
         
-        isPartySetViewPresented.toggle()
-        pathModel.paths.append(.partyCamera)
+        isPartySetViewPresented = false
     }
 }
 
@@ -188,6 +185,8 @@ private struct NotiCycleView: View {
 }
 
 #Preview {
-    PartySetView(isPartySetViewPresented: .constant(true))
-        .modelContainer(MockModelContainer.mockModelContainer)
+    PartySetView(
+        isPartySetViewPresented: .constant(true)
+    )
+    .modelContainer(MockModelContainer.mockModelContainer)
 }

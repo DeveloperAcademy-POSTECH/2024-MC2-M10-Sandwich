@@ -9,8 +9,8 @@ import SwiftUI
 
 struct FinishPopupView: View {
     
-    @EnvironmentObject private var pathModel: PathModel
     @Binding var isFinishPopupPresented: Bool
+    @Binding var isPartyEnd: Bool
     
     var body: some View {
         VStack {
@@ -50,20 +50,23 @@ struct FinishPopupView: View {
                             title: "끝내기",
                             buttonType: .primary
                         ) {
-                            isFinishPopupPresented.toggle()
-                            pathModel.paths.append(.partyResult)
-                        
+                            UserDefaults.standard.updatePartyLive(isLive: false)
+                            
+                            isFinishPopupPresented = false
+                            isPartyEnd = true
                         }
                     }
                     .padding(.horizontal, 33)
                     .padding(.top, 50)   
                 }
             }
-            
         }
     }
 }
 
 #Preview {
-    FinishPopupView(isFinishPopupPresented: .constant(true))
+    FinishPopupView(
+        isFinishPopupPresented: .constant(true),
+        isPartyEnd: .constant(false)
+    )
 }

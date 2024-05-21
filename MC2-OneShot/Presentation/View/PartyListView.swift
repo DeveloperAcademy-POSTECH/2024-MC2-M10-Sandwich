@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct PartyListView: View {
-    let party: Party
     
     @State private var isFinishPopupPresented = false
     @State private var isMemberPopupPresented = false
-    @EnvironmentObject private var pathModel: PathModel
+    @State private var isPartyResultViewPresented = false
+    @State private var isPartyEnd = false
+    
+    let party: Party
+    
+    @Binding var isCameraViewPresented: Bool
     
     var body: some View {
         ZStack {
@@ -36,6 +40,14 @@ struct PartyListView: View {
                 .padding(.top, 3)
                 .padding(.bottom, 8)
                 .padding(.horizontal, 16)
+                .fullScreenCover(isPresented: $isMemberPopupPresented) {
+                    MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
+                        .foregroundStyle(.shotFF)
+                        .presentationBackground(.black.opacity(0.7))
+                }
+                .transaction { transaction in
+                    transaction.disablesAnimations = true
+                }
                 
                 ScrollView {
                     ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
@@ -59,26 +71,30 @@ struct PartyListView: View {
                                     .foregroundStyle(.shotGreen)
                             }
                         })
-                        .fullScreenCover(isPresented: $isFinishPopupPresented) {
-                            FinishPopupView(isFinishPopupPresented: $isFinishPopupPresented)
-                                .foregroundStyle(.shotFF)
-                                .presentationBackground(.black.opacity(0.7))
-                        }
+                        .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
+                            if isPartyEnd {
+                                isPartyResultViewPresented.toggle()
+                            }
+                        }, content: {
+                            FinishPopupView(
+                                isFinishPopupPresented: $isFinishPopupPresented,
+                                isPartyEnd: $isPartyEnd
+                            )
+                            .foregroundStyle(.shotFF)
+                            .presentationBackground(.black.opacity(0.7))
+                        })
                         .transaction { transaction in
                             transaction.disablesAnimations = true
                         }
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
+                .fullScreenCover(isPresented: $isPartyResultViewPresented) {
+                    isCameraViewPresented = false
+                } content: {
+                    PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
+                }
             }
-        }
-        .fullScreenCover(isPresented: $isMemberPopupPresented) {
-            MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
-                .foregroundStyle(.shotFF)
-                .presentationBackground(.black.opacity(0.7))
-        }
-        .transaction { transaction in
-            transaction.disablesAnimations = true
         }
     }
 }
@@ -175,5 +191,8 @@ struct StepCell: View {
 }
 
 #Preview {
-    PartyListView(party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60))
+    PartyListView(
+        party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60),
+        isCameraViewPresented: .constant(true)
+    )
 }

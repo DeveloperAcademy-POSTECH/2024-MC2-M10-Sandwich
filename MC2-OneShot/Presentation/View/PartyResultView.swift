@@ -9,11 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct PartyResultView: View {
+    
+    @EnvironmentObject private var homePathModel: HomePathModel
+    
     @Query private var partys: [Party]
-    
     @State private var isHelpMessagePresented = false
-    
-    @EnvironmentObject private var pathModel: PathModel
+    @Binding var isPartyResultViewPresented: Bool
     
     var body: some View {
         VStack{
@@ -91,14 +92,15 @@ struct PartyResultView: View {
                     title: "홈으로 돌아가기",
                     buttonType: .secondary
                 ) {
-                    pathModel.paths.removeAll()
+                    isPartyResultViewPresented = false
                 }
                 
                 ActionButton(
                     title: "그룹으로 이동",
                     buttonType: .primary
                 ) {
-                    pathModel.paths.append(.partyList(party: partys.last!))
+                    isPartyResultViewPresented = false
+                    homePathModel.paths.append(.partyList(party: partys.last!))
                 }
             }
             .padding()
@@ -212,6 +214,6 @@ private struct ListView: View {
 
 
 #Preview {
-    PartyResultView()
-        .environmentObject(PathModel())
+    PartyResultView(isPartyResultViewPresented: .constant(true))
+        .environmentObject(CameraPathModel())
 }
