@@ -165,4 +165,8 @@ extension PartyService {
         return TimeInterval(self.notiCycle.toSeconds)
     }
     
+//    func getStartDate() -> TimeInterval {
+//        return TimeInterval(self.startDate.timeIntervalSince1970)
+//    }
+    
 }

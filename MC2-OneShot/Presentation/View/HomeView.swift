@@ -197,34 +197,28 @@ struct HomeView: View {
                         
                     }
                     
-                    // 만약 마지막 스텝의 사진이 촬영됐다면 (완료후 다음스텝 넘어가기전 죽음)
+                    // 이전 스텝 사진 찍고
                     else {
-                        let restTime = PartyService.shared.currentStepEndDate.timeIntervalSince1970 - presentTime
+                        let shutdownStepSecond = TimeInterval((currentParty.stepList.count + 1)) * PartyService.shared.getNotiCycle()
+                        let nextStepEndDate = currentParty.startDate.timeIntervalSince1970 + shutdownStepSecond
                         
-                        // 다음tep마지막 - 현재시간
+                        let restTime = nextStepEndDate - presentTime
+                        
+                        
                         if restTime > 0 {
-                            print("다음Step마지막 - 현재시간 > 0 : 초과O -> 카메라")
+                            
                             isCameraViewPresented.toggle()
                             
-                            
-                            print("nextStepEndDAte", PartyService.shared.nextStepEndDate.timeIntervalSince1970)
-                            print("restTime: ", restTime)
-                            print("NotiCycle: ", PartyService.shared.getNotiCycle())
-                            
-                            // 남은시간 < NotiCycle
+                            // 이전 스텝 사진 찍고, 다시 들어와보니 이미 다음 스텝 진행중
                             if restTime <= PartyService.shared.getNotiCycle() {
-                                print("빈배열추가")
                                 let newStep = Step()
                                 currentParty.stepList.append(newStep)
                             }
                         }
+                        // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
                         else {
-                            print("다음Step마지막 - 현재시간 > 0 : 초과O -> 결과")
                             isPartyResultViewPresented.toggle()
                         }
-                        
-                        
-                        
                     }
                 }
             }
