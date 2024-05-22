@@ -19,7 +19,7 @@ struct SearchView: View {
                 
                 Spacer()
             } else{
-                ListView()
+                ListView(searchText: $searchText)
             }
         }.searchable(
             text: $searchText,
@@ -32,9 +32,16 @@ struct SearchView: View {
 private struct ListView: View {
     
     @Query private var partys: [Party]
+    @Binding var searchText: String
+    
+    var searchPartys: [Party]{
+        partys.filter {
+            $0.title.contains(searchText)
+        }
+    }
 
     var body: some View {
-        List(partys) { party in
+        List(searchPartys) { party in
             ListCellView(
                 thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
                 title: party.title,
