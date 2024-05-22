@@ -50,7 +50,7 @@ struct InitialView: View {
     /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
     func updatePartyService() {
         
-        guard let party = partys.last else {
+        guard let party = currentParty else {
             print("파티 없음")
             return
         }
@@ -139,7 +139,7 @@ struct HomeView: View {
                     // 결과화면 present에 예약
                     NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
                         print("홈뷰에서 결과 화면 실행")
-//                        isPartyResultViewPresented.toggle()
+                        isPartyResultViewPresented.toggle()
                     }
                 }
             }, content: {
@@ -156,6 +156,65 @@ struct HomeView: View {
         }
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
+        .onAppear() {
+            if isCurrentPartyLive {
+                if let currentParty = currentParty,
+                   let lastStep = currentParty.lastStep {
+                    let presentTime = Date.now.timeIntervalSince1970
+                    // 만약 마지막 스텝의 사진이 촬영되지 않았다면 (현재미션 미완료중 or 완료후 다음스텝 넘어간후 죽음)
+                    if lastStep.mediaList.isEmpty {
+                        
+                        
+                        let restTime = PartyService.shared.currentStepEndDate.timeIntervalSince1970 - presentTime
+                        
+                        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
+                        if restTime > 0 {
+                            print("현재Step마지막 - 현재시간 > 0 : 초과X -> 카메라")
+                            isCameraViewPresented.toggle()
+                        
+                        }
+                        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
+                        else {
+                            print("현재Step마지막 - 현재시간 > 0 : 초과O -> result")
+                            isPartyResultViewPresented.toggle()
+                        }
+                        
+                        
+                    }
+                    
+                    // 만약 마지막 스텝의 사진이 촬영됐다면 (완료후 다음스텝 넘어가기전 죽음)
+                    else {
+                        let restTime = PartyService.shared.currentStepEndDate.timeIntervalSince1970 - presentTime
+                        
+                        // 다음tep마지막 - 현재시간
+                        if restTime > 0 {
+                            print("다음Step마지막 - 현재시간 > 0 : 초과O -> 카메라")
+                            isCameraViewPresented.toggle()
+                            
+                            
+                            print("nextStepEndDAte", PartyService.shared.nextStepEndDate.timeIntervalSince1970)
+                            print("restTime: ", restTime)
+                            print("NotiCycle: ", PartyService.shared.getNotiCycle())
+                            
+                            // 남은시간 < NotiCycle
+                            if restTime <= PartyService.shared.getNotiCycle() {
+                                print("빈배열추가")
+                                let newStep = Step()
+                                currentParty.stepList.append(newStep)
+                            }
+                        }
+                        else {
+                            print("다음Step마지막 - 현재시간 > 0 : 초과O -> 결과")
+                            isPartyResultViewPresented.toggle()
+                        }
+                        
+                        
+                        
+                    }
+                }
+            }
+            
+        }
     }
 }
 
