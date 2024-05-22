@@ -49,7 +49,7 @@ struct PartyResultView: View {
             // TODO: - 병뚜껑 색 바꿔야함
             VStack{
                 ZStack{
-                    Image("icnSave")
+                    Image("Greenbottle")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 30,height: 30)
@@ -74,7 +74,7 @@ struct PartyResultView: View {
 //                    Text("30min")
                     Text("\((partys.last?.notiCycle)!)min")
                         .foregroundStyle(.shotC6)
-                        .pretendard(.bold, 12)
+                        .pretendard(.bold, 17)
                 }
                 
             }
