@@ -10,20 +10,43 @@ import SwiftData
 
 struct SearchView: View {
     @State private var searchText = ""
+    
+//    init() {
+//            let appearance = UINavigationBarAppearance()
+//    appearance.configureWithOpaqueBackground()
+//    appearance.backgroundColor = UIColor.systemBackground
+//    appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+//    appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+//    
+//    // Set the color of the back button arrow
+//    UINavigationBar.appearance().tintColor = .red
+//    
+//    // Apply the appearance settings
+//    UINavigationBar.appearance().standardAppearance = appearance
+//    UINavigationBar.appearance().compactAppearance = appearance
+//    UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//        }
+//    
     var body: some View {
         Group{
             if searchText.isEmpty{
-                Text("찾고싶은 술자리 이름을 검색해주세요")
-                    .pretendard(.semiBold, 17)
-                    .foregroundStyle(.shot33)
+                Image(.imgLogo)
+                    .padding(.bottom, 60)
+                    .opacity(0.1)
+//                Text("찾고싶은 술자리 이름을 검색해주세요")
+//                    .pretendard(.semiBold, 17)
+//                    .foregroundStyle(.shot33)
                 
-                Spacer()
+              
             } else{
                 ListView(searchText: $searchText)
             }
         }.searchable(
             text: $searchText,
-            placement: .navigationBarDrawer(displayMode: .always)
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "기억하고 싶은 술자리를 검색해보세요"
+                
+            
         )
     }
 }
