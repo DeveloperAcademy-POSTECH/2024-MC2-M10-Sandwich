@@ -57,46 +57,82 @@ struct PartyCameraView: View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack{
                 ZStack{
-                    HStack{
-                        if !isShot{
-                            Button{
-                                isCameraViewPresented.toggle()
-                            } label: {
-                                Image(systemName: "chevron.down")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .foregroundColor(.shotFF)
-                            }
-                        }
                         
-                        Spacer()
                         
-                        if !isShot{
-                            Button{
-                                isFinishPopupPresented.toggle()
-                            } label: {
-                                Text("술자리 종료")
-                                    .pretendard(.extraBold, 15)
-                                    .foregroundColor(.shotGreen)
+                        HStack{
+                            if !isShot{
+                                Button{
+                                    isCameraViewPresented.toggle()
+                                } label: {
+                                    Image(systemName: "chevron.down")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(.shotFF)
+                                        .padding(.leading,16)
+                                }
                             }
-                        }
+                            
+                            
+                            Spacer()
+                            
+                            if !isShot{
+                                Button{
+                                    isFinishPopupPresented.toggle()
+                                } label: {
+                                    Text("술자리 종료")
+                                        .pretendard(.bold, 15)
+                                        .foregroundColor(.shotGreen)
+                                }
+                            }
                     }
-                    .padding(.horizontal, 8)
+                    .padding(.horizontal)
+                    .padding(.top,12)
                     
-                    VStack{
+                    VStack(spacing: 0){
+                        if let lastParty = currentParty,
+                           let lastStep = lastParty.lastStep {
+//                             만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
+                            if lastStep.mediaList.isEmpty {
+                                ZStack{
+                                    Image("icnSave")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25,height: 25)
+                                    
+                                    Image(systemName: "checkmark")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 12,height: 12)
+                                        .foregroundColor(.shotD8)
+                                }
+                                .padding(.bottom, 2)
+                            }else{
+                                
+                                ZStack{
+                                    Image("Greenbottle")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25,height: 25)
+                                    
+                                    Image(systemName: "checkmark")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 12,height: 12)
+                                        .foregroundColor(.shot00)
+                                }
+                                .padding(.bottom, 2)
+                            }
+                        }
                         
-                        // TODO: - check 활성 비활성화 만들기
-                        Image(systemName: "checkmark.circle.fill")
-                            .padding(.bottom, 4)
-                            .foregroundColor(.shotGreen)
+                        
                         //                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
-                        Text("STEP \(partys.last?.stepList.count ?? 2)")
+                        Text("STEP \(partys.last?.stepList.count.intformatter ?? "02")")
                             .pretendard(.extraBold, 20)
                             .foregroundColor(.shotFF)
                         //                    Text("\(dummyPartys[0].notiCycle)min")
                         Text("\(partys.last?.notiCycle ?? 60)min")
-                            .pretendard(.light, 15)
+                            .pretendard(.bold, 15)
                             .foregroundColor(.shot6D)
                     }
                 }
@@ -121,9 +157,9 @@ struct PartyCameraView: View {
                         .onAppear {
                             viewManager.configure()
                         }
-                        .frame(width: 360, height: 360)
+                        .frame(width: 393, height: 393)
                         .aspectRatio(1, contentMode: .fit)
-                        .cornerRadius(25)
+                        .cornerRadius(15)
                 }
                 .padding(.top, 36)
                 
@@ -213,13 +249,13 @@ struct PartyCameraView: View {
                                     Image(systemName: "bolt")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 48, height: 48)
+                                        .frame(width: 32, height: 32)
                                         .foregroundColor(.shotFF)
                                 } else {
                                     Image(systemName: "bolt.slash")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 48, height: 48)
+                                        .frame(width: 32, height: 32)
                                         .foregroundColor(.shotFF)
                                 }
                             }
@@ -239,11 +275,12 @@ struct PartyCameraView: View {
                                 Image(systemName: "arrow.triangle.2.circlepath")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 48, height: 48)
+                                    .frame(width: 32, height: 32)
                                     .foregroundColor(.shotFF)
                             }
                         }
                     }
+                    .padding(.horizontal, 36)
                     
                     VStack{
                         Button{
@@ -261,22 +298,23 @@ struct PartyCameraView: View {
                             delayButton()
                         } label: {
                             ZStack{
-                                if isShot{
+                                if !isShot{
                                     Circle()
                                         .fill(Color.shotGreen)
-                                        .frame(width: 112, height: 112)
+                                        .frame(width: 106, height: 106)
                                     Image(systemName: "arrow.up.forward")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(height: 36)
                                         .foregroundColor(.shot00)
+                                    
                                 } else{
                                     Circle()
                                         .fill(Color.shotFF)
-                                        .frame(width: 112, height: 112)
+                                        .frame(width: 90, height: 90)
                                     
-                                    Circle().stroke(Color.shotGreen, lineWidth: 10)
-                                        .padding(12)
+                                    Circle().stroke(Color.shotGreen, lineWidth: 4)
+                                        .padding(16)
                                 }
                             }
                         }
@@ -285,7 +323,7 @@ struct PartyCameraView: View {
                     .padding(.top)
                     .padding(.horizontal)
                 }
-                .padding(16)
+//                .padding(16)
                 .navigationDestination(for: CameraPathType.self) { path in
                     switch path {
                     case let .partyList(party):
@@ -307,8 +345,8 @@ struct PartyCameraView: View {
         // 버튼을 비활성화
         isShotDisabled = true
         
-        // 0.5초 후에 버튼을 다시 활성화
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        // 1초 후에 버튼을 다시 활성화
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             isShotDisabled = false
         }
     }
@@ -365,6 +403,6 @@ struct PartyCameraView: View {
 
 // persistentDataManager.saveMedia(step: sortedSteps.last!, imageData: viewManager.cropImage()!)
 
-//#Preview {
-//    PartyCameraView(isCameraViewPresented: .constant(true))
-//}
+#Preview {
+    PartyCameraView(isCameraViewPresented: .constant(true), isPartyResultViewPresented: .constant(false))
+}
