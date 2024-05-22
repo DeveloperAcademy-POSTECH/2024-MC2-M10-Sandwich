@@ -107,6 +107,7 @@ struct HomeView: View {
                             .foregroundStyle(.shotFF)
                             .padding(.trailing, 16)
                     }
+                    // 짐승거인 정혜정..
                 }
                 
                 Image(.appLogo)
@@ -115,7 +116,8 @@ struct HomeView: View {
                     .frame(height: 35)
                     .padding(.leading, 16)
                     .padding(.top, 20)
-                Divider()
+                    .padding(.bottom, 4)
+//                Divider()
                 ZStack{
                     // 리스트 생성시 이미지 삭제
 
@@ -130,7 +132,7 @@ struct HomeView: View {
 
                 ActionButton(
                     title: isCurrentPartyLive ? "술자리 돌아가기" : "술자리 생성하기",
-                    buttonType: isCurrentPartyLive ? .secondary : .primary
+                    buttonType: isCurrentPartyLive ? .popupfinish : .primary
                 ) {
                     if isCurrentPartyLive {
                         isCameraViewPresented.toggle()
@@ -312,8 +314,8 @@ private struct ListView: View {
         //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
        
         .listStyle(.plain)
-        .padding(.top, 8)
-        .padding(.bottom, 16)
+//        .padding(.top, 1)
+//        .padding(.bottom, 16)
     }
     
     /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
