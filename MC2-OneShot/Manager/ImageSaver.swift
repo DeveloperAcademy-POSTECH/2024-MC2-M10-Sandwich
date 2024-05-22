@@ -8,7 +8,6 @@
 import SwiftUI
 import Photos
 
-// TODO: - STEP별 사진 전체 저장, 현재 사진 저장 선택할 수 있는 alert 띄우기
 class ImageSaver {
     enum SaveError: Error {
         case generalError
