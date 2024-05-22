@@ -64,8 +64,6 @@ struct InitialView: View {
 
 // MARK: - HomeView
 struct HomeView: View {
-    //쿼리 밖으로 뺐음 !!
-    @Query private var partys: [Party]
     
     @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var homePathModel: HomePathModel = .init()
