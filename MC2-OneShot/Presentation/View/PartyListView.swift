@@ -134,6 +134,20 @@ struct PartyListView: View {
     }
 }
 
+struct ToastView: View {
+    var message: String
+    
+    var body: some View {
+        Text(message)
+            .pretendard(.regular, 16)
+            .foregroundStyle(.shotFF)
+            .padding()
+            .background(Color.black.opacity(0.8))
+            .cornerRadius(10)
+            .padding(.top, 50)
+    }
+}
+
 struct StepCell: View {
     var index: Int
     var step: Step
@@ -141,6 +155,8 @@ struct StepCell: View {
     @State private var visibleMediaIndex = 0
     @State private var captureDates: [Date] = []
     @State private var isImageSaved = false
+    @State private var showActionSheet = false
+    @State private var showToast = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -179,14 +195,14 @@ struct StepCell: View {
                 Spacer()
                 
                 Button(action: {
-                    saveImageToLibrary(imageData: step.mediaList[visibleMediaIndex].fileData)
+                    showActionSheet = true
                 }, label: {
                     ZStack {
                         Image(.icnSave)
                             .resizable()
                             .frame(width: 35, height: 35)
                         
-                        Image(systemName: "square.and.arrow.up")
+                        Image(systemName: "square.and.arrow.down")
                             .resizable()
                             .frame(width: 16, height: 20)
                             .pretendard(.semiBold, 16)
@@ -194,6 +210,20 @@ struct StepCell: View {
                             .offset(y: -1)
                     }
                 })
+                .actionSheet(isPresented: $showActionSheet) {
+                    ActionSheet(
+                        title: Text("사진을 저장할 방법을 선택해 주세요"),
+                        buttons: [
+                            .cancel(Text("취소")),
+                            .default(Text("전체 저장"), action: {
+                                saveAllImages()
+                            }),
+                            .default(Text("현재 사진 저장"), action: {
+                                saveCurrentImage()
+                            })
+                        ]
+                    )
+                }
             }
             .padding(16)
             
@@ -233,20 +263,55 @@ struct StepCell: View {
             .scrollTargetBehavior(.viewAligned)
             .padding(.bottom, 16)
         }
+        .overlay(
+            VStack {
+                if showToast {
+                    ToastView(message: "저장이 완료되었습니다")
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut, value: showToast)
+        )
     }
     
-    func saveImageToLibrary(imageData: Data) {
-        guard let uiImage = UIImage(data: imageData) else { return }
+    func saveAllImages() {
+        for media in step.mediaList {
+            if let uiImage = UIImage(data: media.fileData) {
+                let imageSaver = ImageSaver()
+                imageSaver.saveImage(uiImage) { result in
+                    switch result {
+                    case .success:
+                        isImageSaved = true
+                        showToastMessage()
+                        print("🎞️ 전체 사진 저장 완료")
+                    case .failure(let error):
+                        print("❌ 전체 사진 저장 실패: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+    }
+    
+    func saveCurrentImage() {
+        guard let uiImage = UIImage(data: step.mediaList[visibleMediaIndex].fileData) else { return }
         
         let imageSaver = ImageSaver()
         imageSaver.saveImage(uiImage) { result in
             switch result {
             case .success:
                 isImageSaved = true
-                print("사진 저장 완료")
+                showToastMessage()
+                print("📷 현재 사진 저장 완료")
             case .failure(let error):
-                print("사진 저장 실패: \(error.localizedDescription)")
+                print("❌ 현재 사진 저장 실패: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    func showToastMessage() {
+        showToast = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            showToast = false
         }
     }
 }
