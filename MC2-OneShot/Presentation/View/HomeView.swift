@@ -252,7 +252,7 @@ private struct ListView: View {
     }
     
     var body: some View {
-        List(partys) { party in
+        List(partys.sorted { $0.startDate > $1.startDate }) { party in
             ListCellView(
                 thumbnail: firstThumbnail(party),
                 title: party.title,
@@ -284,16 +284,24 @@ private struct ListView: View {
                 //alert
                 isFirstInfoVisible = partys.isEmpty
             }
-            .alert("진짤루?\n 술자리 기억...지우..는거야..?",isPresented: $showAlert) {
-                Button(role: .destructive) {
-                    persistentDataManager.deleteParty(party)
-                } label: {
-                    Text("지우기")
+            .alert(party.isLive ? Text("진행중인 술자리는 지울 수 없어,, ") :Text("진짤루?\n 술자리 기억...지우..는거야..?"),isPresented: $showAlert) {
+                if party.isLive{
+                    Button(role: .cancel) {
+                    } label: {
+                        Text("확인")
+                    }
+                }else{
+                    Button(role: .destructive) {
+                        persistentDataManager.deleteParty(party)
+                    } label: {
+                        Text("지우기")
+                    }
+                    Button(role: .cancel) {
+                    } label: {
+                        Text("살리기")
+                    }
                 }
-                Button(role: .cancel) {
-                } label: {
-                    Text("살리기")
-                }
+                
             }
         }
         
@@ -379,7 +387,7 @@ private struct PartyStateInfoLabel: View {
     let stepCount: Int
     
     var body: some View {
-        Text(stateInfo == .live ? "LIVE" : "STEP_\(stepCount)")
+        Text(stateInfo == .live ? "LIVE" : "STEP \(stepCount.intformatter)")
             .frame(width: 76, height: 22)
             .pretendard(.bold, 14)
             .background(stateInfo == .live ? .shotGreen : .shot33)
@@ -393,3 +401,4 @@ private struct PartyStateInfoLabel: View {
         .environmentObject(HomePathModel())
         .modelContainer(MockModelContainer.mockModelContainer)
 }
+
