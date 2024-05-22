@@ -6,10 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CommentPopupView: View {
     @Binding var isCommentPopupPresented: Bool
     @State var content: String = ""
+    
+    var party: Party
+    
+    init(isCommentPopupPresented: Binding<Bool>, party: Party) {
+        self._isCommentPopupPresented = isCommentPopupPresented
+        self._content = State(initialValue: party.comment ?? "")
+        self.party = party
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -47,6 +56,7 @@ struct CommentPopupView: View {
                         title: "닫기",
                         buttonType: .popupfinish
                     ) {
+                        party.comment = content
                         isCommentPopupPresented.toggle()
                     }
                     .padding(.horizontal, 16)
