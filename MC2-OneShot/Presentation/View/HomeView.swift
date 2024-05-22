@@ -12,6 +12,23 @@ import SwiftData
 /// PersistentDataManager 생성을 위한 View
 struct InitialView: View {
     
+    @Query private var partys: [Party]
+    
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party? {
+        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
+        return sortedParty.last
+    }
+    
+    /// 현재 파티가 라이브인지 확인하는 계산 속성
+    var isCurrentPartyLive: Bool {
+        if let safeParty = currentParty {
+            return safeParty.isLive
+        } else {
+            return false
+        }
+    }
+    
     var modelContainer: ModelContainer
     
     var body: some View {
@@ -22,7 +39,26 @@ struct InitialView: View {
         )
         .onAppear {
             NotificationManager.instance.requestAuthorization()
+            
+            // 라이브 중일 때 함수 호출
+            if isCurrentPartyLive {
+                updatePartyService()
+            }
         }
+    }
+    
+    /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
+    func updatePartyService() {
+        
+        guard let party = currentParty else {
+            print("파티 없음")
+            return
+        }
+        
+        let currentStartDate = party.startDate
+        let currentNotiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
+        
+        PartyService.shared.setPartyService(startDate: currentStartDate, notiCycle: currentNotiCycle)
     }
 }
 
@@ -36,6 +72,23 @@ struct HomeView: View {
     
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
+    @State private var isPartyResultViewPresented = false
+    
+    @Query private var partys: [Party]
+    
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party? {
+        return partys.last
+    }
+    
+    /// 현재 파티가 라이브인지 확인하는 계산 속성
+    var isCurrentPartyLive: Bool {
+        if let safeParty = currentParty {
+            return safeParty.isLive
+        } else {
+            return false
+        }
+    }
     
     @State private var isFirstInfoVisible: Bool = true
     
@@ -78,11 +131,10 @@ struct HomeView: View {
                 }
 
                 ActionButton(
-                    // 버튼 이름 변경
-                    title: UserDefaults.standard.isPartyLive ? "술자리 돌아가기" : "술자리 생성하기",
-                    buttonType: UserDefaults.standard.isPartyLive ? .secondary : .primary
+                    title: isCurrentPartyLive ? "술자리 돌아가기" : "술자리 생성하기",
+                    buttonType: isCurrentPartyLive ? .secondary : .primary
                 ) {
-                    if UserDefaults.standard.isPartyLive {
+                    if isCurrentPartyLive {
                         isCameraViewPresented.toggle()
                     } else {
                         isPartySetViewPresented.toggle()
@@ -98,22 +150,87 @@ struct HomeView: View {
             }
             
             .sheet(isPresented: $isPartySetViewPresented, onDismiss: {
-                if UserDefaults.standard.isPartyLive {
+                if isCurrentPartyLive {
                     isCameraViewPresented.toggle()
+                    
+                    // 결과화면 present에 예약
+                    NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
+                        print("홈뷰에서 결과 화면 실행")
+                        isPartyResultViewPresented.toggle()
+                    }
                 }
             }, content: {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
             })
             .fullScreenCover(isPresented: $isCameraViewPresented) {
-                PartyCameraView(isCameraViewPresented: $isCameraViewPresented)
+                PartyCameraView(isCameraViewPresented: $isCameraViewPresented, isPartyResultViewPresented: $isPartyResultViewPresented)
+            }
+            .fullScreenCover(isPresented: $isPartyResultViewPresented) {
+                isCameraViewPresented = false
+            } content: {
+                PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
         }
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
-        .onAppear {
-            if UserDefaults.standard.isPartyLive {
-                isCameraViewPresented.toggle()
+        .onAppear() {
+            if isCurrentPartyLive {
+                if let currentParty = currentParty,
+                   let lastStep = currentParty.lastStep {
+                    let presentTime = Date.now.timeIntervalSince1970
+                    // 만약 마지막 스텝의 사진이 촬영되지 않았다면 (현재미션 미완료중 or 완료후 다음스텝 넘어간후 죽음)
+                    if lastStep.mediaList.isEmpty {
+                        
+                        
+                        let restTime = PartyService.shared.currentStepEndDate.timeIntervalSince1970 - presentTime
+                        
+                        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
+                        if restTime > 0 {
+                            print("현재Step마지막 - 현재시간 > 0 : 초과X -> 카메라")
+                            isCameraViewPresented.toggle()
+                        
+                        }
+                        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
+                        else {
+                            print("현재Step마지막 - 현재시간 > 0 : 초과O -> result")
+                            isPartyResultViewPresented.toggle()
+                        }
+                        
+                        
+                    }
+                    
+                    // 만약 마지막 스텝의 사진이 촬영됐다면 (완료후 다음스텝 넘어가기전 죽음)
+                    else {
+                        let restTime = PartyService.shared.currentStepEndDate.timeIntervalSince1970 - presentTime
+                        
+                        // 다음tep마지막 - 현재시간
+                        if restTime > 0 {
+                            print("다음Step마지막 - 현재시간 > 0 : 초과O -> 카메라")
+                            isCameraViewPresented.toggle()
+                            
+                            
+                            print("nextStepEndDAte", PartyService.shared.nextStepEndDate.timeIntervalSince1970)
+                            print("restTime: ", restTime)
+                            print("NotiCycle: ", PartyService.shared.getNotiCycle())
+                            
+                            // 남은시간 < NotiCycle
+                            if restTime <= PartyService.shared.getNotiCycle() {
+                                print("빈배열추가")
+                                let newStep = Step()
+                                currentParty.stepList.append(newStep)
+                            }
+                        }
+                        else {
+                            print("다음Step마지막 - 현재시간 > 0 : 초과O -> 결과")
+                            isPartyResultViewPresented.toggle()
+                        }
+                        
+                        
+                        
+                    }
+                }
             }
+            
         }
     }
 }

@@ -12,6 +12,8 @@ class NotificationManager {
     static let instance = NotificationManager()
     private init() {}
     
+    var timers: [Timer] = []
+    
     func requestAuthorization() {
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         UNUserNotificationCenter.current().requestAuthorization(options: options) { (success, error) in
@@ -64,9 +66,19 @@ class NotificationManager {
             let timer = Timer(fire: date, interval: 0, repeats: false) { _ in
                 handler()
             }
+            
             RunLoop.main.add(timer, forMode: .common)
+            timers.append(timer)
         } else {
             print("The scheduled date is in the past.")
         }
+    }
+    
+    func cancelFunction() {
+        for timer in timers {
+            timer.invalidate()
+        }
+        
+        timers.removeAll()
     }
 }

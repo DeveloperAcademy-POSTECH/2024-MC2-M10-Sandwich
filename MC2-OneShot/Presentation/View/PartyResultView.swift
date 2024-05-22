@@ -11,10 +11,21 @@ import SwiftData
 struct PartyResultView: View {
     
     @EnvironmentObject private var homePathModel: HomePathModel
+    @Environment(\.modelContext) private var modelContext
     
     @Query private var partys: [Party]
     @State private var isHelpMessagePresented = false
     @Binding var isPartyResultViewPresented: Bool
+    
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party? {
+        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
+        return sortedParty.last
+    }
+    
+//    var sortedStepList: [Step]? {
+//        currentParty?.stepList.sorted { $0.createDate < $1.createDate }
+//    }
     
     var body: some View {
         
@@ -101,6 +112,17 @@ struct PartyResultView: View {
             .padding()
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            currentParty?.isLive = false
+            
+            if let lastParty = currentParty,
+               let lastStep = lastParty.lastStep {
+                
+                if lastStep.mediaList.isEmpty {
+                    modelContext.delete(lastStep)
+                }
+            }
+        }
     }
 }
 

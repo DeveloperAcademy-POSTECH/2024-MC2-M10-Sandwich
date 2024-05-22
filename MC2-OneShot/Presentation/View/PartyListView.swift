@@ -20,6 +20,11 @@ struct PartyListView: View {
     
     @Binding var isCameraViewPresented: Bool
     
+    var sortedStepList: [Step] {
+        let sort = party.stepList.sorted { $0.createDate < $1.createDate }
+        return sort
+    }
+    
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
@@ -56,7 +61,7 @@ struct PartyListView: View {
                 Divider()
                 
                 ScrollView {
-                    ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
+                    ForEach(Array(sortedStepList.enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step)
                         
                         Divider()

@@ -42,15 +42,17 @@ final class PartyService: PartyServiceProtocol {
 // MARK: - Protocol Method
 extension PartyService {
     
+    func setPartyService(startDate: Date, notiCycle: NotiCycle) {
+        self.startDate = startDate
+        self.notiCycle = notiCycle
+    }
+    
     /// 술자리 처음 시작(혹은 재시작)
     func startParty(startDate: Date, notiCycle: NotiCycle) {
         
         print(#function)
         
-        UserDefaults.standard.updatePartyLive(isLive: true)
-        
-        self.startDate = startDate
-        self.notiCycle = notiCycle
+        setPartyService(startDate: startDate, notiCycle: notiCycle)
         
         // PUSH 알림
         // 1. 강제 종료 10분전 예약 - 소리+배너
@@ -59,27 +61,24 @@ extension PartyService {
         // 2. 강제 종료 되었을 때 예약 - 배너
         notificationManager.scheduleNotification(date: currentStepEndDate, title: NotificationTitle.shutdownTitle, subtitle: NotificationTitle.shutdownSubTitle)
         
-        // 비동기 이벤트 예약
-        // 1. 이번 STEP 종료 시간에 작동할 함수 실행(Notification)
     }
     
     /// 사진을 촬영했을 때(STEP을 완료했을 때)
     func stepComplete() {
-        
-        print(#function)
         
         // PUSH 알림
         // 1. 원래 예약 되어있었던 알림 모두 취소
         notificationManager.cancelNotification()
         
         // 2. 다음 STEP 알림을 예약 - 소리 + 배너
-        notificationManager.scheduleNotification(date: currentStepEndDate, title: "STEP \(currentStep.intformatter)", subtitle: NotificationTitle.continuePartySubTitle)
+        notificationManager.scheduleNotification(date: nextStepStartDate, title: "STEP \((currentStep + 1).intformatter)", subtitle: NotificationTitle.continuePartySubTitle)
         
         // 3. 다음 스텝 강제 종료 10분전 예약 - 소리+배너
-        notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
+        // notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
         
         // 4. 다음 스텝 강제 종료 되었을 때 예약 - 배너
         notificationManager.scheduleNotification(date: nextStepEndDate, title: NotificationTitle.shutdownTitle, subtitle: NotificationTitle.shutdownSubTitle)
+        print("PartyService에서 nextStepEndDate: \(nextStepEndDate)")
     }
     
     /// 다음 STEP으로 넘어갔을 때
@@ -92,11 +91,10 @@ extension PartyService {
     /// STEP을 종료했을 때
     func endParty() {
         
-        UserDefaults.standard.updatePartyLive(isLive: false)
-        
         // PUSH 알림
-        // 1. 원래 예약 되어있었던 알림 모두 취소
+        // 1. 원래 예약 되어있었던 알림 + 함수 모두 취소
         notificationManager.cancelNotification()
+        notificationManager.cancelFunction()
         
         // 비동기 이벤트 예약
         // 1. 예약되어있던 함수 취소
@@ -136,6 +134,14 @@ extension PartyService {
         return Date(timeIntervalSince1970: shutdownSecond)
     }
     
+    /// 다음 STEP의 시작 시점 Date를 반환하는 계산 속성
+    var nextStepStartDate: Date {
+        let shutdownStepSecond = TimeInterval(currentStep * notiCycle.toSeconds) + TimeInterval(1)
+        let shutdownSecond = startDate.timeIntervalSince1970 + shutdownStepSecond
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
+    
     /// 다음 STEP의 강제 종료 10분전 시점 Date를 반환하는 계산 속성
     var nextShutdownWarningDate: Date {
         let shutDownWarningSecond = nextStepEndDate.timeIntervalSince1970 - TimeInterval(600)
@@ -148,7 +154,15 @@ extension PartyService {
     
     /// 테스트용 술자리 시작 후 1분 뒤 날짜입니다.
     var testDate: Date {
-        let testSecond = startDate.timeIntervalSince1970 + TimeInterval(30)
+        let testSecond = startDate.timeIntervalSince1970 + TimeInterval(10)
         return Date(timeIntervalSince1970: testSecond)
     }
+}
+
+// MARK: - NotiCycle 반환
+extension PartyService {
+    func getNotiCycle() -> TimeInterval {
+        return TimeInterval(self.notiCycle.toSeconds)
+    }
+    
 }

@@ -16,6 +16,7 @@ struct PartyCameraView: View {
     @StateObject var viewManager = CameraViewManager()
     
     @Query private var partys: [Party]
+    @Environment(\.modelContext) private var modelContext
     
     @State private var isCamera = true
     @State private var isBolt = false
@@ -24,14 +25,34 @@ struct PartyCameraView: View {
     @State private var isShotDisabled = false
     @State private var isPartyEnd = false
     
-    @State private var isShowingImageModal = false
+//    @State private var isShowingImageModal = false
     @State private var isFinishPopupPresented = false
-    @State private var isPartyResultViewPresented = false
+    
     
     @State private var croppedImage: UIImage? = nil
     
     @Binding var isCameraViewPresented: Bool
+    @Binding var isPartyResultViewPresented: Bool
     
+    @State private var count = 1
+    
+    
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party? {
+        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
+        return sortedParty.last
+    }
+    
+    /// 현재 파티가 라이브인지 확인하는 계산 속성
+    var isCurrentPartyLive: Bool {
+        if let safeParty = currentParty {
+            return safeParty.isLive
+        } else {
+            return false
+        }
+    }
+    
+
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack{
@@ -226,33 +247,18 @@ struct PartyCameraView: View {
                     
                     VStack{
                         Button{
-                            if isBolt && !isShot{
-                                viewManager.toggleFlash()
-                            }
-                            
                             if isShot {
                                 viewManager.retakePhoto()
-                                
-                                // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
-                                if ((partys.last?.stepList.last?.mediaList.isEmpty) != nil) {
-                                    PartyService.shared.stepComplete()
-                                }
-                                
-                                if let lastParty = partys.last{
-                                    persistentDataManager.saveMedia(party: lastParty , imageData: viewManager.cropImage()!)
-                                }
+                                takePhoto()
                             } else {
-                                
                                 if isBolt{
                                     viewManager.toggleFlash()
                                 }
-                                
                                 viewManager.capturePhoto()
                             }
                             
                             isShot.toggle()
                             delayButton()
-                            
                         } label: {
                             ZStack{
                                 if isShot{
@@ -306,8 +312,59 @@ struct PartyCameraView: View {
             isShotDisabled = false
         }
     }
+    
+    private func takePhoto() {
+        
+        print("💀 사진 촤령~~~~~~~")
+        
+        if let lastParty = currentParty,
+           let lastStep = lastParty.lastStep {
+            
+            // MARK: - 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
+            if lastStep.mediaList.isEmpty {
+                
+                // 기존 배너 알림 예약 취소 + 배너 알림 예약
+                PartyService.shared.stepComplete()
+                
+                // 예약된 모든 함수 취소
+                NotificationManager.instance.cancelFunction()
+                
+                // 다음 STEP 종료 결과 화면 예약
+                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
+                    isPartyResultViewPresented.toggle()
+                }
+                
+                 // 새로운 빈 STEP 생성 예약
+                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepStartDate) {
+                    
+                    // 스텝 추가
+                    let newStep = Step()
+                    lastParty.stepList.append(newStep)
+                }
+            }
+            
+            // 사진 데이터 저장!
+            let sortedSteps = lastParty.stepList.sorted { $0.createDate < $1.createDate }
+            let newMedia = Media(fileData: viewManager.cropImage()!, captureDate: .now)
+            sortedSteps.last?.mediaList.append(newMedia)
+            
+//            print("💀\(count)번째 촬영")
+//            print("💀PARTY: \(lastParty)")
+//            for step in sortedSteps {
+//                print("💀---STEP: \(step)")
+//                for media in step.mediaList {
+//                    print("💀------MEDIA: \(media)")
+//                }
+//                print("\n😡😡😡😡😡😡😡😡😡😡😡😡😡\n")
+//            }
+//            print("💀")
+//            count += 1
+        }
+    }
 }
 
-#Preview {
-    PartyCameraView(isCameraViewPresented: .constant(true))
-}
+// persistentDataManager.saveMedia(step: sortedSteps.last!, imageData: viewManager.cropImage()!)
+
+//#Preview {
+//    PartyCameraView(isCameraViewPresented: .constant(true))
+//}
