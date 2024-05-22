@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Photos
 
 struct PartyListView: View {
     @State private var isFinishPopupPresented = false
@@ -139,6 +140,7 @@ struct StepCell: View {
     
     @State private var visibleMediaIndex = 0
     @State private var captureDates: [Date] = []
+    @State private var isImageSaved = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -176,7 +178,9 @@ struct StepCell: View {
                 
                 Spacer()
                 
-                Button(action: {}, label: {
+                Button(action: {
+                    saveImageToLibrary(imageData: step.mediaList[visibleMediaIndex].fileData)
+                }, label: {
                     ZStack {
                         Image(.icnSave)
                             .resizable()
@@ -228,6 +232,21 @@ struct StepCell: View {
             .scrollTargetLayout()
             .scrollTargetBehavior(.viewAligned)
             .padding(.bottom, 16)
+        }
+    }
+    
+    func saveImageToLibrary(imageData: Data) {
+        guard let uiImage = UIImage(data: imageData) else { return }
+        
+        let imageSaver = ImageSaver()
+        imageSaver.saveImage(uiImage) { result in
+            switch result {
+            case .success:
+                isImageSaved = true
+                print("사진 저장 완료")
+            case .failure(let error):
+                print("사진 저장 실패: \(error.localizedDescription)")
+            }
         }
     }
 }
