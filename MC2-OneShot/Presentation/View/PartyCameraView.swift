@@ -34,10 +34,8 @@ struct PartyCameraView: View {
     @Binding var isCameraViewPresented: Bool
     @Binding var isPartyResultViewPresented: Bool
     
-    
-    
-    
     @State private var count = 1
+    
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
@@ -319,61 +317,49 @@ struct PartyCameraView: View {
         
         print("💀 사진 촤령~~~~~~~")
         
-        if let lastParty = partys.last,
-           let lastStep = lastParty.stepList.last {
+        if let lastParty = currentParty,
+           let lastStep = lastParty.lastStep {
             
             // MARK: - 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
             if lastStep.mediaList.isEmpty {
                 
                 // 기존 배너 알림 예약 취소 + 배너 알림 예약
-                // PartyService.shared.stepComplete()
+                PartyService.shared.stepComplete()
                 
                 // 예약된 모든 함수 취소
-                // NotificationManager.instance.cancelFunction()
+                NotificationManager.instance.cancelFunction()
                 
                 // 다음 STEP 종료 결과 화면 예약
-//                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
-//                    isPartyResultViewPresented.toggle()
-//                }
+                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
+                    isPartyResultViewPresented.toggle()
+                }
                 
-                
-                
-                // 새로운 빈 STEP 생성 예약
-//                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepStartDate) {
-//                    guard let party = currentParty else {
-//                        print("currentParty 생성 실패, STEP을 추가할 수 없습니다.")
-//                        return
-//                    }
-//                    persistentDataManager.addStep(party: party)
-//                }
+                 // 새로운 빈 STEP 생성 예약
+                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepStartDate) {
+                    
+                    // 스텝 추가
+                    let newStep = Step()
+                    lastParty.stepList.append(newStep)
+                }
             }
             
+            // 사진 데이터 저장!
             let sortedSteps = lastParty.stepList.sorted { $0.createDate < $1.createDate }
-            
-            // 1. 사진 데이터 저장!
             let newMedia = Media(fileData: viewManager.cropImage()!, captureDate: .now)
             sortedSteps.last?.mediaList.append(newMedia)
             
-            // 2. 스텝 추가
-            let newStep = Step()
-            currentParty?.stepList.append(newStep)
+//            print("💀\(count)번째 촬영")
+//            print("💀PARTY: \(lastParty)")
+//            for step in sortedSteps {
+//                print("💀---STEP: \(step)")
+//                for media in step.mediaList {
+//                    print("💀------MEDIA: \(media)")
+//                }
+//                print("\n😡😡😡😡😡😡😡😡😡😡😡😡😡\n")
+//            }
+//            print("💀")
+//            count += 1
         }
-        
-        print("💀\(count)번째 촬영")
-        print("💀PARTY: \(partys.last!)")
-        
-        for step in partys.last!.stepList {
-            print("💀---STEP: \(step)")
-            
-            for media in step.mediaList {
-                print("💀------MEDIA: \(media)")
-            }
-            
-            print("\n😡😡😡😡😡😡😡😡😡😡😡😡😡\n")
-        }
-        print("💀")
-        
-        count += 1
     }
 }
 

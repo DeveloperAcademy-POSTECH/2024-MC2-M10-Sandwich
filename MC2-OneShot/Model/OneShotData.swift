@@ -23,6 +23,10 @@ class Party: Identifiable {
     @Relationship(deleteRule: .cascade) var memberList: [Member]
     var comment: String?
     
+    var lastStep: Step? {
+        return stepList.sorted { $0.createDate < $1.createDate }.last
+    }
+    
     init(
         title: String,
         startDate: Date,
