@@ -252,7 +252,7 @@ private struct ListView: View {
     }
     
     var body: some View {
-        List(partys) { party in
+        List(partys.sorted { $0.startDate > $1.startDate }) { party in
             ListCellView(
                 thumbnail: firstThumbnail(party),
                 title: party.title,
@@ -379,7 +379,7 @@ private struct PartyStateInfoLabel: View {
     let stepCount: Int
     
     var body: some View {
-        Text(stateInfo == .live ? "LIVE" : "STEP_\(stepCount)")
+        Text(stateInfo == .live ? "LIVE" : "STEP \(stepCount.intformatter)")
             .frame(width: 76, height: 22)
             .pretendard(.bold, 14)
             .background(stateInfo == .live ? .shotGreen : .shot33)
@@ -393,3 +393,4 @@ private struct PartyStateInfoLabel: View {
         .environmentObject(HomePathModel())
         .modelContainer(MockModelContainer.mockModelContainer)
 }
+
