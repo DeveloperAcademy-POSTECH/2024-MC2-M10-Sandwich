@@ -187,6 +187,11 @@ struct HomeView: View {
                         
                         // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
                         if restTime > 0 {
+
+                            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
+                                isPartyResultViewPresented.toggle()
+                            }
+                            
                             print("현재Step마지막 - 현재시간 > 0 : 초과X -> 카메라")
                             isCameraViewPresented.toggle()
                         
@@ -209,6 +214,10 @@ struct HomeView: View {
                         
                         
                         if restTime > 0 {
+
+                            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
+                                isPartyResultViewPresented.toggle()
+                            }
                             
                             isCameraViewPresented.toggle()
                             
