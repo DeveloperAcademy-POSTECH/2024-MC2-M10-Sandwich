@@ -46,8 +46,7 @@ struct PartyResultView: View {
             .padding(.top,12)
             
             // 상단 STEP
-            // TODO: - 병뚜껑 색 바꿔야함
-            VStack{
+            VStack(spacing: 0){
                 ZStack{
                     Image("Greenbottle")
                         .resizable()
@@ -57,9 +56,10 @@ struct PartyResultView: View {
                     Image(systemName: "checkmark")
                         .foregroundColor(.shot00)
                 }
+                .padding(.bottom, 4)
                 
                 HStack{
-                    Text("STEP ")
+                    Text("STEP")
                         .foregroundColor(.shotFF)
                         .pretendard(.bold, 32)
                     
@@ -78,7 +78,7 @@ struct PartyResultView: View {
                 }
                 
             }
-            .padding(.top,20)
+            .padding(.top,28)
             
             ListView()
             
