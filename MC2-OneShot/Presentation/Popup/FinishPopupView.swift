@@ -14,25 +14,29 @@ struct FinishPopupView: View {
     @Binding var isPartyEnd: Bool
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 10)
                     .frame(width: 361, height: 361)
-                    .clipShape(RoundedRectangle(cornerRadius: 25))
-                    .foregroundStyle(.shot25).opacity(0.95)
+                    .foregroundStyle(.shot25)
                 
                 VStack(spacing: 0) {
-                    Circle()
+                    // TODO: 함께한 사람들 이미지중 랜덤으로 들어오도록 수정
+                    Image(.dummyProfile)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 118, height: 118)
-                        .foregroundStyle(.clear)
+                        .cornerRadius(50)
                         .overlay(
                             Circle()
                                 .stroke(.shotGreen, lineWidth: 5)
                         )
+                        .padding(.top, 40)
                     
                     Text("술자리를 정말로 끝낼까요?")
                         .pretendard(.semiBold, 17)
-                        .padding(.top, 19)
+                        .foregroundStyle(.shotFF)
+                        .padding(.top, 20)
                     
                     Text("진짜루? 진쨔류? 진짤루?!")
                         .pretendard(.semiBold, 14)

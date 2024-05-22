@@ -64,6 +64,8 @@ struct InitialView: View {
 
 // MARK: - HomeView
 struct HomeView: View {
+    //쿼리 밖으로 뺐음 !!
+    @Query private var partys: [Party]
     
     @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var homePathModel: HomePathModel = .init()
@@ -88,6 +90,11 @@ struct HomeView: View {
         }
     }
     
+    @State private var isFirstInfoVisible: Bool = true
+    
+    // 리스트 생성시 이미지 삭제
+//    @State private var isFirstInfoVisible = true
+    
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
@@ -110,9 +117,19 @@ struct HomeView: View {
                     .frame(height: 35)
                     .padding(.leading, 16)
                     .padding(.top, 20)
-                
-                ListView()
-                
+                Divider()
+                ZStack{
+                    // 리스트 생성시 이미지 삭제
+
+                    if partys.isEmpty {
+                        Image(.firstInfo)
+                    }
+                    
+//                파티스를 하나로 집어넣음 (루시아가 설명할 거임)
+                    ListView(isFirstInfoVisible: $isFirstInfoVisible, partys: partys)
+                  
+                }
+
                 ActionButton(
                     title: isCurrentPartyLive ? "술자리 돌아가기" : "술자리 생성하기",
                     buttonType: isCurrentPartyLive ? .secondary : .primary
@@ -224,7 +241,17 @@ private struct ListView: View {
     @EnvironmentObject private var homePathModel: HomePathModel
     @EnvironmentObject var persistentDataManager: PersistentDataManager
     
-    @Query private var partys: [Party]
+    @State private var showAlert = false
+    
+    @Binding var isFirstInfoVisible: Bool
+    
+//    @Query private var partys: [Party] 두번 쿼리 불러오는거 방지하기 위해 일케 씀
+    var partys: [Party]
+    
+    init(isFirstInfoVisible: Binding<Bool>, partys: [Party]) {
+        self._isFirstInfoVisible = isFirstInfoVisible
+        self.partys = partys
+    }
     
     var body: some View {
         List(partys) { party in
@@ -238,17 +265,46 @@ private struct ListView: View {
             )
             .onTapGesture {
                 homePathModel.paths.append(.partyList(party: party))
+                isFirstInfoVisible = partys.isEmpty
             }
             .swipeActions {
                 Button {
                     // TODO: 술자리 데이터 삭제 Alert 출력
-                    persistentDataManager.deleteParty(party)
+                    self.showAlert = true
+                    
+                    //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
+                    isFirstInfoVisible = partys.isEmpty
+                
+                    
                 } label: {
                     Text("삭제하기")
                 }
                 .tint(.red)
+                
+            
+            } .onAppear{
+                //alert
+                isFirstInfoVisible = partys.isEmpty
+            }
+            .alert("진짤루?\n 술자리 기억...지우..는거야..?",isPresented: $showAlert) {
+                Button(role: .destructive) {
+                    persistentDataManager.deleteParty(party)
+                } label: {
+                    Text("지우기")
+                }
+                Button(role: .cancel) {
+                } label: {
+                    Text("살리기")
+                }
             }
         }
+        
+
+            
+                   
+                    
+        //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
+       
         .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
