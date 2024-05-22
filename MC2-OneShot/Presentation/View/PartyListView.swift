@@ -201,12 +201,13 @@ struct StepCell: View {
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: .infinity, height: 393)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 393)
                                     .cornerRadius(15)
                             }
                             
                             Text("\(index+1) / \(step.mediaList.count)")
-                                .pretendard(.regular, 17)
+                                .pretendard(.regular, 14)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 6)
                                 .foregroundStyle(.shotFF)
