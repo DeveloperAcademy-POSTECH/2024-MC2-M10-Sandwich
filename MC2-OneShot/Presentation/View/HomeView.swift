@@ -153,7 +153,6 @@ private struct ListView: View {
             .swipeActions {
                 Button {
                     // TODO: 술자리 데이터 삭제 Alert 출력
-                    persistentDataManager.deleteParty(party)
                     self.showAlert = true
                     
                     //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
@@ -164,17 +163,29 @@ private struct ListView: View {
                     Text("삭제하기")
                 }
                 .tint(.red)
+                
             
             } .onAppear{
                 //alert
                 isFirstInfoVisible = partys.isEmpty
             }
+            .alert("진짤루?\n 술자리 기억...지우..는거야..?",isPresented: $showAlert) {
+                Button(role: .destructive) {
+                    persistentDataManager.deleteParty(party)
+                } label: {
+                    Text("지우기")
+                }
+                Button(role: .cancel) {
+                } label: {
+                    Text("살리기")
+                }
+            }
         }
-        .alert(isPresented: $showAlert, content: {
-            Alert(title: Text("진짜 취소?"),
-                  message: Text("ㄹㅇ?"),
-                  dismissButton: .default( Text("ㅇㅋ")))
-        })
+        
+
+            
+                   
+                    
         //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
        
         .listStyle(.plain)
