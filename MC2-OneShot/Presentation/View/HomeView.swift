@@ -16,7 +16,8 @@ struct InitialView: View {
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
-        return partys.last
+        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
+        return sortedParty.last
     }
     
     /// 현재 파티가 라이브인지 확인하는 계산 속성
@@ -27,8 +28,6 @@ struct InitialView: View {
             return false
         }
     }
-    
-    
     
     var modelContainer: ModelContainer
     
@@ -137,8 +136,10 @@ struct HomeView: View {
                 if isCurrentPartyLive {
                     isCameraViewPresented.toggle()
                     
-                    NotificationManager.instance.scheduleFunction(date: PartyService.shared.testDate) {
-                        isPartyResultViewPresented.toggle()
+                    // 결과화면 present에 예약
+                    NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
+                        print("홈뷰에서 결과 화면 실행")
+//                        isPartyResultViewPresented.toggle()
                     }
                 }
             }, content: {

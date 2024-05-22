@@ -27,7 +27,7 @@ class Party: Identifiable {
         title: String,
         startDate: Date,
         notiCycle: Int,
-        stepList: [Step] = [Step(mediaList: [])],
+        stepList: [Step] = [Step()],
         isLive: Bool = true,
         isShutdown: Bool = false,
         memberList: [Member] = [],
@@ -47,9 +47,12 @@ class Party: Identifiable {
 
 @Model
 class Step: Identifiable {
+    
+    let createDate: Date
     @Relationship(deleteRule: .cascade) var mediaList: [Media]
     
-    init(mediaList: [Media]) {
+    init(createDate: Date = .now, mediaList: [Media] = []) {
+        self.createDate = createDate
         self.mediaList = mediaList
     }
 }

@@ -35,18 +35,20 @@ extension PersistentDataManager {
     }
     
     /// 찍은 사진을 저장하는 데이터입니다.
-    func saveMedia(party: Party, imageData: Data) {
+    func saveMedia(step: Step, imageData: Data) {
         let newMedia = Media(fileData: imageData, captureDate: Date.now)
-        party.stepList.last?.mediaList.append(newMedia)
+        step.mediaList.append(newMedia)
+        
+        try? modelContext.save()
     }
     
     /// StepList에 빈배열을 추가하는 데이터입니다.
-    func addStep(party: Party, currentStep: Int) {
+    func addStep(party: Party) {
         // step 추가
-        if (party.stepList.count) < currentStep{
-            let newStep = Step(mediaList: [])
-            party.stepList.append(newStep)
-        }
+        let newStep = Step(mediaList: [])
+        party.stepList.append(newStep)
+        
+        try? modelContext.save()
     }
     
     /// 술자리 Party 데이터를 지울때 사용합니다.

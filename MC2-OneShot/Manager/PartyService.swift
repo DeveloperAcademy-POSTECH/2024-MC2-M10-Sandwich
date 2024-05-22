@@ -66,20 +66,19 @@ extension PartyService {
     /// 사진을 촬영했을 때(STEP을 완료했을 때)
     func stepComplete() {
         
-        print(#function)
-        
         // PUSH 알림
         // 1. 원래 예약 되어있었던 알림 모두 취소
         notificationManager.cancelNotification()
         
         // 2. 다음 STEP 알림을 예약 - 소리 + 배너
-        notificationManager.scheduleNotification(date: currentStepEndDate, title: "STEP \(currentStep.intformatter)", subtitle: NotificationTitle.continuePartySubTitle)
+        notificationManager.scheduleNotification(date: nextStepStartDate, title: "STEP \((currentStep + 1).intformatter)", subtitle: NotificationTitle.continuePartySubTitle)
         
         // 3. 다음 스텝 강제 종료 10분전 예약 - 소리+배너
-        notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
+        // notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
         
         // 4. 다음 스텝 강제 종료 되었을 때 예약 - 배너
         notificationManager.scheduleNotification(date: nextStepEndDate, title: NotificationTitle.shutdownTitle, subtitle: NotificationTitle.shutdownSubTitle)
+        print("PartyService에서 nextStepEndDate: \(nextStepEndDate)")
     }
     
     /// 다음 STEP으로 넘어갔을 때
@@ -134,6 +133,14 @@ extension PartyService {
         let shutdownSecond = startDate.timeIntervalSince1970 + shutdownStepSecond
         return Date(timeIntervalSince1970: shutdownSecond)
     }
+    
+    /// 다음 STEP의 시작 시점 Date를 반환하는 계산 속성
+    var nextStepStartDate: Date {
+        let shutdownStepSecond = TimeInterval(currentStep * notiCycle.toSeconds) + TimeInterval(1)
+        let shutdownSecond = startDate.timeIntervalSince1970 + shutdownStepSecond
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
     
     /// 다음 STEP의 강제 종료 10분전 시점 Date를 반환하는 계산 속성
     var nextShutdownWarningDate: Date {
