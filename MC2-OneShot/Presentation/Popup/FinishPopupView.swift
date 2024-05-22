@@ -15,10 +15,9 @@ struct FinishPopupView: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 10)
                     .frame(width: 361, height: 361)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .foregroundStyle(.shot25).opacity(0.95)
+                    .foregroundStyle(.shot25)
                 
                 VStack(spacing: 0) {
                     // TODO: 함께한 사람들 이미지중 랜덤으로 들어오도록 수정

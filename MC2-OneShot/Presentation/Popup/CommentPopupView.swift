@@ -23,9 +23,8 @@ struct CommentPopupView: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 25)
                     .frame(width: 361, height: 361)
-                    .clipShape(RoundedRectangle(cornerRadius: 25))
                     .foregroundStyle(.shot25)
                 
                 VStack(alignment: .leading, spacing: 0) {

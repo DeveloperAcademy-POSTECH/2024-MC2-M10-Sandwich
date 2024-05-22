@@ -35,10 +35,9 @@ struct MemberPopupView: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 15)
                     .frame(width: 361, height: 334)
-                    .clipShape(RoundedRectangle(cornerRadius: 25))
-                    .foregroundStyle(.shot25).opacity(0.95)
+                    .foregroundStyle(.shot25)
                 
                 VStack(spacing: 0) {
                     HStack {
