@@ -26,7 +26,7 @@ struct CommentPopupView: View {
                 Rectangle()
                     .frame(width: 361, height: 361)
                     .clipShape(RoundedRectangle(cornerRadius: 25))
-                    .foregroundStyle(.shot25).opacity(0.95)
+                    .foregroundStyle(.shot25)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
@@ -46,7 +46,7 @@ struct CommentPopupView: View {
                     .padding()
                     .frame(width: 329, height: 234, alignment: .topLeading)
                     .background(RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.shot1C).opacity(0.6))
+                        .foregroundStyle(.shot1E))
                     .foregroundStyle(.shotFF)
                     .pretendard(.regular, 16)
                     .multilineTextAlignment(.leading)

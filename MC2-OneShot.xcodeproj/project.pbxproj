@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1DAF42BF88ADA00C53D8C /* SearchView.swift */; };
 		1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E49DAA32BFC662200553A15 /* AppDelegate.swift */; };
+		1EDF2C1A2BFD856C003291F4 /* Helper+HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF2C192BFD856C003291F4 /* Helper+HideKeyboard.swift */; };
 		1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFADD702BF6DE6500E333AD /* NotificationManager.swift */; };
 		1EFADD732BF6E34B00E333AD /* CustomSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		19A1DAF42BF88ADA00C53D8C /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		1E49DAA32BFC662200553A15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1EDF2C192BFD856C003291F4 /* Helper+HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+HideKeyboard.swift"; sourceTree = "<group>"; };
 		1EFADD702BF6DE6500E333AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CustomSound.mp3; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */,
 				98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */,
 				82D564522BFB81610091C2BC /* Helper+UserDefaults.swift */,
+				1EDF2C192BFD856C003291F4 /* Helper+HideKeyboard.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */,
 				98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */,
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
+				1EDF2C1A2BFD856C003291F4 /* Helper+HideKeyboard.swift in Sources */,
 				82D564502BFB80880091C2BC /* Helper+Constant.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */,

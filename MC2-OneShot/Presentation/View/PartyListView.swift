@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PartyListView: View {
-    
     @State private var isFinishPopupPresented = false
+    @State private var isCommentPopupPresented = false
     @State private var isMemberPopupPresented = false
     @State private var isPartyResultViewPresented = false
     @State private var isPartyEnd = false
@@ -30,13 +30,13 @@ struct PartyListView: View {
                         .pretendard(.bold, 25)
                         .foregroundStyle(.shotFF)
                     Spacer()
-//                    Button {
-//                        isMemberPopupPresented.toggle()
-//                    } label: {
-//                        Image(.dummyProfile)
-//                            .resizable()
-//                            .frame(width: 32, height: 32)
-//                    }
+                    //                    Button {
+                    //                        isMemberPopupPresented.toggle()
+                    //                    } label: {
+                    //                        Image(.dummyProfile)
+                    //                            .resizable()
+                    //                            .frame(width: 32, height: 32)
+                    //                    }
                     Image(.dummyProfile)
                         .resizable()
                         .frame(width: 32, height: 32)
@@ -64,34 +64,45 @@ struct PartyListView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: {
-                            isFinishPopupPresented = true
-                            // FinishPopupView()
-                        }, label: {
-                            if isFinishPopupPresented == false {
+                        if party.isLive {
+                            Button(action: {
+                                isFinishPopupPresented = true
+                            }, label: {
                                 Text("술자리 종료")
                                     .pretendard(.bold, 16.5)
                                     .foregroundStyle(.shotGreen)
-                            } else {
-                                Image(systemName: "text.bubble")
+                            })
+                            .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
+                                if isPartyEnd {
+                                    isPartyResultViewPresented.toggle()
+                                }
+                            }, content: {
+                                FinishPopupView(
+                                    isFinishPopupPresented: $isFinishPopupPresented,
+                                    isPartyEnd: $isPartyEnd
+                                )
+                                .foregroundStyle(.shotFF)
+                                .presentationBackground(.black.opacity(0.7))
+                            })
+                            .transaction { transaction in
+                                transaction.disablesAnimations = true
+                            }
+                        } else {
+                            Button(action: {
+                                isCommentPopupPresented = true
+                            }, label: {
+                                Image(systemName: "text.bubble.fill")
                                     .pretendard(.bold, 16.5)
                                     .foregroundStyle(.shotGreen)
+                            })
+                            .fullScreenCover(isPresented: $isCommentPopupPresented) {
+                                CommentPopupView(isCommentPopupPresented: $isCommentPopupPresented, party: party)
+                                    .foregroundStyle(.shotFF)
+                                    .presentationBackground(.black.opacity(0.7))
                             }
-                        })
-                        .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
-                            if isPartyEnd {
-                                isPartyResultViewPresented.toggle()
+                            .transaction { transaction in
+                                transaction.disablesAnimations = true
                             }
-                        }, content: {
-                            FinishPopupView(
-                                isFinishPopupPresented: $isFinishPopupPresented,
-                                isPartyEnd: $isPartyEnd
-                            )
-                            .foregroundStyle(.shotFF)
-                            .presentationBackground(.black.opacity(0.7))
-                        })
-                        .transaction { transaction in
-                            transaction.disablesAnimations = true
                         }
                     }
                 }
