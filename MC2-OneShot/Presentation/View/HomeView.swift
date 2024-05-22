@@ -180,7 +180,10 @@ struct HomeView: View {
                     if lastStep.mediaList.isEmpty {
                         
                         
-                        let restTime = PartyService.shared.currentStepEndDate.timeIntervalSince1970 - presentTime
+                        let shutdownStepSecond = TimeInterval(currentParty.stepList.count) * PartyService.shared.getNotiCycle()
+                        let currentStepEndDate = currentParty.startDate.timeIntervalSince1970 + shutdownStepSecond
+                        
+                        let restTime = currentStepEndDate - presentTime
                         
                         // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
                         if restTime > 0 {
