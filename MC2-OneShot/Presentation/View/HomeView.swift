@@ -71,6 +71,7 @@ struct HomeView: View {
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
     @State private var isPartyResultViewPresented = false
+    @State private var isFirstInfoVisible = true
     
     @Query private var partys: [Party]
     
@@ -88,11 +89,6 @@ struct HomeView: View {
         }
     }
     
-    @State private var isFirstInfoVisible: Bool = true
-    
-    // 리스트 생성시 이미지 삭제
-//    @State private var isFirstInfoVisible = true
-    
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
@@ -107,7 +103,6 @@ struct HomeView: View {
                             .foregroundStyle(.shotFF)
                             .padding(.trailing, 16)
                     }
-                    // 짐승거인 정혜정..
                 }
                 
                 Image(.appLogo)
@@ -117,15 +112,13 @@ struct HomeView: View {
                     .padding(.leading, 16)
                     .padding(.top, 20)
                     .padding(.bottom, 4)
-//                Divider()
-                ZStack{
-                    // 리스트 생성시 이미지 삭제
-
+                
+                ZStack {
                     if partys.isEmpty {
                         Image(.firstInfo)
+                            .padding(.bottom, 48)
                     }
                     
-//                파티스를 하나로 집어넣음 (루시아가 설명할 거임)
                     ListView(isFirstInfoVisible: $isFirstInfoVisible)
                   
                 }
@@ -306,16 +299,7 @@ private struct ListView: View {
                 
             }
         }
-        
-
-            
-                   
-                    
-        //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
-       
         .listStyle(.plain)
-//        .padding(.top, 1)
-//        .padding(.bottom, 16)
     }
     
     /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.

@@ -30,7 +30,7 @@ class NotificationManager {
         content.title = title
         content.body = subtitle
         
-        let soundName = "CustomSound"
+        let soundName = "BBang"
         let soundExtension = "mp3"
         
         if let soundURL = Bundle.main.url(forResource: soundName, withExtension: soundExtension) {
