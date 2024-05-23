@@ -63,6 +63,7 @@ struct PartyCameraView: View {
                                     .foregroundColor(.shotFF)
                                     .padding(.leading,16)
                             }
+                            .disabled(isShotDisabled)
                         }
                         
                         
@@ -76,6 +77,7 @@ struct PartyCameraView: View {
                                     .pretendard(.bold, 15)
                                     .foregroundColor(.shotGreen)
                             }
+                            .disabled(isShotDisabled)
                         }
                     }
                     .padding(.horizontal)
@@ -183,6 +185,7 @@ struct PartyCameraView: View {
                                 .foregroundColor(.shotFF)
                         }
                     }
+                    .disabled(isShotDisabled)
                 }
                 
                 HStack{
@@ -202,6 +205,7 @@ struct PartyCameraView: View {
                                             .stroke(isCamera ? Color.clear : Color.shot6D, lineWidth: 0.33)))
                             
                         }
+                        .disabled(isShotDisabled)
                         
                         Button{
                             print("비디오")
@@ -217,6 +221,7 @@ struct PartyCameraView: View {
                                         .overlay(RoundedRectangle(cornerRadius: 20)
                                             .stroke(isCamera ? Color.shot6D : Color.clear, lineWidth: 0.33)))
                         }
+                        .disabled(isShotDisabled)
                     }
                 }
                 .padding(.top, isShot ? 72 : 32)
@@ -234,6 +239,7 @@ struct PartyCameraView: View {
                                     .foregroundColor(.shotFF)
                                     .pretendard(.extraBold, 20)
                             }
+                            .disabled(isShotDisabled)
                         } else{
                             Button{
                                 print("플래시")
@@ -257,6 +263,7 @@ struct PartyCameraView: View {
                                         .foregroundColor(.shotFF)
                                 }
                             }
+                            .disabled(isShotDisabled)
                         }
                         
                         Spacer()
@@ -276,6 +283,7 @@ struct PartyCameraView: View {
                                     .frame(width: 32, height: 32)
                                     .foregroundColor(.shotFF)
                             }
+                            .disabled(isShotDisabled)
                         }
                     }
                     .padding(.horizontal, 36)
