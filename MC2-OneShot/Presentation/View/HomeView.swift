@@ -338,7 +338,7 @@ private struct ListView: View {
 }
 
 // MARK: - ListCellView
-private struct ListCellView: View {
+struct ListCellView: View {
     
     let thumbnail: Data
     let title: String

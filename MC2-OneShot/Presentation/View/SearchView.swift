@@ -11,6 +11,8 @@ import SwiftData
 struct SearchView: View {
     @State private var searchText = ""
     
+    @Environment(\.presentationMode) var presentationMode
+    
 //    init() {
 //            let appearance = UINavigationBarAppearance()
 //    appearance.configureWithOpaqueBackground()
@@ -28,31 +30,59 @@ struct SearchView: View {
 //        }
 //    
     var body: some View {
-        Group{
-            if searchText.isEmpty{
-                Image(.imgLogo)
-                    .padding(.bottom, 60)
-                    .opacity(0.1)
-//                Text("찾고싶은 술자리 이름을 검색해주세요")
-//                    .pretendard(.semiBold, 17)
-//                    .foregroundStyle(.shot33)
+        VStack {
+            Group{
+                if searchText.isEmpty {
+                    Image(.imgLogo)
+                        .padding(.bottom, 60)
+                        .opacity(0.1)
+    //                Text("찾고싶은 술자리 이름을 검색해주세요")
+    //                    .pretendard(.semiBold, 17)
+    //                    .foregroundStyle(.shot33)
+                    
+                  
+                } else {
+                    ListView(searchText: $searchText)
+                }
+            }.searchable(
+                text: $searchText,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "기억하고 싶은 술자리를 검색해보세요"
                 
-              
-            } else{
-                ListView(searchText: $searchText)
+            )
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.shotFF)
+                }
             }
-        }.searchable(
-            text: $searchText,
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "기억하고 싶은 술자리를 검색해보세요"
-                
-            
-        )
+        }
+        .navigationTitle("술자리 검색하기")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 // MARK: - ListView
 private struct ListView: View {
+    
+    /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
+    func firstThumbnail(_ party: Party) -> Data {
+        guard let firstStep = party.stepList.first,
+              let firstMedia = firstStep.mediaList.first else {
+            // print("썸네일 반환에 실패했습니다.")
+            return Data()
+        }
+        
+        return firstMedia.fileData
+    }
+    
+    
+    @EnvironmentObject private var homePathModel: HomePathModel
     
     @Query private var partys: [Party]
     @Binding var searchText: String
@@ -62,17 +92,19 @@ private struct ListView: View {
             $0.title.contains(searchText)
         }
     }
-
     var body: some View {
         List(searchPartys) { party in
             ListCellView(
-                thumbnail: "image", // TODO: 랜덤 썸네일 뽑는 로직 추가
+                thumbnail: firstThumbnail(party),
                 title: party.title,
                 captureDate: party.startDate,
                 isLive: party.isLive,
                 stepCount: party.stepList.count,
                 notiCycle: party.notiCycle
             )
+            .onTapGesture {
+                homePathModel.paths.append(.partyList(party: party))
+            }
             .swipeActions {
                 Button {
                     // TODO: 술자리 데이터 삭제 Alert 출력
@@ -89,72 +121,72 @@ private struct ListView: View {
 }
 
 // MARK: - ListCellView
-private struct ListCellView: View {
-    
-    let thumbnail: String
-    let title: String
-    let captureDate: Date
-    let isLive: Bool
-    let stepCount: Int
-    let notiCycle: Int
-    
-    var body: some View {
-        HStack {
-            Image(.test)
-                .resizable()
-                .frame(width: 68, height: 68)
-                .clipShape(RoundedRectangle(cornerRadius: 7.5))
-            
-            Spacer()
-                .frame(width: 12)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .pretendard(.bold, 17)
-                    .foregroundStyle(.shotFF)
-                
-                Text("\(captureDate.yearMonthDay)")
-                    .pretendard(.regular, 14)
-                    .foregroundStyle(.shot6D)
-            }
-
-            Spacer()
-            
-            VStack(spacing: 4) {
-                PartyStateInfoLabel(
-                    stateInfo: isLive ? .live : .end,
-                    stepCount: stepCount
-                )
-                
-                Text("\(notiCycle)min")
-                    .pretendard(.regular, 14)
-                    .foregroundStyle(.shot6D)
-            }
-        }
-    }
-}
+//private struct ListCellView: View {
+//    
+//    let thumbnail: String
+//    let title: String
+//    let captureDate: Date
+//    let isLive: Bool
+//    let stepCount: Int
+//    let notiCycle: Int
+//    
+//    var body: some View {
+//        HStack {
+//            Image(.test)
+//                .resizable()
+//                .frame(width: 68, height: 68)
+//                .clipShape(RoundedRectangle(cornerRadius: 7.5))
+//            
+//            Spacer()
+//                .frame(width: 12)
+//            
+//            VStack(alignment: .leading, spacing: 4) {
+//                Text(title)
+//                    .pretendard(.bold, 17)
+//                    .foregroundStyle(.shotFF)
+//                
+//                Text("\(captureDate.yearMonthDay)")
+//                    .pretendard(.regular, 14)
+//                    .foregroundStyle(.shot6D)
+//            }
+//
+//            Spacer()
+//            
+//            VStack(spacing: 4) {
+//                PartyStateInfoLabel(
+//                    stateInfo: isLive ? .live : .end,
+//                    stepCount: stepCount
+//                )
+//                
+//                Text("\(notiCycle)min")
+//                    .pretendard(.regular, 14)
+//                    .foregroundStyle(.shot6D)
+//            }
+//        }
+//    }
+//}
 
 // MARK: - PartyStateInfoLabel
-private struct PartyStateInfoLabel: View {
-    
-    /// 술자리 상태를 나타내는 열거형
-    enum StateInfo: String {
-        case live
-        case end
-    }
-    
-    let stateInfo: StateInfo
-    let stepCount: Int
-    
-    var body: some View {
-        Text(stateInfo == .live ? "LIVE" : "STEP_\(stepCount)")
-            .frame(width: 76, height: 22)
-            .pretendard(.bold, 14)
-            .background(stateInfo == .live ? .shotGreen : .shot33)
-            .foregroundStyle(stateInfo == .live ? .shot00 : .shotD8)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-    }
-}
+//private struct PartyStateInfoLabel: View {
+//    
+//    /// 술자리 상태를 나타내는 열거형
+//    enum StateInfo: String {
+//        case live
+//        case end
+//    }
+//    
+//    let stateInfo: StateInfo
+//    let stepCount: Int
+//    
+//    var body: some View {
+//        Text(stateInfo == .live ? "LIVE" : "STEP_\(stepCount)")
+//            .frame(width: 76, height: 22)
+//            .pretendard(.bold, 14)
+//            .background(stateInfo == .live ? .shotGreen : .shot33)
+//            .foregroundStyle(stateInfo == .live ? .shot00 : .shotD8)
+//            .clipShape(RoundedRectangle(cornerRadius: 12))
+//    }
+//}
 
 #Preview {
     SearchView()
