@@ -212,6 +212,7 @@ struct StepCell: View {
                             .offset(y: -1)
                     }
                 })
+                .disabled(step.mediaList.isEmpty) 
                 .actionSheet(isPresented: $showActionSheet) {
                     ActionSheet(
                         title: Text("사진을 저장할 방법을 선택해 주세요"),
