@@ -39,9 +39,7 @@ struct CommentPopupView: View {
                     }
                     .padding(16)
                     
-                    TextField(text: $content, axis: .vertical) {
-                        Color.clear
-                    }
+                    TextField("이곳을 클릭하여 술자리의 기억을 남겨주세요!", text: $content, axis: .vertical)
                     .padding()
                     .frame(width: 329, height: 234, alignment: .topLeading)
                     .background(RoundedRectangle(cornerRadius: 10)
