@@ -40,7 +40,7 @@ struct PartyResultView: View {
                             isHelpMessagePresented.toggle()
                         } label: {
                             Image(systemName: "questionmark.circle")
-                                .foregroundColor(.shot33)
+                                .foregroundColor(.shotFF)
                         }
                     }
                     .padding(.trailing)

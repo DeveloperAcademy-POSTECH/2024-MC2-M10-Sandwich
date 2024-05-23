@@ -185,6 +185,7 @@ struct HomeView: View {
 
                             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
                                 isPartyResultViewPresented.toggle()
+                                currentParty.isShutdown = true
                             }
                             
                             print("현재Step마지막 - 현재시간 > 0 : 초과X -> 카메라")
@@ -195,6 +196,7 @@ struct HomeView: View {
                         else {
                             print("현재Step마지막 - 현재시간 > 0 : 초과O -> result")
                             isPartyResultViewPresented.toggle()
+                            currentParty.isShutdown = true
                         }
                         
                         
@@ -212,6 +214,7 @@ struct HomeView: View {
 
                             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
                                 isPartyResultViewPresented.toggle()
+                                currentParty.isShutdown = true
                             }
                             
                             isCameraViewPresented.toggle()
@@ -225,6 +228,7 @@ struct HomeView: View {
                         // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
                         else {
                             isPartyResultViewPresented.toggle()
+                            currentParty.isShutdown = true
                         }
                     }
                 }
