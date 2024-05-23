@@ -74,7 +74,7 @@ struct PartyCameraView: View {
                                 isFinishPopupPresented.toggle()
                             } label: {
                                 Text("술자리 종료")
-                                    .pretendard(.bold, 15)
+                                    .pretendard(.semiBold, 16)
                                     .foregroundColor(.shotGreen)
                             }
                             .disabled(isShotDisabled)

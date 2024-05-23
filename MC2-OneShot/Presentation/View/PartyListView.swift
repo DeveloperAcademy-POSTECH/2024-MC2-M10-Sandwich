@@ -78,7 +78,7 @@ struct PartyListView: View {
                                 isFinishPopupPresented = true
                             }, label: {
                                 Text("술자리 종료")
-                                    .pretendard(.bold, 16.5)
+                                    .pretendard(.semiBold, 16)
                                     .foregroundStyle(.shotGreen)
                             })
                             .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
