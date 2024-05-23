@@ -11,81 +11,66 @@ import Combine
 
 class CameraViewManager: ObservableObject {
     private let manager: CameraManager
-    private let session: AVCaptureSession
     let cameraPreview: AnyView
     
-    @Published var arr: [Data] = []
     @Published var recentImage: UIImage?
     
-    // 초기 세팅
+    init() {
+        manager = CameraManager.shared
+        cameraPreview = AnyView(CameraPreviewView(session: manager.session))
+        
+        manager.$recentImage
+            .assign(to: &$recentImage)
+    }
+    
+    // 초기 설정
     func configure() {
         manager.requestAndCheckPermissions()
     }
     
-    // 플래시 온오프
+    // 플래시 전환
     func toggleFlash() {
         guard let device = AVCaptureDevice.default(for: .video) else { return }
-                guard device.hasTorch else { return }
-
-                do {
-                    try device.lockForConfiguration()
-                    device.torchMode = device.isTorchActive ? .off : .on
-                    device.unlockForConfiguration()
-                } catch {
-                    print("플래시를 제어할 수 없습니다: \(error)")
-                }
-//        if let device = AVCaptureDevice.default(for: .video), device.hasTorch {
-//            do {
-//                try device.lockForConfiguration()
-//                try device.setTorchModeOn(level: 1.0) // 플래시 밝기(켜기)
-//                
-//                //3초후에 플래시 끄기 -> 3초후 꺼지는게 오히려 이질감이 들어서 그냥 일단 뺌
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//                    device.unlockForConfiguration()
-//                }
-//                
-//            } catch {
-//                print("플래시를 제어할 수 없습니다: \(error)")
-//            }
-//        }
+        guard device.hasTorch else { return }
+        
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = device.isTorchActive ? .off : .on
+            device.unlockForConfiguration()
+        } catch {
+            print("플래시를 제어할 수 없습니다: \(error)")
+        }
     }
     
     // 사진 촬영
     func capturePhoto() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+        
+        HapticManager.shared.impact(style: .light)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.manager.capturePhoto()
             print("찰칵")
         }
-        print("[CameraViewModel]: Photo captured!")
+        print("CameraManager CapturePhoto 호출")
     }
     
     // 다시 촬영
-    func retakePhoto(){
+    func retakePhoto() {
         manager.retakePhoto()
-        print("[CameraViewManager] : Photo retaker!")
+        print("CameraManager retakePhoto 호출")
     }
     
-    // 전후면 카메라 스위칭
+    // 전후면 카메라 전환
     func changeCamera() {
         manager.changeCamera()
-        print("[CameraViewModel]: Camera changed!")
+        print("CameraManager changeCamera 호출")
     }
     
-    // 사진 저장(업로드)
+    // 이미지를 정사각형으로 자르고 JPEG 데이터로 변환하여 반환
     func cropImage() -> Data? {
-        let croppedImage = cropImageToSquare(image: recentImage!)
-        let imageData = croppedImage?.jpegData(compressionQuality: 1.0)
-        
-        return imageData
-    }
-    
-    init() {
-        manager = CameraManager.shared
-        session = manager.session
-        cameraPreview = AnyView(CameraPreviewView(session: session))
-        
-        manager.$recentImage
-            .assign(to: &$recentImage)
+        guard let recentImage = recentImage else { return nil }
+        let croppedImage = cropImageToSquare(image: recentImage)
+        return croppedImage?.jpegData(compressionQuality: 1.0)
     }
     
     // 이미지를 정사각형 모양으로 자르는 함수

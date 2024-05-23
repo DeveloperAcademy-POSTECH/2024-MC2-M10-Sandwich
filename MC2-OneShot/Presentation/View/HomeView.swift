@@ -131,8 +131,7 @@ struct HomeView: View {
                 }
 
                 ActionButton(
-                                                                 // 내용 바꿈
-                    title: isCurrentPartyLive ? "술자리 돌아가기" : "사진찍으러 가기",
+                    title: isCurrentPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
                     buttonType: isCurrentPartyLive ? .popupfinish : .primary
                 ) {
                     if isCurrentPartyLive {
@@ -276,7 +275,6 @@ private struct ListView: View {
             }
             .swipeActions {
                 Button {
-                    // TODO: 술자리 데이터 삭제 Alert 출력
                     self.showAlert = true
                     
                     //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
@@ -301,6 +299,7 @@ private struct ListView: View {
                     }
                 }else{
                     Button(role: .destructive) {
+                        HapticManager.shared.notification(type: .success)
                         persistentDataManager.deleteParty(party)
                     } label: {
                         Text("지우기")
@@ -334,7 +333,7 @@ private struct ListView: View {
 }
 
 // MARK: - ListCellView
-private struct ListCellView: View {
+struct ListCellView: View {
     
     let thumbnail: Data?
     let title: String
@@ -385,6 +384,7 @@ private struct ListCellView: View {
                     .foregroundStyle(.shot6D)
             }
         }
+        .background(.shot00)
     }
 }
 
@@ -416,3 +416,13 @@ private struct PartyStateInfoLabel: View {
         .modelContainer(MockModelContainer.mockModelContainer)
 }
 
+#Preview {
+    ListCellView(
+        thumbnail: Data(),
+        title: "테스트 제목",
+        captureDate: .now,
+        isLive: true,
+        stepCount: 7,
+        notiCycle: 30
+    )
+}

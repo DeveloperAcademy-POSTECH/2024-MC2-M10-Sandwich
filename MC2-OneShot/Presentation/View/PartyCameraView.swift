@@ -15,6 +15,8 @@ struct PartyCameraView: View {
     @StateObject private var cameraPathModel: CameraPathModel = .init()
     @StateObject var viewManager = CameraViewManager()
     
+    //    @StateObject var cameraManager = CameraManager.shared
+    
     @Query private var partys: [Party]
     @Environment(\.modelContext) private var modelContext
     
@@ -24,17 +26,10 @@ struct PartyCameraView: View {
     @State private var isShot = false
     @State private var isShotDisabled = false
     @State private var isPartyEnd = false
-    
-//    @State private var isShowingImageModal = false
     @State private var isFinishPopupPresented = false
-    
-    
-    @State private var croppedImage: UIImage? = nil
     
     @Binding var isCameraViewPresented: Bool
     @Binding var isPartyResultViewPresented: Bool
-    
-    @State private var count = 1
     
     
     /// 현재 파티를 반환합니다.
@@ -52,39 +47,39 @@ struct PartyCameraView: View {
         }
     }
     
-
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack{
                 ZStack{
+                    HStack{
+                        if !isShot{
+                            Button{
+                                isCameraViewPresented.toggle()
+                            } label: {
+                                Image(systemName: "chevron.down")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                                    .foregroundColor(.shotFF)
+                                    .padding(.leading,16)
+                            }
+                            .disabled(isShotDisabled)
+                        }
                         
                         
-                        HStack{
-                            if !isShot{
-                                Button{
-                                    isCameraViewPresented.toggle()
-                                } label: {
-                                    Image(systemName: "chevron.down")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 24, height: 24)
-                                        .foregroundColor(.shotFF)
-                                        .padding(.leading,16)
-                                }
+                        Spacer()
+                        
+                        if !isShot{
+                            Button{
+                                HapticManager.shared.notification(type: .warning)
+                                isFinishPopupPresented.toggle()
+                            } label: {
+                                Text("술자리 종료")
+                                    .pretendard(.semiBold, 16)
+                                    .foregroundColor(.shotGreen)
                             }
-                            
-                            
-                            Spacer()
-                            
-                            if !isShot{
-                                Button{
-                                    isFinishPopupPresented.toggle()
-                                } label: {
-                                    Text("술자리 종료")
-                                        .pretendard(.bold, 15)
-                                        .foregroundColor(.shotGreen)
-                                }
-                            }
+                            .disabled(isShotDisabled)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.top,12)
@@ -92,7 +87,7 @@ struct PartyCameraView: View {
                     VStack(spacing: 0){
                         if let lastParty = currentParty,
                            let lastStep = lastParty.lastStep {
-//                             만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
+                            // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
                             if lastStep.mediaList.isEmpty {
                                 ZStack{
                                     Image("icnSave")
@@ -125,12 +120,10 @@ struct PartyCameraView: View {
                             }
                         }
                         
-                        
-                        //                    Text("STEP \(intformatter(dummyPartys[0].stepList.count))")
                         Text("STEP \(partys.last?.stepList.count.intformatter ?? "02")")
                             .pretendard(.extraBold, 20)
                             .foregroundColor(.shotFF)
-                        //                    Text("\(dummyPartys[0].notiCycle)min")
+                        
                         Text("\(partys.last?.notiCycle ?? 60)min")
                             .pretendard(.bold, 15)
                             .foregroundColor(.shot6D)
@@ -153,6 +146,17 @@ struct PartyCameraView: View {
                 }
                 
                 VStack {
+                    // 이게 뭐냐면 사진이 찍힌게 뜨는데 색이 이상해서 일단 주석으로 냅둔거임
+                    //                    if isShot{
+                    //                        if let recentImage = cameraManager.recentImage,
+                    //                           let croppedImage = cropImageToSquare(image: recentImage) {
+                    //                            Image(uiImage: croppedImage)
+                    //                                .resizable()
+                    //                                .scaledToFit()
+                    //                                .frame(width: 393, height: 393)
+                    //                                .cornerRadius(15)
+                    //                        }
+                    //                    } else {
                     viewManager.cameraPreview.ignoresSafeArea()
                         .onAppear {
                             viewManager.configure()
@@ -160,11 +164,11 @@ struct PartyCameraView: View {
                         .frame(width: 393, height: 393)
                         .aspectRatio(1, contentMode: .fit)
                         .cornerRadius(15)
+                    //                    }
                 }
                 .padding(.top, 36)
                 
                 if isShot{
-                    //                Text("\(dummyPartys[0].title)")
                     Text(partys.last?.title ?? "제목입니당")
                         .pretendard(.bold, 20)
                         .foregroundColor(.shotFF)
@@ -175,7 +179,6 @@ struct PartyCameraView: View {
                         }
                     } label: {
                         HStack{
-                            //                        Text("\(dummyPartys[0].title)")
                             Text(partys.last?.title ?? "제목입니당")
                                 .pretendard(.bold, 20)
                                 .foregroundColor(.shotFF)
@@ -183,6 +186,7 @@ struct PartyCameraView: View {
                                 .foregroundColor(.shotFF)
                         }
                     }
+                    .disabled(isShotDisabled)
                 }
                 
                 HStack{
@@ -192,37 +196,36 @@ struct PartyCameraView: View {
                             isCamera = true
                         } label: {
                             Text("사진")
-                                .pretendard(.bold, 17)
+                                .pretendard(isCamera ? .semiBold : .regular, 17)
                                 .foregroundColor(isCamera ? .shotFF : .shot6D)
                                 .frame(width: 64, height: 40)
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(isCamera ? Color.shot7B : Color.clear)
+                                        .fill(isCamera ? Color.shot41 : Color.clear)
                                         .overlay(RoundedRectangle(cornerRadius: 20)
-                                            .stroke(isCamera ? Color.shotGreen : Color.shot6D, lineWidth: 0.33)))
+                                            .stroke(isCamera ? Color.clear : Color.shot6D, lineWidth: 0.33)))
                             
                         }
+                        .disabled(isShotDisabled)
                         
                         Button{
-                            print("플래시")
-                            if !isFace{
-                                //                                viewManager.toggleFlash()
-                                isBolt.toggle()
-                            }
+                            print("비디오")
+                            isCamera = false
                         } label: {
                             Text("비디오")
-                                .pretendard(.bold, 17)
+                                .pretendard(isCamera ? .regular : .semiBold, 17)
                                 .foregroundColor(isCamera ? .shot6D : .shotFF)
                                 .frame(width: 64, height: 40)
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(isCamera ? Color.clear : Color.shot7B)
+                                        .fill(isCamera ? Color.clear : Color.shot41)
                                         .overlay(RoundedRectangle(cornerRadius: 20)
-                                            .stroke(isCamera ? Color.shot6D : Color.shotGreen, lineWidth: 0.33)))
+                                            .stroke(isCamera ? Color.shot6D : Color.clear, lineWidth: 0.33)))
                         }
+                        .disabled(isShotDisabled)
                     }
                 }
-                .padding(.top, isShot ? 76 : 32) // TODO: - 패딩 조정 필요
+                .padding(.top, isShot ? 72 : 32)
                 
                 ZStack{
                     HStack{
@@ -237,11 +240,13 @@ struct PartyCameraView: View {
                                     .foregroundColor(.shotFF)
                                     .pretendard(.extraBold, 20)
                             }
+                            .disabled(isShotDisabled)
                         } else{
                             Button{
                                 print("플래시")
-                                if !isFace{
-                                    //                                viewManager.toggleFlash()
+                                if isFace || !isCamera{
+                                    isBolt = false
+                                } else {
                                     isBolt.toggle()
                                 }
                             } label: {
@@ -259,6 +264,7 @@ struct PartyCameraView: View {
                                         .foregroundColor(.shotFF)
                                 }
                             }
+                            .disabled(isShotDisabled)
                         }
                         
                         Spacer()
@@ -278,16 +284,19 @@ struct PartyCameraView: View {
                                     .frame(width: 32, height: 32)
                                     .foregroundColor(.shotFF)
                             }
+                            .disabled(isShotDisabled)
                         }
                     }
                     .padding(.horizontal, 36)
                     
                     VStack{
                         Button{
+                            
                             if isShot {
                                 viewManager.retakePhoto()
                                 takePhoto()
                             } else {
+                                
                                 if isBolt{
                                     viewManager.toggleFlash()
                                 }
@@ -298,10 +307,10 @@ struct PartyCameraView: View {
                             delayButton()
                         } label: {
                             ZStack{
-                                if !isShot{
+                                if isShot{
                                     Circle()
                                         .fill(Color.shotGreen)
-                                        .frame(width: 106, height: 106)
+                                        .frame(width: 96, height: 96)
                                     Image(systemName: "arrow.up.forward")
                                         .resizable()
                                         .scaledToFit()
@@ -311,10 +320,12 @@ struct PartyCameraView: View {
                                 } else{
                                     Circle()
                                         .fill(Color.shotFF)
-                                        .frame(width: 90, height: 90)
+                                        .frame(width: 80, height: 80)
                                     
-                                    Circle().stroke(Color.shotGreen, lineWidth: 4)
-                                        .padding(16)
+                                    Circle()
+                                        .fill(Color.clear)
+                                        .frame(width: 96, height: 96)
+                                        .overlay(Circle().stroke(Color.shotGreen, lineWidth: 4))
                                 }
                             }
                         }
@@ -323,7 +334,7 @@ struct PartyCameraView: View {
                     .padding(.top)
                     .padding(.horizontal)
                 }
-//                .padding(16)
+                //                .padding(16)
                 .navigationDestination(for: CameraPathType.self) { path in
                     switch path {
                     case let .partyList(party):
@@ -338,6 +349,27 @@ struct PartyCameraView: View {
             }
         }
     }
+    // 이미지를 정사각형 모양으로 자르는 함수
+    //    private func cropImageToSquare(image: UIImage) -> UIImage? {
+    //        let cgImage = image.cgImage!
+    //        let width = CGFloat(cgImage.width)
+    //        let height = CGFloat(cgImage.height)
+    //
+    //        let aspectRatio = width / height
+    //        var rect: CGRect
+    //
+    //        if aspectRatio > 1 {
+    //            rect = CGRect(x: (width - height) / 2, y: 0, width: height, height: height)
+    //        } else {
+    //            rect = CGRect(x: 0, y: (height - width) / 2, width: width, height: width)
+    //        }
+    //
+    //        if let croppedCGImage = cgImage.cropping(to: rect) {
+    //            return UIImage(cgImage: croppedCGImage, scale: image.scale, orientation: image.imageOrientation)
+    //        }
+    //
+    //        return nil
+    //    }
     
     private func delayButton() {
         print("버튼 눌림")
@@ -353,7 +385,7 @@ struct PartyCameraView: View {
     
     private func takePhoto() {
         
-        print("💀 사진 촤령~~~~~~~")
+        HapticManager.shared.notification(type: .success)
         
         if let lastParty = currentParty,
            let lastStep = lastParty.lastStep {
@@ -372,7 +404,7 @@ struct PartyCameraView: View {
                     isPartyResultViewPresented.toggle()
                 }
                 
-                 // 새로운 빈 STEP 생성 예약
+                // 새로운 빈 STEP 생성 예약
                 NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepStartDate) {
                     
                     // 스텝 추가
@@ -385,23 +417,9 @@ struct PartyCameraView: View {
             let sortedSteps = lastParty.stepList.sorted { $0.createDate < $1.createDate }
             let newMedia = Media(fileData: viewManager.cropImage()!, captureDate: .now)
             sortedSteps.last?.mediaList.append(newMedia)
-            
-//            print("💀\(count)번째 촬영")
-//            print("💀PARTY: \(lastParty)")
-//            for step in sortedSteps {
-//                print("💀---STEP: \(step)")
-//                for media in step.mediaList {
-//                    print("💀------MEDIA: \(media)")
-//                }
-//                print("\n😡😡😡😡😡😡😡😡😡😡😡😡😡\n")
-//            }
-//            print("💀")
-//            count += 1
         }
     }
 }
-
-// persistentDataManager.saveMedia(step: sortedSteps.last!, imageData: viewManager.cropImage()!)
 
 #Preview {
     PartyCameraView(isCameraViewPresented: .constant(true), isPartyResultViewPresented: .constant(false))

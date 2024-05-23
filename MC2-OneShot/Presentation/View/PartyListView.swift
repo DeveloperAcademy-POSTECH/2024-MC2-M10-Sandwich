@@ -17,6 +17,9 @@ struct PartyListView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    @EnvironmentObject private var homePathModel: HomePathModel
+    @EnvironmentObject private var cameraPathModel: CameraPathModel
+    
     let party: Party
     
     @Binding var isCameraViewPresented: Bool
@@ -72,10 +75,11 @@ struct PartyListView: View {
                     ToolbarItem(placement: .topBarTrailing) {
                         if party.isLive {
                             Button(action: {
+                                HapticManager.shared.notification(type: .warning)
                                 isFinishPopupPresented = true
                             }, label: {
                                 Text("술자리 종료")
-                                    .pretendard(.bold, 16.5)
+                                    .pretendard(.semiBold, 16)
                                     .foregroundStyle(.shotGreen)
                             })
                             .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
@@ -126,7 +130,7 @@ struct PartyListView: View {
                         self.presentationMode.wrappedValue.dismiss()
                     }) {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.shotFF)
                     }
                 }
             }
@@ -216,7 +220,7 @@ struct StepCell: View {
                         title: Text("사진을 저장할 방법을 선택해 주세요"),
                         buttons: [
                             .cancel(Text("취소")),
-                            .default(Text("전체 저장"), action: {
+                            .default(Text("전체 사진 저장"), action: {
                                 saveAllImages()
                             }),
                             .default(Text("현재 사진 저장"), action: {
@@ -285,6 +289,7 @@ struct StepCell: View {
                         isImageSaved = true
                         showToastMessage()
                         print("🎞️ 전체 사진 저장 완료")
+                        HapticManager.shared.notification(type: .success)
                     case .failure(let error):
                         print("❌ 전체 사진 저장 실패: \(error.localizedDescription)")
                     }
@@ -302,6 +307,7 @@ struct StepCell: View {
             case .success:
                 isImageSaved = true
                 showToastMessage()
+                HapticManager.shared.notification(type: .success)
                 print("📷 현재 사진 저장 완료")
             case .failure(let error):
                 print("❌ 현재 사진 저장 실패: \(error.localizedDescription)")
