@@ -26,13 +26,29 @@ struct PartySetView: View {
                 .pretendard(.semiBold, 17)
                 .foregroundStyle(.shotFF)
             
-            List {
-                TextField("제목", text: $titleText)
-               
-                // 위치 변경
-                NotiCycleView(notiCycle: $notiCycle)
-                MemberListView()
-            }
+                List {
+                    Section {
+                        TextField("제목", text: $titleText)
+                            .onChange(of: titleText) { _, text in
+                                if text.count > 12 {
+                                    titleText.removeLast()
+                                }
+                            }
+                    } footer: {
+                        HStack{
+                            Image(systemName: "exclamationmark.circle.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 14, height: 14)
+                            Text("제목은 12자 이내로 작성 가능해요.")
+                                .pretendard(.regular, 12)
+                        }
+                    }
+                    
+                    // 위치 변경
+                    NotiCycleView(notiCycle: $notiCycle)
+                    MemberListView()
+                }
             
             Spacer()
             
