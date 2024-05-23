@@ -110,7 +110,7 @@ struct HomeView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 35)
                     .padding(.leading, 16)
-                    .padding(.top, 20)
+                    .padding(.top, 12)
                     .padding(.bottom, 4)
                 
                 ZStack {
