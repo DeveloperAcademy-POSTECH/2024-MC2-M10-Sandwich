@@ -239,12 +239,14 @@ private struct ListView: View {
     
     @EnvironmentObject private var homePathModel: HomePathModel
     @EnvironmentObject var persistentDataManager: PersistentDataManager
+    @Environment(\.modelContext) private var modelContext
     
     @State private var showAlert = false
     
     @Binding var isFirstInfoVisible: Bool
     
     @Query private var partys: [Party]
+    
     
     var body: some View {
         List(partys.sorted { $0.startDate > $1.startDate }) { party in
@@ -287,6 +289,7 @@ private struct ListView: View {
                 }else{
                     Button(role: .destructive) {
                         HapticManager.shared.notification(type: .success)
+                        print(party.title)
                         persistentDataManager.deleteParty(party)
                     } label: {
                         Text("지우기")
@@ -304,8 +307,8 @@ private struct ListView: View {
     
     /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
     func firstThumbnail(_ party: Party) -> Data? {
-        let firstStep = party.stepList.first
-        let firstMedia = firstStep?.mediaList.first
+        let firstStep = party.stepList.sorted { $0.createDate < $1.createDate }.first
+        let firstMedia = firstStep?.mediaList.sorted{ $0.captureDate < $1.captureDate }.first
         return firstMedia?.fileData
     }
 }
