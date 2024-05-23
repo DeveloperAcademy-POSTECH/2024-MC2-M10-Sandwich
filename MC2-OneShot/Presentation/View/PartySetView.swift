@@ -44,6 +44,7 @@ struct PartySetView: View {
                                 .pretendard(.regular, 12)
                         }
                     }
+                    .padding(4)
                     
                     // 위치 변경
                     NotiCycleView(notiCycle: $notiCycle)
