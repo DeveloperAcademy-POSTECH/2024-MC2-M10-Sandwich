@@ -39,8 +39,9 @@ struct PartyResultView: View {
                         Button{
                             isHelpMessagePresented.toggle()
                         } label: {
-                            Image(systemName: "questionmark.circle")
-                                .foregroundColor(.shotFF)
+                            Image(systemName: "exclamationmark.circle")
+                                .pretendard(.semiBold, 17)
+                                .foregroundColor(.shotC6)
                         }
                     }
                     .padding(.trailing)
