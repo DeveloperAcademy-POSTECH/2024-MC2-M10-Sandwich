@@ -218,7 +218,7 @@ struct StepCell: View {
                         title: Text("사진을 저장할 방법을 선택해 주세요"),
                         buttons: [
                             .cancel(Text("취소")),
-                            .default(Text("전체 저장"), action: {
+                            .default(Text("전체 사진 저장"), action: {
                                 saveAllImages()
                             }),
                             .default(Text("현재 사진 저장"), action: {
