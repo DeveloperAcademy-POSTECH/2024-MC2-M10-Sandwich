@@ -131,8 +131,7 @@ struct HomeView: View {
                 }
 
                 ActionButton(
-                                                                 // 내용 바꿈
-                    title: isCurrentPartyLive ? "술자리 돌아가기" : "사진찍으러 가기",
+                    title: isCurrentPartyLive ? "사진찍으러 가기" : "술자리 돌아가기",
                     buttonType: isCurrentPartyLive ? .popupfinish : .primary
                 ) {
                     if isCurrentPartyLive {
@@ -380,6 +379,7 @@ private struct ListCellView: View {
                     .foregroundStyle(.shot6D)
             }
         }
+        .background(.shot00)
     }
 }
 
@@ -411,3 +411,13 @@ private struct PartyStateInfoLabel: View {
         .modelContainer(MockModelContainer.mockModelContainer)
 }
 
+#Preview {
+    ListCellView(
+        thumbnail: Data(),
+        title: "테스트 제목",
+        captureDate: .now,
+        isLive: true,
+        stepCount: 7,
+        notiCycle: 30
+    )
+}
