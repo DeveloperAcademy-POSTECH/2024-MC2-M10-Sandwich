@@ -71,6 +71,7 @@ struct PartyCameraView: View {
                         
                         if !isShot{
                             Button{
+                                HapticManager.shared.notification(type: .warning)
                                 isFinishPopupPresented.toggle()
                             } label: {
                                 Text("술자리 종료")
@@ -290,10 +291,12 @@ struct PartyCameraView: View {
                     
                     VStack{
                         Button{
+                            
                             if isShot {
                                 viewManager.retakePhoto()
                                 takePhoto()
                             } else {
+                                
                                 if isBolt{
                                     viewManager.toggleFlash()
                                 }
@@ -381,6 +384,8 @@ struct PartyCameraView: View {
     }
     
     private func takePhoto() {
+        
+        HapticManager.shared.notification(type: .success)
         
         if let lastParty = currentParty,
            let lastStep = lastParty.lastStep {

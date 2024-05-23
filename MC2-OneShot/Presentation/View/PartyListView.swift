@@ -75,6 +75,7 @@ struct PartyListView: View {
                     ToolbarItem(placement: .topBarTrailing) {
                         if party.isLive {
                             Button(action: {
+                                HapticManager.shared.notification(type: .warning)
                                 isFinishPopupPresented = true
                             }, label: {
                                 Text("술자리 종료")
@@ -287,6 +288,7 @@ struct StepCell: View {
                         isImageSaved = true
                         showToastMessage()
                         print("🎞️ 전체 사진 저장 완료")
+                        HapticManager.shared.notification(type: .success)
                     case .failure(let error):
                         print("❌ 전체 사진 저장 실패: \(error.localizedDescription)")
                     }
@@ -304,6 +306,7 @@ struct StepCell: View {
             case .success:
                 isImageSaved = true
                 showToastMessage()
+                HapticManager.shared.notification(type: .success)
                 print("📷 현재 사진 저장 완료")
             case .failure(let error):
                 print("❌ 현재 사진 저장 실패: \(error.localizedDescription)")

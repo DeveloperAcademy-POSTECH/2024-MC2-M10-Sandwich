@@ -50,6 +50,8 @@ struct PartySetView: View {
     /// GO STEP! 버튼 클릭 시 호출되는 함수입니다.
     func goStep() {
         
+        HapticManager.shared.notification(type: .success)
+        
         let today = Date.now
         
         // 1. 영구 저장 데이터에 새로운 파티 데이터 생성

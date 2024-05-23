@@ -522,7 +522,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = VQLS72LDQP;
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -539,7 +539,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sandwich.ADA.MC2.OneShot;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.ADA.MC2.OneShot-thinkyside";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -555,7 +555,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = VQLS72LDQP;
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -572,7 +572,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sandwich.ADA.MC2.OneShot;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.ADA.MC2.OneShot-thinkyside";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

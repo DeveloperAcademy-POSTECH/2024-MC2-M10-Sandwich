@@ -131,7 +131,7 @@ struct HomeView: View {
                 }
 
                 ActionButton(
-                    title: isCurrentPartyLive ? "사진 찍으러 가기" : "술자리 돌아가기",
+                    title: isCurrentPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
                     buttonType: isCurrentPartyLive ? .popupfinish : .primary
                 ) {
                     if isCurrentPartyLive {
@@ -275,7 +275,6 @@ private struct ListView: View {
             }
             .swipeActions {
                 Button {
-                    // TODO: 술자리 데이터 삭제 Alert 출력
                     self.showAlert = true
                     
                     //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
@@ -300,6 +299,7 @@ private struct ListView: View {
                     }
                 }else{
                     Button(role: .destructive) {
+                        HapticManager.shared.notification(type: .success)
                         persistentDataManager.deleteParty(party)
                     } label: {
                         Text("지우기")

@@ -44,6 +44,9 @@ class CameraViewManager: ObservableObject {
     
     // 사진 촬영
     func capturePhoto() {
+        
+        HapticManager.shared.impact(style: .light)
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.manager.capturePhoto()
             print("찰칵")
