@@ -368,6 +368,7 @@ struct PartyCameraView: View {
                 // 다음 STEP 종료 결과 화면 예약
                 NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
                     isPartyResultViewPresented.toggle()
+                    lastParty.isShutdown = true
                 }
                 
                 // 새로운 빈 STEP 생성 예약
