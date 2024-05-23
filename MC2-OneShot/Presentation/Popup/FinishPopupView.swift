@@ -56,7 +56,6 @@ struct FinishPopupView: View {
                             buttonType: .primary
                         ) {
                             HapticManager.shared.notification(type: .success)
-                            print("끝!")
                             PartyService.shared.endParty()
                             isFinishPopupPresented = false
                             isPartyEnd = true
