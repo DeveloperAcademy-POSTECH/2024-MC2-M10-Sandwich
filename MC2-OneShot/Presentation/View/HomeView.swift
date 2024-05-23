@@ -119,7 +119,8 @@ struct HomeView: View {
                             .padding(.bottom, 48)
                     }
                     
-                    ListView(isFirstInfoVisible: $isFirstInfoVisible, partys: partys)
+                    ListView(isFirstInfoVisible: $isFirstInfoVisible)
+                  
                 }
 
                 ActionButton(
@@ -243,13 +244,7 @@ private struct ListView: View {
     
     @Binding var isFirstInfoVisible: Bool
     
-//    @Query private var partys: [Party] 두번 쿼리 불러오는거 방지하기 위해 일케 씀
-    var partys: [Party]
-    
-    init(isFirstInfoVisible: Binding<Bool>, partys: [Party]) {
-        self._isFirstInfoVisible = isFirstInfoVisible
-        self.partys = partys
-    }
+    @Query private var partys: [Party]
     
     var body: some View {
         List(partys.sorted { $0.startDate > $1.startDate }) { party in
