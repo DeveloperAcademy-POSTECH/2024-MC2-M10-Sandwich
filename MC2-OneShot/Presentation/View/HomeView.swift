@@ -131,8 +131,7 @@ struct HomeView: View {
                 }
 
                 ActionButton(
-                                                                 // 내용 바꿈
-                    title: isCurrentPartyLive ? "술자리 돌아가기" : "사진찍으러 가기",
+                    title: isCurrentPartyLive ? "사진찍으러 가기" : "술자리 돌아가기",
                     buttonType: isCurrentPartyLive ? .popupfinish : .primary
                 ) {
                     if isCurrentPartyLive {
