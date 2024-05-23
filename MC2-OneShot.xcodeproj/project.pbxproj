@@ -11,6 +11,8 @@
 		19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1DAF42BF88ADA00C53D8C /* SearchView.swift */; };
 		1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E49DAA32BFC662200553A15 /* AppDelegate.swift */; };
 		1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB454502BFDE7EA004E99AD /* ImageSaver.swift */; };
+		1EB454532BFF0C5F004E99AD /* RecordSound.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1EB454522BFF0C5F004E99AD /* RecordSound.m4a */; };
+		1EB454552BFF0D38004E99AD /* BBang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EB454542BFF0D38004E99AD /* BBang.mp3 */; };
 		1EDF2C1A2BFD856C003291F4 /* Helper+HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF2C192BFD856C003291F4 /* Helper+HideKeyboard.swift */; };
 		1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFADD702BF6DE6500E333AD /* NotificationManager.swift */; };
 		1EFADD732BF6E34B00E333AD /* CustomSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */; };
@@ -58,6 +60,8 @@
 		19A1DAF42BF88ADA00C53D8C /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		1E49DAA32BFC662200553A15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EB454502BFDE7EA004E99AD /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
+		1EB454522BFF0C5F004E99AD /* RecordSound.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = RecordSound.m4a; sourceTree = "<group>"; };
+		1EB454542BFF0D38004E99AD /* BBang.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BBang.mp3; sourceTree = "<group>"; };
 		1EDF2C192BFD856C003291F4 /* Helper+HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+HideKeyboard.swift"; sourceTree = "<group>"; };
 		1EFADD702BF6DE6500E333AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CustomSound.mp3; sourceTree = "<group>"; };
@@ -243,6 +247,8 @@
 		82D564512BFB812D0091C2BC /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				1EB454542BFF0D38004E99AD /* BBang.mp3 */,
+				1EB454522BFF0C5F004E99AD /* RecordSound.m4a */,
 				1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */,
 			);
 			path = Sound;
@@ -342,9 +348,11 @@
 				BF2E72C32BF3472C008A2D1F /* Colorsets.xcassets in Resources */,
 				BFB5340E2BF342840013E9FE /* Pretendard-Black.otf in Resources */,
 				BFB5340C2BF342840013E9FE /* Pretendard-SemiBold.otf in Resources */,
+				1EB454532BFF0C5F004E99AD /* RecordSound.m4a in Resources */,
 				BFB534072BF342840013E9FE /* Pretendard-Light.otf in Resources */,
 				1EFADD732BF6E34B00E333AD /* CustomSound.mp3 in Resources */,
 				BFB5340B2BF342840013E9FE /* Pretendard-Regular.otf in Resources */,
+				1EB454552BFF0D38004E99AD /* BBang.mp3 in Resources */,
 				BFB534082BF342840013E9FE /* Pretendard-Thin.otf in Resources */,
 				BFB5340A2BF342840013E9FE /* Pretendard-Medium.otf in Resources */,
 				BFB5340F2BF342840013E9FE /* Pretendard-ExtraLight.otf in Resources */,
