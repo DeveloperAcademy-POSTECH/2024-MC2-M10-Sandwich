@@ -380,6 +380,7 @@ private struct ListCellView: View {
                     .foregroundStyle(.shot6D)
             }
         }
+        .background(.shot00)
     }
 }
 
@@ -411,3 +412,13 @@ private struct PartyStateInfoLabel: View {
         .modelContainer(MockModelContainer.mockModelContainer)
 }
 
+#Preview {
+    ListCellView(
+        thumbnail: Data(),
+        title: "테스트 제목",
+        captureDate: .now,
+        isLive: true,
+        stepCount: 7,
+        notiCycle: 30
+    )
+}
