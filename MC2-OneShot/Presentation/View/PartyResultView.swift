@@ -207,30 +207,6 @@ private struct ListView: View {
                     }
                 }
             }
-            
-            Section{
-                VStack(alignment: .leading){
-                    HStack{
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .foregroundColor(.shotGreen)
-                        
-                        Text("함께한 사람들")
-                            .pretendard(.bold, 14)
-                            .foregroundColor(.shotC6)
-                            .padding(.leading,8)
-                        
-                    }
-                    
-                    LazyVGrid(columns: columns){
-                        ForEach(partys.last?.memberList ?? []){ member in
-                            Circle()
-                                .frame(width: 54, height: 54)
-                            
-                        }
-                    }
-                }
-            }
         }
     }
     
