@@ -17,6 +17,9 @@ struct PartyListView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    @EnvironmentObject private var homePathModel: HomePathModel
+    @EnvironmentObject private var cameraPathModel: CameraPathModel
+    
     let party: Party
     
     @Binding var isCameraViewPresented: Bool
@@ -126,7 +129,7 @@ struct PartyListView: View {
                         self.presentationMode.wrappedValue.dismiss()
                     }) {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.shotFF)
                     }
                 }
             }
