@@ -46,9 +46,6 @@ struct PartyListView: View {
                     //                            .resizable()
                     //                            .frame(width: 32, height: 32)
                     //                    }
-                    Image(.dummyProfile)
-                        .resizable()
-                        .frame(width: 32, height: 32)
                 }
                 .padding(.top, 3)
                 .padding(.bottom, 14)
