@@ -192,14 +192,14 @@ struct PartyCameraView: View {
                             isCamera = true
                         } label: {
                             Text("사진")
-                                .pretendard(.bold, 17)
+                                .pretendard(isCamera ? .semiBold : .regular, 17)
                                 .foregroundColor(isCamera ? .shotFF : .shot6D)
                                 .frame(width: 64, height: 40)
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(isCamera ? Color.shot7B : Color.clear)
+                                        .fill(isCamera ? Color.shot41 : Color.clear)
                                         .overlay(RoundedRectangle(cornerRadius: 20)
-                                            .stroke(isCamera ? Color.shotGreen : Color.shot6D, lineWidth: 0.33)))
+                                            .stroke(isCamera ? Color.clear : Color.shot6D, lineWidth: 0.33)))
                             
                         }
                         
@@ -208,14 +208,14 @@ struct PartyCameraView: View {
                             isCamera = false
                         } label: {
                             Text("비디오")
-                                .pretendard(.bold, 17)
+                                .pretendard(isCamera ? .regular : .semiBold, 17)
                                 .foregroundColor(isCamera ? .shot6D : .shotFF)
                                 .frame(width: 64, height: 40)
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(isCamera ? Color.clear : Color.shot7B)
+                                        .fill(isCamera ? Color.clear : Color.shot41)
                                         .overlay(RoundedRectangle(cornerRadius: 20)
-                                            .stroke(isCamera ? Color.shot6D : Color.shotGreen, lineWidth: 0.33)))
+                                            .stroke(isCamera ? Color.shot6D : Color.clear, lineWidth: 0.33)))
                         }
                     }
                 }
