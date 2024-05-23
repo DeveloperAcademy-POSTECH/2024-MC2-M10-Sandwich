@@ -39,7 +39,7 @@ struct InitialView: View {
         )
         .onAppear {
             NotificationManager.instance.requestAuthorization()
-            
+            NotificationManager.instance.resetBadge()
             // 라이브 중일 때 함수 호출
             if isCurrentPartyLive {
                 updatePartyService()

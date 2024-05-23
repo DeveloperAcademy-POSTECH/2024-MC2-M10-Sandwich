@@ -48,7 +48,7 @@ struct PartySetView: View {
                     
                     // 위치 변경
                     NotiCycleView(notiCycle: $notiCycle)
-                    MemberListView()
+                    //MemberListView()
                 }
             
             Spacer()

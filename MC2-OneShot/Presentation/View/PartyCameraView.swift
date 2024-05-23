@@ -189,43 +189,8 @@ struct PartyCameraView: View {
                     .disabled(isShotDisabled)
                 }
                 
-                HStack{
-                    if !isShot{
-                        Button{
-                            print("사진")
-                            isCamera = true
-                        } label: {
-                            Text("사진")
-                                .pretendard(isCamera ? .semiBold : .regular, 17)
-                                .foregroundColor(isCamera ? .shotFF : .shot6D)
-                                .frame(width: 64, height: 40)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(isCamera ? Color.shot41 : Color.clear)
-                                        .overlay(RoundedRectangle(cornerRadius: 20)
-                                            .stroke(isCamera ? Color.clear : Color.shot6D, lineWidth: 0.33)))
-                            
-                        }
-                        .disabled(isShotDisabled)
-                        
-                        Button{
-                            print("비디오")
-                            isCamera = false
-                        } label: {
-                            Text("비디오")
-                                .pretendard(isCamera ? .regular : .semiBold, 17)
-                                .foregroundColor(isCamera ? .shot6D : .shotFF)
-                                .frame(width: 64, height: 40)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(isCamera ? Color.clear : Color.shot41)
-                                        .overlay(RoundedRectangle(cornerRadius: 20)
-                                            .stroke(isCamera ? Color.shot6D : Color.clear, lineWidth: 0.33)))
-                        }
-                        .disabled(isShotDisabled)
-                    }
-                }
-                .padding(.top, isShot ? 72 : 32)
+                Spacer()
+                    .frame(height: 48)
                 
                 ZStack{
                     HStack{
@@ -328,6 +293,7 @@ struct PartyCameraView: View {
                                         .overlay(Circle().stroke(Color.shotGreen, lineWidth: 4))
                                 }
                             }
+                            .padding(.bottom, 15)
                         }
                         .disabled(isShotDisabled)
                     }
