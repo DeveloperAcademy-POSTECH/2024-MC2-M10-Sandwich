@@ -63,7 +63,7 @@ struct PartyListView: View {
                 
                 ScrollView {
                     ForEach(Array(sortedStepList.enumerated()), id: \.offset) { index, step in
-                        StepCell(index: index, step: step)
+                        StepCell(index: index, step: step, startDate: party.startDate)
                         
                         Divider()
                     }
@@ -151,6 +151,7 @@ struct ToastView: View {
 struct StepCell: View {
     var index: Int
     var step: Step
+    var startDate: Date
     
     @State private var visibleMediaIndex = 0
     @State private var captureDates: [Date] = []
@@ -173,7 +174,7 @@ struct StepCell: View {
                     }
                     
                     HStack(spacing: 0) {
-                        Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].yearMonthDayNoSpace)
+                        Text(captureDates.isEmpty ? startDate.yearMonthDayNoSpace : captureDates[visibleMediaIndex].yearMonthDayNoSpace)
                             .pretendard(.semiBold, 14)
                             .foregroundStyle(.shotC6)
                             .opacity(0.4)
@@ -184,7 +185,7 @@ struct StepCell: View {
                             .cornerRadius(10)
                             .padding(.horizontal, 6)
                         
-                        Text(captureDates.isEmpty ? "" : captureDates[visibleMediaIndex].aHourMinute)
+                        Text(captureDates.isEmpty ? startDate.aHourMinute : captureDates[visibleMediaIndex].aHourMinute)
                             .pretendard(.semiBold, 14)
                             .foregroundStyle(.shotC6)
                             .opacity(0.4)

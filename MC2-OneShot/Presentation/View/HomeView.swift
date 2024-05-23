@@ -326,30 +326,35 @@ private struct ListView: View {
     }
     
     /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
-    func firstThumbnail(_ party: Party) -> Data {
-        guard let firstStep = party.stepList.first,
-              let firstMedia = firstStep.mediaList.first else {
-            // print("썸네일 반환에 실패했습니다.")
-            return Data()
-        }
-        
-        return firstMedia.fileData
+    func firstThumbnail(_ party: Party) -> Data? {
+        let firstStep = party.stepList.first
+        let firstMedia = firstStep?.mediaList.first
+        return firstMedia?.fileData
     }
 }
 
 // MARK: - ListCellView
 private struct ListCellView: View {
     
-    let thumbnail: Data
+    let thumbnail: Data?
     let title: String
     let captureDate: Date
     let isLive: Bool
     let stepCount: Int
     let notiCycle: Int
     
+    var thumbnailLogic: UIImage {
+        if let thumbnail = thumbnail,
+           let uiImage = UIImage(data: thumbnail) {
+            return uiImage
+        } else {
+            return UIImage(resource: .noImageSign)
+        }
+    }
+    
     var body: some View {
         HStack {
-            Image(uiImage: UIImage(data: thumbnail) ?? UIImage())
+            Image(uiImage: thumbnailLogic)
                 .resizable()
                 .frame(width: 68, height: 68)
                 .clipShape(RoundedRectangle(cornerRadius: 7.5))
