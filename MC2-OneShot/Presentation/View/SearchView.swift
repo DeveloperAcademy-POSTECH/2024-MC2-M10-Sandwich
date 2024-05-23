@@ -62,7 +62,7 @@ struct SearchView: View {
                 }
             }
         }
-        .navigationTitle("술자리 검색하기")
+        .navigationTitle("검색하기")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
