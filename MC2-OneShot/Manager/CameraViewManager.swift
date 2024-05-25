@@ -16,15 +16,17 @@ class CameraViewManager: ObservableObject {
     @Published var recentImage: UIImage?
     
     init() {
-        manager = CameraManager.shared
+        manager = CameraManager()
         cameraPreview = AnyView(CameraPreviewView(session: manager.session))
         
         manager.$recentImage
             .assign(to: &$recentImage)
+        
+        configure()
     }
     
     // 초기 설정
-    func configure() {
+    private func configure() {
         manager.requestAndCheckPermissions()
     }
     

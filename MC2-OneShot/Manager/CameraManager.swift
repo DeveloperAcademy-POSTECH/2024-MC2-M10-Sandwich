@@ -8,8 +8,6 @@ import SwiftUI
 import AVFoundation
 
 class CameraManager: NSObject, ObservableObject {
-    static let shared = CameraManager()
-    private override init() {}
     
     var session = AVCaptureSession()
     private var videoDeviceInput: AVCaptureDeviceInput!

@@ -128,9 +128,6 @@ struct PartyCameraView: View {
                     .frame(width: 393, height: 393)
                     .aspectRatio(1, contentMode: .fit)
                     .cornerRadius(15)
-                    .onAppear {
-                        viewManager.configure()
-                    }
             }
             .padding(.top, 36)
             
