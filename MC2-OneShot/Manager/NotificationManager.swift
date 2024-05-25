@@ -15,7 +15,7 @@ class NotificationManager {
     var timers: [Timer] = []
     
     func requestAuthorization() {
-        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        let options: UNAuthorizationOptions = [.alert, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: options) { (success, error) in
             if let error = error {
                 print(error.localizedDescription)
@@ -39,8 +39,6 @@ class NotificationManager {
         } else {
             print("사운드 파일을 찾을 수 없습니다.")
         }
-        
-        content.badge = 1
         
         var calendar = Calendar.current
         calendar.locale = Locale(identifier: "ko_KR")
@@ -81,4 +79,10 @@ class NotificationManager {
         
         timers.removeAll()
     }
+    
+    func resetBadge() {
+            DispatchQueue.main.async {
+                UIApplication.shared.applicationIconBadgeNumber = 0
+            }
+        }
 }

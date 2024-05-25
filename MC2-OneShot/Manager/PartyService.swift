@@ -74,7 +74,7 @@ extension PartyService {
         notificationManager.scheduleNotification(date: nextStepStartDate, title: "STEP \((currentStep + 1).intformatter)", subtitle: NotificationTitle.continuePartySubTitle)
         
         // 3. 다음 스텝 강제 종료 10분전 예약 - 소리+배너
-        // notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
+        notificationManager.scheduleNotification(date: nextShutdownWarningDate, title: NotificationTitle.shutdownWarningTitle, subtitle: NotificationTitle.shutdownWarningSubTitle)
         
         // 4. 다음 스텝 강제 종료 되었을 때 예약 - 배너
         notificationManager.scheduleNotification(date: nextStepEndDate, title: NotificationTitle.shutdownTitle, subtitle: NotificationTitle.shutdownSubTitle)

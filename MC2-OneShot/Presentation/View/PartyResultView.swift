@@ -39,8 +39,9 @@ struct PartyResultView: View {
                         Button{
                             isHelpMessagePresented.toggle()
                         } label: {
-                            Image(systemName: "questionmark.circle")
-                                .foregroundColor(.shot33)
+                            Image(systemName: "exclamationmark.circle")
+                                .pretendard(.semiBold, 17)
+                                .foregroundColor(.shotC6)
                         }
                     }
                     .padding(.trailing)
@@ -204,30 +205,6 @@ private struct ListView: View {
                             .pretendard(.bold, 16)
                             .foregroundStyle(.shotFF)
                             .padding(.leading,8)
-                    }
-                }
-            }
-            
-            Section{
-                VStack(alignment: .leading){
-                    HStack{
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .foregroundColor(.shotGreen)
-                        
-                        Text("함께한 사람들")
-                            .pretendard(.bold, 14)
-                            .foregroundColor(.shotC6)
-                            .padding(.leading,8)
-                        
-                    }
-                    
-                    LazyVGrid(columns: columns){
-                        ForEach(partys.last?.memberList ?? []){ member in
-                            Circle()
-                                .frame(width: 54, height: 54)
-                            
-                        }
                     }
                 }
             }

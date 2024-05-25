@@ -8,7 +8,7 @@
 import Foundation
 
 enum NotiCycle: Int {
-    case min30 = 1
+    case min30 = 30
     case min60 = 60
     case min90 = 90
     case min120 = 120

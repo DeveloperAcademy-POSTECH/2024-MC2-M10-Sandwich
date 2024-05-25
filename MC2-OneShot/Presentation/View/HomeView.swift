@@ -39,7 +39,7 @@ struct InitialView: View {
         )
         .onAppear {
             NotificationManager.instance.requestAuthorization()
-            
+            NotificationManager.instance.resetBadge()
             // 라이브 중일 때 함수 호출
             if isCurrentPartyLive {
                 updatePartyService()
@@ -110,7 +110,7 @@ struct HomeView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 35)
                     .padding(.leading, 16)
-                    .padding(.top, 20)
+                    .padding(.top, 12)
                     .padding(.bottom, 4)
                 
                 ZStack {
@@ -185,6 +185,7 @@ struct HomeView: View {
 
                             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
                                 isPartyResultViewPresented.toggle()
+                                currentParty.isShutdown = true
                             }
                             
                             print("현재Step마지막 - 현재시간 > 0 : 초과X -> 카메라")
@@ -195,6 +196,7 @@ struct HomeView: View {
                         else {
                             print("현재Step마지막 - 현재시간 > 0 : 초과O -> result")
                             isPartyResultViewPresented.toggle()
+                            currentParty.isShutdown = true
                         }
                         
                         
@@ -212,6 +214,7 @@ struct HomeView: View {
 
                             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
                                 isPartyResultViewPresented.toggle()
+                                currentParty.isShutdown = true
                             }
                             
                             isCameraViewPresented.toggle()
@@ -225,6 +228,7 @@ struct HomeView: View {
                         // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
                         else {
                             isPartyResultViewPresented.toggle()
+                            currentParty.isShutdown = true
                         }
                     }
                 }
@@ -241,10 +245,12 @@ private struct ListView: View {
     @EnvironmentObject var persistentDataManager: PersistentDataManager
     
     @State private var showAlert = false
+    @State private var selectedParty: Party = Party(title: "", startDate: Date(), notiCycle: 0)
     
     @Binding var isFirstInfoVisible: Bool
     
     @Query private var partys: [Party]
+    
     
     var body: some View {
         List(partys.sorted { $0.startDate > $1.startDate }) { party in
@@ -262,6 +268,7 @@ private struct ListView: View {
             }
             .swipeActions {
                 Button {
+                    self.selectedParty = party
                     self.showAlert = true
                     
                     //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
@@ -272,14 +279,13 @@ private struct ListView: View {
                     Text("삭제하기")
                 }
                 .tint(.red)
-                
-            
-            } .onAppear{
-                //alert
-                isFirstInfoVisible = partys.isEmpty
             }
-            .alert(party.isLive ? Text("진행중인 술자리는 지울 수 없어,, ") :Text("진짤루?\n 술자리 기억...지우..는거야..?"),isPresented: $showAlert) {
-                if party.isLive{
+            .onAppear{
+               //alert
+               isFirstInfoVisible = partys.isEmpty
+           }
+            .alert(selectedParty.isLive ? Text("진행중인 술자리는 지울 수 없어,, ") :Text("진짤루?\n 술자리 기억...지우..는거야..?"),isPresented: $showAlert) {
+                if selectedParty.isLive{
                     Button(role: .cancel) {
                     } label: {
                         Text("확인")
@@ -287,11 +293,14 @@ private struct ListView: View {
                 }else{
                     Button(role: .destructive) {
                         HapticManager.shared.notification(type: .success)
-                        persistentDataManager.deleteParty(party)
+                        print("지운 파티: ", selectedParty.title)
+                        persistentDataManager.deleteParty(selectedParty)
                     } label: {
                         Text("지우기")
                     }
                     Button(role: .cancel) {
+                        print("살렸다: ", selectedParty.title)
+                        
                     } label: {
                         Text("살리기")
                     }
@@ -304,8 +313,8 @@ private struct ListView: View {
     
     /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
     func firstThumbnail(_ party: Party) -> Data? {
-        let firstStep = party.stepList.first
-        let firstMedia = firstStep?.mediaList.first
+        let firstStep = party.stepList.sorted { $0.createDate < $1.createDate }.first
+        let firstMedia = firstStep?.mediaList.sorted{ $0.captureDate < $1.captureDate }.first
         return firstMedia?.fileData
     }
 }

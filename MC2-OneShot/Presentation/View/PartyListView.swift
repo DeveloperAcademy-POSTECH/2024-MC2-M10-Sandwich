@@ -46,9 +46,6 @@ struct PartyListView: View {
                     //                            .resizable()
                     //                            .frame(width: 32, height: 32)
                     //                    }
-                    Image(.dummyProfile)
-                        .resizable()
-                        .frame(width: 32, height: 32)
                 }
                 .padding(.top, 3)
                 .padding(.bottom, 14)
@@ -68,7 +65,7 @@ struct PartyListView: View {
                     ForEach(Array(sortedStepList.enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step, startDate: party.startDate)
                         
-                        Divider()
+//                        Divider()
                     }
                 }
                 .toolbar {
@@ -102,7 +99,7 @@ struct PartyListView: View {
                                 isCommentPopupPresented = true
                             }, label: {
                                 Image(systemName: "text.bubble.fill")
-                                    .pretendard(.bold, 16.5)
+                                    .pretendard(.semiBold, 15)
                                     .foregroundStyle(.shotGreen)
                             })
                             .fullScreenCover(isPresented: $isCommentPopupPresented) {
@@ -215,6 +212,7 @@ struct StepCell: View {
                             .offset(y: -1)
                     }
                 })
+                .disabled(step.mediaList.isEmpty) 
                 .actionSheet(isPresented: $showActionSheet) {
                     ActionSheet(
                         title: Text("사진을 저장할 방법을 선택해 주세요"),

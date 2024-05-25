@@ -47,7 +47,7 @@ struct SearchView: View {
             }.searchable(
                 text: $searchText,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "기억하고 싶은 술자리를 검색해보세요"
+                prompt: "기억하고 싶은 술자리를 검색해 보세요"
                 
             )
         }
@@ -62,7 +62,7 @@ struct SearchView: View {
                 }
             }
         }
-        .navigationTitle("술자리 검색하기")
+        .navigationTitle("검색하기")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
