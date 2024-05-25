@@ -11,6 +11,11 @@ import SwiftData
 struct CommentPopupView: View {
     @Binding var isCommentPopupPresented: Bool
     @State var content: String = ""
+    @FocusState private var focusField: Field?
+        
+    enum Field: Hashable {
+        case content
+    }
     
     var party: Party
     
@@ -51,6 +56,10 @@ struct CommentPopupView: View {
                     .pretendard(.regular, 16)
                     .multilineTextAlignment(.leading)
                     .padding(.horizontal, 16)
+                    .focused($focusField, equals: .content)
+                    .onTapGesture {
+                        focusField = .content
+                    }
                     
                     ActionButton(
                         title: "닫기",
