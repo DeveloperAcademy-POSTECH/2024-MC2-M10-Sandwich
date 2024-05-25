@@ -10,21 +10,28 @@ import AVFoundation
 import Combine
 
 class CameraViewManager: ObservableObject {
-    private let manager: CameraManager
-    let cameraPreview: AnyView
+    let manager: CameraManager
+    @Published var cameraPreview: AnyView
     
     @Published var recentImage: UIImage?
+    @Published var isShot = false
+    @Published var isPhotoCaptureDone = false
     
     init() {
-        manager = CameraManager.shared
+        manager = CameraManager()
         cameraPreview = AnyView(CameraPreviewView(session: manager.session))
         
         manager.$recentImage
             .assign(to: &$recentImage)
+        
+        manager.$isPhotoCaptureDone
+            .assign(to: &$isPhotoCaptureDone)
+        
+        configure()
     }
     
     // 초기 설정
-    func configure() {
+    private func configure() {
         manager.requestAndCheckPermissions()
     }
     
@@ -51,12 +58,16 @@ class CameraViewManager: ObservableObject {
             self.manager.capturePhoto()
             print("찰칵")
         }
+        
+        isShot = true
+        
         print("CameraManager CapturePhoto 호출")
     }
     
     // 다시 촬영
     func retakePhoto() {
         manager.retakePhoto()
+        isShot = false
         print("CameraManager retakePhoto 호출")
     }
     
