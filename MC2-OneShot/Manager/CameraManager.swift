@@ -14,6 +14,7 @@ class CameraManager: NSObject, ObservableObject {
     private let output = AVCapturePhotoOutput()
     
     @Published var recentImage: UIImage?
+    @Published var isPhotoCaptureDone = false
     
     private let sessionQueue = DispatchQueue(label: "session queue")
     
@@ -55,14 +56,16 @@ class CameraManager: NSObject, ObservableObject {
     
     // 사진 캡처
     func capturePhoto() {
-        let photoSettings = AVCapturePhotoSettings()
+        let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
         output.capturePhoto(with: photoSettings, delegate: self)
+        
         print("사진 캡쳐")
     }
     
     // 화면 다시 촬영
     func retakePhoto() {
-        startSession()
+        isPhotoCaptureDone = false
+        // startSession()
     }
     
     // 카메라 전환
@@ -102,6 +105,13 @@ class CameraManager: NSObject, ObservableObject {
         }
     }
     
+    // 세션 정지
+    private func stopSession() {
+        sessionQueue.async {
+            self.session.stopRunning()
+        }
+    }
+    
     // 세션에 입력 추가
     private func addInputToSession(input: AVCaptureDeviceInput) {
         if session.canAddInput(input) {
@@ -130,11 +140,20 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
             self.recentImage = image // 최근 사진 반영
         }
         
-        
-        sessionQueue.async {
-            self.session.stopRunning() // 화면 멈춤
-        }
-        
         print("Capture 끝!")
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
+        
+        // 1. 사진 캡처 완료
+        isPhotoCaptureDone = true
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        AudioServicesDisposeSystemSoundID(1108)
+        
+    }
+    func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        AudioServicesDisposeSystemSoundID(1108)
     }
 }

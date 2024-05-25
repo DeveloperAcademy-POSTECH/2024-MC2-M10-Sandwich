@@ -123,13 +123,24 @@ struct PartyCameraView: View {
     // MARK: - MiddleView
     var MiddleView: some View {
         Group {
-            VStack {
-                viewManager.cameraPreview.ignoresSafeArea()
+            ZStack {
+                viewManager.cameraPreview
+                    .ignoresSafeArea()
                     .frame(width: 393, height: 393)
                     .aspectRatio(1, contentMode: .fit)
                     .cornerRadius(15)
+                    .padding(.top, 36)
+                
+                if viewManager.isPhotoCaptureDone {
+                    Image(uiImage: viewManager.recentImage ?? UIImage(resource: .appLogo))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 393, height: 393)
+                        .aspectRatio(1, contentMode: .fit)
+                        .cornerRadius(15)
+                        .padding(.top, 36)
+                }
             }
-            .padding(.top, 36)
             
             // 촬영 전
             if !viewManager.isShot {

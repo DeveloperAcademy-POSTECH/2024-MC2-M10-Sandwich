@@ -11,10 +11,11 @@ import Combine
 
 class CameraViewManager: ObservableObject {
     let manager: CameraManager
-    let cameraPreview: AnyView
+    @Published var cameraPreview: AnyView
     
     @Published var recentImage: UIImage?
     @Published var isShot = false
+    @Published var isPhotoCaptureDone = false
     
     init() {
         manager = CameraManager()
@@ -22,6 +23,9 @@ class CameraViewManager: ObservableObject {
         
         manager.$recentImage
             .assign(to: &$recentImage)
+        
+        manager.$isPhotoCaptureDone
+            .assign(to: &$isPhotoCaptureDone)
         
         configure()
     }
