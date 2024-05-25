@@ -34,7 +34,7 @@ class Party: Identifiable {
         stepList: [Step] = [Step()],
         isLive: Bool = true,
         isShutdown: Bool = false,
-        memberList: [Member] = [],
+        memberList: [Member],
         comment: String? = nil
     ) {
         self.id = UUID()

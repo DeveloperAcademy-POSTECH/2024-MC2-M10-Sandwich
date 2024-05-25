@@ -323,7 +323,7 @@ struct StepCell: View {
 
 #Preview {
     PartyListView(
-        party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60),
+        party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60, memberList: []),
         isCameraViewPresented: .constant(true)
     )
 }
