@@ -15,7 +15,7 @@ class CameraManager: NSObject, ObservableObject {
     private var videoDeviceInput: AVCaptureDeviceInput!
     private let output = AVCapturePhotoOutput()
     
-    @Published var arr: [Data] = []
+    @Published var isShot = false
     @Published var recentImage: UIImage?
     
     // 카메라 셋업 과정을 담당하는 함수
@@ -119,6 +119,8 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         DispatchQueue.global(qos: .background).async {
             self.session.stopRunning() // 화면 멈춤
         }
+        
+        isShot = true
         
         print("Capture 끝!")
     }

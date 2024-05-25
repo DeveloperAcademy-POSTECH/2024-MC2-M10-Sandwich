@@ -10,7 +10,7 @@ import AVFoundation
 import Combine
 
 class CameraViewManager: ObservableObject {
-    private let manager: CameraManager
+    let manager: CameraManager
     let cameraPreview: AnyView
     
     @Published var recentImage: UIImage?
