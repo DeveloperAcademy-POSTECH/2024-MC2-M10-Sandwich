@@ -14,6 +14,7 @@ class CameraViewManager: ObservableObject {
     let cameraPreview: AnyView
     
     @Published var recentImage: UIImage?
+    @Published var isShot = false
     
     init() {
         manager = CameraManager()
@@ -53,12 +54,16 @@ class CameraViewManager: ObservableObject {
             self.manager.capturePhoto()
             print("찰칵")
         }
+        
+        isShot = true
+        
         print("CameraManager CapturePhoto 호출")
     }
     
     // 다시 촬영
     func retakePhoto() {
         manager.retakePhoto()
+        isShot = false
         print("CameraManager retakePhoto 호출")
     }
     

@@ -71,7 +71,7 @@ struct PartyCameraView: View {
     // MARK: - HeaderView
     var HeaderView: some View {
         ZStack{
-            if !viewManager.manager.isShot {
+            if !viewManager.isShot {
                 HStack {
                     Button{
                         isCameraViewPresented.toggle()
@@ -132,7 +132,7 @@ struct PartyCameraView: View {
             .padding(.top, 36)
             
             // 촬영 전
-            if !viewManager.manager.isShot {
+            if !viewManager.isShot {
                 Button{
                     if let lastParty = partys.last {
                         cameraPathModel.paths.append(.partyList(party: lastParty))
@@ -165,7 +165,7 @@ struct PartyCameraView: View {
                 
                 // MARK: - 플래시 + 셀카 전환
                 // 촬영 전
-                if !viewManager.manager.isShot {
+                if !viewManager.isShot {
                     Button {
                         print("플래시")
                         if isFace || !isCamera{
@@ -212,11 +212,9 @@ struct PartyCameraView: View {
                 // 촬영 후
                 else {
                     Button {
-                        if viewManager.manager.isShot {
+                        if viewManager.isShot {
                             viewManager.retakePhoto()
                         }
-                        
-                        viewManager.manager.isShot = false
                     } label: {
                         Text("다시찍기")
                             .foregroundColor(.shotFF)
@@ -267,10 +265,9 @@ private struct CaptureButtonView: View {
     
     var body: some View {
         Button {
-            if viewManager.manager.isShot {
+            if viewManager.isShot {
                 viewManager.retakePhoto()
                 takePhoto()
-                viewManager.manager.isShot = false
             } else {
                 if isBolt{
                     viewManager.toggleFlash()
@@ -281,7 +278,7 @@ private struct CaptureButtonView: View {
             delayButton()
         } label: {
             ZStack{
-                if viewManager.manager.isShot {
+                if viewManager.isShot {
                     Circle()
                         .fill(Color.shotGreen)
                         .frame(width: 96, height: 96)

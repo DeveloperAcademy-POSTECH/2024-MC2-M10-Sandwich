@@ -13,7 +13,6 @@ class CameraManager: NSObject, ObservableObject {
     private var videoDeviceInput: AVCaptureDeviceInput!
     private let output = AVCapturePhotoOutput()
     
-    @Published var isShot = false
     @Published var recentImage: UIImage?
     
     private let sessionQueue = DispatchQueue(label: "session queue")
@@ -135,8 +134,6 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         sessionQueue.async {
             self.session.stopRunning() // 화면 멈춤
         }
-        
-        isShot = true
         
         print("Capture 끝!")
     }
