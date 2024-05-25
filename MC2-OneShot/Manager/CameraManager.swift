@@ -18,17 +18,23 @@ class CameraManager: NSObject, ObservableObject {
     @Published var isShot = false
     @Published var recentImage: UIImage?
     
+    private let sessionQueue = DispatchQueue(label: "session queue")
+    
     // 카메라 셋업 과정을 담당하는 함수
     func setUpCamera() {
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else { return }
         
-        do {
-            videoDeviceInput = try AVCaptureDeviceInput(device: device)
-            addInputToSession(input: videoDeviceInput)
-            addOutputToSession(output: output)
-            startSession()
-        } catch {
-            print("Error setting up camera: \(error)")
+        sessionQueue.async { [weak self] in
+            
+            guard let self = self else { return }
+            do {
+                videoDeviceInput = try AVCaptureDeviceInput(device: device)
+                addInputToSession(input: videoDeviceInput)
+                addOutputToSession(output: output)
+                startSession()
+            } catch {
+                print("Error setting up camera: \(error)")
+            }
         }
     }
     
@@ -38,9 +44,7 @@ class CameraManager: NSObject, ObservableObject {
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { [weak self] authStatus in
                 if authStatus {
-                    DispatchQueue.main.async {
-                        self?.setUpCamera()
-                    }
+                    self?.setUpCamera()
                 }
             }
         case .restricted, .denied:
@@ -66,28 +70,37 @@ class CameraManager: NSObject, ObservableObject {
     
     // 카메라 전환
     func changeCamera() {
-        let currentPosition = videoDeviceInput.device.position
-        let preferredPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
-        
-        print(preferredPosition == .back ? "후면카메라로 전환합니다." : "전면카메라로 전환합니다.")
-        
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: preferredPosition) else { return }
-        
-        do {
-            let newVideoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
-            session.beginConfiguration()
-            session.removeInput(videoDeviceInput)
-            addInputToSession(input: newVideoDeviceInput)
-            videoDeviceInput = newVideoDeviceInput
-            session.commitConfiguration()
-        } catch {
-            print("Error changing camera: \(error)")
+            let currentPosition = videoDeviceInput.device.position
+            let preferredPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
+            
+            print(preferredPosition == .back ? "후면카메라로 전환합니다." : "전면카메라로 전환합니다.")
+            
+            guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: preferredPosition) else {
+                print("videoDevice 객체 생성 실패")
+                return
+            }
+            
+        sessionQueue.async { [weak self] in
+            do {
+                guard let self = self else { return }
+                
+                let newVideoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
+                session.beginConfiguration()
+                session.removeInput(videoDeviceInput)
+                addInputToSession(input: newVideoDeviceInput)
+                videoDeviceInput = newVideoDeviceInput
+                session.commitConfiguration()
+                
+                print("잘 전환됨")
+            } catch {
+                print("Error changing camera: \(error)")
+            }
         }
     }
     
     // 세션 시작
     private func startSession() {
-        DispatchQueue.global(qos: .background).async {
+        sessionQueue.async {
             self.session.startRunning()
         }
     }
@@ -96,6 +109,8 @@ class CameraManager: NSObject, ObservableObject {
     private func addInputToSession(input: AVCaptureDeviceInput) {
         if session.canAddInput(input) {
             session.addInput(input)
+        } else {
+            print("Input이 추가되지 않음")
         }
     }
     
@@ -103,6 +118,8 @@ class CameraManager: NSObject, ObservableObject {
     private func addOutputToSession(output: AVCapturePhotoOutput) {
         if session.canAddOutput(output) {
             session.addOutput(output)
+        } else {
+            print("Output이 추가되지 않음")
         }
     }
 }
@@ -116,7 +133,8 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
             self.recentImage = image // 최근 사진 반영
         }
         
-        DispatchQueue.global(qos: .background).async {
+        
+        sessionQueue.async {
             self.session.stopRunning() // 화면 멈춤
         }
         
