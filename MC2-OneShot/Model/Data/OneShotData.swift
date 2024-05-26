@@ -85,3 +85,13 @@ class Member: Identifiable {
         self.profileImageData = profileImageData
     }
 }
+
+// MARK: - [Party]
+extension [Party] {
+    
+    /// 마지막(현재 진행 중인) 파티를 반환합니다.
+    var lastParty: Party? {
+        let sortedParty = self.sorted { $0.startDate < $1.startDate }
+        return sortedParty.last
+    }
+}

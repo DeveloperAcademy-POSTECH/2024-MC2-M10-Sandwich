@@ -8,60 +8,6 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - InitialView
-/// PersistentDataManager 생성을 위한 View
-struct InitialView: View {
-    
-    @Query private var partys: [Party]
-    
-    /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
-        return sortedParty.last
-    }
-    
-    /// 현재 파티가 라이브인지 확인하는 계산 속성
-    var isCurrentPartyLive: Bool {
-        if let safeParty = currentParty {
-            return safeParty.isLive
-        } else {
-            return false
-        }
-    }
-    
-    var modelContainer: ModelContainer
-    
-    var body: some View {
-        HomeView(
-            persistentDataManager: PersistentDataManager(
-                modelContext: modelContainer.mainContext
-            )
-        )
-        .onAppear {
-            NotificationManager.instance.requestAuthorization()
-            NotificationManager.instance.resetBadge()
-            // 라이브 중일 때 함수 호출
-            if isCurrentPartyLive {
-                updatePartyService()
-            }
-        }
-    }
-    
-    /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
-    func updatePartyService() {
-        
-        guard let party = currentParty else {
-            print("파티 없음")
-            return
-        }
-        
-        let currentStartDate = party.startDate
-        let currentNotiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
-        
-        PartyService.shared.setPartyService(startDate: currentStartDate, notiCycle: currentNotiCycle)
-    }
-}
-
 // MARK: - HomeView
 struct HomeView: View {
     
@@ -120,9 +66,9 @@ struct HomeView: View {
                     }
                     
                     ListView(isFirstInfoVisible: $isFirstInfoVisible)
-                  
+                    
                 }
-
+                
                 ActionButton(
                     title: isCurrentPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
                     buttonType: isCurrentPartyLive ? .popupfinish : .primary
@@ -182,7 +128,7 @@ struct HomeView: View {
                         
                         // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
                         if restTime > 0 {
-
+                            
                             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
                                 isPartyResultViewPresented.toggle()
                                 currentParty.isShutdown = true
@@ -190,7 +136,7 @@ struct HomeView: View {
                             
                             print("현재Step마지막 - 현재시간 > 0 : 초과X -> 카메라")
                             isCameraViewPresented.toggle()
-                        
+                            
                         }
                         // 현재Step마지막 - 현재시간 > 0 : 초과일 때
                         else {
@@ -211,7 +157,7 @@ struct HomeView: View {
                         
                         
                         if restTime > 0 {
-
+                            
                             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
                                 isPartyResultViewPresented.toggle()
                                 currentParty.isShutdown = true
@@ -273,7 +219,7 @@ private struct ListView: View {
                     
                     //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
                     isFirstInfoVisible = partys.isEmpty
-                
+                    
                     
                 } label: {
                     Text("삭제하기")
@@ -281,9 +227,9 @@ private struct ListView: View {
                 .tint(.red)
             }
             .onAppear{
-               //alert
-               isFirstInfoVisible = partys.isEmpty
-           }
+                //alert
+                isFirstInfoVisible = partys.isEmpty
+            }
             .alert(selectedParty.isLive ? Text("진행중인 술자리는 지울 수 없어,, ") :Text("진짤루?\n 술자리 기억...지우..는거야..?"),isPresented: $showAlert) {
                 if selectedParty.isLive{
                     Button(role: .cancel) {
