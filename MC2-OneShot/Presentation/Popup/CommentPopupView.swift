@@ -12,7 +12,7 @@ struct CommentPopupView: View {
     @Binding var isCommentPopupPresented: Bool
     @State var content: String = ""
     @FocusState private var focusField: Field?
-        
+    
     enum Field: Hashable {
         case content
     }
@@ -81,5 +81,5 @@ struct CommentPopupView: View {
 }
 
 #Preview {
-    CommentPopupView(isCommentPopupPresented: .constant(true), party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60))
+    CommentPopupView(isCommentPopupPresented: .constant(true), party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60, memberList: []))
 }

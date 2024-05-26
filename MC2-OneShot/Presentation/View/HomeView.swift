@@ -245,7 +245,7 @@ private struct ListView: View {
     @EnvironmentObject var persistentDataManager: PersistentDataManager
     
     @State private var showAlert = false
-    @State private var selectedParty: Party = Party(title: "", startDate: Date(), notiCycle: 0)
+    @State private var selectedParty: Party = Party(title: "", startDate: Date(), notiCycle: 0, memberList: [])
     
     @Binding var isFirstInfoVisible: Bool
     

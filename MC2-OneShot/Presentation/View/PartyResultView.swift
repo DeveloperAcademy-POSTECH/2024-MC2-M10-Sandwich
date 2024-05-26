@@ -94,6 +94,10 @@ struct PartyResultView: View {
             
             ListView()
             
+            if let currentParty = currentParty {
+                MemberResultView(party: currentParty)
+            }
+            
             HStack(spacing: 8) {
                 ActionButton(
                     title: "홈으로 돌아가기",
@@ -236,6 +240,52 @@ private struct ListView: View {
         let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: partys.last?.startDate ?? Date()).hourMinute
         
         return "\(startTime) ~ \(finishTime)"
+    }
+}
+
+// MARK: - MemberResult View
+private struct MemberResultView: View {
+    
+    var party: Party
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
+    var body: some View {
+        List{
+            Section{
+                VStack(alignment: .leading, spacing: 0){
+                    HStack{
+                        Circle()
+                            .frame(width: 8, height: 8)
+                            .foregroundColor(.shotGreen)
+                        
+                        Text("함께한 사람들")
+                            .pretendard(.bold, 14)
+                            .foregroundColor(.shotFF)
+                            .padding(.leading,8)
+                        
+                    }
+                    
+                    LazyVGrid(columns: columns, spacing: 18) {
+                        ForEach(party.memberList, id: \.self) { member in
+                                if let image = UIImage(data: member.profileImageData) {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .frame (width: 60, height: 60)
+                                        .clipShape(Circle())
+                                }
+                            }
+                    }
+                    .padding(.top, 18)
+                    .padding(.bottom, 8)
+                }
+            }
+        }
     }
 }
 

@@ -39,25 +39,65 @@ struct PartyListView: View {
                         .pretendard(.bold, 25)
                         .foregroundStyle(.shotFF)
                     Spacer()
-                    //                    Button {
-                    //                        isMemberPopupPresented.toggle()
-                    //                    } label: {
-                    //                        Image(.dummyProfile)
-                    //                            .resizable()
-                    //                            .frame(width: 32, height: 32)
-                    //                    }
+                    
+                    Button(action: {
+                        isMemberPopupPresented.toggle()
+                    }, label: {
+                        ZStack(alignment: .trailing) {
+                            switch party.memberList.count {
+                            case 1...3:
+                                ForEach(party.memberList.indices, id: \.self) { index in
+                                    if let image = UIImage(data: party.memberList[index].profileImageData) {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .frame (width: 32, height: 32)
+                                            .clipShape(Circle())
+                                            .padding(.trailing, 24*CGFloat(index))
+                                    }
+                                }
+                                
+                            case 4...:
+                                ForEach(0..<2) { index in
+                                    if let image = UIImage(data: party.memberList[index].profileImageData) {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .frame (width: 32, height: 32)
+                                            .clipShape(Circle())
+                                            .padding(.trailing, 24*CGFloat(index))
+                                    }
+                                }
+                                
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 32)
+                                        .foregroundStyle(.shot00)
+                                    Text("+\(party.memberList.count - 2)")
+                                        .pretendard(.semiBold, 17)
+                                        .foregroundStyle(.shotC6)
+                                }
+                                .padding(.trailing, 24*2)
+                                
+                            default:
+                                EmptyView()
+                            }
+                        }
+                    })
+                    .disabled(party.memberList.isEmpty)
+                    .fullScreenCover(isPresented: $isMemberPopupPresented) {
+                        MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented, memberList: party.memberList)
+                            .foregroundStyle(.shotFF)
+                            .presentationBackground(.black.opacity(0.7))
+                    }
+                    .transaction { transaction in
+                        transaction.disablesAnimations = true
+                    }
+                    
+                    
                 }
                 .padding(.top, 3)
                 .padding(.bottom, 14)
                 .padding(.horizontal, 16)
-                .fullScreenCover(isPresented: $isMemberPopupPresented) {
-                    MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
-                        .foregroundStyle(.shotFF)
-                        .presentationBackground(.black.opacity(0.7))
-                }
-                .transaction { transaction in
-                    transaction.disablesAnimations = true
-                }
+                
                 
                 Divider()
                 
@@ -65,7 +105,7 @@ struct PartyListView: View {
                     ForEach(Array(sortedStepList.enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step, startDate: party.startDate)
                         
-//                        Divider()
+                        //                        Divider()
                     }
                 }
                 .toolbar {
@@ -212,7 +252,7 @@ struct StepCell: View {
                             .offset(y: -1)
                     }
                 })
-                .disabled(step.mediaList.isEmpty) 
+                .disabled(step.mediaList.isEmpty)
                 .actionSheet(isPresented: $showActionSheet) {
                     ActionSheet(
                         title: Text("사진을 저장할 방법을 선택해 주세요"),
@@ -273,7 +313,7 @@ struct StepCell: View {
                         .transition(.opacity)
                 }
             }
-            .animation(.easeInOut, value: showToast)
+                .animation(.easeInOut, value: showToast)
         )
     }
     
@@ -323,7 +363,7 @@ struct StepCell: View {
 
 #Preview {
     PartyListView(
-        party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60),
+        party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60, memberList: []),
         isCameraViewPresented: .constant(true)
     )
 }

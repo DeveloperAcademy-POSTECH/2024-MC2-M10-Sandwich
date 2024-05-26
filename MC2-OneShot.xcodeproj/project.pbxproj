@@ -43,6 +43,7 @@
 		98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
 		BF2E72C32BF3472C008A2D1F /* Colorsets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */; };
+		BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C8E832C01F300005638A2 /* MemberCameraView.swift */; };
 		BFB534072BF342840013E9FE /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB533FE2BF342830013E9FE /* Pretendard-Light.otf */; };
 		BFB534082BF342840013E9FE /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB533FF2BF342830013E9FE /* Pretendard-Thin.otf */; };
 		BFB534092BF342840013E9FE /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB534002BF342830013E9FE /* Pretendard-Bold.otf */; };
@@ -93,6 +94,7 @@
 		98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
 		BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colorsets.xcassets; sourceTree = "<group>"; };
+		BF7C8E832C01F300005638A2 /* MemberCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCameraView.swift; sourceTree = "<group>"; };
 		BFB533FE2BF342830013E9FE /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
 		BFB533FF2BF342830013E9FE /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		BFB534002BF342830013E9FE /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				82D564542BFC22440091C2BC /* CameraPreviewView.swift */,
 				8264EA272BF2013000586FA0 /* PartyResultView.swift */,
 				8264EA292BF2014200586FA0 /* PartyListView.swift */,
+				BF7C8E832C01F300005638A2 /* MemberCameraView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				8264EA2E2BF2016500586FA0 /* CommentPopupView.swift in Sources */,
 				82D564552BFC22440091C2BC /* CameraPreviewView.swift in Sources */,
 				1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */,
+				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
 				82B49BE42BF88E1700119628 /* PersistentDataManager.swift in Sources */,
 				8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */,
@@ -530,7 +534,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = 9XG4S4XZWN;
+				DEVELOPMENT_TEAM = 8U8S6CBZ9D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -548,7 +552,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sandwich.ADA.MC2.OneShot;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot-jongchang";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -564,7 +568,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = 9XG4S4XZWN;
+				DEVELOPMENT_TEAM = 8U8S6CBZ9D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -582,7 +586,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sandwich.ADA.MC2.OneShot;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot-jongchang";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

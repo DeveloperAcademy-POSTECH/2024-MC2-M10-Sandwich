@@ -24,11 +24,12 @@ final class PersistentDataManager: ObservableObject {
 extension PersistentDataManager {
     
     /// 술자리를 시작할 때 생성하는 Party 데이터입니다.
-    func createParty(title: String, startDate: Date, notiCycle: NotiCycle) {
+    func createParty(title: String, startDate: Date, notiCycle: NotiCycle, memberList: [Member]) {
         let newParty = Party(
             title: title,
             startDate: startDate,
-            notiCycle: notiCycle.rawValue
+            notiCycle: notiCycle.rawValue,
+            memberList: memberList
         )
         
         modelContext.insert(newParty)
