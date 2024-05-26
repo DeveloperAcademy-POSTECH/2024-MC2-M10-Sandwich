@@ -14,6 +14,7 @@ struct TableListView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var isShowAlert = false
+    @State private var selectedParty: Party?
     @Binding var isFirstInfoVisible: Bool
     
     @Query private var partys: [Party]
@@ -36,19 +37,21 @@ struct TableListView: View {
             }
             .swipeActions {
                 Button {
+                    selectedParty = party
                     self.isShowAlert.toggle()
                 } label: {
                     Text("삭제하기")
                 }
                 .tint(.red)
             }
-            .alert(deletePartyAlertText(party), isPresented: $isShowAlert) {
-                if party.isLive {
+            .alert(deletePartyAlertText, isPresented: $isShowAlert) {
+                if selectedParty?.isLive ?? false {
                     Button("확인", role: .none) {}
                 } else {
                     Button("지우기", role: .destructive) {
+                        guard let selectedParty = selectedParty else { return }
                         HapticManager.shared.notification(type: .success)
-                        modelContext.delete(party)
+                        modelContext.delete(selectedParty)
                         isFirstInfoVisible = partys.isEmpty
                     }
                     
@@ -60,8 +63,9 @@ struct TableListView: View {
     }
     
     /// 리스트에서 파티를 삭제할 때 출력되는 텍스트입니다.
-    private func deletePartyAlertText(_ party: Party) -> String {
-        if party.isLive { return "진행중인 술자리는 지울 수 없어,,," }
+    private var deletePartyAlertText: String {
+        guard let selectedParty = selectedParty else { return "" }
+        if selectedParty.isLive { return "진행중인 술자리는 지울 수 없어,,," }
         else { return "진짤루?\n 술자리 기억...지우..는거야..?" }
     }
 }
