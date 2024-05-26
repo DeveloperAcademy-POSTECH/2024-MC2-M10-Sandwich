@@ -8,20 +8,7 @@
 import SwiftUI
 
 struct MemberPopupView: View {
-    var party: Party = Party(
-        title: "포항공대애애앵",
-        startDate: Date(),
-        notiCycle: 30,
-        memberList: [
-            Member(profileImageData: Data()),
-            Member(profileImageData: Data()),
-            Member(profileImageData: Data()),
-            Member(profileImageData: Data()),
-            Member(profileImageData: Data()),
-            Member(profileImageData: Data()),
-            Member(profileImageData: Data())
-        ]
-    )
+
     
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 20),
@@ -32,14 +19,16 @@ struct MemberPopupView: View {
     
     @Binding var isMemberPopupPresented: Bool
     
+    var memberList: [Member]
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    .frame(width: 361, height: 334)
+                    .frame(width: 361, height: 320)
                     .foregroundStyle(.shot25)
                 
-                VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         Image(systemName: "person.fill")
                             .pretendard(.bold, 17)
@@ -48,23 +37,10 @@ struct MemberPopupView: View {
                         Text("함께한 사람들")
                             .pretendard(.bold, 17)
                             .foregroundStyle(.shotFF)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isMemberPopupPresented.toggle()
-                        }, label: {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 30, height: 30)
-                                    .foregroundStyle(.shotC6)
-                                Image(systemName: "xmark")
-                                    .pretendard(.semiBold, 16)
-                                    .foregroundStyle(.shot25)
-                            }
-                        })
-                        
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+                    
                     
                     ZStack(alignment: .top) {
                         Image(.imgLogo)
@@ -73,10 +49,30 @@ struct MemberPopupView: View {
                             .padding(.top, 33)
                             .padding(.bottom, 12)
                         
-                        LazyVGrid(columns: columns, spacing: 30) {
-                                ForEach(party.memberList.indices, id: \.self) { index in
-                                    PeopleCell(member: party.memberList[index])
-                                }
+                        VStack(spacing: 0) {
+                            LazyVGrid(columns: columns, spacing: 30) {
+                                    ForEach(memberList, id: \.self) { member in
+                                        if let image = UIImage(data: member.profileImageData) {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .frame (width: 60, height: 60)
+                                                .clipShape(Circle())
+                                        }
+                                    }
+                            }
+                            .padding(.bottom, 30)
+                            .frame(width: 329, height: 150, alignment: .top)
+                            
+                            ActionButton(
+                                title: "닫기",
+                                buttonType: .popupfinish
+                            ) {
+                                isMemberPopupPresented.toggle()
+                            }
+                            .frame(width: 329, height: 50)
+                            .padding(.top, 30)
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 16)
                         }
                         .padding(.top, 30)
                     }
@@ -88,15 +84,7 @@ struct MemberPopupView: View {
     }
 }
 
-struct PeopleCell: View {
-    var member: Member
-    
-    var body: some View {
-        Circle()
-            .frame(width: 60, height: 60)
-    }
-}
 
 #Preview {
-    MemberPopupView(isMemberPopupPresented: .constant(true))
+    MemberPopupView(isMemberPopupPresented: .constant(true), memberList: [])
 }

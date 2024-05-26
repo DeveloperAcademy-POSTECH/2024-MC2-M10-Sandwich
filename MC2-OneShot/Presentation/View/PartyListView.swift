@@ -40,63 +40,64 @@ struct PartyListView: View {
                         .foregroundStyle(.shotFF)
                     Spacer()
                     
-                    if party.memberList.count > 0 {
-                        Button {
-                            isMemberPopupPresented.toggle()
-                        } label: {
-                            ZStack(alignment: .trailing) {
-                                switch party.memberList.count {
-                                case 1...3:
-                                    ForEach(party.memberList.indices, id: \.self) { index in
-                                        if let image = UIImage(data: party.memberList[index].profileImageData) {
-                                            Image(uiImage: image)
-                                                .resizable()
-                                                .frame (width: 32, height: 32)
-                                                .clipShape(Circle())
-                                                .padding(.trailing, 24*CGFloat(index))
-                                        }
+                    Button(action: {
+                        isMemberPopupPresented.toggle()
+                    }, label: {
+                        ZStack(alignment: .trailing) {
+                            switch party.memberList.count {
+                            case 1...3:
+                                ForEach(party.memberList.indices, id: \.self) { index in
+                                    if let image = UIImage(data: party.memberList[index].profileImageData) {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .frame (width: 32, height: 32)
+                                            .clipShape(Circle())
+                                            .padding(.trailing, 24*CGFloat(index))
                                     }
-                                    
-                                case 4...:
-                                    ForEach(0..<2) { index in
-                                        if let image = UIImage(data: party.memberList[index].profileImageData) {
-                                            Image(uiImage: image)
-                                                .resizable()
-                                                .frame (width: 32, height: 32)
-                                                .clipShape(Circle())
-                                                .padding(.trailing, 24*CGFloat(index))
-                                        }
-                                    }
-                                    
-                                    ZStack {
-                                        Circle()
-                                            .frame(width: 32)
-                                            .foregroundStyle(.shot00)
-                                        Text("+\(party.memberList.count - 2)")
-                                            .pretendard(.semiBold, 17)
-                                            .foregroundStyle(.shotC6)
-                                    }
-                                    .padding(.trailing, 24*2)
-                                    
-                                default:
-                                    EmptyView()
                                 }
+                                
+                            case 4...:
+                                ForEach(0..<2) { index in
+                                    if let image = UIImage(data: party.memberList[index].profileImageData) {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .frame (width: 32, height: 32)
+                                            .clipShape(Circle())
+                                            .padding(.trailing, 24*CGFloat(index))
+                                    }
+                                }
+                                
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 32)
+                                        .foregroundStyle(.shot00)
+                                    Text("+\(party.memberList.count - 2)")
+                                        .pretendard(.semiBold, 17)
+                                        .foregroundStyle(.shotC6)
+                                }
+                                .padding(.trailing, 24*2)
+                                
+                            default:
+                                EmptyView()
                             }
                         }
+                    })
+                    .disabled(party.memberList.isEmpty)
+                    .fullScreenCover(isPresented: $isMemberPopupPresented) {
+                        MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented, memberList: party.memberList)
+                            .foregroundStyle(.shotFF)
+                            .presentationBackground(.black.opacity(0.7))
                     }
+                    .transaction { transaction in
+                        transaction.disablesAnimations = true
+                    }
+                    
                     
                 }
                 .padding(.top, 3)
                 .padding(.bottom, 14)
                 .padding(.horizontal, 16)
-                .fullScreenCover(isPresented: $isMemberPopupPresented) {
-                    MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented)
-                        .foregroundStyle(.shotFF)
-                        .presentationBackground(.black.opacity(0.7))
-                }
-                .transaction { transaction in
-                    transaction.disablesAnimations = true
-                }
+                
                 
                 Divider()
                 
