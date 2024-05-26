@@ -23,19 +23,13 @@ struct InitialView: View {
         )
         .onAppear {
             setupNotification()
-            if isCurrentPartyLive { setupPartyService() }
+            if partys.isLastParyLive { setupPartyService() }
         }
     }
 }
 
 // MARK: - View Funcion
 extension InitialView {
-    
-    /// 현재 파티가 라이브인지 확인하는 계산 속성
-    private var isCurrentPartyLive: Bool {
-        if let party = partys.lastParty { return party.isLive }
-        else { return false }
-    }
     
     /// 초기 Notification을 설정합니다.
     private func setupNotification() {

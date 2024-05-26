@@ -121,7 +121,7 @@ struct PartyResultView: View {
             currentParty?.isLive = false
             
             if let lastParty = currentParty,
-               let lastStep = lastParty.lastStep {
+               let lastStep = lastParty.sortedStepList.last {
                 
                 if lastStep.mediaList.isEmpty {
                     modelContext.delete(lastStep)
