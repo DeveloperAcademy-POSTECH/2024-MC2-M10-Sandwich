@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+// MARK: - Party
 @Model
 class Party: Identifiable {
     @Attribute(.unique) let id: UUID
@@ -23,6 +24,7 @@ class Party: Identifiable {
     @Relationship(deleteRule: .cascade) var memberList: [Member]
     var comment: String?
     
+    /// StepList를 정렬 후 마지막 Step을 반환합니다.
     var lastStep: Step? {
         return stepList.sorted { $0.createDate < $1.createDate }.last
     }
@@ -49,6 +51,7 @@ class Party: Identifiable {
     }
 }
 
+// MARK: - Step
 @Model
 class Step: Identifiable {
     
@@ -61,6 +64,7 @@ class Step: Identifiable {
     }
 }
 
+// MARK: - Media
 @Model
 class Media: Identifiable {
     var fileData: Data
@@ -72,6 +76,7 @@ class Media: Identifiable {
     }
 }
 
+// MARK: - Member
 @Model
 class Member: Identifiable {
     let profileImageData: Data
