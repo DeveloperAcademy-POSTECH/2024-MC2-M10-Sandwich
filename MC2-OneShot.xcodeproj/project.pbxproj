@@ -35,6 +35,8 @@
 		8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA312BF2017300586FA0 /* ShutdownPopupView.swift */; };
 		8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA332BF2021D00586FA0 /* PathModel.swift */; };
 		827616782BFED788008099F4 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827616772BFED788008099F4 /* HapticManager.swift */; };
+		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
+		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE12BF88A7B00119628 /* MockModelContainer.swift */; };
 		82B49BE42BF88E1700119628 /* PersistentDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE32BF88E1700119628 /* PersistentDataManager.swift */; };
 		82D564502BFB80880091C2BC /* Helper+Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D5644F2BFB80880091C2BC /* Helper+Constant.swift */; };
@@ -86,6 +88,8 @@
 		8264EA312BF2017300586FA0 /* ShutdownPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutdownPopupView.swift; sourceTree = "<group>"; };
 		8264EA332BF2021D00586FA0 /* PathModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathModel.swift; sourceTree = "<group>"; };
 		827616772BFED788008099F4 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
+		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82B49BE12BF88A7B00119628 /* MockModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockModelContainer.swift; sourceTree = "<group>"; };
 		82B49BE32BF88E1700119628 /* PersistentDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataManager.swift; sourceTree = "<group>"; };
 		82D5644F2BFB80880091C2BC /* Helper+Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+Constant.swift"; sourceTree = "<group>"; };
@@ -193,6 +197,8 @@
 			isa = PBXGroup;
 			children = (
 				8264EA332BF2021D00586FA0 /* PathModel.swift */,
+				82A0C79E2C030CBA00686604 /* HomePath.swift */,
+				82A0C7A02C030CE000686604 /* CameraPath.swift */,
 				82016BF62BF7034A00BF01CF /* NotiCycle.swift */,
 				825F0BDC2BF32F46001B416A /* OneShotData.swift */,
 				82B49BE12BF88A7B00119628 /* MockModelContainer.swift */,
@@ -380,6 +386,7 @@
 				82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */,
 				8264EA122BF2000900586FA0 /* HomeView.swift in Sources */,
 				8264EA2E2BF2016500586FA0 /* CommentPopupView.swift in Sources */,
+				82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */,
 				82D564552BFC22440091C2BC /* CameraPreviewView.swift in Sources */,
 				1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */,
 				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
@@ -393,6 +400,7 @@
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
 				1EDF2C1A2BFD856C003291F4 /* Helper+HideKeyboard.swift in Sources */,
 				82D564502BFB80880091C2BC /* Helper+Constant.swift in Sources */,
+				82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
@@ -534,7 +542,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = 8U8S6CBZ9D;
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
@@ -568,7 +576,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2-OneShot/Preview Content\"";
-				DEVELOPMENT_TEAM = 8U8S6CBZ9D;
+				DEVELOPMENT_TEAM = 9XG4S4XZWN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";

@@ -10,27 +10,27 @@ import SwiftData
 
 @main
 struct MC2_OneShotApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    /// SwiftData ModelContainer 생성
-    var modelContainer: ModelContainer = {
-        
-        // 1. Scehema 및 ModelConfiguration 생성
-        let schema = Schema([Party.self])
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        
-        // 2. ModelContainer 생성
-        do {
-            return try ModelContainer(for: schema, configurations: [configuration])
-        } catch {
-            fatalError("ModelContainer 생성 실패: \(error.localizedDescription)")
-        }
-    }()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
             InitialView(modelContainer: modelContainer)
         }
         .modelContainer(modelContainer)
+    }
+}
+
+// MARK: - SwiftData
+extension MC2_OneShotApp {
+    
+    /// SwiftData ModelContainer 생성
+    private var modelContainer: ModelContainer {
+        
+        let schema = Schema([Party.self])
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        
+        do { return try ModelContainer(for: schema, configurations: [configuration]) }
+        catch { fatalError("ModelContainer 생성 실패: \(error.localizedDescription)") }
     }
 }
