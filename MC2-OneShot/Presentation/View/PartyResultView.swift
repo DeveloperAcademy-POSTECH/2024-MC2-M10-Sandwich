@@ -258,7 +258,7 @@ private struct MemberResultView: View {
     var body: some View {
         List{
             Section{
-                VStack(alignment: .leading){
+                VStack(alignment: .leading, spacing: 0){
                     HStack{
                         Circle()
                             .frame(width: 8, height: 8)
@@ -271,8 +271,7 @@ private struct MemberResultView: View {
                         
                     }
                     
-                    
-                    LazyVGrid(columns: columns, spacing: 30) {
+                    LazyVGrid(columns: columns, spacing: 18) {
                         ForEach(party.memberList, id: \.self) { member in
                                 if let image = UIImage(data: member.profileImageData) {
                                     Image(uiImage: image)
@@ -282,9 +281,9 @@ private struct MemberResultView: View {
                                 }
                             }
                     }
-                    
+                    .padding(.top, 18)
+                    .padding(.bottom, 8)
                 }
-                
             }
         }
     }
