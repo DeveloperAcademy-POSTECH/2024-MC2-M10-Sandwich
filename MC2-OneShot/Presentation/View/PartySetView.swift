@@ -128,32 +128,33 @@ private struct MemberListView: View {
                         if let image = UIImage(data: member.profileImageData) {
                             Image(uiImage: image)
                                 .resizable()
-                                .frame (width: 60, height: 60)
+                                .frame(width: 60, height: 60)
                                 .clipShape(Circle())
                         }
                     }
                     
-                    Button {
-                        isCameraViewPresented.toggle()
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .frame(width: 60)
-                                .foregroundStyle(.shot33)
-                            Image(systemName: "plus")
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                                .foregroundStyle(.shot6D)
+                    // + 버튼을 조건부로 표시
+                    if membersInfo.count < 8 {
+                        Button {
+                            isCameraViewPresented.toggle()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 60)
+                                    .foregroundStyle(.shot33)
+                                Image(systemName: "plus")
+                                    .resizable()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundStyle(.shot6D)
+                            }
                         }
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                    .fullScreenCover(isPresented: $isCameraViewPresented) {
-                        MemberCameraView(isCameraViewPresented: $isCameraViewPresented, membersInfo: $membersInfo)
+                        .buttonStyle(BorderlessButtonStyle())
+                        .fullScreenCover(isPresented: $isCameraViewPresented) {
+                            MemberCameraView(isCameraViewPresented: $isCameraViewPresented, membersInfo: $membersInfo)
+                        }
                     }
                 }
                 .padding(.bottom, 8)
-                
-                
             }
         } footer: {
             // footer 변경
