@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// HomeView에서 이동할 수 있는 PathType
 enum HomePathType: Hashable {
@@ -21,5 +22,23 @@ final class HomePathModel: PathModel {
     
     init(paths: [HomePathType] = []) {
         self.paths = paths
+    }
+}
+
+private struct HomePathDestination: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .navigationDestination(for: HomePathType.self) { path in
+                switch path {
+                case let .partyList(party): PartyListView(party: party, isCameraViewPresented: .constant(false))
+                case .searchList: SearchView()
+                }
+            }
+    }
+}
+
+extension View {
+    func homePathDestination() -> some View {
+        self.modifier(HomePathDestination())
     }
 }
