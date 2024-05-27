@@ -94,8 +94,9 @@ struct PartyResultView: View {
             
             ListView()
             
-            if let currentParty = currentParty {
+            if let currentParty = currentParty, let memberList = partys.last?.memberList, !memberList.isEmpty {
                 MemberResultView(party: currentParty)
+                    .padding(.top, -20)
             }
             
             HStack(spacing: 8) {
@@ -116,6 +117,7 @@ struct PartyResultView: View {
             }
             .padding()
         }
+        .scrollDisabled(true)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             currentParty?.isLive = false
