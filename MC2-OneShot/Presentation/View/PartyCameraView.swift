@@ -174,7 +174,6 @@ struct PartyCameraView: View {
     var BottomView: some View {
         ZStack {
             HStack {
-                
                 // MARK: - 플래시 + 셀카 전환
                 // 촬영 전
                 if !viewManager.isShot {
@@ -283,8 +282,13 @@ private struct CaptureButtonView: View {
             } else {
                 if isBolt{
                     viewManager.toggleFlash()
+                    viewManager.capturePhoto()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // 0.5초 후에 플래시가 꺼짐
+                        viewManager.toggleFlash()
+                    }
+                } else {
+                    viewManager.capturePhoto()
                 }
-                viewManager.capturePhoto()
             }
             
             delayButton()

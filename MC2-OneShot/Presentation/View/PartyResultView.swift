@@ -94,8 +94,9 @@ struct PartyResultView: View {
             
             ListView()
             
-            if let currentParty = currentParty {
+            if let currentParty = currentParty, let memberList = partys.last?.memberList, !memberList.isEmpty {
                 MemberResultView(party: currentParty)
+                    .padding(.top, -20)
             }
             
             HStack(spacing: 8) {
@@ -116,6 +117,7 @@ struct PartyResultView: View {
             }
             .padding()
         }
+        .scrollDisabled(true)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             currentParty?.isLive = false
@@ -234,12 +236,16 @@ private struct ListView: View {
         //    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
         //    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
         
-        // 일단 강제 종료일 경우
         let allSteptime = (stepCount + 1) * (partys.last?.notiCycle ?? 60)
         
-        let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: partys.last?.startDate ?? Date()).hourMinute
-        
-        return "\(startTime) ~ \(finishTime)"
+        // 자동 종료된 경우
+        if ((partys.last?.isShutdown) == true) {
+            let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: partys.last?.startDate ?? Date()).hourMinute
+            return "\(startTime) ~ \(finishTime)"
+        } else { // 직접 종료한 경우
+            let finishTime = Date().hourMinute
+            return "\(startTime) ~ \(finishTime)"
+        }
     }
 }
 
