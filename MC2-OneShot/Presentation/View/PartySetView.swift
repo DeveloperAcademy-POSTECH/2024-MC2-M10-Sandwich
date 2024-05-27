@@ -219,7 +219,7 @@ private struct NotiCycleView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 14, height: 14)
-                Text("무음모드를 해제해주세요!")
+                Text("무음모드를 해제해 주세요!")
                     .pretendard(.regular, 12)
             }
         }
