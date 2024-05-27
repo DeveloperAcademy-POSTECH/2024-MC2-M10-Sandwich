@@ -19,7 +19,9 @@ class CameraViewManager: ObservableObject {
     
     init() {
         manager = CameraManager()
-        cameraPreview = AnyView(CameraPreviewView(session: manager.session))
+        cameraPreview = AnyView(
+            CameraPreviewView(session: manager.session)
+        )
         
         manager.$recentImage
             .assign(to: &$recentImage)

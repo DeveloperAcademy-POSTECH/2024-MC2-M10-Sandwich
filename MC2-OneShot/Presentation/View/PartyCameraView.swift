@@ -131,6 +131,7 @@ struct PartyCameraView: View {
                     .cornerRadius(15)
                     .padding(.top, 36)
                 
+                
                 if viewManager.isPhotoCaptureDone {
                     Image(uiImage: viewManager.recentImage ?? UIImage(resource: .appLogo))
                         .resizable()
@@ -428,3 +429,5 @@ private struct StepInfoView: View {
         }
     }
 }
+
+
