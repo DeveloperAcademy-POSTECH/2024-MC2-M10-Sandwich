@@ -130,12 +130,25 @@ private struct TableListStateInfoLabel: View {
     let stepCount: Int
     
     var body: some View {
-        Text(stateInfo == .live ? "LIVE" : "STEP \(stepCount.intformatter)")
-            .frame(width: 76, height: 22)
+        if stateInfo == .live {
+            Text("LIVE")
+                .pretendard(.bold, 14)
+                .foregroundStyle(Color.shot00)
+                .frame(width: 76, height: 22)
+                .background(Color.shotGreen)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+        } else {
+            HStack(spacing: 0) {
+                Text("STEP ")
+                    .foregroundStyle(Color.shotD8)
+                Text("\(stepCount.intformatter)")
+                    .foregroundStyle(Color.shotGreen)
+            }
             .pretendard(.bold, 14)
-            .background(stateInfo == .live ? .shotGreen : .shot33)
-            .foregroundStyle(stateInfo == .live ? .shot00 : .shotD8)
+            .frame(width: 76, height: 22)
+            .background(Color.shot33)
             .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
     }
 }
 
