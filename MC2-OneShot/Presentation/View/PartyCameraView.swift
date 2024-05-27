@@ -320,7 +320,7 @@ private struct CaptureButtonView: View {
         HapticManager.shared.notification(type: .success)
         
         if let lastParty = currentParty,
-           let lastStep = lastParty.lastStep {
+           let lastStep = lastParty.sortedStepList.last {
             
             // MARK: - 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
             if lastStep.mediaList.isEmpty {
@@ -380,7 +380,7 @@ private struct StepInfoView: View {
     var body: some View {
         VStack(spacing: 0){
             if let lastParty = currentParty,
-               let lastStep = lastParty.lastStep {
+               let lastStep = lastParty.sortedStepList.last {
                 // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
                 if lastStep.mediaList.isEmpty {
                     ZStack{

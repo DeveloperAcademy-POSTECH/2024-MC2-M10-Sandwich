@@ -7,7 +7,9 @@
 
 import Foundation
 import SwiftData
+import UIKit
 
+// MARK: - Party
 @Model
 class Party: Identifiable {
     @Attribute(.unique) let id: UUID
@@ -23,8 +25,21 @@ class Party: Identifiable {
     @Relationship(deleteRule: .cascade) var memberList: [Member]
     var comment: String?
     
-    var lastStep: Step? {
-        return stepList.sorted { $0.createDate < $1.createDate }.last
+    /// StepList를 정렬 후 반환합니다.
+    var sortedStepList: [Step] {
+        return stepList.sorted { $0.createDate < $1.createDate }
+    }
+    
+    /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
+    var firstThumbnailData: UIImage {
+        let firstMedia = sortedStepList.first?.mediaList.sorted { $0.captureDate < $1.captureDate }.first
+        
+        if let fileData = firstMedia?.fileData,
+           let image = UIImage(data: fileData) {
+            return image
+        } else {
+            return UIImage(resource: .noImageSign)
+        }
     }
     
     init(
@@ -49,6 +64,7 @@ class Party: Identifiable {
     }
 }
 
+// MARK: - Step
 @Model
 class Step: Identifiable {
     
@@ -61,6 +77,7 @@ class Step: Identifiable {
     }
 }
 
+// MARK: - Media
 @Model
 class Media: Identifiable {
     var fileData: Data
@@ -72,11 +89,32 @@ class Media: Identifiable {
     }
 }
 
+// MARK: - Member
 @Model
 class Member: Identifiable {
     let profileImageData: Data
     
     init(profileImageData: Data) {
         self.profileImageData = profileImageData
+    }
+}
+
+// MARK: - [Party]
+extension [Party] {
+    
+    /// 날짜를 기준으로 정렬한 Party 배열을 반환합니다.
+    var sortedPartys: [Party] {
+        return self.sorted { $0.startDate < $1.startDate }
+    }
+    
+    /// 마지막(현재 진행 중인) 파티를 반환합니다.
+    var lastParty: Party? {
+        return sortedPartys.last
+    }
+    
+    /// 마지막(현재 진행 중인) 파티가 진행 중인 여부를 반환합니다.
+    var isLastParyLive: Bool {
+        if let party = lastParty { return party.isLive }
+        return false
     }
 }

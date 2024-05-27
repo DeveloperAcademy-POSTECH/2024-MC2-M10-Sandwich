@@ -8,17 +8,16 @@
 import Foundation
 import SwiftData
 
+/// Mock 전용 SwiftData Model Container
 struct MockModelContainer {
     
     /// 목업용으로 사용할 SwiftData ModelContainer
     static var mockModelContainer: ModelContainer = {
+        
         let schema = Schema([Party.self, Member.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        do {
-            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            return container
-        } catch {
-            fatalError("MockModelContainer 생성 실패: \(error)")
-        }
+        
+        do { return try ModelContainer(for: schema, configurations: [modelConfiguration]) }
+        catch { fatalError("MockModelContainer 생성 실패: \(error)") }
     }()
 }

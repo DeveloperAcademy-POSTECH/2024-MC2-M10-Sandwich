@@ -13,22 +13,6 @@ struct SearchView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-//    init() {
-//            let appearance = UINavigationBarAppearance()
-//    appearance.configureWithOpaqueBackground()
-//    appearance.backgroundColor = UIColor.systemBackground
-//    appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-//    appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
-//    
-//    // Set the color of the back button arrow
-//    UINavigationBar.appearance().tintColor = .red
-//    
-//    // Apply the appearance settings
-//    UINavigationBar.appearance().standardAppearance = appearance
-//    UINavigationBar.appearance().compactAppearance = appearance
-//    UINavigationBar.appearance().scrollEdgeAppearance = appearance
-//        }
-//    
     var body: some View {
         VStack {
             Group{
@@ -94,8 +78,8 @@ private struct ListView: View {
     }
     var body: some View {
         List(searchPartys) { party in
-            ListCellView(
-                thumbnail: firstThumbnail(party),
+            TableListCellView(
+                thumbnail: party.firstThumbnailData,
                 title: party.title,
                 captureDate: party.startDate,
                 isLive: party.isLive,
@@ -119,74 +103,6 @@ private struct ListView: View {
         .padding(.bottom, 16)
     }
 }
-
-// MARK: - ListCellView
-//private struct ListCellView: View {
-//    
-//    let thumbnail: String
-//    let title: String
-//    let captureDate: Date
-//    let isLive: Bool
-//    let stepCount: Int
-//    let notiCycle: Int
-//    
-//    var body: some View {
-//        HStack {
-//            Image(.test)
-//                .resizable()
-//                .frame(width: 68, height: 68)
-//                .clipShape(RoundedRectangle(cornerRadius: 7.5))
-//            
-//            Spacer()
-//                .frame(width: 12)
-//            
-//            VStack(alignment: .leading, spacing: 4) {
-//                Text(title)
-//                    .pretendard(.bold, 17)
-//                    .foregroundStyle(.shotFF)
-//                
-//                Text("\(captureDate.yearMonthDay)")
-//                    .pretendard(.regular, 14)
-//                    .foregroundStyle(.shot6D)
-//            }
-//
-//            Spacer()
-//            
-//            VStack(spacing: 4) {
-//                PartyStateInfoLabel(
-//                    stateInfo: isLive ? .live : .end,
-//                    stepCount: stepCount
-//                )
-//                
-//                Text("\(notiCycle)min")
-//                    .pretendard(.regular, 14)
-//                    .foregroundStyle(.shot6D)
-//            }
-//        }
-//    }
-//}
-
-// MARK: - PartyStateInfoLabel
-//private struct PartyStateInfoLabel: View {
-//    
-//    /// 술자리 상태를 나타내는 열거형
-//    enum StateInfo: String {
-//        case live
-//        case end
-//    }
-//    
-//    let stateInfo: StateInfo
-//    let stepCount: Int
-//    
-//    var body: some View {
-//        Text(stateInfo == .live ? "LIVE" : "STEP_\(stepCount)")
-//            .frame(width: 76, height: 22)
-//            .pretendard(.bold, 14)
-//            .background(stateInfo == .live ? .shotGreen : .shot33)
-//            .foregroundStyle(stateInfo == .live ? .shot00 : .shotD8)
-//            .clipShape(RoundedRectangle(cornerRadius: 12))
-//    }
-//}
 
 #Preview {
     SearchView()

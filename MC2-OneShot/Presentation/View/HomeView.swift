@@ -8,61 +8,6 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - InitialView
-/// PersistentDataManager 생성을 위한 View
-struct InitialView: View {
-    
-    @Query private var partys: [Party]
-    
-    /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
-        return sortedParty.last
-    }
-    
-    /// 현재 파티가 라이브인지 확인하는 계산 속성
-    var isCurrentPartyLive: Bool {
-        if let safeParty = currentParty {
-            return safeParty.isLive
-        } else {
-            return false
-        }
-    }
-    
-    var modelContainer: ModelContainer
-    
-    var body: some View {
-        HomeView(
-            persistentDataManager: PersistentDataManager(
-                modelContext: modelContainer.mainContext
-            )
-        )
-        .onAppear {
-            NotificationManager.instance.requestAuthorization()
-            NotificationManager.instance.resetBadge()
-            // 라이브 중일 때 함수 호출
-            if isCurrentPartyLive {
-                updatePartyService()
-            }
-        }
-    }
-    
-    /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
-    func updatePartyService() {
-        
-        guard let party = currentParty else {
-            print("파티 없음")
-            return
-        }
-        
-        let currentStartDate = party.startDate
-        let currentNotiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
-        
-        PartyService.shared.setPartyService(startDate: currentStartDate, notiCycle: currentNotiCycle)
-    }
-}
-
-// MARK: - HomeView
 struct HomeView: View {
     
     @StateObject var persistentDataManager: PersistentDataManager
@@ -71,90 +16,31 @@ struct HomeView: View {
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
     @State private var isPartyResultViewPresented = false
-    @State private var isFirstInfoVisible = true
     
     @Query private var partys: [Party]
-    
-    /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        return partys.last
-    }
-    
-    /// 현재 파티가 라이브인지 확인하는 계산 속성
-    var isCurrentPartyLive: Bool {
-        if let safeParty = currentParty {
-            return safeParty.isLive
-        } else {
-            return false
-        }
-    }
     
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
-                HStack{
-                    Spacer()
-                    Button {
-                        homePathModel.paths.append(.searchList)
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.shotFF)
-                            .padding(.trailing, 16)
-                    }
-                }
-                
-                Image(.appLogo)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 35)
-                    .padding(.leading, 16)
-                    .padding(.top, 12)
-                    .padding(.bottom, 4)
-                
-                ZStack {
-                    if partys.isEmpty {
-                        Image(.firstInfo)
-                            .padding(.bottom, 48)
-                    }
-                    
-                    ListView(isFirstInfoVisible: $isFirstInfoVisible)
-                  
-                }
-
+                HeaderView()
+                ListView()
                 ActionButton(
-                    title: isCurrentPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
-                    buttonType: isCurrentPartyLive ? .popupfinish : .primary
+                    title: partys.isLastParyLive ? "사진 찍으러 가기" : "술자리 생성하기",
+                    buttonType: partys.isLastParyLive ? .popupfinish : .primary
                 ) {
-                    if isCurrentPartyLive {
-                        isCameraViewPresented.toggle()
-                    } else {
-                        isPartySetViewPresented.toggle()
-                    }
+                    if partys.isLastParyLive { isCameraViewPresented.toggle() }
+                    else { isPartySetViewPresented.toggle() }
                 }
                 .padding(.horizontal, 16)
             }
-            .navigationDestination(for: HomePathType.self) { path in
-                switch path {
-                case let .partyList(party): PartyListView(party: party, isCameraViewPresented: .constant(false))
-                case .searchList: SearchView()
+            .homePathDestination()
+            .sheet(isPresented: $isPartySetViewPresented) {
+                if partys.isLastParyLive {
+                    presentCameraView()
                 }
-            }
-            
-            .sheet(isPresented: $isPartySetViewPresented, onDismiss: {
-                if isCurrentPartyLive {
-                    isCameraViewPresented.toggle()
-                    
-                    // 결과화면 present에 예약
-                    NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
-                        print("홈뷰에서 결과 화면 실행")
-                        isPartyResultViewPresented.toggle()
-                    }
-                }
-            }, content: {
+            } content: {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
-            })
+            }
             .fullScreenCover(isPresented: $isCameraViewPresented) {
                 PartyCameraView(isCameraViewPresented: $isCameraViewPresented, isPartyResultViewPresented: $isPartyResultViewPresented)
             }
@@ -166,234 +52,137 @@ struct HomeView: View {
         }
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
-        .onAppear() {
-            if isCurrentPartyLive {
-                if let currentParty = currentParty,
-                   let lastStep = currentParty.lastStep {
-                    let presentTime = Date.now.timeIntervalSince1970
-                    // 만약 마지막 스텝의 사진이 촬영되지 않았다면 (현재미션 미완료중 or 완료후 다음스텝 넘어간후 죽음)
-                    if lastStep.mediaList.isEmpty {
-                        
-                        
-                        let shutdownStepSecond = TimeInterval(currentParty.stepList.count) * PartyService.shared.getNotiCycle()
-                        let currentStepEndDate = currentParty.startDate.timeIntervalSince1970 + shutdownStepSecond
-                        
-                        let restTime = currentStepEndDate - presentTime
-                        
-                        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
-                        if restTime > 0 {
-
-                            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
-                                isPartyResultViewPresented.toggle()
-                                currentParty.isShutdown = true
-                            }
-                            
-                            print("현재Step마지막 - 현재시간 > 0 : 초과X -> 카메라")
-                            isCameraViewPresented.toggle()
-                        
-                        }
-                        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
-                        else {
-                            print("현재Step마지막 - 현재시간 > 0 : 초과O -> result")
-                            isPartyResultViewPresented.toggle()
-                            currentParty.isShutdown = true
-                        }
-                        
-                        
-                    }
-                    
-                    // 이전 스텝 사진 찍고
-                    else {
-                        let shutdownStepSecond = TimeInterval((currentParty.stepList.count + 1)) * PartyService.shared.getNotiCycle()
-                        let nextStepEndDate = currentParty.startDate.timeIntervalSince1970 + shutdownStepSecond
-                        
-                        let restTime = nextStepEndDate - presentTime
-                        
-                        
-                        if restTime > 0 {
-
-                            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
-                                isPartyResultViewPresented.toggle()
-                                currentParty.isShutdown = true
-                            }
-                            
-                            isCameraViewPresented.toggle()
-                            
-                            // 이전 스텝 사진 찍고, 다시 들어와보니 이미 다음 스텝 진행중
-                            if restTime <= PartyService.shared.getNotiCycle() {
-                                let newStep = Step()
-                                currentParty.stepList.append(newStep)
-                            }
-                        }
-                        // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
-                        else {
-                            isPartyResultViewPresented.toggle()
-                            currentParty.isShutdown = true
-                        }
-                    }
+        .onAppear {
+            
+            // 1. 만약 현재 파티가 Live 상태라면
+            if partys.isLastParyLive,
+               let lastParty = partys.lastParty,
+               let lastStep = lastParty.sortedStepList.last {
+                print("1. 만약 현재 파티가 Live 상태이고")
+                let presentTime = Date.now.timeIntervalSince1970
+                
+                if lastStep.mediaList.isEmpty {
+                    print("2-1. 마지막 스텝의 미디어가 비어있다면(아직 미션을 완료하지 않았다면)")
+                    whenLastStepNotComplete(lastParty: lastParty, presentTime: presentTime)
+                } else {
+                    print("2-2. 마지막 스텝의 미디어가 한 개 이상 있다면(미션을 완료했다면)")
+                    whenLastStepComplete(lastParty: lastParty, presentTime: presentTime)
                 }
             }
-            
         }
+    }
+    
+    /// PartySetView가 사라질 때 호출되는 메서드입니다.
+    private func presentCameraView() {
+        isCameraViewPresented.toggle()
+        
+        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
+            isPartyResultViewPresented.toggle()
+        }
+    }
+}
+
+// MARK: - HeaderView
+private struct HeaderView: View {
+    
+    @EnvironmentObject private var homePathModel: HomePathModel
+    
+    var body: some View {
+        HStack{
+            Spacer()
+            Button {
+                homePathModel.paths.append(.searchList)
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(.shotFF)
+                    .padding(.trailing, 16)
+            }
+        }
+        
+        Image(.appLogo)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(height: 35)
+            .padding(.leading, 16)
+            .padding(.top, 12)
+            .padding(.bottom, 4)
     }
 }
 
 // MARK: - ListView
 private struct ListView: View {
     
-    @EnvironmentObject private var homePathModel: HomePathModel
-    @EnvironmentObject var persistentDataManager: PersistentDataManager
-    
-    @State private var showAlert = false
-    @State private var selectedParty: Party = Party(title: "", startDate: Date(), notiCycle: 0, memberList: [])
-    
-    @Binding var isFirstInfoVisible: Bool
-    
+    @State private var isFirstInfoVisible = true
     @Query private var partys: [Party]
     
-    
     var body: some View {
-        List(partys.sorted { $0.startDate > $1.startDate }) { party in
-            ListCellView(
-                thumbnail: firstThumbnail(party),
-                title: party.title,
-                captureDate: party.startDate,
-                isLive: party.isLive,
-                stepCount: party.stepList.count,
-                notiCycle: party.notiCycle
-            )
-            .onTapGesture {
-                homePathModel.paths.append(.partyList(party: party))
-                isFirstInfoVisible = partys.isEmpty
-            }
-            .swipeActions {
-                Button {
-                    self.selectedParty = party
-                    self.showAlert = true
-                    
-                    //partys가 EMPTY 일때 뒤의 이미지가 보여지도록 도와주는 함수
-                    isFirstInfoVisible = partys.isEmpty
-                
-                    
-                } label: {
-                    Text("삭제하기")
-                }
-                .tint(.red)
-            }
-            .onAppear{
-               //alert
-               isFirstInfoVisible = partys.isEmpty
-           }
-            .alert(selectedParty.isLive ? Text("진행중인 술자리는 지울 수 없어,, ") :Text("진짤루?\n 술자리 기억...지우..는거야..?"),isPresented: $showAlert) {
-                if selectedParty.isLive{
-                    Button(role: .cancel) {
-                    } label: {
-                        Text("확인")
-                    }
-                }else{
-                    Button(role: .destructive) {
-                        HapticManager.shared.notification(type: .success)
-                        print("지운 파티: ", selectedParty.title)
-                        persistentDataManager.deleteParty(selectedParty)
-                    } label: {
-                        Text("지우기")
-                    }
-                    Button(role: .cancel) {
-                        print("살렸다: ", selectedParty.title)
-                        
-                    } label: {
-                        Text("살리기")
-                    }
-                }
-                
-            }
+        ZStack {
+            Image(.firstInfo)
+                .padding(.bottom, 48)
+                .opacity(partys.isEmpty ? 1 : 0)
+            
+            TableListView(isFirstInfoVisible: $isFirstInfoVisible)
         }
-        .listStyle(.plain)
-    }
-    
-    /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
-    func firstThumbnail(_ party: Party) -> Data? {
-        let firstStep = party.stepList.sorted { $0.createDate < $1.createDate }.first
-        let firstMedia = firstStep?.mediaList.sorted{ $0.captureDate < $1.captureDate }.first
-        return firstMedia?.fileData
     }
 }
 
-// MARK: - ListCellView
-struct ListCellView: View {
+// MARK: - HomeView Function
+extension HomeView {
     
-    let thumbnail: Data?
-    let title: String
-    let captureDate: Date
-    let isLive: Bool
-    let stepCount: Int
-    let notiCycle: Int
-    
-    var thumbnailLogic: UIImage {
-        if let thumbnail = thumbnail,
-           let uiImage = UIImage(data: thumbnail) {
-            return uiImage
-        } else {
-            return UIImage(resource: .noImageSign)
+    /// STEP을 완료했을 때 로직
+    private func whenLastStepNotComplete(lastParty: Party, presentTime: TimeInterval) {
+        let shutdownStepSecond = TimeInterval(lastParty.stepList.count) * PartyService.shared.getNotiCycle()
+        let currentStepEndDate = lastParty.startDate.timeIntervalSince1970 + shutdownStepSecond
+        
+        let restTime = currentStepEndDate - presentTime
+        
+        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
+        if restTime > 0 {
+            
+            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
+                isPartyResultViewPresented.toggle()
+                lastParty.isShutdown = true
+            }
+            
+            isCameraViewPresented.toggle()
+            
+        }
+        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
+        else {
+            isPartyResultViewPresented.toggle()
+            lastParty.isShutdown = true
         }
     }
     
-    var body: some View {
-        HStack {
-            Image(uiImage: thumbnailLogic)
-                .resizable()
-                .frame(width: 68, height: 68)
-                .clipShape(RoundedRectangle(cornerRadius: 7.5))
+    /// STEP을 완료하지 못했을 때 로직
+    private func whenLastStepComplete(lastParty: Party, presentTime: TimeInterval) {
+        let shutdownStepSecond = TimeInterval((lastParty.stepList.count + 1)) * PartyService.shared.getNotiCycle()
+        let nextStepEndDate = lastParty.startDate.timeIntervalSince1970 + shutdownStepSecond
+        
+        let restTime = nextStepEndDate - presentTime
+        
+        if restTime > 0 {
             
-            Spacer()
-                .frame(width: 12)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .pretendard(.bold, 17)
-                    .foregroundStyle(.shotFF)
-                
-                Text("\(captureDate.yearMonthDay)")
-                    .pretendard(.regular, 14)
-                    .foregroundStyle(.shot6D)
+            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
+                isPartyResultViewPresented.toggle()
+                lastParty.isShutdown = true
             }
             
-            Spacer()
+            isCameraViewPresented.toggle()
             
-            VStack(spacing: 4) {
-                PartyStateInfoLabel(
-                    stateInfo: isLive ? .live : .end,
-                    stepCount: stepCount
-                )
-                
-                Text("\(notiCycle)min")
-                    .pretendard(.regular, 14)
-                    .foregroundStyle(.shot6D)
+            // 이전 스텝 사진 찍고, 다시 들어와보니 이미 다음 스텝 진행중
+            if restTime <= PartyService.shared.getNotiCycle() {
+                let newStep = Step()
+                lastParty.stepList.append(newStep)
             }
         }
-        .background(.shot00)
-    }
-}
-
-// MARK: - PartyStateInfoLabel
-private struct PartyStateInfoLabel: View {
-    
-    /// 술자리 상태를 나타내는 열거형
-    enum StateInfo: String {
-        case live
-        case end
-    }
-    
-    let stateInfo: StateInfo
-    let stepCount: Int
-    
-    var body: some View {
-        Text(stateInfo == .live ? "LIVE" : "STEP \(stepCount.intformatter)")
-            .frame(width: 76, height: 22)
-            .pretendard(.bold, 14)
-            .background(stateInfo == .live ? .shotGreen : .shot33)
-            .foregroundStyle(stateInfo == .live ? .shot00 : .shotD8)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+        // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
+        else {
+            isPartyResultViewPresented.toggle()
+            lastParty.isShutdown = true
+        }
     }
 }
 
@@ -401,15 +190,4 @@ private struct PartyStateInfoLabel: View {
     HomeView(persistentDataManager: PersistentDataManager(modelContext: ModelContext(MockModelContainer.mockModelContainer)))
         .environmentObject(HomePathModel())
         .modelContainer(MockModelContainer.mockModelContainer)
-}
-
-#Preview {
-    ListCellView(
-        thumbnail: Data(),
-        title: "테스트 제목",
-        captureDate: .now,
-        isLive: true,
-        stepCount: 7,
-        notiCycle: 30
-    )
 }
