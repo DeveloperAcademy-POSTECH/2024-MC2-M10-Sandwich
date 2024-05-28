@@ -11,30 +11,10 @@
  
 </div>
 
-<!-- 
-
-## :fireworks: Screenshots
-
-Attach photos if you are available
-
-## :framed_picture: Demo (optional)
-
-Attach videos if you are available
-
-
-## :pushpin: Features
-
-- Feature 1
-- Feature 2
-- Feature 3
-
-### :sparkles: Skills & Tech Stack
-<img src="https://img.shields.io/badge/iOS-FFFFFF??style=round-square&logo=Apple&logoColor=black"> <img src="https://img.shields.io/badge/Swift-FA7343?style=round-square&logo=Swift&logoColor=white"> <img src="https://img.shields.io/badge/Xcode-007ACC?style=round-square&logo=Xcode&logoColor=white"> <img src="https://img.shields.io/badge/GitHub-181717?style=round-square&logo=GitHub&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=round-square&logo=Figma&logoColor=white">
-
--->
-
 ### 📱 Screenshots
-<br>
+| Setting | Push Notification | Camera | List |
+ ------------ | ------------ | ------------ | ------------ |
+| <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/e739a565-3338-4581-a373-460a3bdd0a73"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/fcbcd0c5-8850-4e1a-8cc4-51ad9eb8cea3"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/90d24db8-6291-48fb-bb33-ba35bb591a89"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/503e41db-eae1-4d16-b297-a60a9b29e00c"> |
 <br>
 
 ### 🛠 Development Environment
