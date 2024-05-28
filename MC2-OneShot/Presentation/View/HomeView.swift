@@ -53,8 +53,6 @@ struct HomeView: View {
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
         .onAppear {
-            
-            // 1. 만약 현재 파티가 Live 상태라면
             if partys.isLastParyLive,
                let lastParty = partys.lastParty,
                let lastStep = lastParty.sortedStepList.last {
@@ -69,15 +67,6 @@ struct HomeView: View {
                     whenLastStepComplete(lastParty: lastParty, presentTime: presentTime)
                 }
             }
-        }
-    }
-    
-    /// PartySetView가 사라질 때 호출되는 메서드입니다.
-    private func presentCameraView() {
-        isCameraViewPresented.toggle()
-        
-        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
-            isPartyResultViewPresented.toggle()
         }
     }
 }
@@ -131,6 +120,15 @@ private struct ListView: View {
 // MARK: - HomeView Function
 extension HomeView {
     
+    /// PartySetView가 사라질 때 호출되는 메서드입니다.
+    private func presentCameraView() {
+        isCameraViewPresented.toggle()
+        
+        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
+            isPartyResultViewPresented.toggle()
+        }
+    }
+    
     /// STEP을 완료했을 때 로직
     private func whenLastStepNotComplete(lastParty: Party, presentTime: TimeInterval) {
         let shutdownStepSecond = TimeInterval(lastParty.stepList.count) * PartyService.shared.getNotiCycle()
@@ -140,15 +138,14 @@ extension HomeView {
         
         // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
         if restTime > 0 {
-            
             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
                 isPartyResultViewPresented.toggle()
                 lastParty.isShutdown = true
             }
             
             isCameraViewPresented.toggle()
-            
         }
+        
         // 현재Step마지막 - 현재시간 > 0 : 초과일 때
         else {
             isPartyResultViewPresented.toggle()
@@ -178,6 +175,7 @@ extension HomeView {
                 lastParty.stepList.append(newStep)
             }
         }
+        
         // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
         else {
             isPartyResultViewPresented.toggle()
