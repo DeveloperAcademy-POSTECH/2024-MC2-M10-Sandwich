@@ -28,11 +28,6 @@ struct MemberPopupView: View {
                     .frame(width: 361, height: 319)
                     .foregroundStyle(.shot25)
                 
-                Image(.imgLogo)
-                    .resizable()
-                    .frame(width: 225, height: 225).opacity(0.1)
-                    .padding(.top, 7)
-                
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         Image(systemName: "person.fill")
