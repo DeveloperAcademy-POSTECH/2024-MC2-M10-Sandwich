@@ -83,8 +83,8 @@ struct PartyResultView: View {
                 
                 HStack{
                     // preview crash 
-//                    Text("30min")
-                    Text("\((partys.last?.notiCycle)!)min")
+                    Text("30min")
+//                    Text("\((partys.last?.notiCycle)!)min")
                         .foregroundStyle(.shotC6)
                         .pretendard(.bold, 17)
                 }
