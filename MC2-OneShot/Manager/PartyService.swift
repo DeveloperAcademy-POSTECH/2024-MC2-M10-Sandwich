@@ -160,9 +160,9 @@ extension PartyService {
 }
 
 // MARK: - NotiCycle 반환
-extension PartyService {
-    func getNotiCycle() -> TimeInterval {
-        return TimeInterval(self.notiCycle.toSeconds)
-    }
-}
+//extension PartyService {
+//    func getNotiCycle() -> TimeInterval {
+//        return TimeInterval(self.notiCycle.toSeconds)
+//    }
+//}
 

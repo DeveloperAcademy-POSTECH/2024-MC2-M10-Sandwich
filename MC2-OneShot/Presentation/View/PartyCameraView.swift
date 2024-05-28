@@ -246,6 +246,7 @@ struct PartyCameraView: View {
                 isShotDisabled: $isShotDisabled,
                 isPartyResultViewPresented: $isPartyResultViewPresented
             )
+            .padding(.top, 15)
         }
     }
 }
@@ -292,6 +293,7 @@ private struct CaptureButtonView: View {
             }
             
             delayButton()
+            
         } label: {
             ZStack{
                 if viewManager.isShot {

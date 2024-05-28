@@ -58,7 +58,7 @@ struct MemberCameraView: View {
                 .foregroundColor(.shotFF)
                
         }
-        .padding(.top, 27)
+        .padding(.top, 24)
         .padding(.bottom, 16)
     }
     
@@ -82,7 +82,7 @@ struct MemberCameraView: View {
                     .padding(.top, 36)
             }
         }
-        .padding(.bottom, 10)
+        .padding(.bottom, 12)
     }
     
     // MARK: - BottomView
@@ -163,6 +163,7 @@ struct MemberCameraView: View {
                 membersInfo: $membersInfo,
                 isCameraViewPresented: $isCameraViewPresented
             )
+            .padding(.top, 15)
         }
         .padding(.top, 20)
     }
