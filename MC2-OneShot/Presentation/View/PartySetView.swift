@@ -223,7 +223,9 @@ private struct NotiCycleView: View {
                     .pretendard(.regular, 12)
             }
         }
-    } .padding(4)
+    } 
+    .padding(4)
+    .onAppear (perform : UIApplication.shared.hideKeyboard)
     }
 }
 

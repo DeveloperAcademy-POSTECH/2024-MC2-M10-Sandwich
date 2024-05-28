@@ -14,11 +14,13 @@ struct FinishPopupView: View {
     @Binding var isPartyEnd: Bool
     
     var body: some View {
+        
         VStack(spacing: 0) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .frame(width: 361, height: 361)
                     .foregroundStyle(.shot25)
+                    .frame(width: min(ScreenSize.screenWidth, ScreenSize.screenHeigh) * 0.9, height: min(ScreenSize.screenWidth, ScreenSize.screenHeigh) * 0.9)
+                    .padding()
                 
                 VStack(spacing: 0) {
                     // TODO: 함께한 사람들 이미지중 랜덤으로 들어오도록 수정
@@ -62,7 +64,7 @@ struct FinishPopupView: View {
                         }
                     }
                     .padding(.horizontal, 33)
-                    .padding(.top, 50)   
+                    .padding(.top, 50)
                 }
             }
         }

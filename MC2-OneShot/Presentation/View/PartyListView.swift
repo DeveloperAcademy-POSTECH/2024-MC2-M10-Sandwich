@@ -278,8 +278,8 @@ struct StepCell: View {
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 393)
+//                                    .frame(maxWidth: .infinity)
+                                    .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                                     .cornerRadius(15)
                             }
                             

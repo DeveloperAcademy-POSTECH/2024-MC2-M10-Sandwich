@@ -78,6 +78,7 @@ struct HomeView: View {
         
         NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
             isPartyResultViewPresented.toggle()
+            partys.last?.isShutdown = true
         }
     }
 }

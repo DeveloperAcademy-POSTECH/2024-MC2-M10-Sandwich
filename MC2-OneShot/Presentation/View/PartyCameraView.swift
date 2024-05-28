@@ -126,7 +126,7 @@ struct PartyCameraView: View {
             ZStack {
                 viewManager.cameraPreview
                     .ignoresSafeArea()
-                    .frame(width: 393, height: 393)
+                    .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                     .aspectRatio(1, contentMode: .fit)
                     .cornerRadius(15)
                     .padding(.top, 36)
@@ -136,7 +136,7 @@ struct PartyCameraView: View {
                     Image(uiImage: viewManager.recentImage ?? UIImage(resource: .appLogo))
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 393, height: 393)
+                        .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                         .aspectRatio(1, contentMode: .fit)
                         .cornerRadius(15)
                         .padding(.top, 36)
