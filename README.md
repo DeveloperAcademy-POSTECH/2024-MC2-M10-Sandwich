@@ -45,7 +45,7 @@ import Combine
 ###  Authors 
 | [김민준(Hantol)](https://github.com/thinkySide) | [김여운(Friday)](https://github.com/friday0425) | [김유빈(Nini)](https://github.com/ubeeni) | [오명진(Simmons)](https://github.com/OhMyungJin) | [장종현(Jomir)](https://github.com/jongchang) | [정혜정(Lucia)](https://github.com/DecideJung1221) |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|<img width="100" alt="Hantol" src="">|<img width="100" alt="Friday" src="">|<img width="100" alt="Nini" src="">|<img width="100" alt="Simmons" src="">|<img width="100" alt="Jomir" src="">|<img width="100" alt="Lucia" src="">|
+|<img width="100" alt="Hantol" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/d9f68889-b5da-4eb4-a986-8b85102d2d04">|<img width="100" alt="Friday" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/9d151b2a-b9e4-4b05-a3a9-c549a6212c24">|<img width="100" alt="Nini" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/ce3dd289-1fbd-4834-824e-bcde40de5d5b">|<img width="100" alt="Simmons" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/d9848150-fc08-4e1b-a3c9-94de53c4cfc2">|<img width="100" alt="Jomir" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/7b241262-96e0-421c-866e-e953183f6699">|<img width="100" alt="Lucia" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/e396a865-e718-435c-af58-a97202d4eabb">|
 
 <br>
 
