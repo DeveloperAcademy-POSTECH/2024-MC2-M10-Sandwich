@@ -14,7 +14,7 @@
 ### 📱 Screenshots
 | Setting | Push Notification | Camera | List |
  ------------ | ------------ | ------------ | ------------ |
-| <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/e739a565-3338-4581-a373-460a3bdd0a73"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/fcbcd0c5-8850-4e1a-8cc4-51ad9eb8cea3"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/90d24db8-6291-48fb-bb33-ba35bb591a89"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/503e41db-eae1-4d16-b297-a60a9b29e00c"> |
+| <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/0c1e36f4-3a91-41d2-8f46-39947c18fb63"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/60847d2f-b79e-4f7c-b2c9-af26e97292c9"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/00c2d288-322b-4116-9f30-73bf385e06a4"> | <img width="430" src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M10-Sandwich/assets/69234788/133edfe7-7d24-47a0-abe6-cbba2019efbd"> |
 <br>
 
 ### 🛠 Development Environment
