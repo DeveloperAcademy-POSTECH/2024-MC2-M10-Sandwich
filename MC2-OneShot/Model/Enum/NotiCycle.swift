@@ -9,7 +9,7 @@ import Foundation
 
 /// 술자리 STEP 알림 주기 열거형
 enum NotiCycle: Int {
-    case min01 = 1
+    //case min01 = 1
     case min30 = 30
     case min60 = 60
     case min90 = 90
