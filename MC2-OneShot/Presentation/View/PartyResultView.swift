@@ -94,7 +94,9 @@ struct PartyResultView: View {
             
             ListView()
             
-            if let currentParty = currentParty, let memberList = partys.last?.memberList, !memberList.isEmpty {
+            if let currentParty = currentParty,
+               let memberList = partys.last?.memberList,
+               !memberList.isEmpty {
                 MemberResultView(party: currentParty)
                     .padding(.top, -20)
             }

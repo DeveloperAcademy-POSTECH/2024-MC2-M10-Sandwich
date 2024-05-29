@@ -126,7 +126,8 @@ struct PartyListView: View {
                             }, content: {
                                 FinishPopupView(
                                     isFinishPopupPresented: $isFinishPopupPresented,
-                                    isPartyEnd: $isPartyEnd
+                                    isPartyEnd: $isPartyEnd,
+                                    memberList: party.memberList
                                 )
                                 .foregroundStyle(.shotFF)
                                 .presentationBackground(.black.opacity(0.7))

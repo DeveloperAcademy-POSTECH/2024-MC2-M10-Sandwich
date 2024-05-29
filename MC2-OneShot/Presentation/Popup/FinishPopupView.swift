@@ -13,6 +13,8 @@ struct FinishPopupView: View {
     @Binding var isFinishPopupPresented: Bool
     @Binding var isPartyEnd: Bool
     
+    var memberList: [Member]
+    
     var body: some View {
         
         VStack(spacing: 0) {
@@ -23,17 +25,33 @@ struct FinishPopupView: View {
                     .padding()
                 
                 VStack(spacing: 0) {
-                    // TODO: 함께한 사람들 이미지중 랜덤으로 들어오도록 수정
-                    Image(.dummyProfile)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 118, height: 118)
-                        .cornerRadius(50)
-                        .overlay(
-                            Circle()
-                                .stroke(.shotGreen, lineWidth: 5)
-                        )
-                        .padding(.top, 40)
+                    if memberList.isEmpty {
+                        Image(.dummyProfile)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 118, height: 118)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(.shotGreen, lineWidth: 5)
+                            )
+                            .padding(.top, 40)
+                        
+                    } else {
+                        if let randomMember = memberList.randomElement(),
+                           let image = UIImage(data: randomMember.profileImageData) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 118, height: 118)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(.shotGreen, lineWidth: 5)
+                                )
+                                .padding(.top, 40)
+                        }
+                    }
                     
                     Text("술자리를 정말로 끝낼까요?")
                         .pretendard(.semiBold, 17)
@@ -74,6 +92,7 @@ struct FinishPopupView: View {
 #Preview {
     FinishPopupView(
         isFinishPopupPresented: .constant(true),
-        isPartyEnd: .constant(false)
+        isPartyEnd: .constant(false),
+        memberList: []
     )
 }
