@@ -40,9 +40,6 @@ struct MemberPopupView: View {
                     }
                     .padding(.leading, 16)
                     
-                    
-                        
-                        
                     VStack(spacing: 0) {
                         LazyVGrid(columns: columns, spacing: 30) {
                             ForEach(memberList, id: \.self) { member in
