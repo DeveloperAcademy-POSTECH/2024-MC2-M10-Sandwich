@@ -236,36 +236,37 @@ struct StepCell: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    showActionSheet = true
-                }, label: {
-                    ZStack {
-                        Image(.icnSave)
-                            .resizable()
-                            .frame(width: 35, height: 35)
-                        
-                        Image(systemName: "square.and.arrow.down")
-                            .resizable()
-                            .frame(width: 16, height: 20)
-                            .pretendard(.semiBold, 16)
-                            .foregroundStyle(.shotC6)
-                            .offset(y: -1)
+                if !step.mediaList.isEmpty {
+                    Button(action: {
+                        showActionSheet = true
+                    }, label: {
+                        ZStack {
+                            Image(.icnSave)
+                                .resizable()
+                                .frame(width: 35, height: 35)
+                            
+                            Image(systemName: "square.and.arrow.down")
+                                .resizable()
+                                .frame(width: 16, height: 20)
+                                .pretendard(.semiBold, 16)
+                                .foregroundStyle(.shotC6)
+                                .offset(y: -1)
+                        }
+                    })
+                    .actionSheet(isPresented: $showActionSheet) {
+                        ActionSheet(
+                            title: Text("사진을 저장할 방법을 선택해 주세요"),
+                            buttons: [
+                                .cancel(Text("취소")),
+                                .default(Text("전체 사진 저장"), action: {
+                                    saveAllImages()
+                                }),
+                                .default(Text("현재 사진 저장"), action: {
+                                    saveCurrentImage()
+                                })
+                            ]
+                        )
                     }
-                })
-                .disabled(step.mediaList.isEmpty)
-                .actionSheet(isPresented: $showActionSheet) {
-                    ActionSheet(
-                        title: Text("사진을 저장할 방법을 선택해 주세요"),
-                        buttons: [
-                            .cancel(Text("취소")),
-                            .default(Text("전체 사진 저장"), action: {
-                                saveAllImages()
-                            }),
-                            .default(Text("현재 사진 저장"), action: {
-                                saveCurrentImage()
-                            })
-                        ]
-                    )
                 }
             }
             .padding(16)
