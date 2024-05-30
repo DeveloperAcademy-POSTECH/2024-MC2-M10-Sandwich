@@ -338,7 +338,7 @@ struct StepCell: View {
     }
     
     func saveCurrentImage() {
-        guard let uiImage = UIImage(data: step.mediaList[visibleMediaIndex].fileData) else { return }
+        guard let uiImage = UIImage(data: step.mediaList.sorted(by: { $0.captureDate < $1.captureDate })[visibleMediaIndex].fileData) else { return }
         
         let imageSaver = ImageSaver()
         imageSaver.saveImage(uiImage) { result in
