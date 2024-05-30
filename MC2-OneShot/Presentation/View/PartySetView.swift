@@ -13,7 +13,6 @@ struct PartySetView: View {
     @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @State private var titleText: String = ""
-    //@State private var notiCycle: NotiCycle = .min01
     @State private var notiCycle: NotiCycle = .min30
     @State var membersInfo: [Member] = []
     
@@ -185,11 +184,9 @@ private struct NotiCycleView: View {
                 Spacer()
                 
                 Menu {
-                    //Button("1분(테스트용)") { notiCycle = .min01 }
-                    Button("30분") { notiCycle = .min30 }
-                    Button("60분") { notiCycle = .min60 }
-                    Button("90분") {notiCycle = .min90 }
-                    Button("120분") { notiCycle = .min120 }
+                    ForEach(NotiCycle.allCases, id: \.rawValue) { notiCycle in
+                        Button("\(notiCycle.rawValue)분") { self.notiCycle = notiCycle }
+                    }
                 } label: {
                     HStack {
                         Text("\(notiCycle.rawValue)분")
