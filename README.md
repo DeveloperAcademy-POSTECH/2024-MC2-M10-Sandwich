@@ -11,6 +11,16 @@
  
 </div>
 
+</div>
+<div style="display: flex; flex-direction: column;" align="center" >
+  <a href="https://apps.apple.com/kr/app/oneshot-%EC%9B%90%EC%83%B7/id6502974864">
+    <img src="https://user-images.githubusercontent.com/81340603/204947353-18c33fe9-c49b-443a-b1e2-7cf9a85bb91b.png" width=180px />
+  </a>
+  <p3>&nbsp;&nbsp;&nbsp;</p3>
+</div>
+
+<br/>
+
 ### 📱 Screenshots
 | Setting | Push Notification | Camera | List |
  ------------ | ------------ | ------------ | ------------ |
