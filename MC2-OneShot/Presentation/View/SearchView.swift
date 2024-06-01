@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - SearchView
+
 struct SearchView: View {
     
     @EnvironmentObject private var homePathModel: HomePathModel
@@ -46,18 +48,22 @@ struct SearchView: View {
 }
 
 // MARK: - ListView
+
 private struct ListView: View {
     
     @EnvironmentObject private var homePathModel: HomePathModel
     
-    @Query private var partys: [Party]
     @Binding var searchText: String
     
-    var searchPartys: [Party]{
+    @Query private var partys: [Party]
+    
+    /// 검색어를 이용해 Party 배열을 반환합니다.
+    var searchPartys: [Party] {
         partys.filter {
             $0.title.contains(searchText)
         }
     }
+    
     var body: some View {
         List(searchPartys) { party in
             TableListCellView(
@@ -71,14 +77,6 @@ private struct ListView: View {
             .onTapGesture {
                 homePathModel.paths.append(.partyList(party: party))
             }
-            .swipeActions {
-                Button {
-                    // TODO: 술자리 데이터 삭제 Alert 출력
-                } label: {
-                    Text("삭제하기")
-                }
-                .tint(.red)
-            }
         }
         .listStyle(.plain)
         .padding(.top, 8)
@@ -86,6 +84,10 @@ private struct ListView: View {
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
     SearchView()
 }
+#endif
