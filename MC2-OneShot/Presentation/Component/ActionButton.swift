@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - ActionButton
+
 /// 특정 액션을 위한 커스텀 버튼
 struct ActionButton: View {
     
@@ -27,6 +29,26 @@ struct ActionButton: View {
     /// 버튼 Tap 액션
     let tapAction: () -> Void
     
+    var body: some View {
+        Button {
+            tapAction()
+        } label: {
+            Text(title)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(backgroundColor)
+                .foregroundStyle(titleColor)
+                .pretendard(.semiBold, 17)
+                .clipShape(RoundedRectangle(cornerRadius: 11))
+        }
+        .disabled(buttonType == .disabled)
+    }
+}
+
+// MARK: - ActionButton Logic
+
+extension ActionButton {
+    
     /// 배경색상 결정 로직
     private var backgroundColor: Color {
         switch buttonType {
@@ -45,22 +67,9 @@ struct ActionButton: View {
         case .popupfinish: return .shotFF
         }
     }
-    
-    var body: some View {
-        Button {
-            tapAction()
-        } label: {
-            Text(title)
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .background(backgroundColor)
-                .foregroundStyle(titleColor)
-                .pretendard(.semiBold, 17)
-                .clipShape(RoundedRectangle(cornerRadius: 11))
-        }
-        .disabled(buttonType == .disabled)
-    }
 }
+
+// MARK: - Preview
 
 #Preview {
     ZStack {

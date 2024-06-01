@@ -13,7 +13,7 @@ struct PartySetView: View {
     @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @State private var titleText: String = ""
-    @State private var notiCycle: NotiCycle = .min30
+    @State private var notiCycle: NotiCycle = NotiCycle.allCases.first ?? .min30
     @State var membersInfo: [Member] = []
     
     @Binding var isPartySetViewPresented: Bool

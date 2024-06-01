@@ -17,7 +17,11 @@ struct MC2_OneShotApp: App {
     
     var body: some Scene {
         WindowGroup {
-            InitialView(modelContainer: modelContainer)
+            HomeView(
+                persistentDataManager: PersistentDataManager(
+                    modelContext: modelContainer.mainContext
+                )
+            )
         }
         .modelContainer(modelContainer)
     }

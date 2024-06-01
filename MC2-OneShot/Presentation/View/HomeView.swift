@@ -53,6 +53,12 @@ struct HomeView: View {
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
         .onAppear {
+            setupNotification()
+            if partys.isLastParyLive {
+                setupPartyService()
+            }
+        }
+        .onAppear {
             if partys.isLastParyLive,
                let lastParty = partys.lastParty,
                let lastStep = lastParty.sortedStepList.last {
@@ -119,6 +125,26 @@ private struct ListView: View {
 
 // MARK: - HomeView Function
 extension HomeView {
+    
+    /// 초기 Notification을 설정합니다.
+    private func setupNotification() {
+        NotificationManager.instance.requestAuthorization()
+        NotificationManager.instance.resetBadge()
+    }
+    
+    /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
+    private func setupPartyService() {
+        
+        guard let party = partys.lastParty else {
+            print("현재 진행 중인 파티가 없습니다.")
+            return
+        }
+        
+        let currentStartDate = party.startDate
+        let currentNotiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
+        
+        PartyService.shared.setPartyService(startDate: currentStartDate, notiCycle: currentNotiCycle)
+    }
     
     /// PartySetView가 사라질 때 호출되는 메서드입니다.
     private func presentCameraView() {

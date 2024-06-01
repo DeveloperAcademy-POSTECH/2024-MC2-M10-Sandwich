@@ -25,6 +25,7 @@ final class HomePathModel: PathModel {
     }
 }
 
+/// HomePathModel 지정을 위한 ViewModifier
 private struct HomePathDestination: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -38,6 +39,8 @@ private struct HomePathDestination: ViewModifier {
 }
 
 extension View {
+    
+    /// HomePathModel을 이용해 NavigationDestination을 지정합니다.
     func homePathDestination() -> some View {
         self.modifier(HomePathDestination())
     }
