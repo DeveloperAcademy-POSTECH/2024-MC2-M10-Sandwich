@@ -110,7 +110,8 @@ struct PartyCameraView: View {
         }, content: {
             FinishPopupView(
                 isFinishPopupPresented: $isFinishPopupPresented,
-                isPartyEnd: $isPartyEnd
+                isPartyEnd: $isPartyEnd,
+                memberList: currentParty!.memberList
             )
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
