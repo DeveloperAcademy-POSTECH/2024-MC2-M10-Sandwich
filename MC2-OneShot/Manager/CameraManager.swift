@@ -98,6 +98,25 @@ class CameraManager: NSObject, ObservableObject {
         }
     }
     
+    // 이미지 좌우반전
+    func flipImageHorizontally(_ image: UIImage) -> UIImage? {
+            UIGraphicsBeginImageContext(image.size)
+            guard let context = UIGraphicsGetCurrentContext() else { return nil }
+            
+            context.translateBy(x: image.size.width / 2, y: image.size.height / 2)
+            
+            context.scaleBy(x: -1.0, y: 1.0)
+            
+            context.translateBy(x: -image.size.width / 2, y: -image.size.height / 2)
+            
+            image.draw(at: .zero)
+            
+            let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return flippedImage
+        }
+    
     // 세션 시작
     private func startSession() {
         sessionQueue.async {
@@ -134,14 +153,23 @@ class CameraManager: NSObject, ObservableObject {
 // 사진 캡처 델리게이트
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        
+        let currentPosition = videoDeviceInput.device.position
+        
         guard let imageData = photo.fileDataRepresentation() else { return }
         
-        if let image = UIImage(data: imageData) {
-            self.recentImage = image // 최근 사진 반영
+        if currentPosition == .front {
+            if let image = UIImage(data: imageData) {
+                self.recentImage = flipImageHorizontally(image) // 최근 사진 반영
+            }
+        } else {
+            if let image = UIImage(data: imageData) {
+                self.recentImage = image // 최근 사진 반영
+            }
         }
-        
-        print("Capture 끝!")
-    }
+            
+            print("Capture 끝!")
+        }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         
@@ -150,10 +178,10 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
     }
     
     func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        AudioServicesDisposeSystemSoundID(1108)
+        // AudioServicesDisposeSystemSoundID(1108)
         
     }
     func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        AudioServicesDisposeSystemSoundID(1108)
+        // AudioServicesDisposeSystemSoundID(1108)
     }
 }

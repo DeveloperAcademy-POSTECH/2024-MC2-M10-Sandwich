@@ -13,7 +13,7 @@ struct PartySetView: View {
     @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @State private var titleText: String = ""
-    @State private var notiCycle: NotiCycle = .min01
+    @State private var notiCycle: NotiCycle = .min30
     @State var membersInfo: [Member] = []
     
     @Binding var isPartySetViewPresented: Bool
@@ -128,32 +128,33 @@ private struct MemberListView: View {
                         if let image = UIImage(data: member.profileImageData) {
                             Image(uiImage: image)
                                 .resizable()
-                                .frame (width: 60, height: 60)
+                                .frame(width: 60, height: 60)
                                 .clipShape(Circle())
                         }
                     }
                     
-                    Button {
-                        isCameraViewPresented.toggle()
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .frame(width: 60)
-                                .foregroundStyle(.shot33)
-                            Image(systemName: "plus")
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                                .foregroundStyle(.shot6D)
+                    // + 버튼을 조건부로 표시
+                    if membersInfo.count < 8 {
+                        Button {
+                            isCameraViewPresented.toggle()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 60)
+                                    .foregroundStyle(.shot33)
+                                Image(systemName: "plus")
+                                    .resizable()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundStyle(.shot6D)
+                            }
                         }
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                    .fullScreenCover(isPresented: $isCameraViewPresented) {
-                        MemberCameraView(isCameraViewPresented: $isCameraViewPresented, membersInfo: $membersInfo)
+                        .buttonStyle(BorderlessButtonStyle())
+                        .fullScreenCover(isPresented: $isCameraViewPresented) {
+                            MemberCameraView(isCameraViewPresented: $isCameraViewPresented, membersInfo: $membersInfo)
+                        }
                     }
                 }
                 .padding(.bottom, 8)
-                
-                
             }
         } footer: {
             // footer 변경
@@ -183,11 +184,9 @@ private struct NotiCycleView: View {
                 Spacer()
                 
                 Menu {
-                    Button("1분(테스트용)") { notiCycle = .min01 }
-                    Button("30분") { notiCycle = .min30 }
-                    Button("60분") { notiCycle = .min60 }
-                    Button("90분") {notiCycle = .min90 }
-                    Button("120분") { notiCycle = .min120 }
+                    ForEach(NotiCycle.allCases, id: \.rawValue) { notiCycle in
+                        Button("\(notiCycle.rawValue)분") { self.notiCycle = notiCycle }
+                    }
                 } label: {
                     HStack {
                         Text("\(notiCycle.rawValue)분")
@@ -218,11 +217,13 @@ private struct NotiCycleView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 14, height: 14)
-                Text("무음모드를 해제해주세요!")
+                Text("무음모드를 해제해 주세요!")
                     .pretendard(.regular, 12)
             }
         }
-    } .padding(4)
+    } 
+    .padding(4)
+    .onAppear (perform : UIApplication.shared.hideKeyboard)
     }
 }
 

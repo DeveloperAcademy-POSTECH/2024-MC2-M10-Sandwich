@@ -23,7 +23,9 @@ struct InitialView: View {
         )
         .onAppear {
             setupNotification()
-            if partys.isLastParyLive { setupPartyService() }
+            if partys.isLastParyLive {
+                setupPartyService()
+            }
         }
     }
 }

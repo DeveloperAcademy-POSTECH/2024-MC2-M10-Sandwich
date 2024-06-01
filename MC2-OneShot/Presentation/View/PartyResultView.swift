@@ -23,15 +23,11 @@ struct PartyResultView: View {
         return sortedParty.last
     }
     
-//    var sortedStepList: [Step]? {
-//        currentParty?.stepList.sorted { $0.createDate < $1.createDate }
-//    }
-    
     var body: some View {
         
         VStack{
             ZStack{
-                if ((partys.last?.isShutdown) == true){
+                if ((partys.lastParty?.isShutdown) == true){
                     
                     HStack{
                         Spacer()
@@ -75,7 +71,7 @@ struct PartyResultView: View {
                         .foregroundColor(.shotFF)
                         .pretendard(.bold, 32)
                     
-                    Text("\((partys.last?.stepList.count ?? 1).intformatter)")
+                    Text("\((partys.lastParty?.stepList.count ?? 1).intformatter)")
                         .foregroundColor(.shotGreen)
                         .pretendard(.bold, 32)
                     
@@ -84,7 +80,7 @@ struct PartyResultView: View {
                 HStack{
                     // preview crash 
 //                    Text("30min")
-                    Text("\((partys.last?.notiCycle)!)min")
+                    Text("\((partys.lastParty?.notiCycle)!)min")
                         .foregroundStyle(.shotC6)
                         .pretendard(.bold, 17)
                 }
@@ -94,8 +90,11 @@ struct PartyResultView: View {
             
             ListView()
             
-            if let currentParty = currentParty {
+            if let currentParty = currentParty,
+               let memberList = partys.lastParty?.memberList,
+               !memberList.isEmpty {
                 MemberResultView(party: currentParty)
+                    .padding(.top, -20)
             }
             
             HStack(spacing: 8) {
@@ -111,11 +110,12 @@ struct PartyResultView: View {
                     buttonType: .primary
                 ) {
                     isPartyResultViewPresented = false
-                    homePathModel.paths.append(.partyList(party: partys.last!))
+                    homePathModel.paths.append(.partyList(party: partys.lastParty!))
                 }
             }
             .padding()
         }
+        .scrollDisabled(true)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             currentParty?.isLive = false
@@ -183,7 +183,7 @@ private struct ListView: View {
                             .frame(width: 8, height: 8)
                             .foregroundColor(.shotGreen)
                         
-                        Text((partys.last?.startDate ?? Date()).yearMonthdayweekDay)
+                        Text((partys.lastParty?.startDate ?? Date()).yearMonthdayweekDay)
                             .pretendard(.bold, 16)
                             .foregroundStyle(.shotFF)
                             .padding(.leading,8)
@@ -217,29 +217,20 @@ private struct ListView: View {
     
     // MARK: - totalTime
     func totalTime() -> String {
-        //    let startTime = dummyPartys[0].startDate.hourMinute
-        //    let stepCount = dummyPartys[0].stepList.count
-        //    //    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
-        //    //    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
-        //
-        //    // 일단 강제 종료일 경우
-        //    let allSteptime = (stepCount + 1) * dummyPartys[0].notiCycle
-        //
-        //    let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: dummyPartys[0].startDate).hourMinute
-        //
-        //    return "\(startTime) ~ \(finishTime)"
         
-        let startTime = (partys.last?.startDate ?? Date()).hourMinute
-        let stepCount = partys.last?.stepList.count ?? 3
-        //    let mediaCount = dummyPartys[0].stepList[stepCount-1].mediaList.count
-        //    let finishTime = dummyPartys[0].stepList[stepCount-1].mediaList[mediaCount-1].captureDate.hourMinute
+        let startTime = (partys.lastParty?.startDate ?? Date()).hourMinute
+        let stepCount = partys.lastParty?.stepList.count ?? 3
         
-        // 일단 강제 종료일 경우
-        let allSteptime = (stepCount + 1) * (partys.last?.notiCycle ?? 60)
+        let allSteptime = (stepCount + 1) * (partys.lastParty?.notiCycle ?? 60)
         
-        let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: partys.last?.startDate ?? Date()).hourMinute
-        
-        return "\(startTime) ~ \(finishTime)"
+        // 자동 종료된 경우
+        if ((partys.lastParty?.isShutdown) == true) {
+            let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: partys.lastParty?.startDate ?? Date()).hourMinute
+            return "\(startTime) ~ \(finishTime)"
+        } else { // 직접 종료한 경우
+            let finishTime = Date().hourMinute
+            return "\(startTime) ~ \(finishTime)"
+        }
     }
 }
 

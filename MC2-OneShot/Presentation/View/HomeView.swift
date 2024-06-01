@@ -69,6 +69,19 @@ struct HomeView: View {
             }
         }
     }
+<<<<<<< HEAD
+=======
+    
+    /// PartySetView가 사라질 때 호출되는 메서드입니다.
+    private func presentCameraView() {
+        isCameraViewPresented.toggle()
+        
+        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
+            isPartyResultViewPresented.toggle()
+            partys.last?.isShutdown = true
+        }
+    }
+>>>>>>> dev
 }
 
 // MARK: - HeaderView
@@ -120,6 +133,7 @@ private struct ListView: View {
 // MARK: - HomeView Function
 extension HomeView {
     
+<<<<<<< HEAD
     /// PartySetView가 사라질 때 호출되는 메서드입니다.
     private func presentCameraView() {
         isCameraViewPresented.toggle()
@@ -130,8 +144,11 @@ extension HomeView {
     }
     
     /// STEP을 완료했을 때 로직
+=======
+    /// STEP을 완료하지 못했을 때 로직
+>>>>>>> dev
     private func whenLastStepNotComplete(lastParty: Party, presentTime: TimeInterval) {
-        let shutdownStepSecond = TimeInterval(lastParty.stepList.count) * PartyService.shared.getNotiCycle()
+        let shutdownStepSecond = TimeInterval(lastParty.stepList.count) * TimeInterval(lastParty.notiCycle * 60)
         let currentStepEndDate = lastParty.startDate.timeIntervalSince1970 + shutdownStepSecond
         
         let restTime = currentStepEndDate - presentTime
@@ -153,15 +170,14 @@ extension HomeView {
         }
     }
     
-    /// STEP을 완료하지 못했을 때 로직
+    /// STEP을 완료했을 때 로직
     private func whenLastStepComplete(lastParty: Party, presentTime: TimeInterval) {
-        let shutdownStepSecond = TimeInterval((lastParty.stepList.count + 1)) * PartyService.shared.getNotiCycle()
+        let shutdownStepSecond = TimeInterval((lastParty.stepList.count + 1)) * TimeInterval(lastParty.notiCycle * 60)
         let nextStepEndDate = lastParty.startDate.timeIntervalSince1970 + shutdownStepSecond
         
         let restTime = nextStepEndDate - presentTime
         
         if restTime > 0 {
-            
             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
                 isPartyResultViewPresented.toggle()
                 lastParty.isShutdown = true
@@ -170,7 +186,7 @@ extension HomeView {
             isCameraViewPresented.toggle()
             
             // 이전 스텝 사진 찍고, 다시 들어와보니 이미 다음 스텝 진행중
-            if restTime <= PartyService.shared.getNotiCycle() {
+            if restTime <= TimeInterval(lastParty.notiCycle * 60) {
                 let newStep = Step()
                 lastParty.stepList.append(newStep)
             }

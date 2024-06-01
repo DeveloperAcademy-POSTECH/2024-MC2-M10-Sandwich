@@ -110,7 +110,8 @@ struct PartyCameraView: View {
         }, content: {
             FinishPopupView(
                 isFinishPopupPresented: $isFinishPopupPresented,
-                isPartyEnd: $isPartyEnd
+                isPartyEnd: $isPartyEnd,
+                memberList: currentParty!.memberList
             )
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
@@ -126,16 +127,17 @@ struct PartyCameraView: View {
             ZStack {
                 viewManager.cameraPreview
                     .ignoresSafeArea()
-                    .frame(width: 393, height: 393)
+                    .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                     .aspectRatio(1, contentMode: .fit)
                     .cornerRadius(15)
                     .padding(.top, 36)
+                
                 
                 if viewManager.isPhotoCaptureDone {
                     Image(uiImage: viewManager.recentImage ?? UIImage(resource: .appLogo))
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 393, height: 393)
+                        .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                         .aspectRatio(1, contentMode: .fit)
                         .cornerRadius(15)
                         .padding(.top, 36)
@@ -173,7 +175,6 @@ struct PartyCameraView: View {
     var BottomView: some View {
         ZStack {
             HStack {
-                
                 // MARK: - 플래시 + 셀카 전환
                 // 촬영 전
                 if !viewManager.isShot {
@@ -246,6 +247,7 @@ struct PartyCameraView: View {
                 isShotDisabled: $isShotDisabled,
                 isPartyResultViewPresented: $isPartyResultViewPresented
             )
+            .padding(.top, 15)
         }
     }
 }
@@ -282,11 +284,17 @@ private struct CaptureButtonView: View {
             } else {
                 if isBolt{
                     viewManager.toggleFlash()
+                    viewManager.capturePhoto()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // 0.5초 후에 플래시가 꺼짐
+                        viewManager.toggleFlash()
+                    }
+                } else {
+                    viewManager.capturePhoto()
                 }
-                viewManager.capturePhoto()
             }
             
             delayButton()
+            
         } label: {
             ZStack{
                 if viewManager.isShot {
@@ -424,3 +432,5 @@ private struct StepInfoView: View {
         }
     }
 }
+
+
