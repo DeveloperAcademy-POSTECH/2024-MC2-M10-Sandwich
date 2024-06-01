@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - PartySetView
+
 struct PartySetView: View {
     
     @EnvironmentObject private var homePathModel: HomePathModel
@@ -14,9 +16,9 @@ struct PartySetView: View {
     
     @State private var titleText: String = ""
     @State private var notiCycle: NotiCycle = NotiCycle.allCases.first ?? .min30
-    @State var membersInfo: [Member] = []
+    @State private var membersInfo: [Member] = []
     
-    @Binding var isPartySetViewPresented: Bool
+    @Binding private(set) var isPartySetViewPresented: Bool
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -47,7 +49,7 @@ struct PartySetView: View {
     }
     
     /// GO STEP! 버튼 클릭 시 호출되는 함수입니다.
-    func goStep() {
+    private func goStep() {
         
         HapticManager.shared.notification(type: .success)
         
@@ -73,9 +75,10 @@ struct PartySetView: View {
 }
 
 // MARK: - TitleView
+
 private struct TitleView: View {
     
-    @Binding var titleText: String
+    @Binding private(set) var titleText: String
     
     var body: some View {
         Section {
@@ -91,6 +94,7 @@ private struct TitleView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 14, height: 14)
+                
                 Text("제목은 12자 이내로 작성 가능해요.")
                     .pretendard(.regular, 12)
             }
@@ -100,17 +104,14 @@ private struct TitleView: View {
 }
 
 // MARK: - MemberListView
+
 private struct MemberListView: View {
     
     @State private var isCameraViewPresented = false
-    @Binding var membersInfo: [Member]
     
-    let columns: [GridItem] = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    @Binding private(set) var membersInfo: [Member]
+    
+    private let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 4)
     
     var body: some View {
         Section {
@@ -142,6 +143,7 @@ private struct MemberListView: View {
                                 Circle()
                                     .frame(width: 60)
                                     .foregroundStyle(.shot33)
+                                
                                 Image(systemName: "plus")
                                     .resizable()
                                     .frame(width: 32, height: 32)
@@ -150,19 +152,22 @@ private struct MemberListView: View {
                         }
                         .buttonStyle(BorderlessButtonStyle())
                         .fullScreenCover(isPresented: $isCameraViewPresented) {
-                            MemberCameraView(isCameraViewPresented: $isCameraViewPresented, membersInfo: $membersInfo)
+                            MemberCameraView(
+                                isCameraViewPresented: $isCameraViewPresented,
+                                membersInfo: $membersInfo
+                            )
                         }
                     }
                 }
                 .padding(.bottom, 8)
             }
         } footer: {
-            // footer 변경
             HStack {
                 Image(systemName: "camera.circle.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 14, height: 14)
+                
                 Text("술자리를 함께하는 일행의 사진을 찍어봐요!")
                     .pretendard(.regular, 12)
             }
@@ -172,9 +177,10 @@ private struct MemberListView: View {
 }
 
 // MARK: - NotiCycleView
+
 private struct NotiCycleView: View {
     
-    @Binding var notiCycle: NotiCycle
+    @Binding private(set) var notiCycle: NotiCycle
     
     var body: some View {
         Section {
@@ -197,39 +203,41 @@ private struct NotiCycleView: View {
                     .foregroundStyle(.shotFF).opacity(0.6)
                 }
             }
-        }
-        
-    footer: {
-        
-        // 인포 문구 추가
-        VStack(alignment: .leading){
-            HStack{
-                Image(systemName: "questionmark.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                Text("알림 주기마다 PUSH 알림을 보내드려요.")
-                    .pretendard(.regular, 12)
+        } footer: {
+            VStack(alignment: .leading){
+                HStack{
+                    Image(systemName: "questionmark.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 14, height: 14)
+                    
+                    Text("알림 주기마다 PUSH 알림을 보내드려요.")
+                        .pretendard(.regular, 12)
+                }
+                
+                HStack{
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 14, height: 14)
+                    
+                    Text("무음모드를 해제해 주세요!")
+                        .pretendard(.regular, 12)
+                }
             }
-            
-            HStack{
-                Image(systemName: "exclamationmark.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                Text("무음모드를 해제해 주세요!")
-                    .pretendard(.regular, 12)
-            }
         }
-    } 
-    .padding(4)
-    .onAppear (perform : UIApplication.shared.hideKeyboard)
+        .padding(4)
+        .onAppear(perform : UIApplication.shared.hideKeyboard)
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
     PartySetView(
         isPartySetViewPresented: .constant(true)
     )
     .modelContainer(MockModelContainer.mockModelContainer)
 }
+#endif
