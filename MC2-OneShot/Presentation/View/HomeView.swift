@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - HomeView
+
 struct HomeView: View {
     
     @StateObject var persistentDataManager: PersistentDataManager
@@ -78,6 +80,7 @@ struct HomeView: View {
 }
 
 // MARK: - HeaderView
+
 private struct HeaderView: View {
     
     @EnvironmentObject private var homePathModel: HomePathModel
@@ -107,9 +110,11 @@ private struct HeaderView: View {
 }
 
 // MARK: - ListView
+
 private struct ListView: View {
     
     @State private var isFirstInfoVisible = true
+    
     @Query private var partys: [Party]
     
     var body: some View {
@@ -124,6 +129,7 @@ private struct ListView: View {
 }
 
 // MARK: - HomeView Function
+
 extension HomeView {
     
     /// 초기 Notification을 설정합니다.
@@ -205,8 +211,6 @@ extension HomeView {
                     lastParty.stepList.append(newStep)
                 }
             }
-            
-            
         }
         
         // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
@@ -217,8 +221,12 @@ extension HomeView {
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
     HomeView(persistentDataManager: PersistentDataManager(modelContext: ModelContext(MockModelContainer.mockModelContainer)))
         .environmentObject(HomePathModel())
         .modelContainer(MockModelContainer.mockModelContainer)
 }
+#endif
