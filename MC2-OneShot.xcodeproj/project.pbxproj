@@ -19,7 +19,10 @@
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
 		82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF62BF7034A00BF01CF /* NotiCycle.swift */; };
 		82016BF92BF742C300BF01CF /* PartyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF82BF742C300BF01CF /* PartyService.swift */; };
-		825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDC2BF32F46001B416A /* OneShotData.swift */; };
+		820F927D2C0ABC6F00E103F3 /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F927C2C0ABC6F00E103F3 /* Party.swift */; };
+		820F927F2C0ABC9500E103F3 /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F927E2C0ABC9500E103F3 /* Step.swift */; };
+		820F92812C0ABCC300E103F3 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92802C0ABCC300E103F3 /* Media.swift */; };
+		820F92832C0ABCDC00E103F3 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92822C0ABCDC00E103F3 /* Member.swift */; };
 		825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDF2BF486BE001B416A /* ActionButton.swift */; };
 		8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */; };
 		8264EA122BF2000900586FA0 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA112BF2000900586FA0 /* HomeView.swift */; };
@@ -74,7 +77,10 @@
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
 		82016BF62BF7034A00BF01CF /* NotiCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiCycle.swift; sourceTree = "<group>"; };
 		82016BF82BF742C300BF01CF /* PartyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyService.swift; sourceTree = "<group>"; };
-		825F0BDC2BF32F46001B416A /* OneShotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneShotData.swift; sourceTree = "<group>"; };
+		820F927C2C0ABC6F00E103F3 /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
+		820F927E2C0ABC9500E103F3 /* Step.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
+		820F92802C0ABCC300E103F3 /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		820F92822C0ABCDC00E103F3 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		825F0BDF2BF486BE001B416A /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		8264EA0C2BF2000900586FA0 /* MC2-OneShot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MC2-OneShot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MC2_OneShotApp.swift; sourceTree = "<group>"; };
@@ -172,7 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				8264EA1F2BF2008C00586FA0 /* App */,
-				8264EA1E2BF2008400586FA0 /* Model */,
+				8264EA1E2BF2008400586FA0 /* Data */,
 				8264EA1D2BF2007F00586FA0 /* Presentation */,
 				BFB534112BF344ED0013E9FE /* Helper */,
 				82016BEF2BF6DCC200BF01CF /* Manager */,
@@ -200,14 +206,14 @@
 			path = Presentation;
 			sourceTree = "<group>";
 		};
-		8264EA1E2BF2008400586FA0 /* Model */ = {
+		8264EA1E2BF2008400586FA0 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				82A0C7A52C03132400686604 /* Data */,
+				82A0C7A52C03132400686604 /* SwiftData */,
 				82A0C7A42C03131800686604 /* Path */,
 				82A0C7A62C03133200686604 /* Enum */,
 			);
-			path = Model;
+			path = Data;
 			sourceTree = "<group>";
 		};
 		8264EA1F2BF2008C00586FA0 /* App */ = {
@@ -268,13 +274,16 @@
 			path = Path;
 			sourceTree = "<group>";
 		};
-		82A0C7A52C03132400686604 /* Data */ = {
+		82A0C7A52C03132400686604 /* SwiftData */ = {
 			isa = PBXGroup;
 			children = (
-				825F0BDC2BF32F46001B416A /* OneShotData.swift */,
+				820F927C2C0ABC6F00E103F3 /* Party.swift */,
+				820F927E2C0ABC9500E103F3 /* Step.swift */,
+				820F92802C0ABCC300E103F3 /* Media.swift */,
+				820F92822C0ABCDC00E103F3 /* Member.swift */,
 				82B49BE12BF88A7B00119628 /* MockModelContainer.swift */,
 			);
-			path = Data;
+			path = SwiftData;
 			sourceTree = "<group>";
 		};
 		82A0C7A62C03133200686604 /* Enum */ = {
@@ -419,8 +428,10 @@
 				82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */,
 				8264EA122BF2000900586FA0 /* HomeView.swift in Sources */,
 				8264EA2E2BF2016500586FA0 /* CommentPopupView.swift in Sources */,
+				820F927F2C0ABC9500E103F3 /* Step.swift in Sources */,
 				82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */,
 				82D564552BFC22440091C2BC /* CameraPreviewView.swift in Sources */,
+				820F92812C0ABCC300E103F3 /* Media.swift in Sources */,
 				1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */,
 				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
@@ -434,11 +445,12 @@
 				1EDF2C1A2BFD856C003291F4 /* Helper+HideKeyboard.swift in Sources */,
 				82D564502BFB80880091C2BC /* Helper+Constant.swift in Sources */,
 				82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */,
+				820F927D2C0ABC6F00E103F3 /* Party.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */,
 				98BA9D4E2BF6DF4200BEEDCC /* CameraManager.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
-				825F0BDD2BF32F46001B416A /* OneShotData.swift in Sources */,
+				820F92832C0ABCDC00E103F3 /* Member.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
 				827616782BFED788008099F4 /* HapticManager.swift in Sources */,

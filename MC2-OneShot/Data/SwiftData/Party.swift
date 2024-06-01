@@ -1,15 +1,16 @@
 //
-//  OneShotData.swift
+//  Party.swift
 //  MC2-OneShot
 //
-//  Created by 김민준 on 5/14/24.
+//  Created by 김민준 on 6/1/24.
 //
 
 import Foundation
-import SwiftData
 import UIKit
+import SwiftData
 
 // MARK: - Party
+
 @Model
 class Party: Identifiable {
     @Attribute(.unique) let id: UUID
@@ -67,42 +68,8 @@ class Party: Identifiable {
     }
 }
 
-// MARK: - Step
-@Model
-class Step: Identifiable {
-    
-    let createDate: Date
-    @Relationship(deleteRule: .cascade) var mediaList: [Media]
-    
-    init(createDate: Date = .now, mediaList: [Media] = []) {
-        self.createDate = createDate
-        self.mediaList = mediaList
-    }
-}
-
-// MARK: - Media
-@Model
-class Media: Identifiable {
-    var fileData: Data
-    var captureDate: Date
-    
-    init(fileData: Data, captureDate: Date) {
-        self.fileData = fileData
-        self.captureDate = captureDate
-    }
-}
-
-// MARK: - Member
-@Model
-class Member: Identifiable {
-    let profileImageData: Data
-    
-    init(profileImageData: Data) {
-        self.profileImageData = profileImageData
-    }
-}
-
 // MARK: - [Party]
+
 extension [Party] {
     
     /// 날짜를 기준으로 정렬한 Party 배열을 반환합니다.

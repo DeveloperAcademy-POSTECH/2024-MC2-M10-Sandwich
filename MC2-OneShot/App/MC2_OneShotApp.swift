@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - App
+
 @main
 struct MC2_OneShotApp: App {
     
@@ -22,6 +24,7 @@ struct MC2_OneShotApp: App {
 }
 
 // MARK: - SwiftData
+
 extension MC2_OneShotApp {
     
     /// SwiftData ModelContainer 생성
