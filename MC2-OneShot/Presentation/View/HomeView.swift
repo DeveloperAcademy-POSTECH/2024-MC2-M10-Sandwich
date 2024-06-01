@@ -160,6 +160,7 @@ extension HomeView {
     private func whenLastStepComplete(lastParty: Party, presentTime: TimeInterval) {
         let shutdownStepSecond = TimeInterval((lastParty.stepList.count + 1)) * TimeInterval(lastParty.notiCycle * 60)
         let nextStepEndDate = lastParty.startDate.timeIntervalSince1970 + shutdownStepSecond
+        let nextStepStartDate = lastParty.startDate.timeIntervalSince1970 + TimeInterval(lastParty.stepList.count) * TimeInterval(lastParty.notiCycle * 60)
         
         let restTime = nextStepEndDate - presentTime
         
@@ -175,7 +176,14 @@ extension HomeView {
             if restTime <= TimeInterval(lastParty.notiCycle * 60) {
                 let newStep = Step()
                 lastParty.stepList.append(newStep)
+            } else {
+                NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepStartDate)) {
+                    let newStep = Step()
+                    lastParty.stepList.append(newStep)
+                }
             }
+            
+            
         }
         // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
         else {
