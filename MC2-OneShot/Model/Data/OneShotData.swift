@@ -32,7 +32,10 @@ class Party: Identifiable {
     
     /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.
     var firstThumbnailData: UIImage {
-        let firstMedia = sortedStepList.first?.mediaList.sorted { $0.captureDate < $1.captureDate }.first
+        let firstMedia = sortedStepList
+            .first?.mediaList
+            .sorted { $0.captureDate < $1.captureDate }
+            .first
         
         if let fileData = firstMedia?.fileData,
            let image = UIImage(data: fileData) {

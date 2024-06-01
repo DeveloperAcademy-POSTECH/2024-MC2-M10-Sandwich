@@ -69,19 +69,6 @@ struct HomeView: View {
             }
         }
     }
-<<<<<<< HEAD
-=======
-    
-    /// PartySetView가 사라질 때 호출되는 메서드입니다.
-    private func presentCameraView() {
-        isCameraViewPresented.toggle()
-        
-        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
-            isPartyResultViewPresented.toggle()
-            partys.last?.isShutdown = true
-        }
-    }
->>>>>>> dev
 }
 
 // MARK: - HeaderView
@@ -133,7 +120,6 @@ private struct ListView: View {
 // MARK: - HomeView Function
 extension HomeView {
     
-<<<<<<< HEAD
     /// PartySetView가 사라질 때 호출되는 메서드입니다.
     private func presentCameraView() {
         isCameraViewPresented.toggle()
@@ -143,10 +129,7 @@ extension HomeView {
         }
     }
     
-    /// STEP을 완료했을 때 로직
-=======
     /// STEP을 완료하지 못했을 때 로직
->>>>>>> dev
     private func whenLastStepNotComplete(lastParty: Party, presentTime: TimeInterval) {
         let shutdownStepSecond = TimeInterval(lastParty.stepList.count) * TimeInterval(lastParty.notiCycle * 60)
         let currentStepEndDate = lastParty.startDate.timeIntervalSince1970 + shutdownStepSecond

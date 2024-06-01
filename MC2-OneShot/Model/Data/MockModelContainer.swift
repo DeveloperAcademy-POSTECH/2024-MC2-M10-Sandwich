@@ -5,7 +5,7 @@
 //  Created by 김민준 on 5/18/24.
 //
 
-import Foundation
+// import Foundation
 import SwiftData
 
 /// Mock 전용 SwiftData Model Container
