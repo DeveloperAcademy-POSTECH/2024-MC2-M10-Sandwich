@@ -140,7 +140,6 @@
 				1EFADD702BF6DE6500E333AD /* NotificationManager.swift */,
 				82016BF82BF742C300BF01CF /* PartyService.swift */,
 				98BA9D4D2BF6DF4200BEEDCC /* CameraManager.swift */,
-				98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */,
 				1EB454502BFDE7EA004E99AD /* ImageSaver.swift */,
 				827616772BFED788008099F4 /* HapticManager.swift */,
 			);
@@ -253,6 +252,7 @@
 				19A1DAF42BF88ADA00C53D8C /* SearchView.swift */,
 				8264EA232BF200E200586FA0 /* PartySetView.swift */,
 				8264EA252BF200EB00586FA0 /* PartyCameraView.swift */,
+				98BA9D4B2BF6DF3900BEEDCC /* CameraViewManager.swift */,
 				82D564542BFC22440091C2BC /* CameraPreviewView.swift */,
 				8264EA272BF2013000586FA0 /* PartyResultView.swift */,
 				8264EA292BF2014200586FA0 /* PartyListView.swift */,

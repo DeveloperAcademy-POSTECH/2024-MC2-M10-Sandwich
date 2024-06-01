@@ -53,9 +53,9 @@ private struct ListView: View {
     
     @EnvironmentObject private var homePathModel: HomePathModel
     
-    @Binding var searchText: String
-    
     @Query private var partys: [Party]
+    
+    @Binding var searchText: String
     
     /// 검색어를 이용해 Party 배열을 반환합니다.
     var searchPartys: [Party] {

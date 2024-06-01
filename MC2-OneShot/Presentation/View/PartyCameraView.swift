@@ -8,11 +8,9 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - PartyCameraView
+
 struct PartyCameraView: View {
-    
-    @Environment(\.modelContext) private var modelContext
-    
-    @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
     @StateObject var viewManager = CameraViewManager()
@@ -22,28 +20,17 @@ struct PartyCameraView: View {
     @State private var isCamera = true
     @State private var isBolt = false
     @State private var isFace = false
-    @State private var isShot = false
     @State private var isShotDisabled = false
     @State private var isPartyEnd = false
     @State private var isFinishPopupPresented = false
     
-    @Binding var isCameraViewPresented: Bool
-    @Binding var isPartyResultViewPresented: Bool
-    
+    @Binding private(set) var isCameraViewPresented: Bool
+    @Binding private(set) var isPartyResultViewPresented: Bool
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
         let sortedParty = partys.sorted { $0.startDate < $1.startDate }
         return sortedParty.last
-    }
-    
-    /// 현재 파티가 라이브인지 확인하는 계산 속성
-    var isCurrentPartyLive: Bool {
-        if let safeParty = currentParty {
-            return safeParty.isLive
-        } else {
-            return false
-        }
     }
     
     var body: some View {

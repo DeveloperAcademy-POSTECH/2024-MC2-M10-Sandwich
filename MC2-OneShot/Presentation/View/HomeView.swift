@@ -15,11 +15,11 @@ struct HomeView: View {
     @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var homePathModel: HomePathModel = .init()
     
+    @Query private var partys: [Party]
+    
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
     @State private var isPartyResultViewPresented = false
-    
-    @Query private var partys: [Party]
     
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
@@ -113,9 +113,9 @@ private struct HeaderView: View {
 
 private struct ListView: View {
     
-    @State private var isFirstInfoVisible = true
-    
     @Query private var partys: [Party]
+    
+    @State private var isFirstInfoVisible = true
     
     var body: some View {
         ZStack {
