@@ -12,7 +12,7 @@ protocol PartyCameraInterface {
     func requestPermission()
     func displayPreview() -> AnyView
     func capturePhoto()
-    func savePhoto()
+    func fetchPhotoDataForSave() -> Data?
     func toggleFrontBack()
     func toggleFlashMode()
 }

@@ -10,8 +10,8 @@ import AVFoundation
 
 // MARK: - PartyCameraService
 
-final class PartyCameraService: PartyCameraInterface {
-    
+final class PartyCameraService: NSObject, PartyCameraInterface {
+
     /// Input과 Output을 연결하는 Session
     private var session = AVCaptureSession()
     
@@ -23,6 +23,9 @@ final class PartyCameraService: PartyCameraInterface {
     
     /// 카메라 관련 동작은 SessionQueue에서 진행
     private let sessionQueue = DispatchQueue(label: "sessionQueue")
+    
+    /// 가장 마지막에 촬영한 사진 UIImage
+    private var recentImage: UIImage?
 }
 
 // MARK: - 프로토콜 구현체
@@ -46,12 +49,14 @@ extension PartyCameraService {
     
     /// 사진을 촬영합니다.
     func capturePhoto() {
-        //
+        output.capturePhoto(with: capturePhotoSetting, delegate: self)
     }
     
-    /// 사진을 저장합니다.
-    func savePhoto() {
-        //
+    /// 사진 저장을 위해 이미지 데이터를 반환합니다.
+    func fetchPhotoDataForSave() -> Data? {
+        guard let recentImage = recentImage,
+              let croppedImage = cropImageToSquare(image: recentImage) else { return nil }
+        return croppedImage.jpegData(compressionQuality: 1.0)
     }
     
     /// 전면 / 후면 카메라를 전환합니다.
@@ -122,9 +127,32 @@ extension PartyCameraService {
             self.session.startRunning()
         }
     }
+    
+    /// AVCapturePhotoSetting을 반환합니다.
+    private var capturePhotoSetting: AVCapturePhotoSettings {
+        return AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+    }
 }
 
-// MARK: - Camera Preview
+// MARK: - AVCapturePhotoCaptureDelegate
+
+extension PartyCameraService: AVCapturePhotoCaptureDelegate {
+    
+    /// 사진 촬영 후 Photo 데이터의 준비가 완료되었을 때 호출되는 Delegate 메서드
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let imageData = photo.fileDataRepresentation(),
+              let uiImage = UIImage(data: imageData) else {
+            print("photoOutput(didFinishProcessingPhoto:) - Photo 데이터 변환 실패 ")
+            return
+        }
+        
+        let devicePosition = input.device.position
+        if devicePosition == .front { self.recentImage = flipImageHorizontally(uiImage) }
+        else { self.recentImage = uiImage }
+    }
+}
+
+// MARK: - Camera Preview 구현
 
 extension PartyCameraService {
     
@@ -154,6 +182,52 @@ extension PartyCameraService {
         }
         
         func updateUIView(_ uiView: VideoPreviewView, context: Context) {}
+    }
+}
+
+// MARK: - Camera Additional Method
+
+extension PartyCameraService {
+    
+    /// 이미지를 좌우반전 후 반환합니다.
+    private func flipImageHorizontally(_ image: UIImage) -> UIImage? {
+        UIGraphicsBeginImageContext(image.size)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        
+        context.translateBy(x: image.size.width / 2, y: image.size.height / 2)
+        
+        context.scaleBy(x: -1.0, y: 1.0)
+        
+        context.translateBy(x: -image.size.width / 2, y: -image.size.height / 2)
+        
+        image.draw(at: .zero)
+        
+        let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return flippedImage
+    }
+    
+    /// 이미지를 정사각형 모양으로 자르는 함수
+    private func cropImageToSquare(image: UIImage) -> UIImage? {
+        let cgImage = image.cgImage!
+        let width = CGFloat(cgImage.width)
+        let height = CGFloat(cgImage.height)
+        
+        let aspectRatio = width / height
+        var rect: CGRect
+        
+        if aspectRatio > 1 {
+            rect = CGRect(x: (width - height) / 2, y: 0, width: height, height: height)
+        } else {
+            rect = CGRect(x: 0, y: (height - width) / 2, width: width, height: width)
+        }
+        
+        if let croppedCGImage = cgImage.cropping(to: rect) {
+            return UIImage(cgImage: croppedCGImage, scale: image.scale, orientation: image.imageOrientation)
+        }
+        
+        return nil
     }
 }
 
@@ -325,13 +399,5 @@ extension OldPartyCameraService: AVCapturePhotoCaptureDelegate {
         
         // 1. 사진 캡처 완료
         isPhotoCaptureDone = true
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        // AudioServicesDisposeSystemSoundID(1108)
-        
-    }
-    func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        // AudioServicesDisposeSystemSoundID(1108)
     }
 }

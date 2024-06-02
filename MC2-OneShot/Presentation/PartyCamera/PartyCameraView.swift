@@ -273,7 +273,6 @@ private struct CameraBottomView: View {
             
             CaptureButtonView(
                 cameraUseCase: cameraUseCase,
-                viewManager: viewModel,
                 isBolt: $viewModel.isBolt,
                 isShotDisabled: $viewModel.isShotDisabled,
                 isPartyResultViewPresented: $isPartyResultViewPresented
@@ -289,7 +288,7 @@ private struct CaptureButtonView: View {
     
     @Bindable private(set) var cameraUseCase: PartyCameraUseCase
     
-    @ObservedObject var viewManager: PartyCameraViewModel
+    // @ObservedObject var viewManager: PartyCameraViewModel
     
     @Query private var partys: [Party]
     
@@ -305,7 +304,11 @@ private struct CaptureButtonView: View {
     
     var body: some View {
         Button {
-            cameraUseCase.capturePhoto()
+            if cameraUseCase.state.isCaptureMode {
+                cameraUseCase.capturePhoto()
+            } else {
+                cameraUseCase.savePhoto()
+            }
 //            if viewManager.isShot {
 //                viewManager.retakePhoto()
 //                takePhoto()
@@ -321,11 +324,10 @@ private struct CaptureButtonView: View {
 //                }
 //            }
 //            
-//            delayButton()
-            
+//            delayButton()   
         } label: {
             ZStack{
-                if viewManager.isShot {
+                if cameraUseCase.state.isCaptureMode {
                     Circle()
                         .fill(Color.shotGreen)
                         .frame(width: 96, height: 96)
@@ -335,7 +337,7 @@ private struct CaptureButtonView: View {
                         .frame(height: 36)
                         .foregroundColor(.shot00)
                     
-                } else{
+                } else {
                     Circle()
                         .fill(Color.shotFF)
                         .frame(width: 80, height: 80)
@@ -384,7 +386,7 @@ private struct CaptureButtonView: View {
             
             // 사진 데이터 저장!
             let sortedSteps = lastParty.stepList.sorted { $0.createDate < $1.createDate }
-            let newMedia = Media(fileData: viewManager.cropImage()!, captureDate: .now)
+            let newMedia = Media(fileData: cameraUseCase.fetchPhotoData(), captureDate: .now)
             sortedSteps.last?.mediaList.append(newMedia)
         }
     }

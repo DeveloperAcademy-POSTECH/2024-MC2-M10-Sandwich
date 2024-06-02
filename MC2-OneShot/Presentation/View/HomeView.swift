@@ -12,6 +12,8 @@ import SwiftData
 
 struct HomeView: View {
     
+    @Environment(\.modelContext) private var modelContext
+    
     @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var homePathModel: HomePathModel = .init()
     
@@ -47,7 +49,10 @@ struct HomeView: View {
             }
             .fullScreenCover(isPresented: $isCameraViewPresented) {
                 PartyCameraView(
-                    cameraUseCase: PartyCameraUseCase(cameraService: PartyCameraService()),
+                    cameraUseCase: PartyCameraUseCase(
+                        cameraService: PartyCameraService(),
+                        dataService: PersistentDataService(modelContext: modelContext)
+                    ),
                     isCameraViewPresented: $isCameraViewPresented,
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )

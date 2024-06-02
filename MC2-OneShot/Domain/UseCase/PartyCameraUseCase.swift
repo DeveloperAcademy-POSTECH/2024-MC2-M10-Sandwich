@@ -13,10 +13,13 @@ import SwiftUI
 final class PartyCameraUseCase {
     
     private var cameraService: PartyCameraInterface
+    private var dataService: PersistentDataService
+    
     private(set) var state: State
     
-    init(cameraService: PartyCameraInterface) {
+    init(cameraService: PartyCameraInterface, dataService: PersistentDataService) {
         self.cameraService = cameraService
+        self.dataService = dataService
         self.state = State()
     }
 }
@@ -52,6 +55,27 @@ extension PartyCameraUseCase {
     
     /// 사진을 촬영합니다.
     func capturePhoto() {
-        cameraService.capturePhoto()
+        if state.isCaptureMode {
+            cameraService.capturePhoto()
+            state.isCaptureMode.toggle()
+        }
+    }
+    
+    func fetchPhotoData() -> Data {
+        if let photoData = cameraService.fetchPhotoDataForSave() {
+            return photoData
+        } else {
+            fatalError("사진 데이터 반환 실패")
+        }
+    }
+    
+    /// 사진을 저장합니다.
+    func savePhoto() {
+        guard let photoData = cameraService.fetchPhotoDataForSave() else {
+            print("사진 데이터 누락 저장 실패")
+            return
+        }
+        dataService.savePhoto(data: photoData)
+        state.isCaptureMode.toggle()
     }
 }
