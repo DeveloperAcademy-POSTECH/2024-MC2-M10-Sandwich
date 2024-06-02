@@ -46,7 +46,11 @@ struct HomeView: View {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
             }
             .fullScreenCover(isPresented: $isCameraViewPresented) {
-                PartyCameraView(isCameraViewPresented: $isCameraViewPresented, isPartyResultViewPresented: $isPartyResultViewPresented)
+                PartyCameraView(
+                    cameraUseCase: PartyCameraUseCase(cameraService: PartyCameraService()),
+                    isCameraViewPresented: $isCameraViewPresented,
+                    isPartyResultViewPresented: $isPartyResultViewPresented
+                )
             }
             .fullScreenCover(isPresented: $isPartyResultViewPresented) {
                 isCameraViewPresented = false

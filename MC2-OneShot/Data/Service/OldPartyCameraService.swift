@@ -8,7 +8,124 @@
 import SwiftUI
 import AVFoundation
 
-class PartyCameraService: NSObject, ObservableObject {
+// MARK: - PartyCameraService
+
+final class PartyCameraService: PartyCameraInterface {
+    
+    /// Input과 Output을 연결하는 Session
+    private var session = AVCaptureSession()
+    
+    /// 실제 디바이스 연결을 통한 Input
+    private var input: AVCaptureDeviceInput!
+    
+    /// 촬영 이후 결과를 내보내는 Output
+    private let output = AVCapturePhotoOutput()
+    
+    /// 카메라 관련 동작은 SessionQueue에서 진행
+    private let sessionQueue = DispatchQueue(label: "sessionQueue")
+}
+
+// MARK: - 프로토콜 구현체
+
+extension PartyCameraService {
+    
+    /// 카메라 권한을 요청합니다.
+    func requestPermission() {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .notDetermined: requestAccess()
+        case .restricted, .denied: print("권한 거부 / 제한")
+        case .authorized: initialSetup()
+        @unknown default: print("알수없는 권한 상태")
+        }
+    }
+    
+    /// 사진을 촬영합니다.
+    func capturePhoto() {
+        //
+    }
+    
+    /// 사진을 저장합니다.
+    func savePhoto() {
+        //
+    }
+    
+    /// Preview를 표시합니다.
+    func displayPreview() {
+        //
+    }
+    
+    /// 전면 / 후면 카메라를 전환합니다.
+    func toggleFrontBack() {
+        //
+    }
+    
+    /// 플래시 모드를 전환합니다.
+    func toggleFlashMode() {
+        //
+    }
+}
+
+// MARK: - AVCaptureSession 구현
+
+extension PartyCameraService {
+    
+    /// 카메라 사용 권한을 요청합니다.
+    private func requestAccess() {
+        AVCaptureDevice.requestAccess(for: .video) { [weak self] authStatus in
+            if authStatus { self?.initialSetup() }
+        }
+    }
+    
+    /// 카메라 초기 설정 메서드입니다.
+    private func initialSetup() {
+        guard let device = AVCaptureDevice.default(
+            .builtInWideAngleCamera,
+            for: .video,
+            position: .back
+        ) else { return }
+        
+        sessionQueue.async { [weak self] in
+            
+            guard let self = self else { return }
+            do {
+                input = try AVCaptureDeviceInput(device: device)
+                addInputToSession(input: input)
+                addOutputToSession(output: output)
+                startSession()
+            } catch {
+                print("Error setting up camera: \(error)")
+            }
+        }
+    }
+    
+    /// AVCaptureSession에 입력(Input)을 추가합니다.
+    private func addInputToSession(input: AVCaptureDeviceInput) {
+        if session.canAddInput(input) {
+            session.addInput(input)
+        } else {
+            print("Input이 추가되지 않음")
+        }
+    }
+    
+    /// AVCaptureSession에 출력(Output)을 추가합니다.
+    private func addOutputToSession(output: AVCapturePhotoOutput) {
+        if session.canAddOutput(output) {
+            session.addOutput(output)
+        } else {
+            print("Output이 추가되지 않음")
+        }
+    }
+    
+    /// AVCaptureSession을 시작합니다.
+    private func startSession() {
+        sessionQueue.async {
+            self.session.startRunning()
+        }
+    }
+}
+
+
+class OldPartyCameraService: NSObject, ObservableObject {
     
     var session = AVCaptureSession()
     private var videoDeviceInput: AVCaptureDeviceInput!
@@ -71,16 +188,16 @@ class PartyCameraService: NSObject, ObservableObject {
     
     // 카메라 전환
     func changeCamera() {
-            let currentPosition = videoDeviceInput.device.position
-            let preferredPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
-            
-            print(preferredPosition == .back ? "후면카메라로 전환합니다." : "전면카메라로 전환합니다.")
-            
-            guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: preferredPosition) else {
-                print("videoDevice 객체 생성 실패")
-                return
-            }
-            
+        let currentPosition = videoDeviceInput.device.position
+        let preferredPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
+        
+        print(preferredPosition == .back ? "후면카메라로 전환합니다." : "전면카메라로 전환합니다.")
+        
+        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: preferredPosition) else {
+            print("videoDevice 객체 생성 실패")
+            return
+        }
+        
         sessionQueue.async { [weak self] in
             do {
                 guard let self = self else { return }
@@ -101,22 +218,22 @@ class PartyCameraService: NSObject, ObservableObject {
     
     // 이미지 좌우반전
     func flipImageHorizontally(_ image: UIImage) -> UIImage? {
-            UIGraphicsBeginImageContext(image.size)
-            guard let context = UIGraphicsGetCurrentContext() else { return nil }
-            
-            context.translateBy(x: image.size.width / 2, y: image.size.height / 2)
-            
-            context.scaleBy(x: -1.0, y: 1.0)
-            
-            context.translateBy(x: -image.size.width / 2, y: -image.size.height / 2)
-            
-            image.draw(at: .zero)
-            
-            let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            return flippedImage
-        }
+        UIGraphicsBeginImageContext(image.size)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        
+        context.translateBy(x: image.size.width / 2, y: image.size.height / 2)
+        
+        context.scaleBy(x: -1.0, y: 1.0)
+        
+        context.translateBy(x: -image.size.width / 2, y: -image.size.height / 2)
+        
+        image.draw(at: .zero)
+        
+        let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return flippedImage
+    }
     
     // 세션 시작
     private func startSession() {
@@ -152,7 +269,7 @@ class PartyCameraService: NSObject, ObservableObject {
 }
 
 // 사진 캡처 델리게이트
-extension PartyCameraService: AVCapturePhotoCaptureDelegate {
+extension OldPartyCameraService: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         
         let currentPosition = videoDeviceInput.device.position
@@ -168,9 +285,9 @@ extension PartyCameraService: AVCapturePhotoCaptureDelegate {
                 self.recentImage = image // 최근 사진 반영
             }
         }
-            
-            print("Capture 끝!")
-        }
+        
+        print("Capture 끝!")
+    }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         

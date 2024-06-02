@@ -13,7 +13,7 @@ import Combine
 
 final class PartyCameraViewModel: ObservableObject {
     
-    private let cameraService: PartyCameraService
+    private let cameraService: OldPartyCameraService
     
     @Published var isCamera = true
     @Published var isBolt = false
@@ -28,7 +28,7 @@ final class PartyCameraViewModel: ObservableObject {
     @Published var isPhotoCaptureDone = false
     
     init() {
-        cameraService = PartyCameraService()
+        cameraService = OldPartyCameraService()
         cameraPreview = AnyView(
             CameraPreviewView(session: cameraService.session)
         )

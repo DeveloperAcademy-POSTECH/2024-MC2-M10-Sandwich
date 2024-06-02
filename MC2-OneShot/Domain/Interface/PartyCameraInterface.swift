@@ -9,6 +9,7 @@ import Foundation
 
 /// 카메라와 관련된 기능
 protocol PartyCameraInterface {
+    func requestPermission()
     func capturePhoto()
     func savePhoto()
     func displayPreview()

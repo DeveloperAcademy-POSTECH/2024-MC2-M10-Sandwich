@@ -12,6 +12,8 @@ import SwiftData
 
 struct PartyCameraView: View {
     
+    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
+    
     @StateObject private var cameraPathModel: CameraPathModel = .init()
     @StateObject private var viewModel = PartyCameraViewModel()
     
@@ -51,6 +53,9 @@ struct PartyCameraView: View {
             }
         }
         .environmentObject(cameraPathModel)
+        .onAppear {
+            cameraUseCase.requestPermission()
+        }
     }
 }
 
@@ -447,10 +452,11 @@ private struct StepInfoView: View {
 // MARK: - Preview
 
 #if DEBUG
-#Preview {
-    PartyCameraView(
-        isCameraViewPresented: .constant(true),
-        isPartyResultViewPresented: .constant(false)
-    )
-}
+//#Preview {
+//    PartyCameraView(
+//        cameraUseCase: PartyCameraUseCase(cameraService: PartyCameraService()),
+//        isCameraViewPresented: .constant(true),
+//        isPartyResultViewPresented: .constant(false)
+//    )
+//}
 #endif
