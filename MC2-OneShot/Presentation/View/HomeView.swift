@@ -21,6 +21,8 @@ struct HomeView: View {
     @State private var isCameraViewPresented = false
     @State private var isPartyResultViewPresented = false
     
+    private(set) var hello = "Hello"
+    
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {

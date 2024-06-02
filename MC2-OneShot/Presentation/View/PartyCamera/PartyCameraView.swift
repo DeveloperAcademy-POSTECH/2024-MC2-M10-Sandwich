@@ -13,33 +13,30 @@ import SwiftData
 struct PartyCameraView: View {
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
-    @StateObject var viewManager = CameraViewManager()
+    @StateObject private var viewModel = PartyCameraViewModel()
     
     @Query private var partys: [Party]
-    
-    @State private var isCamera = true
-    @State private var isBolt = false
-    @State private var isFace = false
-    @State private var isShotDisabled = false
-    @State private var isPartyEnd = false
-    @State private var isFinishPopupPresented = false
     
     @Binding private(set) var isCameraViewPresented: Bool
     @Binding private(set) var isPartyResultViewPresented: Bool
     
-    /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
-        return sortedParty.last
-    }
-    
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack{
-                HeaderView
-                MiddleView
+                CameraHeaderView(
+                    viewModel: viewModel,
+                    isCameraViewPresented: $isCameraViewPresented,
+                    isPartyResultViewPresented: $isPartyResultViewPresented
+                )
+                
+                CameraMiddleView(viewModel: viewModel)
+                
                 Spacer().frame(height: 48)
-                BottomView
+                
+                CameraBottomView(
+                    viewModel: viewModel,
+                    isPartyResultViewPresented: $isPartyResultViewPresented
+                )
             }
             .navigationDestination(for: CameraPathType.self) { path in
                 switch path {
@@ -53,12 +50,30 @@ struct PartyCameraView: View {
                 PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
         }
+        .environmentObject(cameraPathModel)
+    }
+}
+
+// MARK: - CameraHeaderView
+
+private struct CameraHeaderView: View {
+    
+    @ObservedObject var viewModel: PartyCameraViewModel
+    
+    @Query private var partys: [Party]
+    
+    @Binding private(set) var isCameraViewPresented: Bool
+    @Binding private(set) var isPartyResultViewPresented: Bool
+    
+    /// 현재 파티를 반환합니다.
+    var currentParty: Party? {
+        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
+        return sortedParty.last
     }
     
-    // MARK: - HeaderView
-    var HeaderView: some View {
-        ZStack{
-            if !viewManager.isShot {
+    var body: some View {
+        ZStack {
+            if !viewModel.isShot {
                 HStack {
                     Button{
                         isCameraViewPresented.toggle()
@@ -70,19 +85,19 @@ struct PartyCameraView: View {
                             .foregroundColor(.shotFF)
                             .padding(.leading,16)
                     }
-                    .disabled(isShotDisabled)
+                    .disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                     
                     Button{
                         HapticManager.shared.notification(type: .warning)
-                        isFinishPopupPresented.toggle()
+                        viewModel.isFinishPopupPresented.toggle()
                     } label: {
                         Text("술자리 종료")
                             .pretendard(.semiBold, 16)
                             .foregroundColor(.shotGreen)
                     }
-                    .disabled(isShotDisabled)
+                    .disabled(viewModel.isShotDisabled)
                 }
                 .padding(.horizontal)
                 .padding(.top,12)
@@ -90,14 +105,14 @@ struct PartyCameraView: View {
             
             StepInfoView()
         }
-        .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
-            if isPartyEnd {
+        .fullScreenCover(isPresented: $viewModel.isFinishPopupPresented, onDismiss: {
+            if viewModel.isPartyEnd {
                 isPartyResultViewPresented.toggle()
             }
         }, content: {
             FinishPopupView(
-                isFinishPopupPresented: $isFinishPopupPresented,
-                isPartyEnd: $isPartyEnd,
+                isFinishPopupPresented: $viewModel.isFinishPopupPresented,
+                isPartyEnd: $viewModel.isPartyEnd,
                 memberList: currentParty!.memberList
             )
             .foregroundStyle(.shotFF)
@@ -107,12 +122,22 @@ struct PartyCameraView: View {
             transaction.disablesAnimations = true
         }
     }
+}
+
+// MARK: - CameraMiddleView
+
+private struct CameraMiddleView: View {
     
-    // MARK: - MiddleView
-    var MiddleView: some View {
+    @EnvironmentObject private var cameraPathModel: CameraPathModel
+    
+    @ObservedObject var viewModel: PartyCameraViewModel
+    
+    @Query private var partys: [Party]
+    
+    var body: some View {
         Group {
             ZStack {
-                viewManager.cameraPreview
+                viewModel.cameraPreview
                     .ignoresSafeArea()
                     .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                     .aspectRatio(1, contentMode: .fit)
@@ -120,8 +145,8 @@ struct PartyCameraView: View {
                     .padding(.top, 36)
                 
                 
-                if viewManager.isPhotoCaptureDone {
-                    Image(uiImage: viewManager.recentImage ?? UIImage(resource: .appLogo))
+                if viewModel.isPhotoCaptureDone {
+                    Image(uiImage: viewModel.recentImage ?? UIImage(resource: .appLogo))
                         .resizable()
                         .scaledToFill()
                         .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
@@ -132,7 +157,7 @@ struct PartyCameraView: View {
             }
             
             // 촬영 전
-            if !viewManager.isShot {
+            if !viewModel.isShot {
                 Button{
                     if let lastParty = partys.last {
                         cameraPathModel.paths.append(.partyList(party: lastParty))
@@ -146,7 +171,7 @@ struct PartyCameraView: View {
                             .foregroundColor(.shotFF)
                     }
                 }
-                .disabled(isShotDisabled)
+                .disabled(viewModel.isShotDisabled)
             }
             
             // 촬영 후
@@ -157,23 +182,30 @@ struct PartyCameraView: View {
             }
         }
     }
+}
+
+// MARK: - CameraBottomView
+
+private struct CameraBottomView: View {
     
-    // MARK: - BottomView
-    var BottomView: some View {
+    @ObservedObject var viewModel: PartyCameraViewModel
+    
+    @Binding private(set) var isPartyResultViewPresented: Bool
+    
+    var body: some View {
         ZStack {
             HStack {
-                // MARK: - 플래시 + 셀카 전환
                 // 촬영 전
-                if !viewManager.isShot {
+                if !viewModel.isShot {
                     Button {
                         print("플래시")
-                        if isFace || !isCamera{
-                            isBolt = false
+                        if viewModel.isFace || !viewModel.isCamera{
+                            viewModel.isBolt = false
                         } else {
-                            isBolt.toggle()
+                            viewModel.isBolt.toggle()
                         }
                     } label: {
-                        if isBolt {
+                        if viewModel.isBolt {
                             Image(systemName: "bolt")
                                 .resizable()
                                 .scaledToFit()
@@ -187,16 +219,16 @@ struct PartyCameraView: View {
                                 .foregroundColor(.shotFF)
                         }
                     }
-                    .disabled(isShotDisabled)
+                    .disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                     
                     Button{
                         print("화면전환")
-                        viewManager.changeCamera()
-                        isFace.toggle()
-                        if isFace {
-                            isBolt = false
+                        viewModel.changeCamera()
+                        viewModel.isFace.toggle()
+                        if viewModel.isFace {
+                            viewModel.isBolt = false
                         }
                     } label: {
                         Image(systemName: "arrow.triangle.2.circlepath")
@@ -205,33 +237,31 @@ struct PartyCameraView: View {
                             .frame(width: 32, height: 32)
                             .foregroundColor(.shotFF)
                     }
-                    .disabled(isShotDisabled)
+                    .disabled(viewModel.isShotDisabled)
                 }
                 
                 // 촬영 후
                 else {
                     Button {
-                        if viewManager.isShot {
-                            viewManager.retakePhoto()
+                        if viewModel.isShot {
+                            viewModel.retakePhoto()
                         }
                     } label: {
                         Text("다시찍기")
                             .foregroundColor(.shotFF)
                             .pretendard(.extraBold, 20)
                     }
-                    .disabled(isShotDisabled)
+                    .disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                 }
             }
             .padding(.horizontal, 36)
             
-            
-            // MARK: - 카메라 버튼
             CaptureButtonView(
-                viewManager: viewManager,
-                isBolt: $isBolt,
-                isShotDisabled: $isShotDisabled,
+                viewManager: viewModel,
+                isBolt: $viewModel.isBolt,
+                isShotDisabled: $viewModel.isShotDisabled,
                 isPartyResultViewPresented: $isPartyResultViewPresented
             )
             .padding(.top, 15)
@@ -239,17 +269,11 @@ struct PartyCameraView: View {
     }
 }
 
-#Preview {
-    PartyCameraView(
-        isCameraViewPresented: .constant(true),
-        isPartyResultViewPresented: .constant(false)
-    )
-}
-
 // MARK: - CaptureButtonView
+
 private struct CaptureButtonView: View {
     
-    @ObservedObject var viewManager: CameraViewManager
+    @ObservedObject var viewManager: PartyCameraViewModel
     
     @Query private var partys: [Party]
     
@@ -317,7 +341,7 @@ private struct CaptureButtonView: View {
         if let lastParty = currentParty,
            let lastStep = lastParty.sortedStepList.last {
             
-            // MARK: - 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
+            // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
             if lastStep.mediaList.isEmpty {
                 
                 // 기존 배너 알림 예약 취소 + 배너 알림 예약
@@ -362,6 +386,7 @@ private struct CaptureButtonView: View {
 }
 
 // MARK: - StepInfoView
+
 private struct StepInfoView: View {
     
     @Query private var partys: [Party]
@@ -373,7 +398,7 @@ private struct StepInfoView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0){
+        VStack(spacing: 0) {
             if let lastParty = currentParty,
                let lastStep = lastParty.sortedStepList.last {
                 // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
@@ -391,8 +416,7 @@ private struct StepInfoView: View {
                             .foregroundColor(.shotD8)
                     }
                     .padding(.bottom, 2)
-                }else{
-                    
+                } else {
                     ZStack{
                         Image("Greenbottle")
                             .resizable()
@@ -420,4 +444,13 @@ private struct StepInfoView: View {
     }
 }
 
+// MARK: - Preview
 
+#if DEBUG
+#Preview {
+    PartyCameraView(
+        isCameraViewPresented: .constant(true),
+        isPartyResultViewPresented: .constant(false)
+    )
+}
+#endif

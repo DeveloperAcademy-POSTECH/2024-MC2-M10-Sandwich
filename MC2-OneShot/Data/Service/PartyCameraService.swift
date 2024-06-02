@@ -1,13 +1,14 @@
 //
-//  CameraManager.swift
+//  CameraService.swift
 //  MC2-OneShot
 //
 //  Created by 정혜정 on 5/17/24.
 //
+
 import SwiftUI
 import AVFoundation
 
-class CameraManager: NSObject, ObservableObject {
+class PartyCameraService: NSObject, ObservableObject {
     
     var session = AVCaptureSession()
     private var videoDeviceInput: AVCaptureDeviceInput!
@@ -151,7 +152,7 @@ class CameraManager: NSObject, ObservableObject {
 }
 
 // 사진 캡처 델리게이트
-extension CameraManager: AVCapturePhotoCaptureDelegate {
+extension PartyCameraService: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         
         let currentPosition = videoDeviceInput.device.position

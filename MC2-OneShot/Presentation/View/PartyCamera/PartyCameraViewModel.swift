@@ -1,40 +1,55 @@
 //
-//  CameraViewManager.swift
+//  PartyCameraViewModel.swift
 //  MC2-OneShot
 //
 //  Created by 정혜정 on 5/17/24.
 //
 
-import SwiftUI
 import AVFoundation
+import SwiftUI
 import Combine
 
-class CameraViewManager: ObservableObject {
-    let manager: CameraManager
-    @Published var cameraPreview: AnyView
+// MARK: - PartyCameraViewModel
+
+final class PartyCameraViewModel: ObservableObject {
     
+    private let cameraService: PartyCameraService
+    
+    @Published var isCamera = true
+    @Published var isBolt = false
+    @Published var isFace = false
+    @Published var isShotDisabled = false
+    @Published var isPartyEnd = false
+    @Published var isFinishPopupPresented = false
+    
+    @Published var cameraPreview: AnyView
     @Published var recentImage: UIImage?
     @Published var isShot = false
     @Published var isPhotoCaptureDone = false
     
     init() {
-        manager = CameraManager()
+        cameraService = PartyCameraService()
         cameraPreview = AnyView(
-            CameraPreviewView(session: manager.session)
+            CameraPreviewView(session: cameraService.session)
         )
         
-        manager.$recentImage
+        cameraService.$recentImage
             .assign(to: &$recentImage)
         
-        manager.$isPhotoCaptureDone
+        cameraService.$isPhotoCaptureDone
             .assign(to: &$isPhotoCaptureDone)
         
         configure()
     }
+}
+
+// MARK: - Camera Function
+
+extension PartyCameraViewModel {
     
     // 초기 설정
     private func configure() {
-        manager.requestAndCheckPermissions()
+        cameraService.requestAndCheckPermissions()
     }
     
     // 플래시 전환
@@ -57,7 +72,7 @@ class CameraViewManager: ObservableObject {
         HapticManager.shared.impact(style: .light)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.manager.capturePhoto()
+            self.cameraService.capturePhoto()
             print("찰칵")
         }
         
@@ -68,14 +83,14 @@ class CameraViewManager: ObservableObject {
     
     // 다시 촬영
     func retakePhoto() {
-        manager.retakePhoto()
+        cameraService.retakePhoto()
         isShot = false
         print("CameraManager retakePhoto 호출")
     }
     
     // 전후면 카메라 전환
     func changeCamera() {
-        manager.changeCamera()
+        cameraService.changeCamera()
         print("CameraManager changeCamera 호출")
     }
     

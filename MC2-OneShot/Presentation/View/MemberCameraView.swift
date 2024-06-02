@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MemberCameraView: View {
     
-    @StateObject var viewManager = CameraViewManager()
+    @StateObject var viewManager = PartyCameraViewModel()
     
     @State private var isCamera = true
     @State private var isBolt = false
@@ -173,7 +173,7 @@ struct MemberCameraView: View {
 // MARK: - CaptureButtonView
 private struct CaptureButtonView: View {
     
-    @ObservedObject var viewManager: CameraViewManager
+    @ObservedObject var viewManager: PartyCameraViewModel
 
     @Binding var isBolt: Bool
     @Binding var isShotDisabled: Bool
