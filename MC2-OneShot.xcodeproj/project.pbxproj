@@ -43,6 +43,7 @@
 		827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D22C0CB5F1008F86BF /* CapturePhoto.swift */; };
 		827CF4D52C0CBB04008F86BF /* PersistentDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */; };
 		827CF4D72C0CBB35008F86BF /* PersistentDataInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D62C0CBB35008F86BF /* PersistentDataInterface.swift */; };
+		827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
@@ -105,6 +106,7 @@
 		827CF4D22C0CB5F1008F86BF /* CapturePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePhoto.swift; sourceTree = "<group>"; };
 		827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataService.swift; sourceTree = "<group>"; };
 		827CF4D62C0CBB35008F86BF /* PersistentDataInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataInterface.swift; sourceTree = "<group>"; };
+		827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldCameraService.swift; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 			children = (
 				98BA9D4D2BF6DF4200BEEDCC /* PartyCameraService.swift */,
 				827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */,
+				827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 				82D564552BFC22440091C2BC /* CameraPreviewView.swift in Sources */,
 				820F92812C0ABCC300E103F3 /* Media.swift in Sources */,
 				827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */,
+				827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */,
 				827CF4D72C0CBB35008F86BF /* PersistentDataInterface.swift in Sources */,
 				1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */,
 				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,

@@ -209,16 +209,11 @@ private struct CameraBottomView: View {
         ZStack {
             HStack {
                 // 촬영 전
-                if !viewModel.isShot {
+                if cameraUseCase.state.isCaptureMode {
                     Button {
-                        print("플래시")
-                        if viewModel.isFace || !viewModel.isCamera{
-                            viewModel.isBolt = false
-                        } else {
-                            viewModel.isBolt.toggle()
-                        }
+                        cameraUseCase.toggleFlashMode()
                     } label: {
-                        if viewModel.isBolt {
+                        if cameraUseCase.state.isFlashMode {
                             Image(systemName: "bolt")
                                 .resizable()
                                 .scaledToFit()
@@ -288,8 +283,6 @@ private struct CaptureButtonView: View {
     
     @Bindable private(set) var cameraUseCase: PartyCameraUseCase
     
-    // @ObservedObject var viewManager: PartyCameraViewModel
-    
     @Query private var partys: [Party]
     
     @Binding var isBolt: Bool
@@ -329,16 +322,6 @@ private struct CaptureButtonView: View {
             ZStack{
                 if cameraUseCase.state.isCaptureMode {
                     Circle()
-                        .fill(Color.shotGreen)
-                        .frame(width: 96, height: 96)
-                    Image(systemName: "arrow.up.forward")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 36)
-                        .foregroundColor(.shot00)
-                    
-                } else {
-                    Circle()
                         .fill(Color.shotFF)
                         .frame(width: 80, height: 80)
                     
@@ -346,6 +329,16 @@ private struct CaptureButtonView: View {
                         .fill(Color.clear)
                         .frame(width: 96, height: 96)
                         .overlay(Circle().stroke(Color.shotGreen, lineWidth: 4))
+                } else {
+                    Circle()
+                        .fill(Color.shotGreen)
+                        .frame(width: 96, height: 96)
+                    
+                    Image(systemName: "arrow.up.forward")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 36)
+                        .foregroundColor(.shot00)
                 }
             }
             .padding(.bottom, 15)
@@ -383,11 +376,6 @@ private struct CaptureButtonView: View {
                     lastParty.stepList.append(newStep)
                 }
             }
-            
-            // 사진 데이터 저장!
-            let sortedSteps = lastParty.stepList.sorted { $0.createDate < $1.createDate }
-            let newMedia = Media(fileData: cameraUseCase.fetchPhotoData(), captureDate: .now)
-            sortedSteps.last?.mediaList.append(newMedia)
         }
     }
     

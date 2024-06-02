@@ -29,13 +29,9 @@ final class PartyCameraUseCase {
 extension PartyCameraUseCase {
     
     struct State {
-        var isCaptureMode: Bool
-        
-        init(
-            isCaptureMode: Bool = true
-        ) {
-            self.isCaptureMode = isCaptureMode
-        }
+        var isCaptureMode: Bool = true
+        var isFlashMode: Bool = false
+        var isSelfieMode: Bool = false
     }
 }
 
@@ -58,14 +54,14 @@ extension PartyCameraUseCase {
         if state.isCaptureMode {
             cameraService.capturePhoto()
             state.isCaptureMode.toggle()
-        }
-    }
-    
-    func fetchPhotoData() -> Data {
-        if let photoData = cameraService.fetchPhotoDataForSave() {
-            return photoData
-        } else {
-            fatalError("사진 데이터 반환 실패")
+            
+            if state.isFlashMode && !state.isSelfieMode {
+                cameraService.toggleFlashMode()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    self?.cameraService.toggleFlashMode()
+                }
+            }
         }
     }
     
@@ -77,5 +73,10 @@ extension PartyCameraUseCase {
         }
         dataService.savePhoto(data: photoData)
         state.isCaptureMode.toggle()
+    }
+    
+    /// 플래시 모드를 토글합니다.
+    func toggleFlashMode() {
+        state.isFlashMode.toggle()
     }
 }

@@ -38,19 +38,12 @@ final class PartyCameraViewModel: ObservableObject {
         
         cameraService.$isPhotoCaptureDone
             .assign(to: &$isPhotoCaptureDone)
-        
-        configure()
     }
 }
 
 // MARK: - Camera Function
 
 extension PartyCameraViewModel {
-    
-    // 초기 설정
-    private func configure() {
-        cameraService.requestAndCheckPermissions()
-    }
     
     // 플래시 전환
     func toggleFlash() {
