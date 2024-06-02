@@ -25,6 +25,7 @@
 		820F92832C0ABCDC00E103F3 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92822C0ABCDC00E103F3 /* Member.swift */; };
 		820F92872C0AF6D100E103F3 /* PartyCameraInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92862C0AF6D100E103F3 /* PartyCameraInterface.swift */; };
 		8224EA432C0C4597003EB372 /* PartyCameraUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8224EA422C0C4597003EB372 /* PartyCameraUseCase.swift */; };
+		8224EA672C0CAD84003EB372 /* CamerPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8224EA662C0CAD84003EB372 /* CamerPreview.swift */; };
 		825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDF2BF486BE001B416A /* ActionButton.swift */; };
 		8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */; };
 		8264EA122BF2000900586FA0 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA112BF2000900586FA0 /* HomeView.swift */; };
@@ -83,6 +84,7 @@
 		820F92822C0ABCDC00E103F3 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		820F92862C0AF6D100E103F3 /* PartyCameraInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCameraInterface.swift; sourceTree = "<group>"; };
 		8224EA422C0C4597003EB372 /* PartyCameraUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCameraUseCase.swift; sourceTree = "<group>"; };
+		8224EA662C0CAD84003EB372 /* CamerPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CamerPreview.swift; sourceTree = "<group>"; };
 		825F0BDF2BF486BE001B416A /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		8264EA0C2BF2000900586FA0 /* MC2-OneShot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MC2-OneShot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8264EA0F2BF2000900586FA0 /* MC2_OneShotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MC2_OneShotApp.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 		820F92842C0AF69600E103F3 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				8224EA652C0CAD7C003EB372 /* Entity */,
 				8224EA412C0C4566003EB372 /* UseCase */,
 				820F92852C0AF6B200E103F3 /* Interface */,
 			);
@@ -162,15 +165,6 @@
 				820F92862C0AF6D100E103F3 /* PartyCameraInterface.swift */,
 			);
 			path = Interface;
-			sourceTree = "<group>";
-		};
-		820F92882C0AF9E600E103F3 /* PartyCamera */ = {
-			isa = PBXGroup;
-			children = (
-				8264EA252BF200EB00586FA0 /* PartyCameraView.swift */,
-				98BA9D4B2BF6DF3900BEEDCC /* PartyCameraViewModel.swift */,
-			);
-			path = PartyCamera;
 			sourceTree = "<group>";
 		};
 		8224EA412C0C4566003EB372 /* UseCase */ = {
@@ -187,6 +181,23 @@
 				98BA9D4D2BF6DF4200BEEDCC /* OldPartyCameraService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		8224EA622C0CA8E5003EB372 /* PartyCamera */ = {
+			isa = PBXGroup;
+			children = (
+				8264EA252BF200EB00586FA0 /* PartyCameraView.swift */,
+				98BA9D4B2BF6DF3900BEEDCC /* PartyCameraViewModel.swift */,
+			);
+			path = PartyCamera;
+			sourceTree = "<group>";
+		};
+		8224EA652C0CAD7C003EB372 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				8224EA662C0CAD84003EB372 /* CamerPreview.swift */,
+			);
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		825F0BDE2BF486AB001B416A /* Component */ = {
@@ -240,6 +251,7 @@
 		8264EA1D2BF2007F00586FA0 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				8224EA622C0CA8E5003EB372 /* PartyCamera */,
 				8264EA222BF200CC00586FA0 /* View */,
 				8264EA212BF200C000586FA0 /* Popup */,
 				825F0BDE2BF486AB001B416A /* Component */,
@@ -293,7 +305,6 @@
 		8264EA222BF200CC00586FA0 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				820F92882C0AF9E600E103F3 /* PartyCamera */,
 				8264EA112BF2000900586FA0 /* HomeView.swift */,
 				19A1DAF42BF88ADA00C53D8C /* SearchView.swift */,
 				8264EA232BF200E200586FA0 /* PartySetView.swift */,
@@ -468,6 +479,7 @@
 				82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */,
 				820F92872C0AF6D100E103F3 /* PartyCameraInterface.swift in Sources */,
 				8264EA122BF2000900586FA0 /* HomeView.swift in Sources */,
+				8224EA672C0CAD84003EB372 /* CamerPreview.swift in Sources */,
 				8264EA2E2BF2016500586FA0 /* CommentPopupView.swift in Sources */,
 				820F927F2C0ABC9500E103F3 /* Step.swift in Sources */,
 				82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */,

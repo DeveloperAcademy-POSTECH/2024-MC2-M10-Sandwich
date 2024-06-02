@@ -39,6 +39,11 @@ extension PartyCameraService {
         }
     }
     
+    /// Camera 화면에 보여질 Preview 객체를 반환합니다.
+    func displayPreview() -> AnyView {
+        return AnyView(CameraPreviewView(session: session))
+    }
+    
     /// 사진을 촬영합니다.
     func capturePhoto() {
         //
@@ -46,11 +51,6 @@ extension PartyCameraService {
     
     /// 사진을 저장합니다.
     func savePhoto() {
-        //
-    }
-    
-    /// Preview를 표시합니다.
-    func displayPreview() {
         //
     }
     
@@ -124,6 +124,38 @@ extension PartyCameraService {
     }
 }
 
+// MARK: - Camera Preview
+
+extension PartyCameraService {
+    
+    /// CameraPreview 객체
+    private struct CameraPreviewView: UIViewRepresentable {
+        
+        let session: AVCaptureSession
+        
+        class VideoPreviewView: UIView {
+            override class var layerClass: AnyClass {
+                AVCaptureVideoPreviewLayer.self
+            }
+            
+            var videoPreviewLayer: AVCaptureVideoPreviewLayer {
+                return layer as! AVCaptureVideoPreviewLayer
+            }
+        }
+        
+        func makeUIView(context: Context) -> VideoPreviewView {
+            let view = VideoPreviewView()
+            view.videoPreviewLayer.session = session
+            view.backgroundColor = .black
+            view.videoPreviewLayer.videoGravity = .resizeAspectFill
+            view.videoPreviewLayer.cornerRadius = 0
+            view.videoPreviewLayer.connection?.videoRotationAngle = 90
+            return view
+        }
+        
+        func updateUIView(_ uiView: VideoPreviewView, context: Context) {}
+    }
+}
 
 class OldPartyCameraService: NSObject, ObservableObject {
     

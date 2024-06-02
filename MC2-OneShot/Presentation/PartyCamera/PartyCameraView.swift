@@ -12,7 +12,7 @@ import SwiftData
 
 struct PartyCameraView: View {
     
-    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
+    @State private(set) var cameraUseCase: PartyCameraUseCase
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
     @StateObject private var viewModel = PartyCameraViewModel()
@@ -31,11 +31,15 @@ struct PartyCameraView: View {
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )
                 
-                CameraMiddleView(viewModel: viewModel)
+                CameraMiddleView(
+                    cameraUseCase: cameraUseCase,
+                    viewModel: viewModel
+                )
                 
                 Spacer().frame(height: 48)
                 
                 CameraBottomView(
+                    cameraUseCase: cameraUseCase,
                     viewModel: viewModel,
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )
@@ -133,6 +137,8 @@ private struct CameraHeaderView: View {
 
 private struct CameraMiddleView: View {
     
+    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
+    
     @EnvironmentObject private var cameraPathModel: CameraPathModel
     
     @ObservedObject var viewModel: PartyCameraViewModel
@@ -142,7 +148,7 @@ private struct CameraMiddleView: View {
     var body: some View {
         Group {
             ZStack {
-                viewModel.cameraPreview
+                cameraUseCase.preview
                     .ignoresSafeArea()
                     .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                     .aspectRatio(1, contentMode: .fit)
@@ -192,6 +198,8 @@ private struct CameraMiddleView: View {
 // MARK: - CameraBottomView
 
 private struct CameraBottomView: View {
+    
+    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
     
     @ObservedObject var viewModel: PartyCameraViewModel
     
@@ -264,6 +272,7 @@ private struct CameraBottomView: View {
             .padding(.horizontal, 36)
             
             CaptureButtonView(
+                cameraUseCase: cameraUseCase,
                 viewManager: viewModel,
                 isBolt: $viewModel.isBolt,
                 isShotDisabled: $viewModel.isShotDisabled,
@@ -277,6 +286,8 @@ private struct CameraBottomView: View {
 // MARK: - CaptureButtonView
 
 private struct CaptureButtonView: View {
+    
+    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
     
     @ObservedObject var viewManager: PartyCameraViewModel
     
@@ -294,22 +305,23 @@ private struct CaptureButtonView: View {
     
     var body: some View {
         Button {
-            if viewManager.isShot {
-                viewManager.retakePhoto()
-                takePhoto()
-            } else {
-                if isBolt{
-                    viewManager.toggleFlash()
-                    viewManager.capturePhoto()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // 0.5초 후에 플래시가 꺼짐
-                        viewManager.toggleFlash()
-                    }
-                } else {
-                    viewManager.capturePhoto()
-                }
-            }
-            
-            delayButton()
+            cameraUseCase.capturePhoto()
+//            if viewManager.isShot {
+//                viewManager.retakePhoto()
+//                takePhoto()
+//            } else {
+//                if isBolt {
+//                    viewManager.toggleFlash()
+//                    viewManager.capturePhoto()
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // 0.5초 후에 플래시가 꺼짐
+//                        viewManager.toggleFlash()
+//                    }
+//                } else {
+//                    viewManager.capturePhoto()
+//                }
+//            }
+//            
+//            delayButton()
             
         } label: {
             ZStack{
