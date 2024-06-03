@@ -24,6 +24,17 @@ struct PersistentDataService: PersistentDataServiceInterface {
 
 extension PersistentDataService {
     
+    /// Party 배열을 시작 날짜를 기준으로 정렬 후 반환합니다.
+    func fetchPartys() -> [Party] {
+        do {
+            let fetchDescriptor = FetchDescriptor<Party>(sortBy: [.init(\.startDate)])
+            return try modelContext.fetch(fetchDescriptor)
+        } catch {
+            print("Party 데이터 반환 실패")
+            return []
+        }
+    }
+    
     /// Party 데이터를 생성합니다.
     func createParty(_ party: Party) {
         modelContext.insert(party)
@@ -40,17 +51,6 @@ extension PersistentDataService {
 // MARK: - SwiftData Function
 
 extension PersistentDataService {
-    
-    /// Party 배열을 시작 날짜를 기준으로 정렬 후 반환합니다.
-    private func fetchPartys() -> [Party] {
-        do {
-            let fetchDescriptor = FetchDescriptor<Party>(sortBy: [.init(\.startDate)])
-            return try modelContext.fetch(fetchDescriptor)
-        } catch {
-            print("Party 데이터 반환 실패")
-            return []
-        }
-    }
     
     /// 현재 진행 중인 STEP 데이터를 반환합니다.
     private func currentSteps() -> [Step] {

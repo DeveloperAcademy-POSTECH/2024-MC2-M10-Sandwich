@@ -16,9 +16,12 @@ final class PartyPlayUseCase {
     
     private(set) var state: State
     
+    private(set) var partys: [Party]
+    
     init(dataService: PersistentDataServiceInterface) {
         self.dataService = dataService
         self.state = State()
+        self.partys = dataService.fetchPartys()
     }
 }
 
@@ -40,10 +43,12 @@ extension PartyPlayUseCase {
     func startParty(_ party: Party) {
         dataService.createParty(party)
         state.isPartyLive = true
+        partys = dataService.fetchPartys()
     }
     
     /// 사진을 현재 스텝에 저장합니다.
     func savePhoto(_ photo: CapturePhoto) {
         dataService.savePhoto(photo)
+        partys = dataService.fetchPartys()
     }
 }
