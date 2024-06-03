@@ -18,6 +18,10 @@ struct MC2_OneShotApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView(
+                cameraUseCase: PartyCameraUseCase(
+                    cameraService: PartyCameraService(),
+                    dataService: PersistentDataService(modelContext: modelContainer.mainContext)
+                ),
                 persistentDataManager: PersistentDataManager(
                     modelContext: modelContainer.mainContext
                 )

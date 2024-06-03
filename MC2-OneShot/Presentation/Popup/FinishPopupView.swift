@@ -10,8 +10,9 @@ import SwiftData
 
 struct FinishPopupView: View {
     
+    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    
     @Binding var isFinishPopupPresented: Bool
-    @Binding var isPartyEnd: Bool
     
     var memberList: [Member]
     
@@ -21,7 +22,16 @@ struct FinishPopupView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(.shot25)
-                    .frame(width: min(ScreenSize.screenWidth, ScreenSize.screenHeigh) * 0.9, height: min(ScreenSize.screenWidth, ScreenSize.screenHeigh) * 0.9)
+                    .frame(
+                        width: min(
+                            ScreenSize.screenWidth,
+                            ScreenSize.screenHeigh
+                        ) * 0.9,
+                        height: min(
+                            ScreenSize.screenWidth,
+                            ScreenSize.screenHeigh
+                        ) * 0.9
+                    )
                     .padding()
                 
                 VStack(spacing: 0) {
@@ -68,7 +78,7 @@ struct FinishPopupView: View {
                             title: "더 마시기",
                             buttonType: .secondary
                         ) {
-                            isFinishPopupPresented.toggle()
+                            isFinishPopupPresented = false
                         }
                         
                         ActionButton(
@@ -78,7 +88,7 @@ struct FinishPopupView: View {
                             HapticManager.shared.notification(type: .success)
                             PartyService.shared.endParty()
                             isFinishPopupPresented = false
-                            isPartyEnd = true
+                            cameraUseCase.finishParty()
                         }
                     }
                     .padding(.horizontal, 33)
@@ -89,10 +99,11 @@ struct FinishPopupView: View {
     }
 }
 
+#if DEBUG
 #Preview {
     FinishPopupView(
         isFinishPopupPresented: .constant(true),
-        isPartyEnd: .constant(false),
         memberList: []
     )
 }
+#endif

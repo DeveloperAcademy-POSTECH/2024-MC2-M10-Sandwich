@@ -8,11 +8,11 @@
 import SwiftUI
 
 /// 카메라와 관련된 기능
-protocol PartyCameraInterface {
+protocol PartyCameraServiceInterface {
     func requestPermission()
     func displayPreview() -> AnyView
-    func capturePhoto()
-    func fetchPhotoDataForSave() -> Data?
+    func capturePhoto(photoDataPrepare: @escaping (CapturePhoto?) -> Void)
+    func fetchPhotoDataForSave() -> CapturePhoto?
     func toggleFrontBack()
     func toggleFlashMode()
 }

@@ -9,6 +9,9 @@ import SwiftUI
 import Photos
 
 struct PartyListView: View {
+    
+    @Environment(PartyCameraUseCase.self) var cameraUseCase
+    
     @State private var isFinishPopupPresented = false
     @State private var isCommentPopupPresented = false
     @State private var isMemberPopupPresented = false
@@ -23,11 +26,6 @@ struct PartyListView: View {
     let party: Party
     
     @Binding var isCameraViewPresented: Bool
-    
-    var sortedStepList: [Step] {
-        let sort = party.stepList.sorted { $0.createDate < $1.createDate }
-        return sort
-    }
     
     var body: some View {
         ZStack {
@@ -102,10 +100,8 @@ struct PartyListView: View {
                 Divider()
                 
                 ScrollView {
-                    ForEach(Array(sortedStepList.enumerated()), id: \.offset) { index, step in
+                    ForEach(Array(cameraUseCase.currentSteps().enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step, startDate: party.startDate)
-                        
-                        //                        Divider()
                     }
                 }
                 .toolbar {
@@ -126,7 +122,6 @@ struct PartyListView: View {
                             }, content: {
                                 FinishPopupView(
                                     isFinishPopupPresented: $isFinishPopupPresented,
-                                    isPartyEnd: $isPartyEnd,
                                     memberList: party.memberList
                                 )
                                 .foregroundStyle(.shotFF)

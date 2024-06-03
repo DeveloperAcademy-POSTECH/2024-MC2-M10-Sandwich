@@ -10,7 +10,7 @@ import SwiftData
 
 // MARK: - PersistentDataService
 
-struct PersistentDataService: PersistentDataInterface {
+struct PersistentDataService: PersistentDataServiceInterface {
     
     /// ModelContext
     private let modelContext: ModelContext
@@ -24,10 +24,30 @@ struct PersistentDataService: PersistentDataInterface {
 
 extension PersistentDataService {
     
+    /// Party 배열을 시작 날짜를 기준으로 정렬 후 반환합니다.
+    func fetchPartys() -> [Party] {
+        do {
+            let fetchDescriptor = FetchDescriptor<Party>(sortBy: [.init(\.startDate)])
+            return try modelContext.fetch(fetchDescriptor)
+        } catch {
+            print("Party 데이터 반환 실패")
+            return []
+        }
+    }
+    
+    /// 현재 진행 중인 STEP 데이터를 반환합니다.
+    func currentSteps() -> [Step] {
+        if let currentParty = fetchPartys().last {
+            return currentParty.stepList
+        } else {
+            return []
+        }
+    }
+    
     /// 사진을 저장합니다.
-    func savePhoto(data: Data) {
+    func savePhoto(_ photo: CapturePhoto) {
         let sortedSteps = fetchPartys().lastParty!.stepList.sorted { $0.createDate < $1.createDate }
-        let newMedia = Media(fileData: data, captureDate: .now)
+        let newMedia = Media(fileData: photo.image.jpegData(compressionQuality: 1.0)!, captureDate: .now)
         sortedSteps.last?.mediaList.append(newMedia)
     }
 }
@@ -36,13 +56,5 @@ extension PersistentDataService {
 
 extension PersistentDataService {
     
-    private func fetchPartys() -> [Party] {
-        do {
-            let fetchDescriptor = FetchDescriptor<Party>()
-            return try modelContext.fetch(fetchDescriptor)
-        } catch {
-           print("Party 데이터 반환 실패")
-            return []
-        }
-    }
+    
 }

@@ -10,7 +10,7 @@ import AVFoundation
 
 // MARK: - PartyCameraService
 
-final class PartyCameraService: NSObject, PartyCameraInterface {
+final class PartyCameraService: NSObject, PartyCameraServiceInterface {
     
     /// Input과 Output을 연결하는 Session
     private var session = AVCaptureSession()
@@ -24,11 +24,14 @@ final class PartyCameraService: NSObject, PartyCameraInterface {
     /// 카메라 관련 동작은 SessionQueue에서 진행
     private let sessionQueue = DispatchQueue(label: "sessionQueue")
     
-    /// 가장 마지막에 촬영한 사진 UIImage
-    private var recentImage: UIImage?
+    /// 가장 마지막에 촬영한 사진 CapturePhoto
+    private var recentPhoto: CapturePhoto?
+    
+    /// 사진 데이터 준비 후 실행되는 Completion Handler
+    private var photoDataPrepare: ((CapturePhoto?) -> Void)?
 }
 
-// MARK: - 프로토콜 구현체
+// MARK: - Protocol Implementation
 
 extension PartyCameraService {
     
@@ -48,25 +51,37 @@ extension PartyCameraService {
     }
     
     /// 사진을 촬영합니다.
-    func capturePhoto() {
+    func capturePhoto(photoDataPrepare: @escaping (CapturePhoto?) -> Void) {
+        self.photoDataPrepare = photoDataPrepare
         output.capturePhoto(with: capturePhotoSetting, delegate: self)
     }
     
     /// 사진 저장을 위해 이미지 데이터를 반환합니다.
-    func fetchPhotoDataForSave() -> Data? {
-        guard let recentImage = recentImage,
-              let croppedImage = cropImageToSquare(image: recentImage) else { return nil }
-        return croppedImage.jpegData(compressionQuality: 1.0)
+    func fetchPhotoDataForSave() -> CapturePhoto? {
+        guard let recentImage = recentPhoto?.image,
+              let croppedPhoto = cropImageToSquare(image: recentImage),
+              let imageData = croppedPhoto.image.jpegData(compressionQuality: 1.0),
+              let uiImage = UIImage(data: imageData)
+        else {
+            print("이미지 데이터 반환에 실패했습니다.")
+            return nil
+        }
+        
+        return CapturePhoto(image: uiImage)
     }
     
     /// 전면 / 후면 카메라를 전환합니다.
     func toggleFrontBack() {
         let currentPosition = input.device.position
-        let preferredPosition: AVCaptureDevice.Position = (currentPosition == .back) ? .front : .back
         
-        print(preferredPosition == .back ? "후면카메라로 전환합니다." : "전면카메라로 전환합니다.")
+        let preferredPosition: AVCaptureDevice.Position = (
+            currentPosition == .back
+        ) ? .front : .back
         
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: preferredPosition) else {
+        guard let videoDevice = AVCaptureDevice.default(
+            .builtInWideAngleCamera,
+            for: .video, position: preferredPosition
+        ) else {
             print("videoDevice 객체 생성 실패")
             return
         }
@@ -81,8 +96,6 @@ extension PartyCameraService {
                 addInputToSession(input: newVideoDeviceInput)
                 input = newVideoDeviceInput
                 session.commitConfiguration()
-                
-                print("잘 전환됨")
             } catch {
                 print("Error changing camera: \(error)")
             }
@@ -185,9 +198,23 @@ extension PartyCameraService: AVCapturePhotoCaptureDelegate {
         }
         
         let devicePosition = input.device.position
-        if devicePosition == .front { self.recentImage = flipImageHorizontally(uiImage) }
-        else { self.recentImage = uiImage }
+        if devicePosition == .front { self.recentPhoto = flipImageHorizontally(uiImage) }
+        else { self.recentPhoto = CapturePhoto(image: uiImage) }
+        
+        photoDataPrepare?(recentPhoto)
     }
+    
+    /// 카메라 촬영음 음소거
+    func photoOutput(
+        _ output: AVCapturePhotoOutput,
+        willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings
+    ) { AudioServicesDisposeSystemSoundID(1108) }
+    
+    /// 카메라 촬영음 음소거
+    func photoOutput(
+        _ output: AVCapturePhotoOutput,
+        didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings
+    ) { AudioServicesDisposeSystemSoundID(1108) }
 }
 
 // MARK: - Camera Preview 구현
@@ -228,7 +255,7 @@ extension PartyCameraService {
 extension PartyCameraService {
     
     /// 이미지를 좌우반전 후 반환합니다.
-    private func flipImageHorizontally(_ image: UIImage) -> UIImage? {
+    private func flipImageHorizontally(_ image: UIImage) -> CapturePhoto? {
         UIGraphicsBeginImageContext(image.size)
         guard let context = UIGraphicsGetCurrentContext() else { return nil }
         
@@ -246,14 +273,16 @@ extension PartyCameraService {
         
         image.draw(at: .zero)
         
-        let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+        guard let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+        else { return nil }
+        
         UIGraphicsEndImageContext()
         
-        return flippedImage
+        return CapturePhoto(image: flippedImage)
     }
     
     /// 이미지를 정사각형 모양으로 자르는 함수
-    private func cropImageToSquare(image: UIImage) -> UIImage? {
+    private func cropImageToSquare(image: UIImage) -> CapturePhoto? {
         let cgImage = image.cgImage!
         let width = CGFloat(cgImage.width)
         let height = CGFloat(cgImage.height)
@@ -278,11 +307,12 @@ extension PartyCameraService {
         }
         
         if let croppedCGImage = cgImage.cropping(to: rect) {
-            return UIImage(
+            let uiImage = UIImage(
                 cgImage: croppedCGImage,
                 scale: image.scale,
                 orientation: image.imageOrientation
             )
+            return CapturePhoto(image: uiImage)
         }
         
         return nil

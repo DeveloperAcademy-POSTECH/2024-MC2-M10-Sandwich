@@ -10,6 +10,8 @@ import SwiftData
 
 struct TableListView: View {
     
+    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    
     @EnvironmentObject private var homePathModel: HomePathModel
     @Environment(\.modelContext) private var modelContext
     
@@ -17,10 +19,9 @@ struct TableListView: View {
     @State private var selectedParty: Party?
     @Binding var isFirstInfoVisible: Bool
     
-    @Query private var partys: [Party]
-    
     var body: some View {
-        List(partys.sortedPartys.reversed()) { party in
+        let partys = cameraUseCase.fetchPartys()
+        List(partys.reversed()) { party in
             TableListCellView(
                 thumbnail: party.firstThumbnailData,
                 title: party.title,

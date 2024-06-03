@@ -12,10 +12,9 @@ import SwiftData
 
 struct PartyCameraView: View {
     
-    @State private(set) var cameraUseCase: PartyCameraUseCase
+    @Environment(PartyCameraUseCase.self) private var cameraUseCase
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
-    @StateObject private var viewModel = PartyCameraViewModel()
     
     @Query private var partys: [Party]
     
@@ -26,23 +25,15 @@ struct PartyCameraView: View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack{
                 CameraHeaderView(
-                    viewModel: viewModel,
                     isCameraViewPresented: $isCameraViewPresented,
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )
                 
-                CameraMiddleView(
-                    cameraUseCase: cameraUseCase,
-                    viewModel: viewModel
-                )
+                CameraMiddleView()
                 
                 Spacer().frame(height: 48)
                 
-                CameraBottomView(
-                    cameraUseCase: cameraUseCase,
-                    viewModel: viewModel,
-                    isPartyResultViewPresented: $isPartyResultViewPresented
-                )
+                CameraBottomView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
             .navigationDestination(for: CameraPathType.self) { path in
                 switch path {
@@ -67,9 +58,11 @@ struct PartyCameraView: View {
 
 private struct CameraHeaderView: View {
     
-    @ObservedObject var viewModel: PartyCameraViewModel
+    @Environment(PartyCameraUseCase.self) private var cameraUseCase
     
     @Query private var partys: [Party]
+    
+    @State private var isFinishPopupPresented = false
     
     @Binding private(set) var isCameraViewPresented: Bool
     @Binding private(set) var isPartyResultViewPresented: Bool
@@ -82,7 +75,7 @@ private struct CameraHeaderView: View {
     
     var body: some View {
         ZStack {
-            if !viewModel.isShot {
+            if cameraUseCase.state.isCaptureMode {
                 HStack {
                     Button{
                         isCameraViewPresented.toggle()
@@ -94,19 +87,19 @@ private struct CameraHeaderView: View {
                             .foregroundColor(.shotFF)
                             .padding(.leading,16)
                     }
-                    .disabled(viewModel.isShotDisabled)
+                    // .disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                     
-                    Button{
+                    Button {
                         HapticManager.shared.notification(type: .warning)
-                        viewModel.isFinishPopupPresented.toggle()
+                        isFinishPopupPresented.toggle()
                     } label: {
                         Text("술자리 종료")
                             .pretendard(.semiBold, 16)
                             .foregroundColor(.shotGreen)
                     }
-                    .disabled(viewModel.isShotDisabled)
+                    // .disabled(viewModel.isShotDisabled)
                 }
                 .padding(.horizontal)
                 .padding(.top,12)
@@ -114,19 +107,14 @@ private struct CameraHeaderView: View {
             
             StepInfoView()
         }
-        .fullScreenCover(isPresented: $viewModel.isFinishPopupPresented, onDismiss: {
-            if viewModel.isPartyEnd {
-                isPartyResultViewPresented.toggle()
-            }
-        }, content: {
+        .fullScreenCover(isPresented: $isFinishPopupPresented) {
             FinishPopupView(
-                isFinishPopupPresented: $viewModel.isFinishPopupPresented,
-                isPartyEnd: $viewModel.isPartyEnd,
+                isFinishPopupPresented: $isFinishPopupPresented,
                 memberList: currentParty!.memberList
             )
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
-        })
+        }
         .transaction { transaction in
             transaction.disablesAnimations = true
         }
@@ -137,11 +125,9 @@ private struct CameraHeaderView: View {
 
 private struct CameraMiddleView: View {
     
-    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
+    @Environment(PartyCameraUseCase.self) private var cameraUseCase
     
     @EnvironmentObject private var cameraPathModel: CameraPathModel
-    
-    @ObservedObject var viewModel: PartyCameraViewModel
     
     @Query private var partys: [Party]
     
@@ -155,9 +141,8 @@ private struct CameraMiddleView: View {
                     .cornerRadius(15)
                     .padding(.top, 36)
                 
-                
-                if viewModel.isPhotoCaptureDone {
-                    Image(uiImage: viewModel.recentImage ?? UIImage(resource: .appLogo))
+                if cameraUseCase.state.isPhotoDataPrepare {
+                    Image(uiImage: cameraUseCase.state.photoData?.image ?? UIImage(resource: .appLogo))
                         .resizable()
                         .scaledToFill()
                         .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
@@ -167,8 +152,7 @@ private struct CameraMiddleView: View {
                 }
             }
             
-            // 촬영 전
-            if !viewModel.isShot {
+            if cameraUseCase.state.isCaptureMode {
                 Button{
                     if let lastParty = partys.last {
                         cameraPathModel.paths.append(.partyList(party: lastParty))
@@ -182,10 +166,9 @@ private struct CameraMiddleView: View {
                             .foregroundColor(.shotFF)
                     }
                 }
-                .disabled(viewModel.isShotDisabled)
+                // .disabled(viewModel.isShotDisabled)
             }
             
-            // 촬영 후
             else {
                 Text(partys.last?.title ?? "제목입니당")
                     .pretendard(.bold, 20)
@@ -199,9 +182,7 @@ private struct CameraMiddleView: View {
 
 private struct CameraBottomView: View {
     
-    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
-    
-    @ObservedObject var viewModel: PartyCameraViewModel
+    @Environment(PartyCameraUseCase.self) private var cameraUseCase
     
     @Binding private(set) var isPartyResultViewPresented: Bool
     
@@ -227,17 +208,12 @@ private struct CameraBottomView: View {
                                 .foregroundColor(.shotFF)
                         }
                     }
-                    .disabled(viewModel.isShotDisabled)
+                    // .disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                     
-                    Button{
-                        print("화면전환")
-                        viewModel.changeCamera()
-                        viewModel.isFace.toggle()
-                        if viewModel.isFace {
-                            viewModel.isBolt = false
-                        }
+                    Button {
+                        cameraUseCase.toggleFrontBack()
                     } label: {
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .resizable()
@@ -245,33 +221,27 @@ private struct CameraBottomView: View {
                             .frame(width: 32, height: 32)
                             .foregroundColor(.shotFF)
                     }
-                    .disabled(viewModel.isShotDisabled)
+                    //.disabled(viewModel.isShotDisabled)
                 }
                 
                 // 촬영 후
                 else {
                     Button {
-                        if viewModel.isShot {
-                            viewModel.retakePhoto()
-                        }
+                        cameraUseCase.retakePhoto()
                     } label: {
                         Text("다시찍기")
                             .foregroundColor(.shotFF)
                             .pretendard(.extraBold, 20)
                     }
-                    .disabled(viewModel.isShotDisabled)
+                    //.disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                 }
             }
             .padding(.horizontal, 36)
             
-            CaptureButtonView(
-                cameraUseCase: cameraUseCase,
-                isBolt: $viewModel.isBolt,
-                isShotDisabled: $viewModel.isShotDisabled,
-                isPartyResultViewPresented: $isPartyResultViewPresented
-            )
+            CaptureButtonView(isPartyResultViewPresented: $isPartyResultViewPresented)
+            
             .padding(.top, 15)
         }
     }
@@ -281,12 +251,10 @@ private struct CameraBottomView: View {
 
 private struct CaptureButtonView: View {
     
-    @Bindable private(set) var cameraUseCase: PartyCameraUseCase
+    @Environment(PartyCameraUseCase.self) private var cameraUseCase
     
     @Query private var partys: [Party]
-    
-    @Binding var isBolt: Bool
-    @Binding var isShotDisabled: Bool
+
     @Binding var isPartyResultViewPresented: Bool
     
     /// 현재 파티를 반환합니다.
@@ -297,27 +265,8 @@ private struct CaptureButtonView: View {
     
     var body: some View {
         Button {
-            if cameraUseCase.state.isCaptureMode {
-                cameraUseCase.capturePhoto()
-            } else {
-                cameraUseCase.savePhoto()
-            }
-//            if viewManager.isShot {
-//                viewManager.retakePhoto()
-//                takePhoto()
-//            } else {
-//                if isBolt {
-//                    viewManager.toggleFlash()
-//                    viewManager.capturePhoto()
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // 0.5초 후에 플래시가 꺼짐
-//                        viewManager.toggleFlash()
-//                    }
-//                } else {
-//                    viewManager.capturePhoto()
-//                }
-//            }
-//            
-//            delayButton()   
+            cameraUseCase.state.isCaptureMode ?
+            cameraUseCase.capturePhoto() : cameraUseCase.savePhoto()
         } label: {
             ZStack{
                 if cameraUseCase.state.isCaptureMode {
@@ -343,7 +292,7 @@ private struct CaptureButtonView: View {
             }
             .padding(.bottom, 15)
         }
-        .disabled(isShotDisabled)
+        // .disabled(isShotDisabled)
     }
     
     private func takePhoto() {
@@ -379,17 +328,17 @@ private struct CaptureButtonView: View {
         }
     }
     
-    private func delayButton() {
-        print("버튼 눌림")
-        
-        // 버튼을 비활성화
-        isShotDisabled = true
-        
-        // 1초 후에 버튼을 다시 활성화
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            isShotDisabled = false
-        }
-    }
+//    private func delayButton() {
+//        print("버튼 눌림")
+//        
+//        // 버튼을 비활성화
+//        isShotDisabled = true
+//        
+//        // 1초 후에 버튼을 다시 활성화
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            isShotDisabled = false
+//        }
+//    }
 }
 
 // MARK: - StepInfoView
