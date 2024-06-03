@@ -11,7 +11,7 @@ import SwiftUI
 
 struct PartySetView: View {
     
-    @Environment(PartyPlayUseCase.self) private var partyPlayUseCase
+    @Environment(PartyUseCase.self) private var partyPlayUseCase
     
     @EnvironmentObject private var homePathModel: HomePathModel
     

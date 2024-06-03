@@ -18,7 +18,7 @@ struct MC2_OneShotApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView(
-                partyPlayUseCase: PartyPlayUseCase(
+                partyUseCase: PartyUseCase(
                     dataService: PersistentDataService(modelContext: modelContainer.mainContext)
                 )
             )

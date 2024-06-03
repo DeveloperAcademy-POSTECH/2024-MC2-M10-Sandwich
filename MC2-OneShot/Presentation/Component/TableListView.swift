@@ -10,18 +10,16 @@ import SwiftData
 
 struct TableListView: View {
     
-    @Environment(PartyPlayUseCase.self) var partyPlayUseCase
+    @Environment(PartyUseCase.self) var partyPlayUseCase
     @EnvironmentObject private var homePathModel: HomePathModel
     @Environment(\.modelContext) private var modelContext
-    
-    // @Query private var partys: [Party]
     
     @State private var isShowAlert = false
     @State private var selectedParty: Party?
     @Binding var isFirstInfoVisible: Bool
     
     var body: some View {
-        List(partyPlayUseCase.partys.reversed()) { party in
+        List(partyPlayUseCase.state.partys.reversed()) { party in
             TableListCellView(
                 thumbnail: party.firstThumbnailData,
                 title: party.title,
@@ -31,7 +29,7 @@ struct TableListView: View {
                 notiCycle: party.notiCycle
             )
             .onAppear{
-                isFirstInfoVisible = partyPlayUseCase.partys.isEmpty
+                isFirstInfoVisible = partyPlayUseCase.state.partys.isEmpty
             }
             .onTapGesture {
                 homePathModel.paths.append(.partyList(party: party))
@@ -53,7 +51,7 @@ struct TableListView: View {
                         guard let selectedParty = selectedParty else { return }
                         HapticManager.shared.notification(type: .success)
                         modelContext.delete(selectedParty)
-                        isFirstInfoVisible = partyPlayUseCase.partys.isEmpty
+                        isFirstInfoVisible = partyPlayUseCase.state.partys.isEmpty
                     }
                     
                     Button("살리기", role: .cancel) {}

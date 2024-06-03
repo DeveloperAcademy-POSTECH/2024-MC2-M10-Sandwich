@@ -12,12 +12,10 @@ import SwiftData
 
 struct HomeView: View {
     
-    @State private(set) var partyPlayUseCase: PartyPlayUseCase
+    @State private(set) var partyUseCase: PartyUseCase
     
     @Environment(\.modelContext) private var modelContext
     @StateObject private var homePathModel: HomePathModel = .init()
-    
-    @Query private var partys: [Party]
     
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
@@ -29,17 +27,17 @@ struct HomeView: View {
                 HeaderView()
                 ListView()
                 ActionButton(
-                    title: partys.isLastParyLive ? "사진 찍으러 가기" : "술자리 생성하기",
-                    buttonType: partys.isLastParyLive ? .popupfinish : .primary
+                    title: partyUseCase.state.partys.isLastParyLive ? "사진 찍으러 가기" : "술자리 생성하기",
+                    buttonType: partyUseCase.state.partys.isLastParyLive ? .popupfinish : .primary
                 ) {
-                    if partys.isLastParyLive { isCameraViewPresented.toggle() }
+                    if partyUseCase.state.partys.isLastParyLive { isCameraViewPresented.toggle() }
                     else { isPartySetViewPresented.toggle() }
                 }
                 .padding(.horizontal, 16)
             }
             .homePathDestination()
             .sheet(isPresented: $isPartySetViewPresented) {
-                if partys.isLastParyLive {
+                if partyUseCase.state.partys.isLastParyLive {
                     presentCameraView()
                 }
             } content: {
@@ -58,17 +56,17 @@ struct HomeView: View {
                 PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
         }
-        .environment(partyPlayUseCase)
+        .environment(partyUseCase)
         .environmentObject(homePathModel)
         .onAppear {
             setupNotification()
-            if partys.isLastParyLive {
+            if partyUseCase.state.partys.isLastParyLive {
                 setupPartyService()
             }
         }
         .onAppear {
-            if partys.isLastParyLive,
-               let lastParty = partys.lastParty,
+            if partyUseCase.state.partys.isLastParyLive,
+               let lastParty = partyUseCase.state.partys.lastParty,
                let lastStep = lastParty.sortedStepList.last {
                 print("1. 만약 현재 파티가 Live 상태이고")
                 let presentTime = Date.now.timeIntervalSince1970
@@ -147,7 +145,7 @@ extension HomeView {
     /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
     private func setupPartyService() {
         
-        guard let party = partys.lastParty else {
+        guard let party = partyUseCase.state.partys.lastParty else {
             print("현재 진행 중인 파티가 없습니다.")
             return
         }
@@ -234,7 +232,7 @@ extension HomeView {
     let modelContext = MockModelContainer.mockModelContainer.mainContext
     
     return HomeView(
-        partyPlayUseCase: PartyPlayUseCase(
+        partyUseCase: PartyUseCase(
             dataService: PersistentDataService(modelContext: modelContext)
         )
     )
