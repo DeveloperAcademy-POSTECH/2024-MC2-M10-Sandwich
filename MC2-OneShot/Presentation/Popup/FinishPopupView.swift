@@ -10,6 +10,7 @@ import SwiftData
 
 struct FinishPopupView: View {
     
+    @Environment(PartyUseCase.self) private var partyUseCase
     @Binding var isFinishPopupPresented: Bool
     
     var memberList: [Member]
@@ -86,7 +87,7 @@ struct FinishPopupView: View {
                             HapticManager.shared.notification(type: .success)
                             PartyService.shared.endParty()
                             isFinishPopupPresented = false
-                            // cameraUseCase.finishParty()
+                            partyUseCase.finishParty()
                         }
                     }
                     .padding(.horizontal, 33)

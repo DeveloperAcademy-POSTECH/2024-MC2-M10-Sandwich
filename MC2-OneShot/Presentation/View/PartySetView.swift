@@ -56,7 +56,10 @@ struct PartySetView: View {
         
         let today = Date.now
         
-        // 1. 영구 저장 데이터에 새로운 파티 데이터 생성
+        // 1. SetView 가리기
+        isPartySetViewPresented = false
+        
+        // 2. 영구 저장 데이터에 새로운 파티 데이터 생성
         partyPlayUseCase.startParty(
             Party(
                 title: titleText,
@@ -66,14 +69,11 @@ struct PartySetView: View {
             )
         )
         
-        // 2. 파티 서비스 시작
+        // 3. 파티 서비스 시작
         PartyService.shared.startParty(
             startDate: today,
             notiCycle: notiCycle
         )
-        
-        // 3. 화면 띄우기
-        isPartySetViewPresented = false
     }
 }
 

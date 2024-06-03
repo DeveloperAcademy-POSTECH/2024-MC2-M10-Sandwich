@@ -15,10 +15,12 @@ final class PartyUseCase {
     private var dataService: PersistentDataServiceInterface
     
     private(set) var state: State
+    private(set) var partys: [Party]
     
     init(dataService: PersistentDataServiceInterface) {
         self.dataService = dataService
-        self.state = State(partys: dataService.fetchPartys())
+        self.state = State()
+        self.partys = dataService.fetchPartys()
     }
 }
 
@@ -27,9 +29,11 @@ final class PartyUseCase {
 extension PartyUseCase {
     
     /// UseCase 상태 값
-    struct State {
+    @Observable
+    final class State {
         var isPartyLive: Bool = false
-        var partys: [Party]
+        var isCameraViewPresented: Bool = false
+        var isResultViewPresented: Bool = false
     }
 }
 
@@ -41,12 +45,35 @@ extension PartyUseCase {
     func startParty(_ party: Party) {
         dataService.createParty(party)
         state.isPartyLive = true
-        state.partys = dataService.fetchPartys()
+        state.isCameraViewPresented = true
+        partys = dataService.fetchPartys()
     }
     
     /// 사진을 현재 스텝에 저장합니다.
     func savePhoto(_ photo: CapturePhoto) {
         dataService.savePhoto(photo)
-        state.partys = dataService.fetchPartys()
+        partys = dataService.fetchPartys()
+    }
+    
+    /// 파티를 종료합니다.
+    func finishParty() {
+        state.isResultViewPresented = true
+        state.isCameraViewPresented = false
+        state.isPartyLive = false
+    }
+}
+
+// MARK: - Presentaion
+
+extension PartyUseCase {
+    
+    /// CameraView를 컨트롤합니다.
+    func presentCameraView(to bool : Bool) {
+        state.isCameraViewPresented = bool
+    }
+    
+    /// ResultView를 컨트롤합니다.
+    func presentResultView(to bool : Bool) {
+        state.isResultViewPresented = bool
     }
 }

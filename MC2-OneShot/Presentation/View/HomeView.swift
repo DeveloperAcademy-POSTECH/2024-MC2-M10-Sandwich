@@ -19,54 +19,48 @@ struct HomeView: View {
     
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
-    @State private var isPartyResultViewPresented = false
+    // @State private var isPartyResultViewPresented = false
     
     var body: some View {
+        @Bindable var state = partyUseCase.state
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
                 HeaderView()
                 ListView()
                 ActionButton(
-                    title: partyUseCase.state.partys.isLastParyLive ? "사진 찍으러 가기" : "술자리 생성하기",
-                    buttonType: partyUseCase.state.partys.isLastParyLive ? .popupfinish : .primary
+                    title: partyUseCase.state.isPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
+                    buttonType: partyUseCase.state.isPartyLive ? .popupfinish : .primary
                 ) {
-                    if partyUseCase.state.partys.isLastParyLive { isCameraViewPresented.toggle() }
+                    if partyUseCase.partys.isLastParyLive { partyUseCase.presentCameraView(to: true) }
                     else { isPartySetViewPresented.toggle() }
                 }
                 .padding(.horizontal, 16)
             }
             .homePathDestination()
             .sheet(isPresented: $isPartySetViewPresented) {
-                if partyUseCase.state.partys.isLastParyLive {
-                    presentCameraView()
-                }
-            } content: {
                 PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
             }
-            .fullScreenCover(isPresented: $isCameraViewPresented) {
-                PartyCameraView(
-                    cameraUseCase: CameraUseCase(cameraService: CameraService()),
-                    isCameraViewPresented: $isCameraViewPresented,
-                    isPartyResultViewPresented: $isPartyResultViewPresented
-                )
-            }
-            .fullScreenCover(isPresented: $isPartyResultViewPresented) {
-                isCameraViewPresented = false
-            } content: {
-                PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
-            }
+        }
+        .fullScreenCover(isPresented: $state.isCameraViewPresented) {
+            PartyCameraView(
+                cameraUseCase: CameraUseCase(cameraService: CameraService()),
+                isCameraViewPresented: $isCameraViewPresented
+            )
+        }
+        .fullScreenCover(isPresented: $state.isResultViewPresented) {
+            PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
         }
         .environment(partyUseCase)
         .environmentObject(homePathModel)
         .onAppear {
             setupNotification()
-            if partyUseCase.state.partys.isLastParyLive {
+            if partyUseCase.state.isPartyLive {
                 setupPartyService()
             }
         }
         .onAppear {
-            if partyUseCase.state.partys.isLastParyLive,
-               let lastParty = partyUseCase.state.partys.lastParty,
+            if partyUseCase.state.isPartyLive,
+               let lastParty = partyUseCase.partys.lastParty,
                let lastStep = lastParty.sortedStepList.last {
                 print("1. 만약 현재 파티가 Live 상태이고")
                 let presentTime = Date.now.timeIntervalSince1970
@@ -145,7 +139,7 @@ extension HomeView {
     /// 앱을 실행할 때마다 startDate와 notiCycle을 갱신
     private func setupPartyService() {
         
-        guard let party = partyUseCase.state.partys.lastParty else {
+        guard let party = partyUseCase.partys.lastParty else {
             print("현재 진행 중인 파티가 없습니다.")
             return
         }
@@ -160,9 +154,9 @@ extension HomeView {
     private func presentCameraView() {
         isCameraViewPresented.toggle()
         
-        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
-            isPartyResultViewPresented.toggle()
-        }
+//        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
+//            isPartyResultViewPresented.toggle()
+//        }
     }
     
     /// STEP을 완료하지 못했을 때 로직
@@ -172,21 +166,21 @@ extension HomeView {
         
         let restTime = currentStepEndDate - presentTime
         
-        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
-        if restTime > 0 {
-            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
-                isPartyResultViewPresented.toggle()
-                lastParty.isShutdown = true
-            }
-            
-            isCameraViewPresented.toggle()
-        }
-        
-        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
-        else {
-            isPartyResultViewPresented.toggle()
-            lastParty.isShutdown = true
-        }
+//        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
+//        if restTime > 0 {
+//            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
+//                isPartyResultViewPresented.toggle()
+//                lastParty.isShutdown = true
+//            }
+//            
+//            isCameraViewPresented.toggle()
+//        }
+//        
+//        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
+//        else {
+//            isPartyResultViewPresented.toggle()
+//            lastParty.isShutdown = true
+//        }
     }
     
     /// STEP을 완료했을 때 로직
@@ -199,7 +193,7 @@ extension HomeView {
         
         if restTime > 0 {
             NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: nextStepEndDate)) {
-                isPartyResultViewPresented.toggle()
+                // isPartyResultViewPresented.toggle()
                 lastParty.isShutdown = true
             }
             
@@ -219,7 +213,7 @@ extension HomeView {
         
         // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
         else {
-            isPartyResultViewPresented.toggle()
+            // isPartyResultViewPresented.toggle()
             lastParty.isShutdown = true
         }
     }

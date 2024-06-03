@@ -12,7 +12,7 @@ import SwiftData
 
 struct PartyCameraView: View {
     
-    @Environment(PartyUseCase.self) private var partyPlayUseCase
+    @Environment(PartyUseCase.self) private var partyUseCase
     @State private(set) var cameraUseCase: CameraUseCase
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
@@ -20,15 +20,16 @@ struct PartyCameraView: View {
     @Query private var partys: [Party]
     
     @Binding private(set) var isCameraViewPresented: Bool
-    @Binding private(set) var isPartyResultViewPresented: Bool
     
     var body: some View {
+        
+        @Bindable var state = partyUseCase.state
+        
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
                 CameraHeaderView(
                     cameraUseCase: cameraUseCase,
-                    isCameraViewPresented: $isCameraViewPresented,
-                    isPartyResultViewPresented: $isPartyResultViewPresented
+                    isCameraViewPresented: $isCameraViewPresented
                 )
                 
                 CameraMiddleView(cameraUseCase: cameraUseCase)
@@ -36,9 +37,8 @@ struct PartyCameraView: View {
                 Spacer().frame(height: 48)
                 
                 CameraBottomView(
-                    partyPlayUseCase: partyPlayUseCase,
-                    cameraUseCase: cameraUseCase,
-                    isPartyResultViewPresented: $isPartyResultViewPresented
+                    partyPlayUseCase: partyUseCase,
+                    cameraUseCase: cameraUseCase
                 )
             }
             .navigationDestination(for: CameraPathType.self) { path in
@@ -50,11 +50,11 @@ struct PartyCameraView: View {
                     )
                 }
             }
-            .fullScreenCover(isPresented: $isPartyResultViewPresented) {
-                isCameraViewPresented = false
-            } content: {
-                PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
-            }
+//            .fullScreenCover(isPresented: $state.isResultViewPresented) {
+//                isCameraViewPresented = false
+//            } content: {
+//                PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
+//            }
         }
         .environmentObject(cameraPathModel)
         .onAppear {
@@ -74,7 +74,6 @@ private struct CameraHeaderView: View {
     @State private var isFinishPopupPresented = false
     
     @Binding private(set) var isCameraViewPresented: Bool
-    @Binding private(set) var isPartyResultViewPresented: Bool
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
@@ -124,9 +123,9 @@ private struct CameraHeaderView: View {
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
         }
-        .transaction { transaction in
-            transaction.disablesAnimations = true
-        }
+//        .transaction { transaction in
+//            transaction.disablesAnimations = true
+//        }
     }
 }
 
@@ -194,8 +193,6 @@ private struct CameraBottomView: View {
     @Bindable private(set) var partyPlayUseCase: PartyUseCase
     @Bindable private(set) var cameraUseCase: CameraUseCase
     
-    @Binding private(set) var isPartyResultViewPresented: Bool
-    
     var body: some View {
         ZStack {
             HStack {
@@ -252,8 +249,7 @@ private struct CameraBottomView: View {
             
             CaptureButtonView(
                 partyPlayUseCase: partyPlayUseCase,
-                cameraUseCase: cameraUseCase,
-                isPartyResultViewPresented: $isPartyResultViewPresented
+                cameraUseCase: cameraUseCase
             )
             
             .padding(.top, 15)
@@ -269,8 +265,6 @@ private struct CaptureButtonView: View {
     @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @Query private var partys: [Party]
-
-    @Binding var isPartyResultViewPresented: Bool
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
@@ -335,7 +329,7 @@ private struct CaptureButtonView: View {
                 
                 // 다음 STEP 종료 결과 화면 예약
                 NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
-                    isPartyResultViewPresented.toggle()
+                    // isPartyResultViewPresented.toggle()
                     lastParty.isShutdown = true
                 }
                 
