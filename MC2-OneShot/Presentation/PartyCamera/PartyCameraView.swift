@@ -12,7 +12,7 @@ import SwiftData
 
 struct PartyCameraView: View {
     
-    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
     
@@ -23,22 +23,29 @@ struct PartyCameraView: View {
     
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
-            VStack{
+            VStack {
                 CameraHeaderView(
+                    cameraUseCase: cameraUseCase,
                     isCameraViewPresented: $isCameraViewPresented,
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )
                 
-                CameraMiddleView()
+                CameraMiddleView(cameraUseCase: cameraUseCase)
                 
                 Spacer().frame(height: 48)
                 
-                CameraBottomView(isPartyResultViewPresented: $isPartyResultViewPresented)
+                CameraBottomView(
+                    cameraUseCase: cameraUseCase,
+                    isPartyResultViewPresented: $isPartyResultViewPresented
+                )
             }
             .navigationDestination(for: CameraPathType.self) { path in
                 switch path {
                 case let .partyList(party):
-                    PartyListView(party: party, isCameraViewPresented: $isCameraViewPresented)
+                    PartyListView(
+                        party: party,
+                        isCameraViewPresented: $isCameraViewPresented
+                    )
                 }
             }
             .fullScreenCover(isPresented: $isPartyResultViewPresented) {
@@ -58,7 +65,7 @@ struct PartyCameraView: View {
 
 private struct CameraHeaderView: View {
     
-    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @Query private var partys: [Party]
     
@@ -125,7 +132,7 @@ private struct CameraHeaderView: View {
 
 private struct CameraMiddleView: View {
     
-    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @EnvironmentObject private var cameraPathModel: CameraPathModel
     
@@ -182,7 +189,7 @@ private struct CameraMiddleView: View {
 
 private struct CameraBottomView: View {
     
-    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @Binding private(set) var isPartyResultViewPresented: Bool
     
@@ -240,7 +247,10 @@ private struct CameraBottomView: View {
             }
             .padding(.horizontal, 36)
             
-            CaptureButtonView(isPartyResultViewPresented: $isPartyResultViewPresented)
+            CaptureButtonView(
+                cameraUseCase: cameraUseCase,
+                isPartyResultViewPresented: $isPartyResultViewPresented
+            )
             
             .padding(.top, 15)
         }
@@ -251,7 +261,7 @@ private struct CameraBottomView: View {
 
 private struct CaptureButtonView: View {
     
-    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @Query private var partys: [Party]
 

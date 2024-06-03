@@ -10,8 +10,6 @@ import Photos
 
 struct PartyListView: View {
     
-    @Environment(PartyCameraUseCase.self) var cameraUseCase
-    
     @State private var isFinishPopupPresented = false
     @State private var isCommentPopupPresented = false
     @State private var isMemberPopupPresented = false
@@ -100,7 +98,7 @@ struct PartyListView: View {
                 Divider()
                 
                 ScrollView {
-                    ForEach(Array(cameraUseCase.currentSteps().enumerated()), id: \.offset) { index, step in
+                    ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step, startDate: party.startDate)
                     }
                 }
@@ -275,7 +273,7 @@ struct StepCell: View {
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFit()
-//                                    .frame(maxWidth: .infinity)
+                                //                                    .frame(maxWidth: .infinity)
                                     .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                                     .cornerRadius(15)
                             }

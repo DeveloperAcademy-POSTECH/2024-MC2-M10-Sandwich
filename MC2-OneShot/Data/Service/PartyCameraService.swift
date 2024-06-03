@@ -10,7 +10,7 @@ import AVFoundation
 
 // MARK: - PartyCameraService
 
-final class PartyCameraService: NSObject, PartyCameraServiceInterface {
+final class PartyCameraService: NSObject, CameraServiceInterface {
     
     /// Input과 Output을 연결하는 Session
     private var session = AVCaptureSession()
@@ -172,6 +172,13 @@ extension PartyCameraService {
     private func startSession() {
         sessionQueue.async {
             self.session.startRunning()
+        }
+    }
+    
+    /// AVCaptureSession을 정지합니다.
+    private func stopSession() {
+        sessionQueue.async {
+            self.session.stopRunning()
         }
     }
     

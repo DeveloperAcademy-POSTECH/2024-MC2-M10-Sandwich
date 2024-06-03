@@ -10,17 +10,16 @@ import SwiftData
 
 struct TableListView: View {
     
-    @Environment(PartyCameraUseCase.self) private var cameraUseCase
-    
     @EnvironmentObject private var homePathModel: HomePathModel
     @Environment(\.modelContext) private var modelContext
+    
+    @Query private var partys: [Party]
     
     @State private var isShowAlert = false
     @State private var selectedParty: Party?
     @Binding var isFirstInfoVisible: Bool
     
     var body: some View {
-        let partys = cameraUseCase.fetchPartys()
         List(partys.reversed()) { party in
             TableListCellView(
                 thumbnail: party.firstThumbnailData,
@@ -154,12 +153,14 @@ private struct TableListStateInfoLabel: View {
 }
 
 // MARK: - Preview
+
+#if DEBUG
 #Preview {
     let modelContainer = MockModelContainer.mockModelContainer
     return TableListView(isFirstInfoVisible: .constant(true))
-        .environmentObject(HomePathModel())
-        .environmentObject(PersistentDataManager(modelContext: modelContainer.mainContext))
-        .modelContainer(modelContainer)
+    .environmentObject(HomePathModel())
+    .environmentObject(PersistentDataManager(modelContext: modelContainer.mainContext))
+    .modelContainer(modelContainer)
 }
 
 #Preview {
@@ -172,3 +173,4 @@ private struct TableListStateInfoLabel: View {
         notiCycle: 30
     )
 }
+#endif

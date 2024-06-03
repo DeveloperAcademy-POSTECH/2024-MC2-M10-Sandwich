@@ -14,18 +14,16 @@ struct HomeView: View {
     
     @Environment(\.modelContext) private var modelContext
     
-    @State private(set) var cameraUseCase: PartyCameraUseCase
-    
     @StateObject var persistentDataManager: PersistentDataManager
     @StateObject private var homePathModel: HomePathModel = .init()
     
     @Query private var partys: [Party]
     
+    @State private(set) var cameraUseCase: CameraUseCase
+    
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
     @State private var isPartyResultViewPresented = false
-    
-    private(set) var hello = "Hello"
     
     var body: some View {
         NavigationStack(path: $homePathModel.paths) {
@@ -51,6 +49,7 @@ struct HomeView: View {
             }
             .fullScreenCover(isPresented: $isCameraViewPresented) {
                 PartyCameraView(
+                    cameraUseCase: CameraUseCase(cameraService: PartyCameraService()),
                     isCameraViewPresented: $isCameraViewPresented,
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )
@@ -61,7 +60,6 @@ struct HomeView: View {
                 PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
         }
-        .environment(cameraUseCase)
         .environmentObject(homePathModel)
         .environmentObject(persistentDataManager)
         .onAppear {
@@ -123,7 +121,7 @@ private struct HeaderView: View {
 
 private struct ListView: View {
     
-    @Environment(PartyCameraUseCase.self) private var cameraUseCase
+    @Query private var partys: [Party]
     
     @State private var isFirstInfoVisible = true
     
@@ -131,7 +129,7 @@ private struct ListView: View {
         ZStack {
             Image(.firstInfo)
                 .padding(.bottom, 48)
-                .opacity(cameraUseCase.fetchPartys().isEmpty ? 1 : 0)
+                .opacity(partys.isEmpty ? 1 : 0)
             
             TableListView(isFirstInfoVisible: $isFirstInfoVisible)
         }
@@ -238,13 +236,8 @@ extension HomeView {
     let modelContext = MockModelContainer.mockModelContainer.mainContext
     
     return HomeView(
-        cameraUseCase: PartyCameraUseCase(
-            cameraService: PartyCameraService(),
-            dataService: PersistentDataService(
-                modelContext: modelContext
-            )
-        ),
-        persistentDataManager: PersistentDataManager(modelContext: modelContext)
+        persistentDataManager: PersistentDataManager(modelContext: modelContext),
+        cameraUseCase: CameraUseCase(cameraService: PartyCameraService())
     )
     .environmentObject(HomePathModel())
     .modelContainer(MockModelContainer.mockModelContainer)

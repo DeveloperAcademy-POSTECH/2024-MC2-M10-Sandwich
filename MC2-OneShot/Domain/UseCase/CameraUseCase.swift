@@ -1,5 +1,5 @@
 //
-//  PartyCameraUseCase.swift
+//  CameraUseCase.swift
 //  MC2-OneShot
 //
 //  Created by 김민준 on 6/2/24.
@@ -7,29 +7,24 @@
 
 import SwiftUI
 
-// MARK: - PartyCamera Init
+// MARK: - Camera Init
 
 @Observable
-final class PartyCameraUseCase: ObservableObject {
+final class CameraUseCase {
     
-    private var cameraService: PartyCameraServiceInterface
-    private var dataService: PersistentDataServiceInterface
+    private var cameraService: CameraServiceInterface
     
     private(set) var state: State
     
-    init(
-        cameraService: PartyCameraServiceInterface,
-        dataService: PersistentDataServiceInterface
-    ) {
+    init(cameraService: CameraServiceInterface) {
         self.cameraService = cameraService
-        self.dataService = dataService
         self.state = State()
     }
 }
 
 // MARK: - State Struct
 
-extension PartyCameraUseCase {
+extension CameraUseCase {
     
     /// UseCase 상태 값
     struct State {
@@ -38,14 +33,12 @@ extension PartyCameraUseCase {
         var isSelfieMode: Bool = false
         var isPhotoDataPrepare: Bool = false
         var photoData: CapturePhoto?
-        var isFinishPopupPresented: Bool = false
-        var isPartyFinish: Bool = false
     }
 }
 
 // MARK: - Camera UseCase Method
 
-extension PartyCameraUseCase {
+extension CameraUseCase {
     
     /// 카메라 Preview 객체를 반환합니다.
     var preview: AnyView {
@@ -89,9 +82,10 @@ extension PartyCameraUseCase {
             print("사진 데이터 누락 저장 실패")
             return
         }
-        dataService.savePhoto(photoData)
-        state.isCaptureMode = true
+        
+        // dataService.savePhoto(photoData)
         state.isPhotoDataPrepare = false
+        state.isCaptureMode = true
     }
     
     /// 플래시 모드를 토글합니다.
@@ -103,25 +97,5 @@ extension PartyCameraUseCase {
     func toggleFrontBack() {
         cameraService.toggleFrontBack()
         state.isSelfieMode.toggle()
-    }
-    
-    /// 술자리 파티를 종료합니다.
-    func finishParty() {
-        state.isPartyFinish = true
-    }
-}
-
-// MARK: - List Use Case
-
-extension PartyCameraUseCase {
-    
-    /// Party 배열을 반환합니다.
-    func fetchPartys() -> [Party] {
-        return dataService.fetchPartys()
-    }
-    
-    /// 현재 진행 중인 STEP 배열을 반환합니다.
-    func currentSteps() -> [Step] {
-        return dataService.currentSteps()
     }
 }
