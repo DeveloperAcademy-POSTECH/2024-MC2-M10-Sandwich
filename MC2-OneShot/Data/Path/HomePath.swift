@@ -31,10 +31,7 @@ private struct HomePathDestination: ViewModifier {
         content
             .navigationDestination(for: HomePathType.self) { path in
                 switch path {
-                case let .partyList(party): PartyListView(
-                    party: party,
-                    isCameraViewPresented: .constant(false)
-                )
+                case let .partyList(party): PartyListView(party: party)
                 case .searchList: SearchView()
                 }
             }

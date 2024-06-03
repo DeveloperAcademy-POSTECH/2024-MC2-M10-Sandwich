@@ -10,6 +10,8 @@ import Photos
 
 struct PartyListView: View {
     
+    @Environment(PartyUseCase.self) private var partyUseCase
+    
     @State private var isFinishPopupPresented = false
     @State private var isCommentPopupPresented = false
     @State private var isMemberPopupPresented = false
@@ -22,8 +24,6 @@ struct PartyListView: View {
     @EnvironmentObject private var cameraPathModel: CameraPathModel
     
     let party: Party
-    
-    @Binding var isCameraViewPresented: Bool
     
     var body: some View {
         ZStack {
@@ -149,7 +149,7 @@ struct PartyListView: View {
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .fullScreenCover(isPresented: $isPartyResultViewPresented) {
-                    isCameraViewPresented = false
+                    partyUseCase.presentCameraView(to: false)
                 } content: {
                     PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
                 }
@@ -358,7 +358,11 @@ struct StepCell: View {
 
 #Preview {
     PartyListView(
-        party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60, memberList: []),
-        isCameraViewPresented: .constant(true)
+        party: Party(
+            title: "포항공대대애앵앵",
+            startDate: Date(),
+            notiCycle: 60,
+            memberList: []
+        )
     )
 }

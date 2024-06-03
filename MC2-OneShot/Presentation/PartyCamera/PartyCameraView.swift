@@ -19,18 +19,13 @@ struct PartyCameraView: View {
     
     @Query private var partys: [Party]
     
-    @Binding private(set) var isCameraViewPresented: Bool
-    
     var body: some View {
         
         @Bindable var state = partyUseCase.state
         
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
-                CameraHeaderView(
-                    cameraUseCase: cameraUseCase,
-                    isCameraViewPresented: $isCameraViewPresented
-                )
+                CameraHeaderView(cameraUseCase: cameraUseCase)
                 
                 CameraMiddleView(cameraUseCase: cameraUseCase)
                 
@@ -44,10 +39,7 @@ struct PartyCameraView: View {
             .navigationDestination(for: CameraPathType.self) { path in
                 switch path {
                 case let .partyList(party):
-                    PartyListView(
-                        party: party,
-                        isCameraViewPresented: $isCameraViewPresented
-                    )
+                    PartyListView(party: party)
                 }
             }
 //            .fullScreenCover(isPresented: $state.isResultViewPresented) {
@@ -67,13 +59,12 @@ struct PartyCameraView: View {
 
 private struct CameraHeaderView: View {
     
+    @Environment(PartyUseCase.self) private var partyUseCase
     @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @Query private var partys: [Party]
     
     @State private var isFinishPopupPresented = false
-    
-    @Binding private(set) var isCameraViewPresented: Bool
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
@@ -86,7 +77,7 @@ private struct CameraHeaderView: View {
             if cameraUseCase.state.isCaptureMode {
                 HStack {
                     Button{
-                        isCameraViewPresented.toggle()
+                        partyUseCase.presentCameraView(to: false)
                     } label: {
                         Image(systemName: "chevron.down")
                             .resizable()

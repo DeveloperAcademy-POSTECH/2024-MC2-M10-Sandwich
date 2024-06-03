@@ -18,8 +18,6 @@ struct HomeView: View {
     @StateObject private var homePathModel: HomePathModel = .init()
     
     @State private var isPartySetViewPresented = false
-    @State private var isCameraViewPresented = false
-    // @State private var isPartyResultViewPresented = false
     
     var body: some View {
         @Bindable var state = partyUseCase.state
@@ -43,8 +41,7 @@ struct HomeView: View {
         }
         .fullScreenCover(isPresented: $state.isCameraViewPresented) {
             PartyCameraView(
-                cameraUseCase: CameraUseCase(cameraService: CameraService()),
-                isCameraViewPresented: $isCameraViewPresented
+                cameraUseCase: CameraUseCase(cameraService: CameraService())
             )
         }
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
@@ -152,7 +149,7 @@ extension HomeView {
     
     /// PartySetView가 사라질 때 호출되는 메서드입니다.
     private func presentCameraView() {
-        isCameraViewPresented.toggle()
+        // isCameraViewPresented.toggle()
         
 //        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
 //            isPartyResultViewPresented.toggle()
@@ -197,7 +194,7 @@ extension HomeView {
                 lastParty.isShutdown = true
             }
             
-            isCameraViewPresented.toggle()
+            // isCameraViewPresented.toggle()
             
             // 이전 스텝 사진 찍고, 다시 들어와보니 이미 다음 스텝 진행중
             if restTime <= TimeInterval(lastParty.notiCycle * 60) {
