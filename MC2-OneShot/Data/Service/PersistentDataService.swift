@@ -24,24 +24,9 @@ struct PersistentDataService: PersistentDataServiceInterface {
 
 extension PersistentDataService {
     
-    /// Party 배열을 시작 날짜를 기준으로 정렬 후 반환합니다.
-    func fetchPartys() -> [Party] {
-        do {
-            let fetchDescriptor = FetchDescriptor<Party>(sortBy: [.init(\.startDate)])
-            return try modelContext.fetch(fetchDescriptor)
-        } catch {
-            print("Party 데이터 반환 실패")
-            return []
-        }
-    }
-    
-    /// 현재 진행 중인 STEP 데이터를 반환합니다.
-    func currentSteps() -> [Step] {
-        if let currentParty = fetchPartys().last {
-            return currentParty.stepList
-        } else {
-            return []
-        }
+    /// Party 데이터를 생성합니다.
+    func createParty(_ party: Party) {
+        modelContext.insert(party)
     }
     
     /// 사진을 저장합니다.
@@ -56,5 +41,23 @@ extension PersistentDataService {
 
 extension PersistentDataService {
     
+    /// Party 배열을 시작 날짜를 기준으로 정렬 후 반환합니다.
+    private func fetchPartys() -> [Party] {
+        do {
+            let fetchDescriptor = FetchDescriptor<Party>(sortBy: [.init(\.startDate)])
+            return try modelContext.fetch(fetchDescriptor)
+        } catch {
+            print("Party 데이터 반환 실패")
+            return []
+        }
+    }
     
+    /// 현재 진행 중인 STEP 데이터를 반환합니다.
+    private func currentSteps() -> [Step] {
+        if let currentParty = fetchPartys().last {
+            return currentParty.stepList
+        } else {
+            return []
+        }
+    }
 }

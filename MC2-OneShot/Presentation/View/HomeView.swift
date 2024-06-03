@@ -12,14 +12,12 @@ import SwiftData
 
 struct HomeView: View {
     
-    @Environment(\.modelContext) private var modelContext
+    @State private(set) var partyPlayUseCase: PartyPlayUseCase
     
-    @StateObject var persistentDataManager: PersistentDataManager
+    @Environment(\.modelContext) private var modelContext
     @StateObject private var homePathModel: HomePathModel = .init()
     
     @Query private var partys: [Party]
-    
-    @State private(set) var cameraUseCase: CameraUseCase
     
     @State private var isPartySetViewPresented = false
     @State private var isCameraViewPresented = false
@@ -49,7 +47,7 @@ struct HomeView: View {
             }
             .fullScreenCover(isPresented: $isCameraViewPresented) {
                 PartyCameraView(
-                    cameraUseCase: CameraUseCase(cameraService: PartyCameraService()),
+                    cameraUseCase: CameraUseCase(cameraService: CameraService()),
                     isCameraViewPresented: $isCameraViewPresented,
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )
@@ -60,8 +58,8 @@ struct HomeView: View {
                 PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
             }
         }
+        .environment(partyPlayUseCase)
         .environmentObject(homePathModel)
-        .environmentObject(persistentDataManager)
         .onAppear {
             setupNotification()
             if partys.isLastParyLive {
@@ -236,8 +234,9 @@ extension HomeView {
     let modelContext = MockModelContainer.mockModelContainer.mainContext
     
     return HomeView(
-        persistentDataManager: PersistentDataManager(modelContext: modelContext),
-        cameraUseCase: CameraUseCase(cameraService: PartyCameraService())
+        partyPlayUseCase: PartyPlayUseCase(
+            dataService: PersistentDataService(modelContext: modelContext)
+        )
     )
     .environmentObject(HomePathModel())
     .modelContainer(MockModelContainer.mockModelContainer)

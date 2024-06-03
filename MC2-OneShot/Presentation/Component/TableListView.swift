@@ -159,7 +159,6 @@ private struct TableListStateInfoLabel: View {
     let modelContainer = MockModelContainer.mockModelContainer
     return TableListView(isFirstInfoVisible: .constant(true))
     .environmentObject(HomePathModel())
-    .environmentObject(PersistentDataManager(modelContext: modelContainer.mainContext))
     .modelContainer(modelContainer)
 }
 

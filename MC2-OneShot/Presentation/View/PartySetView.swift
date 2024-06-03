@@ -11,8 +11,9 @@ import SwiftUI
 
 struct PartySetView: View {
     
+    @Environment(PartyPlayUseCase.self) private var partyPlayUseCase
+    
     @EnvironmentObject private var homePathModel: HomePathModel
-    @EnvironmentObject private var persistentDataManager: PersistentDataManager
     
     @State private var titleText: String = ""
     @State private var notiCycle: NotiCycle = NotiCycle.allCases.first ?? .min30
@@ -56,11 +57,13 @@ struct PartySetView: View {
         let today = Date.now
         
         // 1. 영구 저장 데이터에 새로운 파티 데이터 생성
-        persistentDataManager.createParty(
-            title: titleText,
-            startDate: today,
-            notiCycle: notiCycle,
-            memberList: membersInfo
+        partyPlayUseCase.startParty(
+            Party(
+                title: titleText,
+                startDate: today,
+                notiCycle: notiCycle.rawValue,
+                memberList: membersInfo
+            )
         )
         
         // 2. 파티 서비스 시작

@@ -76,16 +76,14 @@ extension CameraUseCase {
         state.isPhotoDataPrepare = false
     }
     
-    /// 사진을 저장합니다.
-    func savePhoto() {
+    /// 방금 촬영한 사진을 반환합니다.
+    func fetchPhotoForSave() -> CapturePhoto? {
         guard let photoData = cameraService.fetchPhotoDataForSave() else {
             print("사진 데이터 누락 저장 실패")
-            return
+            return nil
         }
         
-        // dataService.savePhoto(photoData)
-        state.isPhotoDataPrepare = false
-        state.isCaptureMode = true
+        return photoData
     }
     
     /// 플래시 모드를 토글합니다.

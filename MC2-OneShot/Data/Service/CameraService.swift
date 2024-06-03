@@ -8,9 +8,9 @@
 import SwiftUI
 import AVFoundation
 
-// MARK: - PartyCameraService
+// MARK: - CameraService
 
-final class PartyCameraService: NSObject, CameraServiceInterface {
+final class CameraService: NSObject, CameraServiceInterface {
     
     /// Input과 Output을 연결하는 Session
     private var session = AVCaptureSession()
@@ -33,7 +33,7 @@ final class PartyCameraService: NSObject, CameraServiceInterface {
 
 // MARK: - Protocol Implementation
 
-extension PartyCameraService {
+extension CameraService {
     
     /// 카메라 권한을 요청합니다.
     func requestPermission() {
@@ -119,7 +119,7 @@ extension PartyCameraService {
 
 // MARK: - AVCaptureSession 구현
 
-extension PartyCameraService {
+extension CameraService {
     
     /// 카메라 사용 권한을 요청합니다.
     private func requestAccess() {
@@ -190,7 +190,7 @@ extension PartyCameraService {
 
 // MARK: - AVCapturePhotoCaptureDelegate
 
-extension PartyCameraService: AVCapturePhotoCaptureDelegate {
+extension CameraService: AVCapturePhotoCaptureDelegate {
     
     /// 사진 촬영 후 Photo 데이터의 준비가 완료되었을 때 호출되는 Delegate 메서드
     func photoOutput(
@@ -226,7 +226,7 @@ extension PartyCameraService: AVCapturePhotoCaptureDelegate {
 
 // MARK: - Camera Preview 구현
 
-extension PartyCameraService {
+extension CameraService {
     
     /// CameraPreview 객체
     private struct CameraPreviewView: UIViewRepresentable {
@@ -259,7 +259,7 @@ extension PartyCameraService {
 
 // MARK: - Camera Additional Method
 
-extension PartyCameraService {
+extension CameraService {
     
     /// 이미지를 좌우반전 후 반환합니다.
     private func flipImageHorizontally(_ image: UIImage) -> CapturePhoto? {

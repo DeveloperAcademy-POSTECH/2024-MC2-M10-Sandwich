@@ -12,7 +12,8 @@ import SwiftData
 
 struct PartyCameraView: View {
     
-    @Bindable private(set) var cameraUseCase: CameraUseCase
+    @Environment(PartyPlayUseCase.self) private var partyPlayUseCase
+    @State private(set) var cameraUseCase: CameraUseCase
     
     @StateObject private var cameraPathModel: CameraPathModel = .init()
     
@@ -35,6 +36,7 @@ struct PartyCameraView: View {
                 Spacer().frame(height: 48)
                 
                 CameraBottomView(
+                    partyPlayUseCase: partyPlayUseCase,
                     cameraUseCase: cameraUseCase,
                     isPartyResultViewPresented: $isPartyResultViewPresented
                 )
@@ -189,6 +191,7 @@ private struct CameraMiddleView: View {
 
 private struct CameraBottomView: View {
     
+    @Bindable private(set) var partyPlayUseCase: PartyPlayUseCase
     @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @Binding private(set) var isPartyResultViewPresented: Bool
@@ -248,6 +251,7 @@ private struct CameraBottomView: View {
             .padding(.horizontal, 36)
             
             CaptureButtonView(
+                partyPlayUseCase: partyPlayUseCase,
                 cameraUseCase: cameraUseCase,
                 isPartyResultViewPresented: $isPartyResultViewPresented
             )
@@ -261,6 +265,7 @@ private struct CameraBottomView: View {
 
 private struct CaptureButtonView: View {
     
+    @Bindable private(set) var partyPlayUseCase: PartyPlayUseCase
     @Bindable private(set) var cameraUseCase: CameraUseCase
     
     @Query private var partys: [Party]
@@ -275,8 +280,15 @@ private struct CaptureButtonView: View {
     
     var body: some View {
         Button {
-            cameraUseCase.state.isCaptureMode ?
-            cameraUseCase.capturePhoto() : cameraUseCase.savePhoto()
+            if cameraUseCase.state.isCaptureMode {
+                cameraUseCase.capturePhoto()
+            } else {
+                if let photo = cameraUseCase.fetchPhotoForSave() {
+                    partyPlayUseCase.savePhoto(photo)
+                }
+                
+                cameraUseCase.retakePhoto()
+            }
         } label: {
             ZStack{
                 if cameraUseCase.state.isCaptureMode {

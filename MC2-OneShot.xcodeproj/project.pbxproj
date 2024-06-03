@@ -44,16 +44,15 @@
 		827CF4D52C0CBB04008F86BF /* PersistentDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */; };
 		827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D62C0CBB35008F86BF /* PersistentDataServiceInterface.swift */; };
 		827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */; };
-		827CF4DD2C0DE8E0008F86BF /* PartyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4DC2C0DE8E0008F86BF /* PartyUseCase.swift */; };
+		827CF4DD2C0DE8E0008F86BF /* PartyPlayUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4DC2C0DE8E0008F86BF /* PartyPlayUseCase.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
 		82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE12BF88A7B00119628 /* MockModelContainer.swift */; };
-		82B49BE42BF88E1700119628 /* PersistentDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE32BF88E1700119628 /* PersistentDataManager.swift */; };
 		82D564552BFC22440091C2BC /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D564542BFC22440091C2BC /* CameraPreviewView.swift */; };
 		98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */; };
 		98BA9D4C2BF6DF3900BEEDCC /* PartyCameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4B2BF6DF3900BEEDCC /* PartyCameraViewModel.swift */; };
-		98BA9D4E2BF6DF4200BEEDCC /* PartyCameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* PartyCameraService.swift */; };
+		98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
 		BF2E72C32BF3472C008A2D1F /* Colorsets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */; };
 		BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C8E832C01F300005638A2 /* MemberCameraView.swift */; };
@@ -108,16 +107,15 @@
 		827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataService.swift; sourceTree = "<group>"; };
 		827CF4D62C0CBB35008F86BF /* PersistentDataServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataServiceInterface.swift; sourceTree = "<group>"; };
 		827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldCameraService.swift; sourceTree = "<group>"; };
-		827CF4DC2C0DE8E0008F86BF /* PartyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyUseCase.swift; sourceTree = "<group>"; };
+		827CF4DC2C0DE8E0008F86BF /* PartyPlayUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyPlayUseCase.swift; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
 		82B49BE12BF88A7B00119628 /* MockModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockModelContainer.swift; sourceTree = "<group>"; };
-		82B49BE32BF88E1700119628 /* PersistentDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataManager.swift; sourceTree = "<group>"; };
 		82D564542BFC22440091C2BC /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+ScreenSize.swift"; sourceTree = "<group>"; };
 		98BA9D4B2BF6DF3900BEEDCC /* PartyCameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCameraViewModel.swift; sourceTree = "<group>"; };
-		98BA9D4D2BF6DF4200BEEDCC /* PartyCameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCameraService.swift; sourceTree = "<group>"; };
+		98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
 		BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colorsets.xcassets; sourceTree = "<group>"; };
 		BF7C8E832C01F300005638A2 /* MemberCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCameraView.swift; sourceTree = "<group>"; };
@@ -148,7 +146,6 @@
 		82016BEF2BF6DCC200BF01CF /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				82B49BE32BF88E1700119628 /* PersistentDataManager.swift */,
 				1EFADD702BF6DE6500E333AD /* NotificationManager.swift */,
 				82016BF82BF742C300BF01CF /* PartyService.swift */,
 				1EB454502BFDE7EA004E99AD /* ImageSaver.swift */,
@@ -161,8 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				8224EA652C0CAD7C003EB372 /* Entity */,
-				8224EA412C0C4566003EB372 /* UseCase */,
 				820F92852C0AF6B200E103F3 /* Interface */,
+				8224EA412C0C4566003EB372 /* UseCase */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -180,7 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				8224EA422C0C4597003EB372 /* CameraUseCase.swift */,
-				827CF4DC2C0DE8E0008F86BF /* PartyUseCase.swift */,
+				827CF4DC2C0DE8E0008F86BF /* PartyPlayUseCase.swift */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -188,7 +185,7 @@
 		8224EA442C0C45F9003EB372 /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				98BA9D4D2BF6DF4200BEEDCC /* PartyCameraService.swift */,
+				98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */,
 				827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */,
 				827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */,
 			);
@@ -484,7 +481,7 @@
 				82016BF92BF742C300BF01CF /* PartyService.swift in Sources */,
 				8264EA262BF200EB00586FA0 /* PartyCameraView.swift in Sources */,
 				98BA9D4C2BF6DF3900BEEDCC /* PartyCameraViewModel.swift in Sources */,
-				827CF4DD2C0DE8E0008F86BF /* PartyUseCase.swift in Sources */,
+				827CF4DD2C0DE8E0008F86BF /* PartyPlayUseCase.swift in Sources */,
 				8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */,
 				1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */,
 				82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */,
@@ -504,7 +501,6 @@
 				1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */,
 				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
-				82B49BE42BF88E1700119628 /* PersistentDataManager.swift in Sources */,
 				8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */,
 				196B6A942BFED0E20043E196 /* Helper+BackSwipeGesture.swift in Sources */,
 				BFB534132BF3451B0013E9FE /* Helper+CustomFont.swift in Sources */,
@@ -516,7 +512,7 @@
 				820F927D2C0ABC6F00E103F3 /* Party.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */,
-				98BA9D4E2BF6DF4200BEEDCC /* PartyCameraService.swift in Sources */,
+				98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
 				820F92832C0ABCDC00E103F3 /* Member.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,

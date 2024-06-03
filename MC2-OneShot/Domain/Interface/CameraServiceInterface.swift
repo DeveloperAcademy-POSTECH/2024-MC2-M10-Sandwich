@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// 카메라와 관련된 기능
+/// Domain - 카메라 인터페이스
 protocol CameraServiceInterface {
     func requestPermission()
     func displayPreview() -> AnyView
