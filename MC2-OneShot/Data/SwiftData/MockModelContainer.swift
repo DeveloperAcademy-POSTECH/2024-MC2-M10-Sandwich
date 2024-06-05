@@ -13,11 +13,7 @@ struct MockModelContainer {
     
     /// 목업용으로 사용할 SwiftData ModelContainer
     static var mock: ModelContainer = {
-        
-        let schema = Schema([Party.self, Member.self])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        
-        do { return try ModelContainer(for: schema, configurations: [modelConfiguration]) }
-        catch { fatalError("MockModelContainer 생성 실패: \(error)") }
+        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
+        return try! ModelContainer(for: Party.self, configurations: modelConfiguration)
     }()
 }

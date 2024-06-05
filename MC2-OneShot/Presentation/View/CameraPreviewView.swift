@@ -23,17 +23,13 @@ struct CameraPreviewView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> VideoPreviewView {
         let view = VideoPreviewView()
-        
         view.videoPreviewLayer.session = session
         view.backgroundColor = .black
         view.videoPreviewLayer.videoGravity = .resizeAspectFill
         view.videoPreviewLayer.cornerRadius = 0
         view.videoPreviewLayer.connection?.videoRotationAngle = 90 // 나중에 수정할 것!
-        
         return view
     }
     
-    func updateUIView(_ uiView: VideoPreviewView, context: Context) {
-        
-    }
+    func updateUIView(_ uiView: VideoPreviewView, context: Context) {}
 }

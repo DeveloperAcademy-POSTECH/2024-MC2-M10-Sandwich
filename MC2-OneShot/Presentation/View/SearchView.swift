@@ -87,5 +87,6 @@ private struct ListView: View {
 #if DEBUG
 #Preview {
     SearchView()
+        .environment(HomePathModel())
 }
 #endif

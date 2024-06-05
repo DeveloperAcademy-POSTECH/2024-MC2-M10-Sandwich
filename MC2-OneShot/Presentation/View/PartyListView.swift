@@ -8,14 +8,15 @@
 import SwiftUI
 import Photos
 
+// MARK: - PartyListView
+
 struct PartyListView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) private var presentationMode
     
     @State private var isFinishPopupPresented = false
     @State private var isCommentPopupPresented = false
-    @State private var isMemberPopupPresented = false
     @State private var isPartyResultViewPresented = false
     @State private var isPartyEnd = false
     
@@ -26,73 +27,8 @@ struct PartyListView: View {
             Color.black.ignoresSafeArea()
             
             VStack(spacing: 0) {
-                HStack {
-                    Text(party.title)
-                        .pretendard(.bold, 25)
-                        .foregroundStyle(.shotFF)
-                    Spacer()
-                    
-                    Button(action: {
-                        isMemberPopupPresented.toggle()
-                    }, label: {
-                        ZStack(alignment: .trailing) {
-                            switch party.memberList.count {
-                            case 1...3:
-                                ForEach(party.memberList.indices, id: \.self) { index in
-                                    if let image = UIImage(data: party.memberList[index].profileImageData) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .frame (width: 32, height: 32)
-                                            .clipShape(Circle())
-                                            .padding(.trailing, 24*CGFloat(index))
-                                    }
-                                }
-                                
-                            case 4...:
-                                ForEach(0..<2) { index in
-                                    if let image = UIImage(data: party.memberList[index].profileImageData) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .frame (width: 32, height: 32)
-                                            .clipShape(Circle())
-                                            .padding(.trailing, 24*CGFloat(index))
-                                    }
-                                }
-                                
-                                ZStack {
-                                    Circle()
-                                        .frame(width: 32)
-                                        .foregroundStyle(.shot00)
-                                    Text("+\(party.memberList.count - 2)")
-                                        .pretendard(.semiBold, 17)
-                                        .foregroundStyle(.shotC6)
-                                }
-                                .padding(.trailing, 24*2)
-                                
-                            default:
-                                EmptyView()
-                            }
-                        }
-                    })
-                    .disabled(party.memberList.isEmpty)
-                    .fullScreenCover(isPresented: $isMemberPopupPresented) {
-                        MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented, memberList: party.memberList)
-                            .foregroundStyle(.shotFF)
-                            .presentationBackground(.black.opacity(0.7))
-                    }
-                    .transaction { transaction in
-                        transaction.disablesAnimations = true
-                    }
-                    
-                    
-                }
-                .padding(.top, 3)
-                .padding(.bottom, 14)
-                .padding(.horizontal, 16)
-                
-                
+                HeaderView(party: party)
                 Divider()
-                
                 ScrollView {
                     ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
                         StepCell(index: index, step: step, startDate: party.startDate)
@@ -133,9 +69,9 @@ struct PartyListView: View {
                                     .foregroundStyle(.shotGreen)
                             })
                             .fullScreenCover(isPresented: $isCommentPopupPresented) {
-                                CommentPopupView(isCommentPopupPresented: $isCommentPopupPresented, party: party)
-                                    .foregroundStyle(.shotFF)
-                                    .presentationBackground(.black.opacity(0.7))
+//                                CommentPopupView(isCommentPopupPresented: $isCommentPopupPresented, party: party)
+//                                    .foregroundStyle(.shotFF)
+//                                    .presentationBackground(.black.opacity(0.7))
                             }
                             .transaction { transaction in
                                 transaction.disablesAnimations = true
@@ -162,6 +98,78 @@ struct PartyListView: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - HeaderView
+
+private struct HeaderView: View {
+    
+    @State private var isMemberPopupPresented = false
+    
+    let party: Party
+    
+    var body: some View {
+        HStack {
+            Text(party.title)
+                .pretendard(.bold, 25)
+                .foregroundStyle(.shotFF)
+            
+            Spacer()
+            
+            Button {
+                isMemberPopupPresented.toggle()
+            } label: {
+                switch party.memberList.count {
+                case 1...3:
+                    ForEach(party.memberList.indices, id: \.self) { index in
+                        if let image = UIImage(data: party.memberList[index].profileImageData) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .frame (width: 32, height: 32)
+                                .clipShape(Circle())
+                                .padding(.trailing, 24*CGFloat(index))
+                        }
+                    }
+                    
+                case 4...:
+                    ForEach(0..<2) { index in
+                        if let image = UIImage(data: party.memberList[index].profileImageData) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .frame (width: 32, height: 32)
+                                .clipShape(Circle())
+                                .padding(.trailing, 24*CGFloat(index))
+                        }
+                    }
+                    
+                    ZStack {
+                        Circle()
+                            .frame(width: 32)
+                            .foregroundStyle(.shot00)
+                        Text("+\(party.memberList.count - 2)")
+                            .pretendard(.semiBold, 17)
+                            .foregroundStyle(.shotC6)
+                    }
+                    .padding(.trailing, 24*2)
+                    
+                default:
+                    EmptyView()
+                }
+            }
+            .disabled(party.memberList.isEmpty)
+            .fullScreenCover(isPresented: $isMemberPopupPresented) {
+                MemberPopupView(isMemberPopupPresented: $isMemberPopupPresented, memberList: party.memberList)
+                    .foregroundStyle(.shotFF)
+                    .presentationBackground(.black.opacity(0.7))
+            }
+            .transaction { transaction in
+                transaction.disablesAnimations = true
+            }
+        }
+        .padding(.top, 3)
+        .padding(.bottom, 14)
+        .padding(.horizontal, 16)
     }
 }
 
@@ -269,7 +277,6 @@ struct StepCell: View {
                                 Image(uiImage: image)
                                     .resizable()
                                     .scaledToFit()
-                                //                                    .frame(maxWidth: .infinity)
                                     .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
                                     .cornerRadius(15)
                             }
@@ -352,13 +359,24 @@ struct StepCell: View {
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
     PartyListView(
         party: Party(
             title: "포항공대대애앵앵",
-            startDate: Date(),
+            startDate: .now,
             notiCycle: 60,
             memberList: []
         )
     )
+    .modelContainer(MockModelContainer.mock)
+    .environment(
+        PartyUseCase(
+            dataService: PersistentDataService(modelContext: MockModelContainer.mock.mainContext),
+            notificationService: NotificationService()
+        )
+    )
 }
+#endif
