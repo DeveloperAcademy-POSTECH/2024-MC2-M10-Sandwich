@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 // MARK: - SearchView
 
@@ -51,18 +50,10 @@ struct SearchView: View {
 
 private struct ListView: View {
     
+    @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(HomePathModel.self) private var homePathModel
     
-    @Query private var partys: [Party]
-    
     @Binding var searchText: String
-    
-    /// 검색어를 이용해 Party 배열을 반환합니다.
-    var searchPartys: [Party] {
-        partys.filter {
-            $0.title.contains(searchText)
-        }
-    }
     
     var body: some View {
         List(searchPartys) { party in
@@ -81,6 +72,13 @@ private struct ListView: View {
         .listStyle(.plain)
         .padding(.top, 8)
         .padding(.bottom, 16)
+    }
+    
+    /// 검색어를 이용해 Party 배열을 반환합니다.
+    private var searchPartys: [Party] {
+        partyUseCase.partys.filter {
+            $0.title.contains(searchText)
+        }
     }
 }
 

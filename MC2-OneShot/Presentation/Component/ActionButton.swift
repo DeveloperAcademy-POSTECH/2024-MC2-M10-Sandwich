@@ -71,6 +71,7 @@ extension ActionButton {
 
 // MARK: - Preview
 
+#if DEBUG
 #Preview {
     ZStack {
         Color(.shot00)
@@ -99,3 +100,4 @@ extension ActionButton {
         .padding(.horizontal, 16)
     }
 }
+#endif
