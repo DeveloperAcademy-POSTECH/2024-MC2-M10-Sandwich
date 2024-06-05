@@ -5,6 +5,7 @@
 //  Created by 김민준 on 6/5/24.
 //
 
+import UIKit
 import UserNotifications
 
 // MARK: - NotificationServiceInterface
@@ -82,5 +83,11 @@ extension NotificationService {
     /// 예약되어있는 모든 Notification을 취소합니다.
     func cancelAllPendingNotification() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    }
+    
+    /// 앱 Badge를 초기화합니다.
+    func resetBadge() {
+        UNUserNotificationCenter.current()
+            .setBadgeCount(0)
     }
 }

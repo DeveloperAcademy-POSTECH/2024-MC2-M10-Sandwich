@@ -21,6 +21,6 @@ enum NotiCycle: Int, CaseIterable {
     
     /// NotiCycle을 초 단위로 변환하는 계산 속성
     var toSeconds: Int {
-        return self.rawValue * 60
+        return self.rawValue * 30
     }
 }

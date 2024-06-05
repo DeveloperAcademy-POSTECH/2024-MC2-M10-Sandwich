@@ -211,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				827CF4D22C0CB5F1008F86BF /* CapturePhoto.swift */,
+				82016BF62BF7034A00BF01CF /* NotiCycle.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -356,7 +357,6 @@
 		82A0C7A62C03133200686604 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
-				82016BF62BF7034A00BF01CF /* NotiCycle.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";

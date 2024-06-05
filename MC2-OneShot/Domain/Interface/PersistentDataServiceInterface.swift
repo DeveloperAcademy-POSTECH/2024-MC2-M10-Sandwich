@@ -10,6 +10,7 @@ import Foundation
 /// Domain - 영구 데이터 인터페이스
 protocol PersistentDataServiceInterface {
     func isPartyLive() -> Bool
+    func currentStep() -> Step?
     func fetchPartys() -> [Party]
     func createParty(_ party: Party)
     func savePhoto(_ photo: CapturePhoto)

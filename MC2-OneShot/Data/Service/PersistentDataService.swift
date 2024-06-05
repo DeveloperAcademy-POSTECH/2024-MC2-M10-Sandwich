@@ -29,6 +29,18 @@ extension PersistentDataService {
         return fetchPartys().lastParty?.isLive ?? false
     }
     
+    /// 현재 진행 중인 STEP을 반환합니다.
+    func currentStep() -> Step? {
+        if let curreuntParty = fetchPartys().last,
+           let curreuntStep = curreuntParty.stepList.sorted(by: {
+               $0.createDate < $1.createDate
+           }).last {
+            return curreuntStep
+        }
+        
+        return nil
+    }
+    
     /// Party 배열을 시작 날짜를 기준으로 정렬 후 반환합니다.
     func fetchPartys() -> [Party] {
         do {

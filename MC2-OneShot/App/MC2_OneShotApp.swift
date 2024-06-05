@@ -19,7 +19,8 @@ struct MC2_OneShotApp: App {
         WindowGroup {
             HomeView(
                 partyUseCase: PartyUseCase(
-                    dataService: PersistentDataService(modelContext: modelContainer.mainContext)
+                    dataService: PersistentDataService(modelContext: modelContainer.mainContext),
+                    notificationService: NotificationService()
                 )
             )
         }

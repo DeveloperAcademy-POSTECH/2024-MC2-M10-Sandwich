@@ -14,4 +14,5 @@ protocol NotificationServiceInterface {
     func scheduleNotification(date: Date, title: String, subtitle: String)
     func cancelAllPendingFunction()
     func cancelAllPendingNotification()
+    func resetBadge()
 }
