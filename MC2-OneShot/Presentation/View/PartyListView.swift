@@ -151,7 +151,7 @@ struct PartyListView: View {
                 .fullScreenCover(isPresented: $isPartyResultViewPresented) {
                     partyUseCase.presentCameraView(to: false)
                 } content: {
-                    PartyResultView(isPartyResultViewPresented: $isPartyResultViewPresented)
+                    PartyResultView()
                 }
             }
             .navigationBarBackButtonHidden(true)

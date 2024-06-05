@@ -45,6 +45,8 @@
 		827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D62C0CBB35008F86BF /* PersistentDataServiceInterface.swift */; };
 		827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */; };
 		827CF4DD2C0DE8E0008F86BF /* PartyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4DC2C0DE8E0008F86BF /* PartyUseCase.swift */; };
+		827CF4DF2C105718008F86BF /* NotificationServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4DE2C105718008F86BF /* NotificationServiceInterface.swift */; };
+		827CF4E12C105781008F86BF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4E02C105781008F86BF /* NotificationService.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
@@ -108,6 +110,8 @@
 		827CF4D62C0CBB35008F86BF /* PersistentDataServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataServiceInterface.swift; sourceTree = "<group>"; };
 		827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldCameraService.swift; sourceTree = "<group>"; };
 		827CF4DC2C0DE8E0008F86BF /* PartyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyUseCase.swift; sourceTree = "<group>"; };
+		827CF4DE2C105718008F86BF /* NotificationServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceInterface.swift; sourceTree = "<group>"; };
+		827CF4E02C105781008F86BF /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
@@ -169,6 +173,7 @@
 			children = (
 				820F92862C0AF6D100E103F3 /* CameraServiceInterface.swift */,
 				827CF4D62C0CBB35008F86BF /* PersistentDataServiceInterface.swift */,
+				827CF4DE2C105718008F86BF /* NotificationServiceInterface.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -187,6 +192,7 @@
 			children = (
 				98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */,
 				827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */,
+				827CF4E02C105781008F86BF /* NotificationService.swift */,
 				827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */,
 			);
 			path = Service;
@@ -498,6 +504,7 @@
 				827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */,
 				827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */,
 				827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */,
+				827CF4DF2C105718008F86BF /* NotificationServiceInterface.swift in Sources */,
 				1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */,
 				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
@@ -518,6 +525,7 @@
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
 				827616782BFED788008099F4 /* HapticManager.swift in Sources */,
+				827CF4E12C105781008F86BF /* NotificationService.swift in Sources */,
 				8224EA432C0C4597003EB372 /* CameraUseCase.swift in Sources */,
 				82A0C7AA2C03179400686604 /* TableListView.swift in Sources */,
 				1EFADD712BF6DE6500E333AD /* NotificationManager.swift in Sources */,

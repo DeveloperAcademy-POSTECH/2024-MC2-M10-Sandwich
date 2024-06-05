@@ -33,7 +33,7 @@ class NotificationManager {
         let soundName = "BBang"
         let soundExtension = "mp3"
         
-        if let soundURL = Bundle.main.url(forResource: soundName, withExtension: soundExtension) {
+        if let _ = Bundle.main.url(forResource: soundName, withExtension: soundExtension) {
             let sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: soundName + "." + soundExtension))
             content.sound = sound
         } else {
@@ -81,8 +81,8 @@ class NotificationManager {
     }
     
     func resetBadge() {
-            DispatchQueue.main.async {
-                UIApplication.shared.applicationIconBadgeNumber = 0
-            }
+        DispatchQueue.main.async {
+            UIApplication.shared.applicationIconBadgeNumber = 0
         }
+    }
 }

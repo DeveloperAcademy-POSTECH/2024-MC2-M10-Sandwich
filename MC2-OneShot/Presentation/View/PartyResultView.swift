@@ -10,12 +10,13 @@ import SwiftData
 
 struct PartyResultView: View {
     
+    @Environment(PartyUseCase.self) var partyUseCase
+    
     @EnvironmentObject private var homePathModel: HomePathModel
     @Environment(\.modelContext) private var modelContext
     
     @Query private var partys: [Party]
     @State private var isHelpMessagePresented = false
-    @Binding var isPartyResultViewPresented: Bool
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
@@ -78,8 +79,8 @@ struct PartyResultView: View {
                 }
                 
                 HStack{
-                    // preview crash 
-//                    Text("30min")
+                    // preview crash
+                    //                    Text("30min")
                     Text("\((partys.lastParty?.notiCycle)!)min")
                         .foregroundStyle(.shotC6)
                         .pretendard(.bold, 17)
@@ -102,14 +103,14 @@ struct PartyResultView: View {
                     title: "홈으로 돌아가기",
                     buttonType: .secondary
                 ) {
-                    isPartyResultViewPresented = false
+                    partyUseCase.presentCameraView(to: false)
                 }
                 
                 ActionButton(
                     title: "술자리 다시보기",
                     buttonType: .primary
                 ) {
-                    isPartyResultViewPresented = false
+                    partyUseCase.presentCameraView(to: false)
                     homePathModel.paths.append(.partyList(party: partys.lastParty!))
                 }
             }
@@ -264,13 +265,13 @@ private struct MemberResultView: View {
                     
                     LazyVGrid(columns: columns, spacing: 18) {
                         ForEach(party.memberList, id: \.self) { member in
-                                if let image = UIImage(data: member.profileImageData) {
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .frame (width: 60, height: 60)
-                                        .clipShape(Circle())
-                                }
+                            if let image = UIImage(data: member.profileImageData) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame (width: 60, height: 60)
+                                    .clipShape(Circle())
                             }
+                        }
                     }
                     .padding(.top, 18)
                     .padding(.bottom, 8)
@@ -282,6 +283,6 @@ private struct MemberResultView: View {
 
 
 #Preview {
-    PartyResultView(isPartyResultViewPresented: .constant(true))
+    PartyResultView()
         .environmentObject(CameraPathModel())
 }

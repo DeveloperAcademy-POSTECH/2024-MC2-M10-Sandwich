@@ -63,7 +63,6 @@ extension PartyUseCase {
     
     /// 파티를 종료합니다.
     func finishParty() {
-        // state.isCameraViewPresented = false
         state.isResultViewPresented = true
         state.isPartyLive = false
     }
@@ -74,12 +73,12 @@ extension PartyUseCase {
 extension PartyUseCase {
     
     /// CameraView를 컨트롤합니다.
-    func presentCameraView(to bool : Bool) {
+    func presentCameraView(to bool: Bool) {
         state.isCameraViewPresented = bool
     }
     
     /// ResultView를 컨트롤합니다.
-    func presentResultView(to bool : Bool) {
+    func presentResultView(to bool: Bool) {
         state.isResultViewPresented = bool
     }
 }

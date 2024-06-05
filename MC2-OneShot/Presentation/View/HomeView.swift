@@ -14,7 +14,6 @@ struct HomeView: View {
     
     @State private(set) var partyUseCase: PartyUseCase
     
-    @Environment(\.modelContext) private var modelContext
     @StateObject private var homePathModel: HomePathModel = .init()
     
     @State private var isPartySetViewPresented = false
@@ -29,8 +28,11 @@ struct HomeView: View {
                     title: partyUseCase.state.isPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
                     buttonType: partyUseCase.state.isPartyLive ? .popupfinish : .primary
                 ) {
-                    if partyUseCase.partys.isLastParyLive { partyUseCase.presentCameraView(to: true) }
-                    else { isPartySetViewPresented.toggle() }
+                    if partyUseCase.partys.isLastParyLive {
+                        partyUseCase.presentCameraView(to: true)
+                    } else {
+                        isPartySetViewPresented.toggle()
+                    }
                 }
                 .padding(.horizontal, 16)
             }
@@ -40,22 +42,17 @@ struct HomeView: View {
             }
         }
         .fullScreenCover(isPresented: $state.isCameraViewPresented) {
-            PartyCameraView(
-                cameraUseCase: CameraUseCase(cameraService: CameraService())
-            )
+            PartyCameraView(cameraUseCase: CameraUseCase(cameraService: CameraService()))
         }
-//        .fullScreenCover(isPresented: $state.isResultViewPresented) {
-//            PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
-//        }
         .environment(partyUseCase)
         .environmentObject(homePathModel)
         .onAppear {
             setupNotification()
+            
             if partyUseCase.state.isPartyLive {
                 setupPartyService()
             }
-        }
-        .onAppear {
+            
             if partyUseCase.state.isPartyLive,
                let lastParty = partyUseCase.partys.lastParty,
                let lastStep = lastParty.sortedStepList.last {
@@ -151,9 +148,9 @@ extension HomeView {
     private func presentCameraView() {
         // isCameraViewPresented.toggle()
         
-//        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
-//            isPartyResultViewPresented.toggle()
-//        }
+        //        NotificationManager.instance.scheduleFunction(date: PartyService.shared.currentStepEndDate) {
+        //            isPartyResultViewPresented.toggle()
+        //        }
     }
     
     /// STEP을 완료하지 못했을 때 로직
@@ -163,21 +160,21 @@ extension HomeView {
         
         let restTime = currentStepEndDate - presentTime
         
-//        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
-//        if restTime > 0 {
-//            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
-//                isPartyResultViewPresented.toggle()
-//                lastParty.isShutdown = true
-//            }
-//            
-//            isCameraViewPresented.toggle()
-//        }
-//        
-//        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
-//        else {
-//            isPartyResultViewPresented.toggle()
-//            lastParty.isShutdown = true
-//        }
+        //        // 현재Step마지막 - 현재시간 > 0 : 초과 아닐 때
+        //        if restTime > 0 {
+        //            NotificationManager.instance.scheduleFunction(date: Date(timeIntervalSince1970: currentStepEndDate)) {
+        //                isPartyResultViewPresented.toggle()
+        //                lastParty.isShutdown = true
+        //            }
+        //
+        //            isCameraViewPresented.toggle()
+        //        }
+        //
+        //        // 현재Step마지막 - 현재시간 > 0 : 초과일 때
+        //        else {
+        //            isPartyResultViewPresented.toggle()
+        //            lastParty.isShutdown = true
+        //        }
     }
     
     /// STEP을 완료했을 때 로직

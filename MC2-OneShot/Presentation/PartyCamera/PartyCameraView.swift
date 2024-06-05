@@ -44,7 +44,7 @@ struct PartyCameraView: View {
             }
         }
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
+            PartyResultView()
         }
         .environmentObject(cameraPathModel)
         .onAppear {
