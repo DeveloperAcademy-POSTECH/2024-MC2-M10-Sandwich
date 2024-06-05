@@ -15,10 +15,11 @@ enum HomePathType: Hashable {
 }
 
 /// HomePath 관리를 위한 Model
+@Observable
 final class HomePathModel: PathModel {
     
     /// 데이터 추적을 위한 배열
-    @Published var paths: [HomePathType]
+    var paths: [HomePathType]
     
     init(paths: [HomePathType] = []) {
         self.paths = paths

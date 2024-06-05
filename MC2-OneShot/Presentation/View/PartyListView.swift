@@ -11,17 +11,13 @@ import Photos
 struct PartyListView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
+    @Environment(\.presentationMode) var presentationMode
     
     @State private var isFinishPopupPresented = false
     @State private var isCommentPopupPresented = false
     @State private var isMemberPopupPresented = false
     @State private var isPartyResultViewPresented = false
     @State private var isPartyEnd = false
-    
-    @Environment(\.presentationMode) var presentationMode
-    
-    @EnvironmentObject private var homePathModel: HomePathModel
-    @EnvironmentObject private var cameraPathModel: CameraPathModel
     
     let party: Party
     
@@ -132,7 +128,7 @@ struct PartyListView: View {
                             Button(action: {
                                 isCommentPopupPresented = true
                             }, label: {
-                                Image(systemName: "text.bubble.fill")
+                                Image(symbol: .textBubble)
                                     .pretendard(.semiBold, 15)
                                     .foregroundStyle(.shotGreen)
                             })
@@ -160,7 +156,7 @@ struct PartyListView: View {
                     Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
                     }) {
-                        Image(systemName: "chevron.left")
+                        Image(symbol: .chevronLeft)
                             .foregroundStyle(.shotFF)
                     }
                 }
@@ -239,7 +235,7 @@ struct StepCell: View {
                                 .resizable()
                                 .frame(width: 35, height: 35)
                             
-                            Image(systemName: "square.and.arrow.down")
+                            Image(symbol: .squareArrowDown)
                                 .resizable()
                                 .frame(width: 16, height: 20)
                                 .pretendard(.semiBold, 16)

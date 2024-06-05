@@ -6,16 +6,13 @@
 //
 
 import SwiftUI
-import SwiftData
 
 // MARK: - HomeView
 
 struct HomeView: View {
     
     @State private(set) var partyUseCase: PartyUseCase
-    
-    @StateObject private var homePathModel: HomePathModel = .init()
-    
+    @State private var homePathModel: HomePathModel = .init()
     @State private var isPartySetViewPresented = false
     
     var body: some View {
@@ -24,29 +21,19 @@ struct HomeView: View {
             VStack(alignment: .leading) {
                 HeaderView()
                 ListView()
-                ActionButton(
-                    title: partyUseCase.state.isPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
-                    buttonType: partyUseCase.state.isPartyLive ? .popupfinish : .primary
-                ) {
-                    partyUseCase.state.isPartyLive ?
-                    partyUseCase.presentCameraView(to: true) :
-                    isPartySetViewPresented.toggle()
-                }
-                .padding(.horizontal, 16)
+                PartyButton(isPartySetViewPresented: $isPartySetViewPresented)
             }
             .homePathDestination()
             .sheet(isPresented: $isPartySetViewPresented) {
-                PartySetView(isPartySetViewPresented: $isPartySetViewPresented)
+                PartySetView()
             }
         }
         .fullScreenCover(isPresented: $state.isCameraViewPresented) {
             PartyCameraView(cameraUseCase: CameraUseCase(cameraService: CameraService()))
         }
         .environment(partyUseCase)
-        .environmentObject(homePathModel)
-        .onAppear {
-            partyUseCase.initialSetup()
-        }
+        .environment(homePathModel)
+        .onAppear{ partyUseCase.initialSetup() }
     }
 }
 
@@ -54,15 +41,15 @@ struct HomeView: View {
 
 private struct HeaderView: View {
     
-    @EnvironmentObject private var homePathModel: HomePathModel
+    @Environment(HomePathModel.self) private var homePathModel
     
     var body: some View {
-        HStack{
+        HStack {
             Spacer()
             Button {
                 homePathModel.paths.append(.searchList)
             } label: {
-                Image(systemName: "magnifyingglass")
+                Image(symbol: .magnifyingglass)
                     .resizable()
                     .frame(width: 20, height: 20)
                     .foregroundStyle(.shotFF)
@@ -84,18 +71,37 @@ private struct HeaderView: View {
 
 private struct ListView: View {
     
-    @Query private var partys: [Party]
-    
+    @Environment(PartyUseCase.self) private var partyUseCase
     @State private var isFirstInfoVisible = true
     
     var body: some View {
         ZStack {
             Image(.firstInfo)
                 .padding(.bottom, 48)
-                .opacity(partys.isEmpty ? 1 : 0)
+                .opacity(partyUseCase.partys.isEmpty ? 1 : 0)
             
             TableListView(isFirstInfoVisible: $isFirstInfoVisible)
         }
+    }
+}
+
+// MARK: - ActionButton
+
+private struct PartyButton: View {
+    
+    @Environment(PartyUseCase.self) private var partyUseCase
+    @Binding private(set) var isPartySetViewPresented: Bool
+    
+    var body: some View {
+        ActionButton(
+            title: partyUseCase.state.isPartyLive ? "사진 찍으러 가기" : "술자리 생성하기",
+            buttonType: partyUseCase.state.isPartyLive ? .popupfinish : .primary
+        ) {
+            partyUseCase.state.isPartyLive ?
+            partyUseCase.presentCameraView(to: true) :
+            isPartySetViewPresented.toggle()
+        }
+        .padding(.horizontal, 16)
     }
 }
 
@@ -111,7 +117,7 @@ private struct ListView: View {
             notificationService: NotificationService()
         )
     )
-    .environmentObject(HomePathModel())
+    .environment(HomePathModel())
     .modelContainer(MockModelContainer.mockModelContainer)
 }
 #endif

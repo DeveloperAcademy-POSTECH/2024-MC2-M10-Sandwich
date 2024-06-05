@@ -11,8 +11,7 @@ import SwiftData
 struct PartyResultView: View {
     
     @Environment(PartyUseCase.self) var partyUseCase
-    
-    @EnvironmentObject private var homePathModel: HomePathModel
+    @Environment(HomePathModel.self) private var homePathModel
     @Environment(\.modelContext) private var modelContext
     
     @Query private var partys: [Party]
@@ -36,7 +35,7 @@ struct PartyResultView: View {
                         Button{
                             isHelpMessagePresented.toggle()
                         } label: {
-                            Image(systemName: "exclamationmark.circle")
+                            Image(symbol: .exclamationmarkCircle)
                                 .pretendard(.semiBold, 17)
                                 .foregroundColor(.shotC6)
                         }
@@ -62,7 +61,7 @@ struct PartyResultView: View {
                         .scaledToFit()
                         .frame(width: 30,height: 30)
                     
-                    Image(systemName: "checkmark")
+                    Image(symbol: .checkmark)
                         .foregroundColor(.shot00)
                 }
                 .padding(.bottom, 4)
@@ -284,5 +283,5 @@ private struct MemberResultView: View {
 
 #Preview {
     PartyResultView()
-        .environmentObject(CameraPathModel())
+        .environment(CameraPathModel())
 }

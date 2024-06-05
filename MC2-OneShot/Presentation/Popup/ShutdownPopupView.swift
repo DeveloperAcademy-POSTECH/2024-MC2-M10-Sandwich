@@ -21,7 +21,7 @@ struct ShutdownPopupView: View {
                 .overlay {
                     VStack(spacing: 0) {
                         HStack{
-                            Image(systemName: "exclamationmark.circle")
+                            Image(symbol: .exclamationmarkCircle)
                                 .pretendard(.semiBold, 17)
                                 .foregroundStyle(.shotFF)
                             

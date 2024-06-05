@@ -13,10 +13,11 @@ enum CameraPathType: Hashable {
 }
 
 /// CameraPath 관리를 위한 Model
+@Observable
 final class CameraPathModel: PathModel {
     
     /// 데이터 추적을 위한 배열
-    @Published var paths: [CameraPathType]
+    var paths: [CameraPathType]
     
     init(paths: [CameraPathType] = []) {
         self.paths = paths

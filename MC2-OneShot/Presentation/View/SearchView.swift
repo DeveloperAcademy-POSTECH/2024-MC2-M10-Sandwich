@@ -12,7 +12,7 @@ import SwiftData
 
 struct SearchView: View {
     
-    @EnvironmentObject private var homePathModel: HomePathModel
+    @Environment(HomePathModel.self) private var homePathModel
     
     @State private var searchText = ""
     
@@ -39,7 +39,7 @@ struct SearchView: View {
                 Button {
                     homePathModel.paths.removeAll()
                 } label: {
-                    Image(systemName: "chevron.left")
+                    Image(symbol: .chevronLeft)
                         .foregroundStyle(.shotFF)
                 }
             }
@@ -51,7 +51,7 @@ struct SearchView: View {
 
 private struct ListView: View {
     
-    @EnvironmentObject private var homePathModel: HomePathModel
+    @Environment(HomePathModel.self) private var homePathModel
     
     @Query private var partys: [Party]
     

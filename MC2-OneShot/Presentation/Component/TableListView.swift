@@ -11,7 +11,7 @@ import SwiftData
 struct TableListView: View {
     
     @Environment(PartyUseCase.self) var partyPlayUseCase
-    @EnvironmentObject private var homePathModel: HomePathModel
+    @Environment(HomePathModel.self) private var homePathModel
     @Environment(\.modelContext) private var modelContext
     
     @State private var isShowAlert = false
@@ -157,7 +157,7 @@ private struct TableListStateInfoLabel: View {
 #Preview {
     let modelContainer = MockModelContainer.mockModelContainer
     return TableListView(isFirstInfoVisible: .constant(true))
-    .environmentObject(HomePathModel())
+    .environment(HomePathModel())
     .modelContainer(modelContainer)
 }
 

@@ -12,14 +12,12 @@ import SwiftUI
 struct PartySetView: View {
     
     @Environment(PartyUseCase.self) private var partyPlayUseCase
-    
-    @EnvironmentObject private var homePathModel: HomePathModel
+    @Environment(HomePathModel.self) private var homePathModel
+    @Environment(\.dismiss) private var dismiss
     
     @State private var titleText: String = ""
     @State private var notiCycle: NotiCycle = NotiCycle.allCases.first ?? .min30
     @State private var membersInfo: [Member] = []
-    
-    @Binding private(set) var isPartySetViewPresented: Bool
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -57,7 +55,7 @@ struct PartySetView: View {
         let today = Date.now
         
         // 1. SetView 가리기
-        isPartySetViewPresented = false
+        dismiss()
         
         // 2. 영구 저장 데이터에 새로운 파티 데이터 생성
         partyPlayUseCase.startParty(
@@ -93,7 +91,7 @@ private struct TitleView: View {
                 }
         } footer: {
             HStack{
-                Image(systemName: "exclamationmark.circle.fill")
+                Image(symbol: .exclamationmarkCircle)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 14, height: 14)
@@ -147,7 +145,7 @@ private struct MemberListView: View {
                                     .frame(width: 60)
                                     .foregroundStyle(.shot33)
                                 
-                                Image(systemName: "plus")
+                                Image(symbol: .plus)
                                     .resizable()
                                     .frame(width: 32, height: 32)
                                     .foregroundStyle(.shot6D)
@@ -166,7 +164,7 @@ private struct MemberListView: View {
             }
         } footer: {
             HStack {
-                Image(systemName: "camera.circle.fill")
+                Image(symbol: .cameraCircle)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 14, height: 14)
@@ -201,7 +199,7 @@ private struct NotiCycleView: View {
                         Text("\(notiCycle.rawValue)분")
                             .pretendard(.regular, 17)
                         
-                        Image(systemName: "chevron.up.chevron.down")
+                        Image(symbol: .chevronUpDown)
                     }
                     .foregroundStyle(.shotFF).opacity(0.6)
                 }
@@ -209,7 +207,7 @@ private struct NotiCycleView: View {
         } footer: {
             VStack(alignment: .leading){
                 HStack{
-                    Image(systemName: "questionmark.circle.fill")
+                    Image(symbol: .questionmarkCircle)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 14, height: 14)
@@ -219,7 +217,7 @@ private struct NotiCycleView: View {
                 }
                 
                 HStack{
-                    Image(systemName: "exclamationmark.circle.fill")
+                    Image(symbol: .exclamationmarkCircle)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 14, height: 14)
@@ -238,9 +236,7 @@ private struct NotiCycleView: View {
 
 #if DEBUG
 #Preview {
-    PartySetView(
-        isPartySetViewPresented: .constant(true)
-    )
+    PartySetView()
     .modelContainer(MockModelContainer.mockModelContainer)
 }
 #endif

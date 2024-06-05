@@ -37,7 +37,7 @@ struct MemberCameraView: View {
                     Button{
                         isCameraViewPresented.toggle()
                     } label: {
-                        Image(systemName: "chevron.down")
+                        Image(symbol: .chevronDown)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
@@ -102,13 +102,13 @@ struct MemberCameraView: View {
                         }
                     } label: {
                         if isBolt {
-                            Image(systemName: "bolt")
+                            Image(symbol: .bolt)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 32, height: 32)
                                 .foregroundColor(.shotFF)
                         } else {
-                            Image(systemName: "bolt.slash")
+                            Image(symbol: .boltSlash)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 32, height: 32)
@@ -127,7 +127,7 @@ struct MemberCameraView: View {
                             isBolt = false
                         }
                     } label: {
-                        Image(systemName: "arrow.triangle.2.circlepath")
+                        Image(symbol: .frontBackToggle)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 32, height: 32)
@@ -199,7 +199,7 @@ private struct CaptureButtonView: View {
                     Circle()
                         .fill(Color.shotGreen)
                         .frame(width: 96, height: 96)
-                    Image(systemName: "arrow.up.forward")
+                    Image(symbol: .arrowUpForward)
                         .resizable()
                         .scaledToFit()
                         .frame(height: 36)

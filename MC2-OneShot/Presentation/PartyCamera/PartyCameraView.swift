@@ -13,9 +13,9 @@ import SwiftData
 struct PartyCameraView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
-    @State private(set) var cameraUseCase: CameraUseCase
     
-    @StateObject private var cameraPathModel: CameraPathModel = .init()
+    @State private(set) var cameraUseCase: CameraUseCase
+    @State private var cameraPathModel: CameraPathModel = .init()
     
     @Query private var partys: [Party]
     
@@ -46,7 +46,7 @@ struct PartyCameraView: View {
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
             PartyResultView()
         }
-        .environmentObject(cameraPathModel)
+        .environment(cameraPathModel)
         .onAppear {
             cameraUseCase.requestPermission()
         }
@@ -77,7 +77,7 @@ private struct CameraHeaderView: View {
                     Button{
                         partyUseCase.presentCameraView(to: false)
                     } label: {
-                        Image(systemName: "chevron.down")
+                        Image(symbol: .chevronDown)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
@@ -123,8 +123,7 @@ private struct CameraHeaderView: View {
 private struct CameraMiddleView: View {
     
     @Bindable private(set) var cameraUseCase: CameraUseCase
-    
-    @EnvironmentObject private var cameraPathModel: CameraPathModel
+    @Environment(CameraPathModel.self) private var cameraPathModel
     
     @Query private var partys: [Party]
     
@@ -159,7 +158,8 @@ private struct CameraMiddleView: View {
                         Text(partys.last?.title ?? "제목입니당")
                             .pretendard(.bold, 20)
                             .foregroundColor(.shotFF)
-                        Image(systemName: "chevron.right")
+                        
+                        Image(symbol: .chevronRight)
                             .foregroundColor(.shotFF)
                     }
                 }
@@ -191,13 +191,13 @@ private struct CameraBottomView: View {
                         cameraUseCase.toggleFlashMode()
                     } label: {
                         if cameraUseCase.state.isFlashMode {
-                            Image(systemName: "bolt")
+                            Image(symbol: .bolt)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 32, height: 32)
                                 .foregroundColor(.shotFF)
                         } else {
-                            Image(systemName: "bolt.slash")
+                            Image(symbol: .boltSlash)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 32, height: 32)
@@ -211,7 +211,7 @@ private struct CameraBottomView: View {
                     Button {
                         cameraUseCase.toggleFrontBack()
                     } label: {
-                        Image(systemName: "arrow.triangle.2.circlepath")
+                        Image(symbol: .frontBackToggle)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 32, height: 32)
@@ -288,7 +288,7 @@ private struct CaptureButtonView: View {
                         .fill(Color.shotGreen)
                         .frame(width: 96, height: 96)
                     
-                    Image(systemName: "arrow.up.forward")
+                    Image(symbol: .arrowUpForward)
                         .resizable()
                         .scaledToFit()
                         .frame(height: 36)
@@ -365,12 +365,12 @@ private struct StepInfoView: View {
                 // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
                 if lastStep.mediaList.isEmpty {
                     ZStack{
-                        Image("icnSave")
+                        Image(.icnSave)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 25,height: 25)
                         
-                        Image(systemName: "checkmark")
+                        Image(symbol: .checkmark)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 12,height: 12)
@@ -379,12 +379,12 @@ private struct StepInfoView: View {
                     .padding(.bottom, 2)
                 } else {
                     ZStack{
-                        Image("Greenbottle")
+                        Image(.greenbottle)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 25,height: 25)
                         
-                        Image(systemName: "checkmark")
+                        Image(symbol: .checkmark)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 12,height: 12)

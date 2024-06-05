@@ -30,7 +30,7 @@ struct MemberPopupView: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        Image(systemName: "person.fill")
+                        Image(symbol: .person)
                             .pretendard(.bold, 17)
                             .foregroundStyle(.shotGreen)
                         

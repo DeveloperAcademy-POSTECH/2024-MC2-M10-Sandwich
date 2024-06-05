@@ -34,7 +34,7 @@ struct CommentPopupView: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        Image(systemName: "text.bubble.fill")
+                        Image(symbol: .textBubble)
                             .pretendard(.semiBold, 15)
                             .foregroundStyle(.shotGreen)
                         
