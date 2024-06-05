@@ -8,10 +8,12 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - FinishPopupView
+
 struct FinishPopupView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
-    @Binding var isFinishPopupPresented: Bool
+    @Environment(\.dismiss) private var dismiss
     
     var memberList: [Member]
     
@@ -77,7 +79,7 @@ struct FinishPopupView: View {
                             title: "더 마시기",
                             buttonType: .secondary
                         ) {
-                            isFinishPopupPresented = false
+                            dismiss()
                         }
                         
                         ActionButton(
@@ -85,9 +87,8 @@ struct FinishPopupView: View {
                             buttonType: .primary
                         ) {
                             UIView.setAnimationsEnabled(false)
-                            isFinishPopupPresented = false
+                            dismiss()
                             HapticManager.shared.notification(type: .success)
-                            // PartyService.shared.endParty()
                             partyUseCase.finishParty()
                         }
                     }
@@ -102,11 +103,16 @@ struct FinishPopupView: View {
     }
 }
 
+// MARK: - Preview
+
 #if DEBUG
 #Preview {
-    FinishPopupView(
-        isFinishPopupPresented: .constant(true),
-        memberList: []
+    FinishPopupView(memberList: [])
+    .environment(
+        PartyUseCase(
+            dataService: PersistentDataService(modelContext: MockModelContainer.mock.mainContext),
+            notificationService: NotificationService()
+        )
     )
 }
 #endif

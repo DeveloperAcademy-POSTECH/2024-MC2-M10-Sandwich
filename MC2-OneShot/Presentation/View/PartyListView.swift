@@ -17,84 +17,62 @@ struct PartyListView: View {
     
     @State private var isFinishPopupPresented = false
     @State private var isCommentPopupPresented = false
-    @State private var isPartyResultViewPresented = false
-    @State private var isPartyEnd = false
     
     let party: Party
     
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                HeaderView(party: party)
-                Divider()
-                ScrollView {
-                    ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
-                        StepCell(index: index, step: step, startDate: party.startDate)
-                    }
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if party.isLive {
-                            Button(action: {
-                                HapticManager.shared.notification(type: .warning)
-                                isFinishPopupPresented = true
-                            }, label: {
-                                Text("술자리 종료")
-                                    .pretendard(.semiBold, 16)
-                                    .foregroundStyle(.shotGreen)
-                            })
-                            .fullScreenCover(isPresented: $isFinishPopupPresented, onDismiss: {
-                                if isPartyEnd {
-                                    isPartyResultViewPresented.toggle()
-                                }
-                            }, content: {
-                                FinishPopupView(
-                                    isFinishPopupPresented: $isFinishPopupPresented,
-                                    memberList: party.memberList
-                                )
-                                .foregroundStyle(.shotFF)
-                                .presentationBackground(.black.opacity(0.7))
-                            })
-                            .transaction { transaction in
-                                transaction.disablesAnimations = true
-                            }
-                        } else {
-                            Button(action: {
-                                isCommentPopupPresented = true
-                            }, label: {
-                                Image(symbol: .textBubble)
-                                    .pretendard(.semiBold, 15)
-                                    .foregroundStyle(.shotGreen)
-                            })
-                            .fullScreenCover(isPresented: $isCommentPopupPresented) {
-//                                CommentPopupView(isCommentPopupPresented: $isCommentPopupPresented, party: party)
-//                                    .foregroundStyle(.shotFF)
-//                                    .presentationBackground(.black.opacity(0.7))
-                            }
-                            .transaction { transaction in
-                                transaction.disablesAnimations = true
-                            }
-                        }
-                    }
-                }
-                .navigationBarTitleDisplayMode(.inline)
-                .fullScreenCover(isPresented: $isPartyResultViewPresented) {
-                    partyUseCase.presentCameraView(to: false)
-                } content: {
-                    PartyResultView()
+        @Bindable var state = partyUseCase.state
+        VStack(spacing: 0) {
+            HeaderView(party: party)
+            Divider()
+            ScrollView {
+                ForEach(Array(party.stepList.enumerated()), id: \.offset) { index, step in
+                    StepCell(
+                        index: index,
+                        step: step,
+                        startDate: party.startDate
+                    )
                 }
             }
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(symbol: .chevronLeft)
-                            .foregroundStyle(.shotFF)
+            .fullScreenCover(isPresented: $state.isResultViewPresented) {
+                PartyResultView(rootView: .list)
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if party.isLive {
+                    Button {
+                        HapticManager.shared.notification(type: .warning)
+                        isFinishPopupPresented = true
+                    } label: {
+                        Text("술자리 종료")
+                            .pretendard(.semiBold, 16)
+                            .foregroundStyle(.shotGreen)
                     }
+                    .fullScreenCover(isPresented: $isFinishPopupPresented) {
+                        FinishPopupView(memberList: party.memberList)
+                            .foregroundStyle(.shotFF)
+                            .presentationBackground(.black.opacity(0.7))
+                    }
+                    .transaction { $0.disablesAnimations = true }
+                } else {
+                    Button {
+                        isCommentPopupPresented = true
+                    } label: {
+                        Image(symbol: .textBubble)
+                            .pretendard(.semiBold, 15)
+                            .foregroundStyle(.shotGreen)
+                    }
+                    .fullScreenCover(isPresented: $isCommentPopupPresented) {
+                        CommentPopupView(
+                            isCommentPopupPresented: $isCommentPopupPresented,
+                            party: party
+                        )
+                        .foregroundStyle(.shotFF)
+                        .presentationBackground(.black.opacity(0.7))
+                    }
+                    .transaction { $0.disablesAnimations = true }
                 }
             }
         }
@@ -173,30 +151,19 @@ private struct HeaderView: View {
     }
 }
 
-struct ToastView: View {
-    var message: String
-    
-    var body: some View {
-        Text(message)
-            .pretendard(.regular, 16)
-            .foregroundStyle(.shotFF)
-            .padding()
-            .background(Color.black.opacity(0.8))
-            .cornerRadius(10)
-            .padding(.top, 50)
-    }
-}
+// MARK: - StepCell
 
-struct StepCell: View {
-    var index: Int
-    var step: Step
-    var startDate: Date
+private struct StepCell: View {
     
     @State private var visibleMediaIndex = 0
     @State private var captureDates: [Date] = []
     @State private var isImageSaved = false
     @State private var showActionSheet = false
     @State private var showToast = false
+    
+    var index: Int
+    var step: Step
+    var startDate: Date
     
     var body: some View {
         VStack(spacing: 0) {
@@ -363,20 +330,28 @@ struct StepCell: View {
 
 #if DEBUG
 #Preview {
-    PartyListView(
-        party: Party(
-            title: "포항공대대애앵앵",
-            startDate: .now,
-            notiCycle: 60,
-            memberList: []
+    struct Container: View {
+        var body: some View {
+            PartyListView(
+                party: Party(
+                    title: "포항공대대애앵앵",
+                    startDate: .now,
+                    notiCycle: 60,
+                    memberList: []
+                )
+            )
+        }
+    }
+    
+    return Container()
+        .modelContainer(MockModelContainer.mock)
+        .environment(
+            PartyUseCase(
+                dataService: PersistentDataService(
+                    modelContext: MockModelContainer.mock.mainContext
+                ),
+                notificationService: NotificationService()
+            )
         )
-    )
-    .modelContainer(MockModelContainer.mock)
-    .environment(
-        PartyUseCase(
-            dataService: PersistentDataService(modelContext: MockModelContainer.mock.mainContext),
-            notificationService: NotificationService()
-        )
-    )
 }
 #endif

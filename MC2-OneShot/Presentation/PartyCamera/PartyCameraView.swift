@@ -26,11 +26,8 @@ struct PartyCameraView: View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
                 CameraHeaderView(cameraUseCase: cameraUseCase)
-                
                 CameraMiddleView(cameraUseCase: cameraUseCase)
-                
                 Spacer().frame(height: 48)
-                
                 CameraBottomView(
                     partyPlayUseCase: partyUseCase,
                     cameraUseCase: cameraUseCase
@@ -44,7 +41,7 @@ struct PartyCameraView: View {
             }
         }
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView()
+            PartyResultView(rootView: .camera)
         }
         .environment(cameraPathModel)
         .onAppear {
@@ -105,10 +102,7 @@ private struct CameraHeaderView: View {
             StepInfoView()
         }
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
-            FinishPopupView(
-                isFinishPopupPresented: $isFinishPopupPresented,
-                memberList: currentParty!.memberList
-            )
+            FinishPopupView(memberList: currentParty!.memberList)
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
         }

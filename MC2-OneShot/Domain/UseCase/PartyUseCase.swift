@@ -111,6 +111,8 @@ extension PartyUseCase {
         currentParty.isLive = false
         state.isResultViewPresented = true
         state.isPartyLive = false
+        notificationService.cancelAllPendingFunction()
+        notificationService.cancelAllPendingNotification()
     }
     
     /// 선택한 파티를 삭제합니다.

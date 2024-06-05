@@ -10,12 +10,20 @@ import SwiftData
 
 struct PartyResultView: View {
     
-    @Environment(PartyUseCase.self) var partyUseCase
+    @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(HomePathModel.self) private var homePathModel
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
     @Query private var partys: [Party]
     @State private var isHelpMessagePresented = false
+    
+    let rootView: RootView
+    
+    enum RootView {
+        case list
+        case camera
+    }
     
     /// 현재 파티를 반환합니다.
     var currentParty: Party? {
@@ -102,15 +110,21 @@ struct PartyResultView: View {
                     title: "홈으로 돌아가기",
                     buttonType: .secondary
                 ) {
-                    partyUseCase.presentCameraView(to: false)
+                    rootView == .camera ?
+                    partyUseCase.presentCameraView(to: false) :
+                    partyUseCase.presentResultView(to: false)
+                    NavigationHelper.popToRootView()
                 }
                 
-                ActionButton(
-                    title: "술자리 다시보기",
-                    buttonType: .primary
-                ) {
-                    partyUseCase.presentCameraView(to: false)
-                    homePathModel.paths.append(.partyList(party: partys.lastParty!))
+                if rootView == .camera {
+                    ActionButton(
+                        title: "술자리 다시보기",
+                        buttonType: .primary
+                    ) {
+                        partyUseCase.presentCameraView(to: false)
+                        NavigationHelper.popToRootView()
+                        homePathModel.paths.append(.partyList(party: partys.lastParty!))
+                    }
                 }
             }
             .padding()
@@ -282,6 +296,6 @@ private struct MemberResultView: View {
 
 
 #Preview {
-    PartyResultView()
+    PartyResultView(rootView: .camera)
         .environment(CameraPathModel())
 }

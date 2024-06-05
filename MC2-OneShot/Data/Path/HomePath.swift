@@ -5,7 +5,6 @@
 //  Created by 김민준 on 5/26/24.
 //
 
-import Foundation
 import SwiftUI
 
 /// HomeView에서 이동할 수 있는 PathType
@@ -32,7 +31,7 @@ private struct HomePathDestination: ViewModifier {
         content
             .navigationDestination(for: HomePathType.self) { path in
                 switch path {
-                case let .partyList(party): PartyListView(party: party)
+                case let .partyList(party): PartyListView(party: party).toolbarRole(.editor)
                 case .searchList: SearchView()
                 }
             }
