@@ -41,7 +41,6 @@ struct PartySetView: View {
                 buttonType: titleText.isEmpty
                 ? .disabled : .primary
             ) {
-                HapticManager.shared.notification(type: .success)
                 dismiss()
                 partyPlayUseCase.startParty(
                     Party(
@@ -67,9 +66,7 @@ private struct TitleView: View {
         Section {
             TextField("제목", text: $titleText)
                 .onChange(of: titleText) { _, text in
-                    if text.count > 12 {
-                        titleText.removeLast()
-                    }
+                    if text.count > 12 { titleText.removeLast() }
                 }
         } footer: {
             HStack{
@@ -79,79 +76,6 @@ private struct TitleView: View {
                     .frame(width: 14, height: 14)
                 
                 Text("제목은 12자 이내로 작성 가능해요.")
-                    .pretendard(.regular, 12)
-            }
-        }
-        .padding(4)
-    }
-}
-
-// MARK: - MemberListView
-
-private struct MemberListView: View {
-    
-    @State private var isCameraViewPresented = false
-    
-    @Binding private(set) var membersInfo: [Member]
-    
-    private let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 4)
-    
-    var body: some View {
-        Section {
-            VStack(alignment: .leading) {
-                Text("사람 추가")
-                    .pretendard(.regular, 17)
-                    .foregroundStyle(.shotFF)
-                    .padding(.top, 6)
-                
-                Spacer()
-                    .frame(height: 16)
-                
-                LazyVGrid(columns: columns, spacing: 30) {
-                    ForEach(membersInfo, id: \.self) { member in
-                        if let image = UIImage(data: member.profileImageData) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
-                        }
-                    }
-                    
-                    // + 버튼을 조건부로 표시
-                    if membersInfo.count < 8 {
-                        Button {
-                            isCameraViewPresented.toggle()
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 60)
-                                    .foregroundStyle(.shot33)
-                                
-                                Image(symbol: .plus)
-                                    .resizable()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundStyle(.shot6D)
-                            }
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .fullScreenCover(isPresented: $isCameraViewPresented) {
-                            MemberCameraView(
-                                isCameraViewPresented: $isCameraViewPresented,
-                                membersInfo: $membersInfo
-                            )
-                        }
-                    }
-                }
-                .padding(.bottom, 8)
-            }
-        } footer: {
-            HStack {
-                Image(symbol: .cameraCircle)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                
-                Text("술자리를 함께하는 일행의 사진을 찍어봐요!")
                     .pretendard(.regular, 12)
             }
         }
@@ -169,6 +93,8 @@ private struct NotiCycleView: View {
         Section {
             HStack {
                 Text("알람 주기")
+                    .pretendard(.regular, 17)
+                    .foregroundStyle(.shotFF)
                 
                 Spacer()
                 
@@ -210,7 +136,79 @@ private struct NotiCycleView: View {
             }
         }
         .padding(4)
-        .onAppear(perform : UIApplication.shared.hideKeyboard)
+        .onAppear { UIApplication.shared.hideKeyboard() }
+    }
+}
+
+// MARK: - MemberListView
+
+private struct MemberListView: View {
+    
+    @State private var isCameraViewPresented = false
+    
+    @Binding private(set) var membersInfo: [Member]
+    
+    private let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 4)
+    
+    var body: some View {
+        Section {
+            VStack(alignment: .leading) {
+                Text("사람 추가")
+                    .pretendard(.regular, 17)
+                    .foregroundStyle(.shotFF)
+                    .padding(.top, 6)
+                
+                Spacer()
+                    .frame(height: 16)
+                
+                LazyVGrid(columns: columns, spacing: 30) {
+                    ForEach(membersInfo) { member in
+                        if let image = UIImage(data: member.profileImageData) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                        }
+                    }
+                    
+                    if membersInfo.count < 8 {
+                        Button {
+                            isCameraViewPresented.toggle()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 60)
+                                    .foregroundStyle(.shot33)
+                                
+                                Image(symbol: .plus)
+                                    .resizable()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundStyle(.shot6D)
+                            }
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        .fullScreenCover(isPresented: $isCameraViewPresented) {
+                            MemberCameraView(
+                                isCameraViewPresented: $isCameraViewPresented,
+                                membersInfo: $membersInfo
+                            )
+                        }
+                    }
+                }
+                .padding(.bottom, 8)
+            }
+        } footer: {
+            HStack {
+                Image(symbol: .cameraCircle)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 14, height: 14)
+                
+                Text("술자리를 함께하는 일행의 사진을 찍어봐요!")
+                    .pretendard(.regular, 12)
+            }
+        }
+        .padding(4)
     }
 }
 

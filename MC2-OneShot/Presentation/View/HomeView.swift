@@ -12,7 +12,6 @@ import SwiftUI
 struct HomeView: View {
     
     @State private(set) var partyUseCase: PartyUseCase
-    @State private var cameraUseCase = CameraUseCase(cameraService: CameraService())
     @State private var homePathModel: HomePathModel = .init()
     @State private var isPartySetViewPresented = false
     
@@ -27,9 +26,7 @@ struct HomeView: View {
             .homePathDestination()
             .sheet(isPresented: $isPartySetViewPresented) { PartySetView() }
         }
-        .fullScreenCover(isPresented: $state.isCameraViewPresented) {
-            PartyCameraView(cameraUseCase: cameraUseCase)
-        }
+        .fullScreenCover(isPresented: $state.isCameraViewPresented) { PartyCameraView() }
         .environment(partyUseCase)
         .environment(homePathModel)
         .onAppear{ partyUseCase.initialSetup() }

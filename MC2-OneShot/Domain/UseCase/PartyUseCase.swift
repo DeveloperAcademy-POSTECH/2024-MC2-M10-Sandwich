@@ -89,6 +89,7 @@ extension PartyUseCase {
     
     /// 파티를 시작합니다.
     func startParty(_ party: Party) {
+        HapticManager.shared.notification(type: .success)
         dataService.createParty(party)
         state.isPartyLive = true
         state.startDate = party.startDate

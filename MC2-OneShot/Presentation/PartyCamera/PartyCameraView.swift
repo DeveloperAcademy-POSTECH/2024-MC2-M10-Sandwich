@@ -14,7 +14,7 @@ struct PartyCameraView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
     
-    @State private(set) var cameraUseCase: CameraUseCase
+    @State private var cameraUseCase = CameraUseCase(cameraService: CameraService())
     @State private var cameraPathModel: CameraPathModel = .init()
     
     @Query private var partys: [Party]
