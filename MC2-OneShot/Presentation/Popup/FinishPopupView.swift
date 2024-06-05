@@ -84,9 +84,10 @@ struct FinishPopupView: View {
                             title: "끝내기",
                             buttonType: .primary
                         ) {
+                            UIView.setAnimationsEnabled(false)
+                            isFinishPopupPresented = false
                             HapticManager.shared.notification(type: .success)
                             PartyService.shared.endParty()
-                            isFinishPopupPresented = false
                             partyUseCase.finishParty()
                         }
                     }
@@ -94,6 +95,9 @@ struct FinishPopupView: View {
                     .padding(.top, 50)
                 }
             }
+        }
+        .onDisappear {
+            UIView.setAnimationsEnabled(true)
         }
     }
 }

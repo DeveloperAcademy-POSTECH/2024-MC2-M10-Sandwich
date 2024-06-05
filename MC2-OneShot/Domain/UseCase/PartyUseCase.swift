@@ -19,7 +19,7 @@ final class PartyUseCase {
     
     init(dataService: PersistentDataServiceInterface) {
         self.dataService = dataService
-        self.state = State()
+        self.state = State(isPartyLive: dataService.isPartyLive())
         self.partys = dataService.fetchPartys()
     }
 }
@@ -31,9 +31,15 @@ extension PartyUseCase {
     /// UseCase 상태 값
     @Observable
     final class State {
-        var isPartyLive: Bool = false
-        var isCameraViewPresented: Bool = false
-        var isResultViewPresented: Bool = false
+        var isPartyLive: Bool
+        var isCameraViewPresented: Bool
+        var isResultViewPresented: Bool
+        
+        init(isPartyLive: Bool) {
+            self.isPartyLive = isPartyLive
+            self.isCameraViewPresented = false
+            self.isResultViewPresented = false
+        }
     }
 }
 
@@ -57,8 +63,8 @@ extension PartyUseCase {
     
     /// 파티를 종료합니다.
     func finishParty() {
+        // state.isCameraViewPresented = false
         state.isResultViewPresented = true
-        state.isCameraViewPresented = false
         state.isPartyLive = false
     }
 }

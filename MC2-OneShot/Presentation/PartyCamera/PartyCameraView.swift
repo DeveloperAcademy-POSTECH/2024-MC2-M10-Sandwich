@@ -42,11 +42,9 @@ struct PartyCameraView: View {
                     PartyListView(party: party)
                 }
             }
-//            .fullScreenCover(isPresented: $state.isResultViewPresented) {
-//                isCameraViewPresented = false
-//            } content: {
-//                PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
-//            }
+        }
+        .fullScreenCover(isPresented: $state.isResultViewPresented) {
+            PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
         }
         .environmentObject(cameraPathModel)
         .onAppear {
@@ -114,9 +112,9 @@ private struct CameraHeaderView: View {
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
         }
-//        .transaction { transaction in
-//            transaction.disablesAnimations = true
-//        }
+        .transaction { transaction in
+            transaction.disablesAnimations = true
+        }
     }
 }
 

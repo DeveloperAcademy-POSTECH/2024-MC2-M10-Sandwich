@@ -24,6 +24,11 @@ struct PersistentDataService: PersistentDataServiceInterface {
 
 extension PersistentDataService {
     
+    /// 현재 파티가 라이브 중인지 확인합니다.
+    func isPartyLive() -> Bool {
+        return fetchPartys().lastParty?.isLive ?? false
+    }
+    
     /// Party 배열을 시작 날짜를 기준으로 정렬 후 반환합니다.
     func fetchPartys() -> [Party] {
         do {

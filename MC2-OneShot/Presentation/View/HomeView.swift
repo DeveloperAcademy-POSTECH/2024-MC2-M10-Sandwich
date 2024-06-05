@@ -44,9 +44,9 @@ struct HomeView: View {
                 cameraUseCase: CameraUseCase(cameraService: CameraService())
             )
         }
-        .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
-        }
+//        .fullScreenCover(isPresented: $state.isResultViewPresented) {
+//            PartyResultView(isPartyResultViewPresented: $state.isResultViewPresented)
+//        }
         .environment(partyUseCase)
         .environmentObject(homePathModel)
         .onAppear {
