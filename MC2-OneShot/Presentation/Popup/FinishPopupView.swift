@@ -87,7 +87,7 @@ struct FinishPopupView: View {
                             UIView.setAnimationsEnabled(false)
                             isFinishPopupPresented = false
                             HapticManager.shared.notification(type: .success)
-                            PartyService.shared.endParty()
+                            // PartyService.shared.endParty()
                             partyUseCase.finishParty()
                         }
                     }

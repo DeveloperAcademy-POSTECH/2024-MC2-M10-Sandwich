@@ -41,37 +41,19 @@ struct PartySetView: View {
                 buttonType: titleText.isEmpty
                 ? .disabled : .primary
             ) {
-                goStep()
+                HapticManager.shared.notification(type: .success)
+                dismiss()
+                partyPlayUseCase.startParty(
+                    Party(
+                        title: titleText,
+                        startDate: .now,
+                        notiCycle: notiCycle.rawValue,
+                        memberList: membersInfo
+                    )
+                )
             }
             .padding(16)
         }
-    }
-    
-    /// GO STEP! 버튼 클릭 시 호출되는 함수입니다.
-    private func goStep() {
-        
-        HapticManager.shared.notification(type: .success)
-        
-        let today = Date.now
-        
-        // 1. SetView 가리기
-        dismiss()
-        
-        // 2. 영구 저장 데이터에 새로운 파티 데이터 생성
-        partyPlayUseCase.startParty(
-            Party(
-                title: titleText,
-                startDate: today,
-                notiCycle: notiCycle.rawValue,
-                memberList: membersInfo
-            )
-        )
-        
-        // 3. 파티 서비스 시작
-        PartyService.shared.startParty(
-            startDate: today,
-            notiCycle: notiCycle
-        )
     }
 }
 
@@ -237,6 +219,6 @@ private struct NotiCycleView: View {
 #if DEBUG
 #Preview {
     PartySetView()
-    .modelContainer(MockModelContainer.mock)
+        .modelContainer(MockModelContainer.mock)
 }
 #endif

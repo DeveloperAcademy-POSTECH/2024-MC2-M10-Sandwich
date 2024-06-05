@@ -308,28 +308,28 @@ private struct CaptureButtonView: View {
            let lastStep = lastParty.sortedStepList.last {
             
             // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
-            if lastStep.mediaList.isEmpty {
-                
-                // 기존 배너 알림 예약 취소 + 배너 알림 예약
-                PartyService.shared.stepComplete()
-                
-                // 예약된 모든 함수 취소
-                NotificationManager.instance.cancelFunction()
-                
-                // 다음 STEP 종료 결과 화면 예약
-                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
-                    // isPartyResultViewPresented.toggle()
-                    lastParty.isShutdown = true
-                }
-                
-                // 새로운 빈 STEP 생성 예약
-                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepStartDate) {
-                    
-                    // 스텝 추가
-                    let newStep = Step()
-                    lastParty.stepList.append(newStep)
-                }
-            }
+//            if lastStep.mediaList.isEmpty {
+//                
+//                // 기존 배너 알림 예약 취소 + 배너 알림 예약
+//                PartyService.shared.stepComplete()
+//                
+//                // 예약된 모든 함수 취소
+//                NotificationManager.instance.cancelFunction()
+//                
+//                // 다음 STEP 종료 결과 화면 예약
+//                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
+//                    // isPartyResultViewPresented.toggle()
+//                    lastParty.isShutdown = true
+//                }
+//                
+//                // 새로운 빈 STEP 생성 예약
+//                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepStartDate) {
+//                    
+//                    // 스텝 추가
+//                    let newStep = Step()
+//                    lastParty.stepList.append(newStep)
+//                }
+//            }
         }
     }
     

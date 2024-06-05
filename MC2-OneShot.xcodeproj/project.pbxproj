@@ -49,6 +49,7 @@
 		827CF4E12C105781008F86BF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4E02C105781008F86BF /* NotificationService.swift */; };
 		827CF4E52C107BAA008F86BF /* Helper+SFSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4E42C107BAA008F86BF /* Helper+SFSymbol.swift */; };
 		827CF4E72C1085F0008F86BF /* TableListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4E62C1085F0008F86BF /* TableListViewCell.swift */; };
+		827CF4E92C108B16008F86BF /* Helper+NotificationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4E82C108B16008F86BF /* Helper+NotificationTitle.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
@@ -116,6 +117,7 @@
 		827CF4E02C105781008F86BF /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		827CF4E42C107BAA008F86BF /* Helper+SFSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+SFSymbol.swift"; sourceTree = "<group>"; };
 		827CF4E62C1085F0008F86BF /* TableListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListViewCell.swift; sourceTree = "<group>"; };
+		827CF4E82C108B16008F86BF /* Helper+NotificationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+NotificationTitle.swift"; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 				1EDF2C192BFD856C003291F4 /* Helper+HideKeyboard.swift */,
 				196B6A932BFED0E20043E196 /* Helper+BackSwipeGesture.swift */,
 				827CF4E42C107BAA008F86BF /* Helper+SFSymbol.swift */,
+				827CF4E82C108B16008F86BF /* Helper+NotificationTitle.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
 				827616782BFED788008099F4 /* HapticManager.swift in Sources */,
+				827CF4E92C108B16008F86BF /* Helper+NotificationTitle.swift in Sources */,
 				827CF4E12C105781008F86BF /* NotificationService.swift in Sources */,
 				8224EA432C0C4597003EB372 /* CameraUseCase.swift in Sources */,
 				82A0C7AA2C03179400686604 /* TableListView.swift in Sources */,

@@ -95,6 +95,7 @@ extension PartyUseCase {
         state.notiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
         state.isCameraViewPresented = true
         partys = dataService.fetchPartys()
+        whenPartyStart()
     }
     
     /// 사진을 현재 스텝에 저장합니다.
@@ -121,6 +122,30 @@ extension PartyUseCase {
 // MARK: - Helper
 
 extension PartyUseCase {
+    
+    /// Party가 시작됐을 때 실행되는 로직
+    private func whenPartyStart() {
+        
+        // 1. 강제 종료 10분 전 예약 - 소리 + 배너
+        notificationService.scheduleNotification(
+            date: currentShutdownWarningDate,
+            title: NotificationTitle.shutdownWarningTitle,
+            subtitle: NotificationTitle.shutdownWarningSubTitle
+        )
+        
+        // 2. 강제 종료 되었을 때 예약 - 배너
+        notificationService.scheduleNotification(
+            date: currentStepEndDate,
+            title: NotificationTitle.shutdownTitle,
+            subtitle: NotificationTitle.shutdownSubTitle
+        )
+        
+        // 3. 강제 종료 되었을 때 - 결과 화면
+        notificationService.scheduleFunction(date: currentStepEndDate) {
+            [weak self] in
+            self?.finishParty()
+        }
+    }
     
     /// Step이 완료되지 않았을 때 실행되는 로직
     private func whenLastStepNotComplete(lastParty: Party) {
@@ -207,3 +232,34 @@ extension PartyUseCase {
     }
 }
 
+// MARK: - Schedule Date
+
+extension PartyUseCase {
+    
+    /// 현재 STEP이 몇번째인지 반환하는 계산 속성
+    private var currentStep: Int {
+        guard let currentParty = partys.lastParty else { return 0 }
+        return currentParty.stepList.count
+    }
+    
+    /// 현재 STEP의 마지막 시점 Date를 반환하는 계산 속성
+    private var currentStepEndDate: Date {
+        let shutdownStepSecond = TimeInterval(currentStep * state.notiCycle.toSeconds)
+        let shutdownSecond = state.startDate.timeIntervalSince1970 + shutdownStepSecond
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
+    /// 현재 STEP의 강제 종료 10분전 시점 Date를 반환하는 계산 속성
+    private var currentShutdownWarningDate: Date {
+        let shutDownWarningSecond = currentStepEndDate.timeIntervalSince1970 - TimeInterval(600)
+        return Date(timeIntervalSince1970: shutDownWarningSecond)
+    }
+    
+    /// 다음 STEP의 시작 시점 Date를 반환하는 계산 속성
+    private var nextStepStartDate: Date {
+        let currentStepEndSecond = currentStep * state.notiCycle.toSeconds
+        let shutdownStepTime = TimeInterval(currentStepEndSecond + 1)
+        let shutdownSecond = state.startDate.timeIntervalSince1970 + shutdownStepTime
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+}
