@@ -110,6 +110,12 @@ extension PartyUseCase {
         state.isResultViewPresented = true
         state.isPartyLive = false
     }
+    
+    /// 선택한 파티를 삭제합니다.
+    func deleteParty(_ party: Party) {
+        dataService.deleteParty(party)
+        partys = dataService.fetchPartys()
+    }
 }
 
 // MARK: - Helper

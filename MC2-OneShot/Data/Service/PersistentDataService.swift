@@ -57,6 +57,11 @@ extension PersistentDataService {
         modelContext.insert(party)
     }
     
+    /// Party 데이터르 삭제합니다.
+    func deleteParty(_ party: Party) {
+        modelContext.delete(party)
+    }
+    
     /// 사진을 저장합니다.
     func savePhoto(_ photo: CapturePhoto) {
         let sortedSteps = fetchPartys().lastParty!.stepList.sorted { $0.createDate < $1.createDate }
