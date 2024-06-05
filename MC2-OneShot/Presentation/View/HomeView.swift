@@ -12,6 +12,7 @@ import SwiftUI
 struct HomeView: View {
     
     @State private(set) var partyUseCase: PartyUseCase
+    @State private var cameraUseCase = CameraUseCase(cameraService: CameraService())
     @State private var homePathModel: HomePathModel = .init()
     @State private var isPartySetViewPresented = false
     
@@ -24,12 +25,10 @@ struct HomeView: View {
                 PartyButton(isPartySetViewPresented: $isPartySetViewPresented)
             }
             .homePathDestination()
-            .sheet(isPresented: $isPartySetViewPresented) {
-                PartySetView()
-            }
+            .sheet(isPresented: $isPartySetViewPresented) { PartySetView() }
         }
         .fullScreenCover(isPresented: $state.isCameraViewPresented) {
-            PartyCameraView(cameraUseCase: CameraUseCase(cameraService: CameraService()))
+            PartyCameraView(cameraUseCase: cameraUseCase)
         }
         .environment(partyUseCase)
         .environment(homePathModel)
@@ -61,9 +60,9 @@ private struct HeaderView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(height: 35)
-            .padding(.leading, 16)
             .padding(.top, 12)
             .padding(.bottom, 4)
+            .padding(.leading, 16)
     }
 }
 
@@ -72,7 +71,6 @@ private struct HeaderView: View {
 private struct ListView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
-    @State private var isFirstInfoVisible = true
     
     var body: some View {
         ZStack {
@@ -80,12 +78,12 @@ private struct ListView: View {
                 .padding(.bottom, 48)
                 .opacity(partyUseCase.partys.isEmpty ? 1 : 0)
             
-            TableListView(isFirstInfoVisible: $isFirstInfoVisible)
+            TableListView()
         }
     }
 }
 
-// MARK: - ActionButton
+// MARK: - PartyButton
 
 private struct PartyButton: View {
     
@@ -109,7 +107,7 @@ private struct PartyButton: View {
 
 #if DEBUG
 #Preview {
-    let modelContext = MockModelContainer.mockModelContainer.mainContext
+    let modelContext = MockModelContainer.mock.mainContext
     
     return HomeView(
         partyUseCase: PartyUseCase(
@@ -118,6 +116,6 @@ private struct PartyButton: View {
         )
     )
     .environment(HomePathModel())
-    .modelContainer(MockModelContainer.mockModelContainer)
+    .modelContainer(MockModelContainer.mock)
 }
 #endif

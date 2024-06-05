@@ -10,16 +10,15 @@ import SwiftData
 
 struct TableListView: View {
     
-    @Environment(PartyUseCase.self) var partyPlayUseCase
+    @Environment(PartyUseCase.self) var partyUseCase
     @Environment(HomePathModel.self) private var homePathModel
     @Environment(\.modelContext) private var modelContext
     
     @State private var isShowAlert = false
     @State private var selectedParty: Party?
-    @Binding var isFirstInfoVisible: Bool
     
     var body: some View {
-        List(partyPlayUseCase.partys.reversed()) { party in
+        List(partyUseCase.partys.reversed()) { party in
             TableListCellView(
                 thumbnail: party.firstThumbnailData,
                 title: party.title,
@@ -28,9 +27,6 @@ struct TableListView: View {
                 stepCount: party.stepList.count,
                 notiCycle: party.notiCycle
             )
-            .onAppear{
-                isFirstInfoVisible = partyPlayUseCase.partys.isEmpty
-            }
             .onTapGesture {
                 homePathModel.paths.append(.partyList(party: party))
             }
@@ -51,7 +47,6 @@ struct TableListView: View {
                         guard let selectedParty = selectedParty else { return }
                         HapticManager.shared.notification(type: .success)
                         modelContext.delete(selectedParty)
-                        isFirstInfoVisible = partyPlayUseCase.partys.isEmpty
                     }
                     
                     Button("살리기", role: .cancel) {}
@@ -155,10 +150,10 @@ private struct TableListStateInfoLabel: View {
 
 #if DEBUG
 #Preview {
-    let modelContainer = MockModelContainer.mockModelContainer
-    return TableListView(isFirstInfoVisible: .constant(true))
-    .environment(HomePathModel())
-    .modelContainer(modelContainer)
+    let modelContainer = MockModelContainer.mock
+    return TableListView()
+        .environment(HomePathModel())
+        .modelContainer(modelContainer)
 }
 
 #Preview {

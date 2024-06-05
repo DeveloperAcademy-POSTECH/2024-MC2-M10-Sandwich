@@ -237,6 +237,6 @@ private struct NotiCycleView: View {
 #if DEBUG
 #Preview {
     PartySetView()
-    .modelContainer(MockModelContainer.mockModelContainer)
+    .modelContainer(MockModelContainer.mock)
 }
 #endif

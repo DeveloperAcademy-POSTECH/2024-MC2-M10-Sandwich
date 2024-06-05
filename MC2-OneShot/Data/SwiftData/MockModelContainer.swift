@@ -12,7 +12,7 @@ import SwiftData
 struct MockModelContainer {
     
     /// 목업용으로 사용할 SwiftData ModelContainer
-    static var mockModelContainer: ModelContainer = {
+    static var mock: ModelContainer = {
         
         let schema = Schema([Party.self, Member.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
