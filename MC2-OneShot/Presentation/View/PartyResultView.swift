@@ -15,9 +15,9 @@ struct PartyResultView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
-    @Query private var partys: [Party]
     @State private var isHelpMessagePresented = false
     
+    /// 현재 PartyResultView가 어떤 View에서 Present 되었는지 확인하는 변수
     let rootView: RootView
     
     enum RootView {
@@ -26,21 +26,18 @@ struct PartyResultView: View {
     }
     
     /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
-        return sortedParty.last
+    private var currentParty: Party {
+        if let lastParty = partyUseCase.partys.last { return lastParty }
+        fatalError("결과 화면을 표시 할 Party 데이터가 없습니다.")
     }
     
     var body: some View {
-        
-        VStack{
-            ZStack{
-                if ((partys.lastParty?.isShutdown) == true){
-                    
-                    HStack{
+        VStack {
+            ZStack {
+                if currentParty.isShutdown {
+                    HStack {
                         Spacer()
-                        
-                        Button{
+                        Button {
                             isHelpMessagePresented.toggle()
                         } label: {
                             Image(symbol: .exclamationmarkCircle)
@@ -54,15 +51,13 @@ struct PartyResultView: View {
                             .foregroundStyle(.shotFF)
                             .presentationBackground(.black.opacity(0.7))
                     }
-                    .transaction { transaction in
-                        transaction.disablesAnimations = true
-                    }
+                    .transaction { $0.disablesAnimations = true }
                 }
             }
-            .padding(.top,12)
+            .padding(.top, 12)
             
             // 상단 STEP
-            VStack(spacing: 0){
+            VStack(spacing: 0) {
                 ZStack{
                     Image("Greenbottle")
                         .resizable()
@@ -79,16 +74,14 @@ struct PartyResultView: View {
                         .foregroundColor(.shotFF)
                         .pretendard(.bold, 32)
                     
-                    Text("\((partys.lastParty?.stepList.count ?? 1).intformatter)")
+                    Text("\(currentParty.stepList.count.intformatter)")
                         .foregroundColor(.shotGreen)
                         .pretendard(.bold, 32)
                     
                 }
                 
                 HStack{
-                    // preview crash
-                    //                    Text("30min")
-                    Text("\((partys.lastParty?.notiCycle)!)min")
+                    Text("\(currentParty.notiCycle)min")
                         .foregroundStyle(.shotC6)
                         .pretendard(.bold, 17)
                 }
@@ -96,12 +89,10 @@ struct PartyResultView: View {
             }
             .padding(.top,28)
             
-            ListView()
+            ResultViewList(currentParty: currentParty)
             
-            if let currentParty = currentParty,
-               let memberList = partys.lastParty?.memberList,
-               !memberList.isEmpty {
-                MemberResultView(party: currentParty)
+            if currentParty.memberList.isEmpty {
+                MemberResultView(currentParty: currentParty)
                     .padding(.top, -20)
             }
             
@@ -123,7 +114,7 @@ struct PartyResultView: View {
                     ) {
                         partyUseCase.presentCameraView(to: false)
                         NavigationHelper.popToRootView()
-                        homePathModel.paths.append(.partyList(party: partys.lastParty!))
+                        homePathModel.paths.append(.partyList(party: currentParty))
                     }
                 }
             }
@@ -132,11 +123,8 @@ struct PartyResultView: View {
         .scrollDisabled(true)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            currentParty?.isLive = false
-            
-            if let lastParty = currentParty,
-               let lastStep = lastParty.sortedStepList.last {
-                
+            currentParty.isLive = false
+            if let lastStep = currentParty.sortedStepList.last {
                 if lastStep.mediaList.isEmpty {
                     modelContext.delete(lastStep)
                 }
@@ -145,101 +133,42 @@ struct PartyResultView: View {
     }
 }
 
+// MARK: - ResultViewList
 
-
-// MARK: - PartyTime List View
-private struct ListView: View {
-    @Query private var partys: [Party]
+private struct ResultViewList: View {
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    private(set) var currentParty: Party
     
     var body: some View {
-        List{
-            Section{
-                VStack(alignment: .leading){
-                    HStack{
-                        Text("술자리")
-                            .pretendard(.bold, 14)
-                            .foregroundColor(.shotC6)
-                        
-                    }
-                    .padding(.leading, 24)
-                    
-                    HStack{
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .foregroundColor(.shotGreen)
-                        
-                        Text(partys.last?.title ?? "시몬스바보")
-                            .pretendard(.bold, 16)
-                            .foregroundStyle(.shotFF)
-                            .padding(.leading,8)
-                    }
-                    
-                }
+        List {
+            Section {
+                ResultViewListViewCell(
+                    title: "술자리",
+                    content: currentParty.title
+                )
                 
-                VStack(alignment: .leading){
-                    HStack{
-                        Text("날짜")
-                            .pretendard(.bold, 14)
-                            .foregroundColor(.shotC6)
-                        
-                    }
-                    .padding(.leading, 24)
-                    
-                    HStack{
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .foregroundColor(.shotGreen)
-                        
-                        Text((partys.lastParty?.startDate ?? Date()).yearMonthdayweekDay)
-                            .pretendard(.bold, 16)
-                            .foregroundStyle(.shotFF)
-                            .padding(.leading,8)
-                    }
-                    
-                }
+                ResultViewListViewCell(
+                    title: "날짜",
+                    content: currentParty.startDate.yearMonthdayweekDay
+                )
                 
-                VStack(alignment: .leading){
-                    HStack{
-                        Text("진행시간")
-                            .pretendard(.bold, 14)
-                            .foregroundColor(.shotC6)
-                        
-                    }
-                    .padding(.leading, 24)
-                    
-                    HStack{
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .foregroundColor(.shotGreen)
-                        
-                        Text(totalTime())
-                            .pretendard(.bold, 16)
-                            .foregroundStyle(.shotFF)
-                            .padding(.leading,8)
-                    }
-                }
+                ResultViewListViewCell(
+                    title: "진행시간",
+                    content: totalTime
+                )
             }
         }
     }
     
-    // MARK: - totalTime
-    func totalTime() -> String {
-        
-        let startTime = (partys.lastParty?.startDate ?? Date()).hourMinute
-        let stepCount = partys.lastParty?.stepList.count ?? 3
-        
-        let allSteptime = (stepCount + 1) * (partys.lastParty?.notiCycle ?? 60)
+    /// 파티를 진행한 전체 시간 문자열을 반환합니다.
+    private var totalTime: String {
+        let startTime = currentParty.startDate.hourMinute
+        let stepCount = currentParty.stepList.count
+        let allSteptime = stepCount + 1 * currentParty.notiCycle
         
         // 자동 종료된 경우
-        if ((partys.lastParty?.isShutdown) == true) {
-            let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: partys.lastParty?.startDate ?? Date()).hourMinute
+        if currentParty.isShutdown {
+            let finishTime = Date(timeInterval: TimeInterval(allSteptime * 60), since: currentParty.startDate).hourMinute
             return "\(startTime) ~ \(finishTime)"
         } else { // 직접 종료한 경우
             let finishTime = Date().hourMinute
@@ -248,23 +177,46 @@ private struct ListView: View {
     }
 }
 
-// MARK: - MemberResult View
-private struct MemberResultView: View {
+// MARK: - ResultListViewCell
+
+private struct ResultViewListViewCell: View {
     
-    var party: Party
-    
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    let title: String
+    let content: String
     
     var body: some View {
-        List{
-            Section{
-                VStack(alignment: .leading, spacing: 0){
-                    HStack{
+        VStack(alignment: .leading) {
+            Text(title)
+                .pretendard(.bold, 14)
+                .foregroundColor(.shotC6)
+                .padding(.leading, 24)
+            
+            HStack {
+                Circle()
+                    .frame(width: 8, height: 8)
+                    .foregroundColor(.shotGreen)
+                
+                Text(content)
+                    .pretendard(.bold, 16)
+                    .foregroundStyle(.shotFF)
+                    .padding(.leading,8)
+            }
+        }
+    }
+}
+
+// MARK: - MemberResultView
+
+private struct MemberResultView: View {
+    
+    private(set) var currentParty: Party
+    private let columns = Array(repeating: GridItem(.flexible()), count: 4)
+    
+    var body: some View {
+        List {
+            Section {
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack {
                         Circle()
                             .frame(width: 8, height: 8)
                             .foregroundColor(.shotGreen)
@@ -273,11 +225,10 @@ private struct MemberResultView: View {
                             .pretendard(.bold, 14)
                             .foregroundColor(.shotFF)
                             .padding(.leading,8)
-                        
                     }
                     
                     LazyVGrid(columns: columns, spacing: 18) {
-                        ForEach(party.memberList, id: \.self) { member in
+                        ForEach(currentParty.memberList) { member in
                             if let image = UIImage(data: member.profileImageData) {
                                 Image(uiImage: image)
                                     .resizable()
@@ -294,8 +245,18 @@ private struct MemberResultView: View {
     }
 }
 
+// MARK: - Preview
 
+#if DEBUG
 #Preview {
     PartyResultView(rootView: .camera)
-        .environment(CameraPathModel())
+        .environment(
+            PartyUseCase(
+                dataService: PersistentDataService(modelContext: MockModelContainer.mock.mainContext),
+                notificationService: NotificationService()
+            )
+        )
+        .environment(HomePathModel())
 }
+#endif
+
