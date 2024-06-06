@@ -106,11 +106,22 @@ extension PartyUseCase {
     }
     
     /// 파티를 종료합니다.
-    func finishParty() {
-        guard let currentParty = partys.last else { return }
+    func finishParty(isShutdown: Bool) {
+        guard let currentParty = partys.last,
+              let lastStep = currentParty.sortedStepList.last
+        else { return }
+        
+        // 데이터 업데이트
         currentParty.isLive = false
+        currentParty.isShutdown = isShutdown
+        if lastStep.mediaList.isEmpty { dataService.deleteStep(lastStep) }
+        partys = dataService.fetchPartys()
+        
+        // 상태 값 업데이트
         state.isResultViewPresented = true
         state.isPartyLive = false
+        
+        // Notification 예약 취소
         notificationService.cancelAllPendingFunction()
         notificationService.cancelAllPendingNotification()
     }
@@ -146,7 +157,7 @@ extension PartyUseCase {
         // 3. 강제 종료 되었을 때 - 결과 화면
         notificationService.scheduleFunction(date: currentStepEndDate) {
             [weak self] in
-            self?.finishParty()
+            self?.finishParty(isShutdown: true)
         }
     }
     
@@ -164,8 +175,7 @@ extension PartyUseCase {
         if restTime > 0 {
             notificationService.scheduleFunction(date: endDate) {
                 [weak self] in
-                self?.finishParty()
-                lastParty.isShutdown = true
+                self?.finishParty(isShutdown: true)
             }
             
             state.isCameraViewPresented = true
@@ -173,7 +183,7 @@ extension PartyUseCase {
         
         // 현재Step마지막 - 현재시간 > 0 : 초과일 때
         else {
-            finishParty()
+            finishParty(isShutdown: true)
             lastParty.isShutdown = true
         }
     }
@@ -194,8 +204,7 @@ extension PartyUseCase {
         if restTime > 0 {
             NotificationManager.instance.scheduleFunction(date: nextStepEndDate) {
                 [weak self] in
-                self?.finishParty()
-                lastParty.isShutdown = true
+                self?.finishParty(isShutdown: true)
             }
             
             state.isCameraViewPresented = true
@@ -213,10 +222,7 @@ extension PartyUseCase {
         }
         
         // 이전 스텝 사진 찍고, 다시 들어와보니 다음 스텝 종료됨
-        else {
-            finishParty()
-            lastParty.isShutdown = true
-        }
+        else { finishParty(isShutdown: true) }
     }
 }
 

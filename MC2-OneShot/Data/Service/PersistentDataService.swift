@@ -57,9 +57,14 @@ extension PersistentDataService {
         modelContext.insert(party)
     }
     
-    /// Party 데이터르 삭제합니다.
+    /// Party 데이터를 삭제합니다.
     func deleteParty(_ party: Party) {
         modelContext.delete(party)
+    }
+    
+    /// Step 데이터를 삭제합니다.
+    func deleteStep(_ step: Step) {
+        modelContext.delete(step)
     }
     
     /// 사진을 저장합니다.

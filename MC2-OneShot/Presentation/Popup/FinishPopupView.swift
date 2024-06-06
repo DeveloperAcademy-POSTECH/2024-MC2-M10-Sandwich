@@ -89,7 +89,7 @@ struct FinishPopupView: View {
                             UIView.setAnimationsEnabled(false)
                             dismiss()
                             HapticManager.shared.notification(type: .success)
-                            partyUseCase.finishParty()
+                            partyUseCase.finishParty(isShutdown: false)
                         }
                     }
                     .padding(.horizontal, 33)
