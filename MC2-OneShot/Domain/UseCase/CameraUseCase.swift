@@ -52,20 +52,18 @@ extension CameraUseCase {
     
     /// 사진을 촬영합니다.
     func capturePhoto() {
-        if state.isCaptureMode {
-            cameraService.capturePhoto { [weak self] photo in
-                self?.state.photoData = photo
-                self?.state.isPhotoDataPrepare = true
-            }
+        cameraService.capturePhoto { [weak self] photo in
+            self?.state.photoData = photo
+            self?.state.isPhotoDataPrepare = true
+        }
+        
+        state.isCaptureMode.toggle()
+        
+        if state.isFlashMode && !state.isSelfieMode {
+            cameraService.toggleFlashMode()
             
-            state.isCaptureMode.toggle()
-            
-            if state.isFlashMode && !state.isSelfieMode {
-                cameraService.toggleFlashMode()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                    self?.cameraService.toggleFlashMode()
-                }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.cameraService.toggleFlashMode()
             }
         }
     }

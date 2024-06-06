@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 // MARK: - PartyCameraView
 
@@ -17,36 +16,29 @@ struct PartyCameraView: View {
     @State private var cameraUseCase = CameraUseCase(cameraService: CameraService())
     @State private var cameraPathModel: CameraPathModel = .init()
     
-    @Query private var partys: [Party]
-    
     var body: some View {
-        
         @Bindable var state = partyUseCase.state
-        
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
-                CameraHeaderView(cameraUseCase: cameraUseCase)
-                CameraMiddleView(cameraUseCase: cameraUseCase)
+                CameraHeaderView()
+                CameraMiddleView()
                 Spacer().frame(height: 48)
-                CameraBottomView(
-                    partyPlayUseCase: partyUseCase,
-                    cameraUseCase: cameraUseCase
-                )
+                CameraBottomView()
             }
             .navigationDestination(for: CameraPathType.self) { path in
                 switch path {
                 case let .partyList(party):
                     PartyListView(party: party)
+                        .toolbarRole(.editor)
                 }
             }
         }
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
             PartyResultView(rootView: .camera)
         }
+        .environment(cameraUseCase)
         .environment(cameraPathModel)
-        .onAppear {
-            cameraUseCase.requestPermission()
-        }
+        .onAppear { cameraUseCase.requestPermission() }
     }
 }
 
@@ -55,17 +47,9 @@ struct PartyCameraView: View {
 private struct CameraHeaderView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
-    @Bindable private(set) var cameraUseCase: CameraUseCase
-    
-    @Query private var partys: [Party]
+    @Environment(CameraUseCase.self) private var cameraUseCase
     
     @State private var isFinishPopupPresented = false
-    
-    /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
-        return sortedParty.last
-    }
     
     var body: some View {
         ZStack {
@@ -102,7 +86,7 @@ private struct CameraHeaderView: View {
             StepInfoView()
         }
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
-            FinishPopupView(memberList: currentParty!.memberList)
+            FinishPopupView(memberList: partyUseCase.partys.last?.memberList ?? [])
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
         }
@@ -116,10 +100,9 @@ private struct CameraHeaderView: View {
 
 private struct CameraMiddleView: View {
     
-    @Bindable private(set) var cameraUseCase: CameraUseCase
+    @Environment(PartyUseCase.self) private var partyUseCase
+    @Environment(CameraUseCase.self) private var cameraUseCase
     @Environment(CameraPathModel.self) private var cameraPathModel
-    
-    @Query private var partys: [Party]
     
     var body: some View {
         Group {
@@ -143,13 +126,13 @@ private struct CameraMiddleView: View {
             }
             
             if cameraUseCase.state.isCaptureMode {
-                Button{
-                    if let lastParty = partys.last {
+                Button {
+                    if let lastParty = partyUseCase.partys.last {
                         cameraPathModel.paths.append(.partyList(party: lastParty))
                     }
                 } label: {
-                    HStack{
-                        Text(partys.last?.title ?? "제목입니당")
+                    HStack {
+                        Text(partyUseCase.partys.last?.title ?? "제목입니당")
                             .pretendard(.bold, 20)
                             .foregroundColor(.shotFF)
                         
@@ -161,7 +144,7 @@ private struct CameraMiddleView: View {
             }
             
             else {
-                Text(partys.last?.title ?? "제목입니당")
+                Text(partyUseCase.partys.last?.title ?? "제목입니당")
                     .pretendard(.bold, 20)
                     .foregroundColor(.shotFF)
             }
@@ -173,8 +156,8 @@ private struct CameraMiddleView: View {
 
 private struct CameraBottomView: View {
     
-    @Bindable private(set) var partyPlayUseCase: PartyUseCase
-    @Bindable private(set) var cameraUseCase: CameraUseCase
+    @Environment(PartyUseCase.self) private var partyUseCase
+    @Environment(CameraUseCase.self) private var cameraUseCase
     
     var body: some View {
         ZStack {
@@ -230,10 +213,7 @@ private struct CameraBottomView: View {
             }
             .padding(.horizontal, 36)
             
-            CaptureButtonView(
-                partyPlayUseCase: partyPlayUseCase,
-                cameraUseCase: cameraUseCase
-            )
+            CaptureButtonView()
             
             .padding(.top, 15)
         }
@@ -244,30 +224,26 @@ private struct CameraBottomView: View {
 
 private struct CaptureButtonView: View {
     
-    @Bindable private(set) var partyPlayUseCase: PartyUseCase
-    @Bindable private(set) var cameraUseCase: CameraUseCase
-    
-    @Query private var partys: [Party]
-    
-    /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
-        return sortedParty.last
-    }
+    @Environment(PartyUseCase.self) private var partyUseCase
+    @Environment(CameraUseCase.self) private var cameraUseCase
     
     var body: some View {
         Button {
+            
+            // 카메라 촬영 모드
             if cameraUseCase.state.isCaptureMode {
                 cameraUseCase.capturePhoto()
-            } else {
+            }
+            
+            // 사진 전송 모드
+            else {
                 if let photo = cameraUseCase.fetchPhotoForSave() {
-                    partyPlayUseCase.savePhoto(photo)
+                    partyUseCase.savePhoto(photo)
+                    cameraUseCase.retakePhoto()
                 }
-                
-                cameraUseCase.retakePhoto()
             }
         } label: {
-            ZStack{
+            ZStack {
                 if cameraUseCase.state.isCaptureMode {
                     Circle()
                         .fill(Color.shotFF)
@@ -294,39 +270,6 @@ private struct CaptureButtonView: View {
         // .disabled(isShotDisabled)
     }
     
-    private func takePhoto() {
-        
-        HapticManager.shared.notification(type: .success)
-        
-        if let lastParty = currentParty,
-           let lastStep = lastParty.sortedStepList.last {
-            
-            // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
-//            if lastStep.mediaList.isEmpty {
-//                
-//                // 기존 배너 알림 예약 취소 + 배너 알림 예약
-//                PartyService.shared.stepComplete()
-//                
-//                // 예약된 모든 함수 취소
-//                NotificationManager.instance.cancelFunction()
-//                
-//                // 다음 STEP 종료 결과 화면 예약
-//                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepEndDate) {
-//                    // isPartyResultViewPresented.toggle()
-//                    lastParty.isShutdown = true
-//                }
-//                
-//                // 새로운 빈 STEP 생성 예약
-//                NotificationManager.instance.scheduleFunction(date: PartyService.shared.nextStepStartDate) {
-//                    
-//                    // 스텝 추가
-//                    let newStep = Step()
-//                    lastParty.stepList.append(newStep)
-//                }
-//            }
-        }
-    }
-    
 //    private func delayButton() {
 //        print("버튼 눌림")
 //        
@@ -344,21 +287,15 @@ private struct CaptureButtonView: View {
 
 private struct StepInfoView: View {
     
-    @Query private var partys: [Party]
-    
-    /// 현재 파티를 반환합니다.
-    var currentParty: Party? {
-        let sortedParty = partys.sorted { $0.startDate < $1.startDate }
-        return sortedParty.last
-    }
+    @Environment(PartyUseCase.self) private var partyUseCase
     
     var body: some View {
         VStack(spacing: 0) {
-            if let lastParty = currentParty,
-               let lastStep = lastParty.sortedStepList.last {
+            if let currentParty = partyUseCase.partys.last,
+               let lastStep = currentParty.sortedStepList.last {
                 // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
                 if lastStep.mediaList.isEmpty {
-                    ZStack{
+                    ZStack {
                         Image(.icnSave)
                             .resizable()
                             .scaledToFit()
@@ -372,7 +309,7 @@ private struct StepInfoView: View {
                     }
                     .padding(.bottom, 2)
                 } else {
-                    ZStack{
+                    ZStack {
                         Image(.greenbottle)
                             .resizable()
                             .scaledToFit()
@@ -388,11 +325,11 @@ private struct StepInfoView: View {
                 }
             }
             
-            Text("STEP \(partys.last?.stepList.count.intformatter ?? "02")")
+            Text("STEP \(partyUseCase.partys.last?.stepList.count.intformatter ?? "02")")
                 .pretendard(.extraBold, 20)
                 .foregroundColor(.shotFF)
             
-            Text("\(partys.last?.notiCycle ?? 60)min")
+            Text("\(partyUseCase.partys.last?.notiCycle ?? 30)min")
                 .pretendard(.bold, 15)
                 .foregroundColor(.shot6D)
         }

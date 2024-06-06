@@ -101,7 +101,17 @@ extension PartyUseCase {
     
     /// 사진을 현재 스텝에 저장합니다.
     func savePhoto(_ photo: CapturePhoto) {
-        dataService.savePhoto(photo)
+        guard let currentParty = partys.last,
+              let lastStep = currentParty.sortedStepList.last
+        else { return }
+        
+        if lastStep.mediaList.isEmpty {
+            dataService.savePhoto(photo)
+            stepComplete()
+        } else {
+            dataService.savePhoto(photo)
+        }
+        
         partys = dataService.fetchPartys()
     }
     
@@ -122,8 +132,7 @@ extension PartyUseCase {
         state.isPartyLive = false
         
         // Notification 예약 취소
-        notificationService.cancelAllPendingFunction()
-        notificationService.cancelAllPendingNotification()
+        cancelAllSchedule()
     }
     
     /// 선택한 파티를 삭제합니다.
@@ -136,6 +145,48 @@ extension PartyUseCase {
 // MARK: - Helper
 
 extension PartyUseCase {
+    
+    /// Step을 완료했을 때 실행되는 로직입니다.
+    private func stepComplete() {
+        
+        HapticManager.shared.notification(type: .success)
+        
+        // 1. 예약된 스케줄 모두 취소
+        cancelAllSchedule()
+        
+        // 2. 다음 STEP 알림을 예약
+        notificationService.scheduleNotification(
+            date: nextStepStartDate,
+            title: "STEP \((currentStep + 1).intformatter)",
+            subtitle: NotificationTitle.continuePartySubTitle
+        )
+        
+        // 3. 다음 스텝 강제 종료 10분전 예약
+        notificationService.scheduleNotification(
+            date: nextShutdownWarningDate,
+            title: NotificationTitle.shutdownWarningTitle,
+            subtitle: NotificationTitle.shutdownWarningSubTitle
+        )
+        
+        // 4. 다음 스텝 강제 종료 되었을 때 예약
+        notificationService.scheduleNotification(
+            date: nextStepEndDate,
+            title: NotificationTitle.shutdownTitle,
+            subtitle: NotificationTitle.shutdownSubTitle
+        )
+        
+        // 5. 새로운 빈 STEP 생성 예약
+        notificationService.scheduleFunction(date: nextStepStartDate) { [weak self] in
+            let newStep = Step()
+            self?.partys.last?.stepList.append(newStep)
+        }
+    }
+    
+    /// 예약된 모든 함수 및 Notification을 취소합니다.
+    private func cancelAllSchedule() {
+        notificationService.cancelAllPendingFunction()
+        notificationService.cancelAllPendingNotification()
+    }
     
     /// Party가 시작됐을 때 실행되는 로직
     private func whenPartyStart() {
@@ -202,7 +253,7 @@ extension PartyUseCase {
         let restTime = nextStepEndTime - presentTime
         
         if restTime > 0 {
-            NotificationManager.instance.scheduleFunction(date: nextStepEndDate) {
+            notificationService.scheduleFunction(date: nextStepEndDate) {
                 [weak self] in
                 self?.finishParty(isShutdown: true)
             }
@@ -214,7 +265,7 @@ extension PartyUseCase {
                 let newStep = Step()
                 lastParty.stepList.append(newStep)
             } else {
-                NotificationManager.instance.scheduleFunction(date: nextStepStartDate) {
+                notificationService.scheduleFunction(date: nextStepStartDate) {
                     let newStep = Step()
                     lastParty.stepList.append(newStep)
                 }
@@ -270,5 +321,18 @@ extension PartyUseCase {
         let shutdownStepTime = TimeInterval(currentStepEndSecond + 1)
         let shutdownSecond = state.startDate.timeIntervalSince1970 + shutdownStepTime
         return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
+    /// 다음 STEP의 마지막 시점 Date를 반환하는 계산 속성
+    private var nextStepEndDate: Date {
+        let shutdownStepSecond = TimeInterval((currentStep + 1) * state.notiCycle.toSeconds)
+        let shutdownSecond = state.startDate.timeIntervalSince1970 + shutdownStepSecond
+        return Date(timeIntervalSince1970: shutdownSecond)
+    }
+    
+    /// 다음 STEP의 강제 종료 10분전 시점 Date를 반환하는 계산 속성
+    private var nextShutdownWarningDate: Date {
+        let shutDownWarningSecond = nextStepEndDate.timeIntervalSince1970 - TimeInterval(600)
+        return Date(timeIntervalSince1970: shutDownWarningSecond)
     }
 }
