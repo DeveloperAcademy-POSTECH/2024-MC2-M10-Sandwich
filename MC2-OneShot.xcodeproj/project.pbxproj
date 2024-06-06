@@ -52,6 +52,7 @@
 		827CF4E92C108B16008F86BF /* Helper+NotificationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4E82C108B16008F86BF /* Helper+NotificationTitle.swift */; };
 		828101942C10B66D008B1DFC /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828101932C10B66D008B1DFC /* ToastView.swift */; };
 		828101962C10BFF9008B1DFC /* Helper+PopToRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828101952C10BFF9008B1DFC /* Helper+PopToRootView.swift */; };
+		828461562C11DC2400860239 /* StepListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828461552C11DC2400860239 /* StepListView.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
@@ -122,6 +123,7 @@
 		827CF4E82C108B16008F86BF /* Helper+NotificationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+NotificationTitle.swift"; sourceTree = "<group>"; };
 		828101932C10B66D008B1DFC /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		828101952C10BFF9008B1DFC /* Helper+PopToRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+PopToRootView.swift"; sourceTree = "<group>"; };
+		828461552C11DC2400860239 /* StepListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepListView.swift; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				825F0BDF2BF486BE001B416A /* ActionButton.swift */,
 				82A0C7A92C03179400686604 /* TableListView.swift */,
 				827CF4E62C1085F0008F86BF /* TableListViewCell.swift */,
+				828461552C11DC2400860239 /* StepListView.swift */,
 				828101932C10B66D008B1DFC /* ToastView.swift */,
 			);
 			path = Component;
@@ -530,6 +533,7 @@
 				196B6A942BFED0E20043E196 /* Helper+BackSwipeGesture.swift in Sources */,
 				BFB534132BF3451B0013E9FE /* Helper+CustomFont.swift in Sources */,
 				19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */,
+				828461562C11DC2400860239 /* StepListView.swift in Sources */,
 				98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */,
 				828101962C10BFF9008B1DFC /* Helper+PopToRootView.swift in Sources */,
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
