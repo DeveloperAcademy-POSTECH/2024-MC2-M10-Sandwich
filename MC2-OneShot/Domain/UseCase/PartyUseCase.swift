@@ -17,6 +17,7 @@ final class PartyUseCase {
     
     private(set) var state: State
     private(set) var partys: [Party]
+    private(set) var members: [Member]
     
     init(
         dataService: PersistentDataServiceInterface,
@@ -37,6 +38,7 @@ final class PartyUseCase {
         )
         
         self.partys = partys
+        self.members = []
     }
 }
 
@@ -99,20 +101,27 @@ extension PartyUseCase {
         whenPartyStart()
     }
     
-    /// 사진을 현재 스텝에 저장합니다.
-    func savePhoto(_ photo: CapturePhoto) {
+    /// 파티 사진을 현재 Step에 저장합니다.
+    func saveStepPhoto(_ photo: CapturePhoto) {
         guard let currentParty = partys.last,
               let lastStep = currentParty.sortedStepList.last
         else { return }
         
         if lastStep.mediaList.isEmpty {
-            dataService.savePhoto(photo)
+            dataService.saveStepPhoto(photo)
             stepComplete()
         } else {
-            dataService.savePhoto(photo)
+            dataService.saveStepPhoto(photo)
         }
         
         partys = dataService.fetchPartys()
+    }
+    
+    /// 멤버 사진을 저장합니다.
+    func saveMemberPhoto(_ photo: CapturePhoto) {
+        HapticManager.shared.notification(type: .success)
+        let newMember = dataService.saveMemberPhoto(photo)
+        members.append(newMember)
     }
     
     /// 파티를 종료합니다.
@@ -139,6 +148,11 @@ extension PartyUseCase {
     func deleteParty(_ party: Party) {
         dataService.deleteParty(party)
         partys = dataService.fetchPartys()
+    }
+    
+    /// 파티 설정을 초기화합니다.
+    func resetPartySetting() {
+        self.members = []
     }
 }
 

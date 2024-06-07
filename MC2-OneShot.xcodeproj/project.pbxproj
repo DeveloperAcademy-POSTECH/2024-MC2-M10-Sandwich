@@ -17,7 +17,6 @@
 		1EFADD732BF6E34B00E333AD /* CustomSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
 		82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF62BF7034A00BF01CF /* NotiCycle.swift */; };
-		82016BF92BF742C300BF01CF /* PartyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF82BF742C300BF01CF /* PartyService.swift */; };
 		820F927D2C0ABC6F00E103F3 /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F927C2C0ABC6F00E103F3 /* Party.swift */; };
 		820F927F2C0ABC9500E103F3 /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F927E2C0ABC9500E103F3 /* Step.swift */; };
 		820F92812C0ABCC300E103F3 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92802C0ABCC300E103F3 /* Media.swift */; };
@@ -56,9 +55,7 @@
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
 		82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE12BF88A7B00119628 /* MockModelContainer.swift */; };
-		82D564552BFC22440091C2BC /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D564542BFC22440091C2BC /* CameraPreviewView.swift */; };
 		98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */; };
-		98BA9D4C2BF6DF3900BEEDCC /* PartyCameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4B2BF6DF3900BEEDCC /* PartyCameraViewModel.swift */; };
 		98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
 		BF2E72C32BF3472C008A2D1F /* Colorsets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */; };
@@ -86,7 +83,6 @@
 		1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CustomSound.mp3; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
 		82016BF62BF7034A00BF01CF /* NotiCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiCycle.swift; sourceTree = "<group>"; };
-		82016BF82BF742C300BF01CF /* PartyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyService.swift; sourceTree = "<group>"; };
 		820F927C2C0ABC6F00E103F3 /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
 		820F927E2C0ABC9500E103F3 /* Step.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
 		820F92802C0ABCC300E103F3 /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
@@ -126,9 +122,7 @@
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
 		82B49BE12BF88A7B00119628 /* MockModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockModelContainer.swift; sourceTree = "<group>"; };
-		82D564542BFC22440091C2BC /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+ScreenSize.swift"; sourceTree = "<group>"; };
-		98BA9D4B2BF6DF3900BEEDCC /* PartyCameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCameraViewModel.swift; sourceTree = "<group>"; };
 		98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
 		BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colorsets.xcassets; sourceTree = "<group>"; };
@@ -160,7 +154,6 @@
 		82016BEF2BF6DCC200BF01CF /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				82016BF82BF742C300BF01CF /* PartyService.swift */,
 				1EB454502BFDE7EA004E99AD /* ImageSaver.swift */,
 				827616772BFED788008099F4 /* HapticManager.swift */,
 			);
@@ -207,17 +200,13 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
-		8224EA622C0CA8E5003EB372 /* PartyCamera */ = {
-			isa = PBXGroup;
-			children = (
-				98BA9D4B2BF6DF3900BEEDCC /* PartyCameraViewModel.swift */,
-			);
-			path = PartyCamera;
-			sourceTree = "<group>";
-		};
 		8224EA652C0CAD7C003EB372 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				820F927C2C0ABC6F00E103F3 /* Party.swift */,
+				820F927E2C0ABC9500E103F3 /* Step.swift */,
+				820F92802C0ABCC300E103F3 /* Media.swift */,
+				820F92822C0ABCDC00E103F3 /* Member.swift */,
 				827CF4D22C0CB5F1008F86BF /* CapturePhoto.swift */,
 				82016BF62BF7034A00BF01CF /* NotiCycle.swift */,
 			);
@@ -278,7 +267,6 @@
 		8264EA1D2BF2007F00586FA0 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				8224EA622C0CA8E5003EB372 /* PartyCamera */,
 				8264EA222BF200CC00586FA0 /* View */,
 				8264EA212BF200C000586FA0 /* Popup */,
 				825F0BDE2BF486AB001B416A /* Component */,
@@ -292,7 +280,6 @@
 				8224EA442C0C45F9003EB372 /* Service */,
 				82A0C7A52C03132400686604 /* SwiftData */,
 				82A0C7A42C03131800686604 /* Path */,
-				82A0C7A62C03133200686604 /* Enum */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -336,10 +323,9 @@
 				19A1DAF42BF88ADA00C53D8C /* SearchView.swift */,
 				8264EA232BF200E200586FA0 /* PartySetView.swift */,
 				8264EA252BF200EB00586FA0 /* PartyCameraView.swift */,
-				82D564542BFC22440091C2BC /* CameraPreviewView.swift */,
-				8264EA272BF2013000586FA0 /* PartyResultView.swift */,
-				8264EA292BF2014200586FA0 /* PartyListView.swift */,
 				BF7C8E832C01F300005638A2 /* MemberCameraView.swift */,
+				8264EA292BF2014200586FA0 /* PartyListView.swift */,
+				8264EA272BF2013000586FA0 /* PartyResultView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -357,20 +343,9 @@
 		82A0C7A52C03132400686604 /* SwiftData */ = {
 			isa = PBXGroup;
 			children = (
-				820F927C2C0ABC6F00E103F3 /* Party.swift */,
-				820F927E2C0ABC9500E103F3 /* Step.swift */,
-				820F92802C0ABCC300E103F3 /* Media.swift */,
-				820F92822C0ABCDC00E103F3 /* Member.swift */,
 				82B49BE12BF88A7B00119628 /* MockModelContainer.swift */,
 			);
 			path = SwiftData;
-			sourceTree = "<group>";
-		};
-		82A0C7A62C03133200686604 /* Enum */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Enum;
 			sourceTree = "<group>";
 		};
 		82D564512BFB812D0091C2BC /* Sound */ = {
@@ -499,9 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				827CF4D52C0CBB04008F86BF /* PersistentDataService.swift in Sources */,
-				82016BF92BF742C300BF01CF /* PartyService.swift in Sources */,
 				8264EA262BF200EB00586FA0 /* PartyCameraView.swift in Sources */,
-				98BA9D4C2BF6DF3900BEEDCC /* PartyCameraViewModel.swift in Sources */,
 				827CF4DD2C0DE8E0008F86BF /* PartyUseCase.swift in Sources */,
 				8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */,
 				1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */,
@@ -517,7 +490,6 @@
 				820F927F2C0ABC9500E103F3 /* Step.swift in Sources */,
 				82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */,
 				827CF4E72C1085F0008F86BF /* TableListViewCell.swift in Sources */,
-				82D564552BFC22440091C2BC /* CameraPreviewView.swift in Sources */,
 				820F92812C0ABCC300E103F3 /* Media.swift in Sources */,
 				827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */,
 				827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */,

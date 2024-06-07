@@ -291,7 +291,7 @@ private struct CaptureButtonView: View {
     /// 사진을 업로드합니다.
     private func uploadPhoto() {
         if let photo = cameraUseCase.fetchPhotoForSave() {
-            partyUseCase.savePhoto(photo)
+            partyUseCase.saveStepPhoto(photo)
             cameraUseCase.retakePhoto()
         }
     }

@@ -67,11 +67,18 @@ extension PersistentDataService {
         modelContext.delete(step)
     }
     
-    /// 사진을 저장합니다.
-    func savePhoto(_ photo: CapturePhoto) {
-        let sortedSteps = fetchPartys().lastParty!.stepList.sorted { $0.createDate < $1.createDate }
+    /// Step 사진을 저장합니다.
+    func saveStepPhoto(_ photo: CapturePhoto) {
+        guard let currentParty = fetchPartys().last else { return }
+        let sortedSteps = currentParty.stepList.sorted { $0.createDate < $1.createDate }
         let newMedia = Media(fileData: photo.image.jpegData(compressionQuality: 1.0)!, captureDate: .now)
         sortedSteps.last?.mediaList.append(newMedia)
+    }
+    
+    /// Member 사진을 저장합니다.
+    func saveMemberPhoto(_ photo: CapturePhoto) -> Member {
+        let newMember = Member(profileImageData: photo.image.jpegData(compressionQuality: 1.0)!)
+        return newMember
     }
 }
 

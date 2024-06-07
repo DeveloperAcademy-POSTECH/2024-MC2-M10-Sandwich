@@ -11,13 +11,11 @@ import SwiftUI
 
 struct PartySetView: View {
     
-    @Environment(PartyUseCase.self) private var partyPlayUseCase
-    @Environment(HomePathModel.self) private var homePathModel
+    @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(\.dismiss) private var dismiss
     
     @State private var titleText: String = ""
     @State private var notiCycle: NotiCycle = NotiCycle.allCases.first ?? .min30
-    @State private var membersInfo: [Member] = []
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -31,7 +29,7 @@ struct PartySetView: View {
             List {
                 TitleView(titleText: $titleText)
                 NotiCycleView(notiCycle: $notiCycle)
-                MemberListView(membersInfo: $membersInfo)
+                MemberListView()
             }
             
             Spacer()
@@ -42,17 +40,18 @@ struct PartySetView: View {
                 ? .disabled : .primary
             ) {
                 dismiss()
-                partyPlayUseCase.startParty(
+                partyUseCase.startParty(
                     Party(
                         title: titleText,
                         startDate: .now,
                         notiCycle: notiCycle.rawValue,
-                        memberList: membersInfo
+                        memberList: partyUseCase.members
                     )
                 )
             }
             .padding(16)
         }
+        .onDisappear { partyUseCase.resetPartySetting() }
     }
 }
 
@@ -144,9 +143,9 @@ private struct NotiCycleView: View {
 
 private struct MemberListView: View {
     
-    @State private var isCameraViewPresented = false
+    @Environment(PartyUseCase.self) private var partyUseCase
     
-    @Binding private(set) var membersInfo: [Member]
+    @State private var isCameraViewPresented = false
     
     private let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 4)
     
@@ -162,7 +161,7 @@ private struct MemberListView: View {
                     .frame(height: 16)
                 
                 LazyVGrid(columns: columns, spacing: 30) {
-                    ForEach(membersInfo) { member in
+                    ForEach(partyUseCase.members) { member in
                         if let image = UIImage(data: member.profileImageData) {
                             Image(uiImage: image)
                                 .resizable()
@@ -171,7 +170,7 @@ private struct MemberListView: View {
                         }
                     }
                     
-                    if membersInfo.count < 8 {
+                    if partyUseCase.members.count < 8 {
                         Button {
                             isCameraViewPresented.toggle()
                         } label: {
@@ -188,10 +187,7 @@ private struct MemberListView: View {
                         }
                         .buttonStyle(BorderlessButtonStyle())
                         .fullScreenCover(isPresented: $isCameraViewPresented) {
-                            MemberCameraView(
-                                isCameraViewPresented: $isCameraViewPresented,
-                                membersInfo: $membersInfo
-                            )
+                            MemberCameraView()
                         }
                     }
                 }
@@ -218,5 +214,13 @@ private struct MemberListView: View {
 #Preview {
     PartySetView()
         .modelContainer(MockModelContainer.mock)
+        .environment(
+            PartyUseCase(
+                dataService: PersistentDataService(
+                    modelContext: MockModelContainer.mock.mainContext
+                ),
+                notificationService: NotificationService()
+            )
+        )
 }
 #endif

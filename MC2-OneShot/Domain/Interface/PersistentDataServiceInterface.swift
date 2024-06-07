@@ -15,5 +15,6 @@ protocol PersistentDataServiceInterface {
     func createParty(_ party: Party)
     func deleteParty(_ party: Party)
     func deleteStep(_ step: Step)
-    func savePhoto(_ photo: CapturePhoto)
+    func saveStepPhoto(_ photo: CapturePhoto)
+    func saveMemberPhoto(_ photo: CapturePhoto)  -> Member
 }
