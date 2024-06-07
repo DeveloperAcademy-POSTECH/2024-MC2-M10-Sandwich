@@ -18,7 +18,7 @@ struct StepListView: View {
     var body: some View {
         @Bindable var state = partyUseCase.state
         ScrollView {
-            ForEach(Array(party.stepList.enumerated()), id: \.element) {
+            ForEach(Array(party.sortedStepList.enumerated()), id: \.element) {
                 index, step in
                 StepListCellView(
                     index: index,
