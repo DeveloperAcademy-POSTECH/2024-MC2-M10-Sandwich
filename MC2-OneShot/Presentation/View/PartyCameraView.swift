@@ -15,6 +15,7 @@ struct PartyCameraView: View {
     
     @State private var cameraUseCase = CameraUseCase(cameraService: CameraService())
     @State private var cameraPathModel: CameraPathModel = .init()
+    @State private var isShotDisabled = false
     
     var body: some View {
         @Bindable var state = partyUseCase.state
@@ -23,7 +24,7 @@ struct PartyCameraView: View {
                 CameraHeaderView()
                 CameraMiddleView()
                 Spacer().frame(height: 48)
-                CameraBottomView()
+                CameraBottomView(isShotDisabled: $isShotDisabled)
             }
             .navigationDestination(for: CameraPathType.self) { path in
                 switch path {
@@ -33,6 +34,7 @@ struct PartyCameraView: View {
                 }
             }
         }
+        .disabled(isShotDisabled)
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
             PartyResultView(rootView: .camera)
         }
@@ -65,7 +67,6 @@ private struct CameraHeaderView: View {
                             .foregroundColor(.shotFF)
                             .padding(.leading,16)
                     }
-                    // .disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                     
@@ -77,7 +78,6 @@ private struct CameraHeaderView: View {
                             .pretendard(.semiBold, 16)
                             .foregroundColor(.shotGreen)
                     }
-                    // .disabled(viewModel.isShotDisabled)
                 }
                 .padding(.horizontal)
                 .padding(.top,12)
@@ -87,8 +87,8 @@ private struct CameraHeaderView: View {
         }
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
             FinishPopupView(memberList: partyUseCase.partys.last?.memberList ?? [])
-            .foregroundStyle(.shotFF)
-            .presentationBackground(.black.opacity(0.7))
+                .foregroundStyle(.shotFF)
+                .presentationBackground(.black.opacity(0.7))
         }
         .transaction { transaction in
             transaction.disablesAnimations = true
@@ -140,7 +140,6 @@ private struct CameraMiddleView: View {
                             .foregroundColor(.shotFF)
                     }
                 }
-                // .disabled(viewModel.isShotDisabled)
             }
             
             else {
@@ -158,6 +157,8 @@ private struct CameraBottomView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(CameraUseCase.self) private var cameraUseCase
+    
+    @Binding private(set) var isShotDisabled: Bool
     
     var body: some View {
         ZStack {
@@ -181,7 +182,6 @@ private struct CameraBottomView: View {
                                 .foregroundColor(.shotFF)
                         }
                     }
-                    // .disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                     
@@ -194,7 +194,6 @@ private struct CameraBottomView: View {
                             .frame(width: 32, height: 32)
                             .foregroundColor(.shotFF)
                     }
-                    //.disabled(viewModel.isShotDisabled)
                 }
                 
                 // 촬영 후
@@ -206,16 +205,14 @@ private struct CameraBottomView: View {
                             .foregroundColor(.shotFF)
                             .pretendard(.extraBold, 20)
                     }
-                    //.disabled(viewModel.isShotDisabled)
                     
                     Spacer()
                 }
             }
             .padding(.horizontal, 36)
             
-            CaptureButtonView()
-            
-            .padding(.top, 15)
+            CaptureButtonView(isShotDisabled: $isShotDisabled)
+                .padding(.top, 15)
         }
     }
 }
@@ -227,8 +224,11 @@ private struct CaptureButtonView: View {
     @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(CameraUseCase.self) private var cameraUseCase
     
+    @Binding private(set) var isShotDisabled: Bool
+    
     var body: some View {
         Button {
+            delayButton()
             
             // 카메라 촬영 모드
             if cameraUseCase.state.isCaptureMode {
@@ -267,20 +267,15 @@ private struct CaptureButtonView: View {
             }
             .padding(.bottom, 15)
         }
-        // .disabled(isShotDisabled)
     }
     
-//    private func delayButton() {
-//        print("버튼 눌림")
-//        
-//        // 버튼을 비활성화
-//        isShotDisabled = true
-//        
-//        // 1초 후에 버튼을 다시 활성화
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//            isShotDisabled = false
-//        }
-//    }
+    /// 사진 촬영 직후 버튼을 잠시 비활성화 합니다.
+    private func delayButton() {
+        isShotDisabled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            isShotDisabled = false
+        }
+    }
 }
 
 // MARK: - StepInfoView
@@ -293,39 +288,22 @@ private struct StepInfoView: View {
         VStack(spacing: 0) {
             if let currentParty = partyUseCase.partys.last,
                let lastStep = currentParty.sortedStepList.last {
-                // 만약 현재 촬영하는 사진이 이번 STEP의 첫번째 사진이라면
-                if lastStep.mediaList.isEmpty {
-                    ZStack {
-                        Image(.icnSave)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25,height: 25)
-                        
-                        Image(symbol: .checkmark)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 12,height: 12)
-                            .foregroundColor(.shotD8)
-                    }
-                    .padding(.bottom, 2)
-                } else {
-                    ZStack {
-                        Image(.greenbottle)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25,height: 25)
-                        
-                        Image(symbol: .checkmark)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 12,height: 12)
-                            .foregroundColor(.shot00)
-                    }
-                    .padding(.bottom, 2)
+                ZStack {
+                    Image(lastStep.mediaList.isEmpty ? .icnSave : .greenbottle)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 25, height: 25)
+                    
+                    Image(symbol: .checkmark)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12,height: 12)
+                        .foregroundColor(lastStep.mediaList.isEmpty ? .shotD8 : .shot00)
                 }
+                .padding(.bottom, 2)
             }
             
-            Text("STEP \(partyUseCase.partys.last?.stepList.count.intformatter ?? "02")")
+            Text("STEP \(partyUseCase.partys.last?.stepList.count.intformatter ?? "01")")
                 .pretendard(.extraBold, 20)
                 .foregroundColor(.shotFF)
             
@@ -339,11 +317,15 @@ private struct StepInfoView: View {
 // MARK: - Preview
 
 #if DEBUG
-//#Preview {
-//    PartyCameraView(
-//        cameraUseCase: PartyCameraUseCase(cameraService: PartyCameraService()),
-//        isCameraViewPresented: .constant(true),
-//        isPartyResultViewPresented: .constant(false)
-//    )
-//}
+#Preview {
+    PartyCameraView()
+        .environment(
+            PartyUseCase(
+                dataService: PersistentDataService(
+                    modelContext: MockModelContainer.mock.mainContext
+                ),
+                notificationService: NotificationService()
+            )
+        )
+}
 #endif

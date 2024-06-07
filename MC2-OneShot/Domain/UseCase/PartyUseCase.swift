@@ -154,28 +154,33 @@ extension PartyUseCase {
         // 1. 예약된 스케줄 모두 취소
         cancelAllSchedule()
         
-        // 2. 다음 STEP 알림을 예약
+        // 2. 다음 STEP 알림 예약
         notificationService.scheduleNotification(
             date: nextStepStartDate,
             title: "STEP \((currentStep + 1).intformatter)",
             subtitle: NotificationTitle.continuePartySubTitle
         )
         
-        // 3. 다음 스텝 강제 종료 10분전 예약
+        // 3. 다음 스텝 강제 종료 10분전 알림 예약
         notificationService.scheduleNotification(
             date: nextShutdownWarningDate,
             title: NotificationTitle.shutdownWarningTitle,
             subtitle: NotificationTitle.shutdownWarningSubTitle
         )
         
-        // 4. 다음 스텝 강제 종료 되었을 때 예약
+        // 4. 다음 스텝 강제 종료 되었을 때 알림 예약
         notificationService.scheduleNotification(
             date: nextStepEndDate,
             title: NotificationTitle.shutdownTitle,
             subtitle: NotificationTitle.shutdownSubTitle
         )
         
-        // 5. 새로운 빈 STEP 생성 예약
+        // 5. 다음 스텝 강제 종료 되었을 때 함수 예약
+        notificationService.scheduleFunction(date: nextStepEndDate) { [weak self] in
+            self?.finishParty(isShutdown: true)
+        }
+        
+        // 6. 새로운 빈 STEP 생성 예약
         notificationService.scheduleFunction(date: nextStepStartDate) { [weak self] in
             let newStep = Step()
             self?.partys.last?.stepList.append(newStep)
