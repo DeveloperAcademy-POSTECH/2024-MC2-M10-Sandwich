@@ -13,23 +13,28 @@ struct StepListView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
     
+    @State private var photoSaveUseCase = PhotoSaveUseCase(photoSaveService: PhotoSaveService())
+    
     let party: Party
     
     var body: some View {
         @Bindable var state = partyUseCase.state
-        ScrollView {
-            ForEach(Array(party.sortedStepList.enumerated()), id: \.element) {
-                index, step in
-                StepListCellView(
-                    index: index,
-                    step: step,
-                    startDate: party.startDate
-                )
+        Group {
+            ScrollView {
+                ForEach(Array(party.sortedStepList.enumerated()), id: \.element) {
+                    index, step in
+                    StepListCellView(
+                        index: index + 1,
+                        step: step,
+                        startDate: party.startDate
+                    )
+                }
+            }
+            .fullScreenCover(isPresented: $state.isResultViewPresented) {
+                PartyResultView(rootView: .list)
             }
         }
-        .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView(rootView: .list)
-        }
+        .environment(photoSaveUseCase)
     }
 }
 
@@ -37,9 +42,10 @@ struct StepListView: View {
 
 private struct StepListCellView: View {
     
+    @Environment(PhotoSaveUseCase<PhotoSaveService>.self) private var photoSaveUseCase
+    
     @State private var captureDates: [Date] = []
     @State private var visibleMediaIndex = 0
-    @State private var isImageSaveShowToastPresented = false
     
     let index: Int
     let step: Step
@@ -59,7 +65,6 @@ private struct StepListCellView: View {
                 
                 if !step.mediaList.isEmpty {
                     ImageSaveButton(
-                        isImageSaveShowToastPresented: $isImageSaveShowToastPresented,
                         visibleMediaIndex: $visibleMediaIndex,
                         step: step
                     )
@@ -75,12 +80,12 @@ private struct StepListCellView: View {
         }
         .overlay(
             Group {
-                if isImageSaveShowToastPresented {
+                if photoSaveUseCase.state.isPhotoSaved {
                     ToastView(message: "저장이 완료되었습니다")
                         .transition(.opacity)
                 }
             }
-                .animation(.easeInOut, value: isImageSaveShowToastPresented)
+                .animation(.easeInOut, value: photoSaveUseCase.state.isPhotoSaved)
         )
     }
 }
@@ -101,8 +106,7 @@ private struct StepListCellTitleView: View {
                 Text("STEP ")
                     .foregroundStyle(.shotC6)
                 
-                Text("0\(index + 1)")
-                    .pretendard(.bold, 22)
+                Text("\(index.intformatter)")
                     .foregroundStyle(.shotGreen)
             }
             .pretendard(.bold, 22)
@@ -141,10 +145,10 @@ private struct StepListCellTitleView: View {
 
 private struct ImageSaveButton: View {
     
-    @State private var showActionSheet = false
-    @State private var isImageSaved = false
+    @Environment(PhotoSaveUseCase<PhotoSaveService>.self) private var photoSaveUseCase
     
-    @Binding private(set) var isImageSaveShowToastPresented: Bool
+    @State private var showActionSheet = false
+    
     @Binding private(set) var visibleMediaIndex: Int
     
     let step: Step
@@ -172,62 +176,63 @@ private struct ImageSaveButton: View {
                 buttons: [
                     .cancel(Text("취소")),
                     .default(Text("전체 사진 저장"), action: {
-                        saveAllImages()
+                        //
                     }),
                     .default(Text("현재 사진 저장"), action: {
-                        saveCurrentImage()
+                        guard let uiImage = UIImage(
+                            data: step.mediaList.sorted(by: {
+                                $0.captureDate < $1.captureDate
+                            })[visibleMediaIndex].fileData
+                        ) else { return }
+                        
+                        let photo = CapturePhoto(image: uiImage)
+                        
+                        photoSaveUseCase.saveCurrentPhoto(photo)
                     })
                 ]
             )
         }
     }
     
-    func saveAllImages() {
-        for media in step.mediaList {
-            if let uiImage = UIImage(data: media.fileData) {
-                let imageSaver = ImageSaver()
-                imageSaver.saveImage(uiImage) { result in
-                    switch result {
-                    case .success:
-                        isImageSaved = true
-                        showToastMessage()
-                        print("🎞️ 전체 사진 저장 완료")
-                        HapticManager.shared.notification(type: .success)
-                    case .failure(let error):
-                        print("❌ 전체 사진 저장 실패: \(error.localizedDescription)")
-                    }
-                }
-            }
-        }
-    }
-    
-    func saveCurrentImage() {
-        guard let uiImage = UIImage(
-            data: step.mediaList.sorted(by: {
-                $0.captureDate < $1.captureDate
-            })[visibleMediaIndex].fileData
-        ) else { return }
-        
-        let imageSaver = ImageSaver()
-        imageSaver.saveImage(uiImage) { result in
-            switch result {
-            case .success:
-                isImageSaved = true
-                showToastMessage()
-                HapticManager.shared.notification(type: .success)
-                print("📷 현재 사진 저장 완료")
-            case .failure(let error):
-                print("❌ 현재 사진 저장 실패: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func showToastMessage() {
-        isImageSaveShowToastPresented = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            isImageSaveShowToastPresented = false
-        }
-    }
+    //    func saveAllImages() {
+    //        for media in step.mediaList {
+    //            if let uiImage = UIImage(data: media.fileData) {
+    //                let imageSaver = ImageSaver()
+    //                imageSaver.saveImage(uiImage) { result in
+    //                    switch result {
+    //                    case .success:
+    //                        isImageSaved = true
+    //                        showToastMessage()
+    //                        print("🎞️ 전체 사진 저장 완료")
+    //                        HapticManager.shared.notification(type: .success)
+    //                    case .failure(let error):
+    //                        print("❌ 전체 사진 저장 실패: \(error.localizedDescription)")
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //
+    //    func saveCurrentImage() {
+    //        guard let uiImage = UIImage(
+    //            data: step.mediaList.sorted(by: {
+    //                $0.captureDate < $1.captureDate
+    //            })[visibleMediaIndex].fileData
+    //        ) else { return }
+    //
+    //        let imageSaver = ImageSaver()
+    //        imageSaver.saveImage(uiImage) { result in
+    //            switch result {
+    //            case .success:
+    //                isImageSaved = true
+    //                showToastMessage()
+    //                HapticManager.shared.notification(type: .success)
+    //                print("📷 현재 사진 저장 완료")
+    //            case .failure(let error):
+    //                print("❌ 현재 사진 저장 실패: \(error.localizedDescription)")
+    //            }
+    //        }
+    //    }
 }
 
 // MARK: - StepListCellImageSlider
@@ -246,7 +251,7 @@ private struct StepListCellImageSlider: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack {
-                ForEach(Array(sortedMediaList.enumerated()), id: \.offset) {
+                ForEach(Array(sortedMediaList.enumerated()), id: \.element) {
                     index, media in
                     ZStack(alignment: .topTrailing) {
                         if let image = UIImage(data: media.fileData) {
@@ -293,5 +298,6 @@ private struct StepListCellImageSlider: View {
             memberList: []
         )
     )
+    .modelContainer(MockModelContainer.mock)
 }
 #endif

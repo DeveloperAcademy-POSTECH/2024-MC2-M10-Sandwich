@@ -12,9 +12,6 @@ import SwiftUI
 struct PartyResultView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
-    @Environment(HomePathModel.self) private var homePathModel
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
     
     /// 현재 PartyResultView가 어떤 View에서 Present 되었는지 확인하는 변수
     let rootView: RootView
@@ -28,7 +25,12 @@ struct PartyResultView: View {
     /// 현재 파티를 반환합니다.
     private var currentParty: Party {
         if let lastParty = partyUseCase.partys.last { return lastParty }
-        fatalError("결과 화면을 표시 할 Party 데이터가 없습니다.")
+        return Party(
+            title: "테스트 파티",
+            startDate: .now,
+            notiCycle: 30,
+            memberList: []
+        )
     }
     
     var body: some View {
@@ -60,7 +62,7 @@ struct PartyResultView: View {
 
 private struct StepInfoView: View {
     
-    private(set) var currentParty: Party
+    let currentParty: Party
     
     var body: some View {
         VStack(spacing: 0) {
@@ -260,6 +262,8 @@ private struct ShutdownInfoButtonView: View {
 #if DEBUG
 #Preview {
     PartyResultView(rootView: .camera)
+        .environment(HomePathModel())
+        .modelContainer(MockModelContainer.mock)
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
@@ -268,7 +272,6 @@ private struct ShutdownInfoButtonView: View {
                 notificationService: NotificationService()
             )
         )
-        .environment(HomePathModel())
 }
 #endif
 
