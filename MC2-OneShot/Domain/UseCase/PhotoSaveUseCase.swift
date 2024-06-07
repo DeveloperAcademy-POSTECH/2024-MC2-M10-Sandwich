@@ -40,19 +40,42 @@ extension PhotoSaveUseCase {
 
 extension PhotoSaveUseCase {
     
+    /// 전체 사진을 저장합니다.
+    func saveAllPhotos(_ photos: [CapturePhoto]) {
+        Task {
+            let result = await photoSaveService.saveAllPhotos(photos)
+            switch result {
+            case .success():
+                showCompleteAlert()
+            case .failure(let error):
+                print("전체 사진 저장에 실패했습니다 : \(error.localizedDescription)")
+            }
+        }
+    }
+    
     /// 현재 사진을 저장합니다.
     func saveCurrentPhoto(_ photo: CapturePhoto) {
         Task {
             let result = await photoSaveService.saveCurrentPhoto(photo)
             switch result {
             case .success:
-                state.isPhotoSaved = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                    self?.state.isPhotoSaved = false
-                }
+                showCompleteAlert()
             case .failure(let error):
-                print("사진 저장에 실패했습니다 : \(error.localizedDescription)")
+                print("현재 사진 저장에 실패했습니다 : \(error.localizedDescription)")
             }
+        }
+    }
+}
+
+// MARK: - Helper Method
+
+extension PhotoSaveUseCase {
+    
+    /// 저장 완료 Alert를 출력합니다.
+    private func showCompleteAlert() {
+        state.isPhotoSaved = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.state.isPhotoSaved = false
         }
     }
 }

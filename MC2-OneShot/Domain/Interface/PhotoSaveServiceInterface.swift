@@ -13,6 +13,6 @@ protocol PhotoSaveServiceInterface {
     
     typealias SaveResult = Result<Void, SaveError>
     
-    // func saveAllPhotos(_ photos: [CapturePhoto]) async -> SaveResult
+    func saveAllPhotos(_ photos: [CapturePhoto]) async -> SaveResult
     func saveCurrentPhoto(_ photo: CapturePhoto) async -> SaveResult
 }

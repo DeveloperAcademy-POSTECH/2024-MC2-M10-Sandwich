@@ -85,7 +85,7 @@ private struct StepListCellView: View {
                         .transition(.opacity)
                 }
             }
-                .animation(.easeInOut, value: photoSaveUseCase.state.isPhotoSaved)
+            .animation(.easeInOut, value: photoSaveUseCase.state.isPhotoSaved)
         )
     }
 }
@@ -153,6 +153,26 @@ private struct ImageSaveButton: View {
     
     let step: Step
     
+    /// 현재 보고 있는 이미지를 반환합니다.
+    private var currentPhoto: CapturePhoto {
+        let sortedMediaList = step.mediaList.sorted { $0.captureDate < $1.captureDate }
+        guard let uiImage = UIImage(data: sortedMediaList[visibleMediaIndex].fileData)
+        else { return CapturePhoto(image: UIImage(resource: .appLogo)) }
+        return CapturePhoto(image: uiImage)
+    }
+    
+    /// 현재 STEP의 전체 이미지를 반환합니다.
+    private var currentPhotos: [CapturePhoto] {
+        var images: [UIImage] = []
+        let sortedMediaList = step.mediaList.sorted { $0.captureDate < $1.captureDate }
+        for media in sortedMediaList {
+            guard let uiImage = UIImage(data: media.fileData)
+            else { return [] }
+            images.append(uiImage)
+        }
+        return images.map { CapturePhoto(image: $0) }
+    }
+    
     var body: some View {
         Button {
             showActionSheet = true
@@ -176,63 +196,15 @@ private struct ImageSaveButton: View {
                 buttons: [
                     .cancel(Text("취소")),
                     .default(Text("전체 사진 저장"), action: {
-                        //
+                        photoSaveUseCase.saveAllPhotos(currentPhotos)
                     }),
                     .default(Text("현재 사진 저장"), action: {
-                        guard let uiImage = UIImage(
-                            data: step.mediaList.sorted(by: {
-                                $0.captureDate < $1.captureDate
-                            })[visibleMediaIndex].fileData
-                        ) else { return }
-                        
-                        let photo = CapturePhoto(image: uiImage)
-                        
-                        photoSaveUseCase.saveCurrentPhoto(photo)
+                        photoSaveUseCase.saveCurrentPhoto(currentPhoto)
                     })
                 ]
             )
         }
     }
-    
-    //    func saveAllImages() {
-    //        for media in step.mediaList {
-    //            if let uiImage = UIImage(data: media.fileData) {
-    //                let imageSaver = ImageSaver()
-    //                imageSaver.saveImage(uiImage) { result in
-    //                    switch result {
-    //                    case .success:
-    //                        isImageSaved = true
-    //                        showToastMessage()
-    //                        print("🎞️ 전체 사진 저장 완료")
-    //                        HapticManager.shared.notification(type: .success)
-    //                    case .failure(let error):
-    //                        print("❌ 전체 사진 저장 실패: \(error.localizedDescription)")
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //
-    //    func saveCurrentImage() {
-    //        guard let uiImage = UIImage(
-    //            data: step.mediaList.sorted(by: {
-    //                $0.captureDate < $1.captureDate
-    //            })[visibleMediaIndex].fileData
-    //        ) else { return }
-    //
-    //        let imageSaver = ImageSaver()
-    //        imageSaver.saveImage(uiImage) { result in
-    //            switch result {
-    //            case .success:
-    //                isImageSaved = true
-    //                showToastMessage()
-    //                HapticManager.shared.notification(type: .success)
-    //                print("📷 현재 사진 저장 완료")
-    //            case .failure(let error):
-    //                print("❌ 현재 사진 저장 실패: \(error.localizedDescription)")
-    //            }
-    //        }
-    //    }
 }
 
 // MARK: - StepListCellImageSlider
