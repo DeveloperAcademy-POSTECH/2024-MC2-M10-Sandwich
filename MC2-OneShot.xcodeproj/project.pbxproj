@@ -41,7 +41,6 @@
 		827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D22C0CB5F1008F86BF /* CapturePhoto.swift */; };
 		827CF4D52C0CBB04008F86BF /* PersistentDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */; };
 		827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D62C0CBB35008F86BF /* PersistentDataServiceInterface.swift */; };
-		827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */; };
 		827CF4DD2C0DE8E0008F86BF /* PartyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4DC2C0DE8E0008F86BF /* PartyUseCase.swift */; };
 		827CF4DF2C105718008F86BF /* NotificationServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4DE2C105718008F86BF /* NotificationServiceInterface.swift */; };
 		827CF4E12C105781008F86BF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827CF4E02C105781008F86BF /* NotificationService.swift */; };
@@ -51,6 +50,7 @@
 		828101942C10B66D008B1DFC /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828101932C10B66D008B1DFC /* ToastView.swift */; };
 		828101962C10BFF9008B1DFC /* Helper+PopToRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828101952C10BFF9008B1DFC /* Helper+PopToRootView.swift */; };
 		828461562C11DC2400860239 /* StepListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828461552C11DC2400860239 /* StepListView.swift */; };
+		828461582C12AC2800860239 /* FooterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828461572C12AC2800860239 /* FooterInfo.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
@@ -108,7 +108,6 @@
 		827CF4D22C0CB5F1008F86BF /* CapturePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePhoto.swift; sourceTree = "<group>"; };
 		827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataService.swift; sourceTree = "<group>"; };
 		827CF4D62C0CBB35008F86BF /* PersistentDataServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDataServiceInterface.swift; sourceTree = "<group>"; };
-		827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldCameraService.swift; sourceTree = "<group>"; };
 		827CF4DC2C0DE8E0008F86BF /* PartyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyUseCase.swift; sourceTree = "<group>"; };
 		827CF4DE2C105718008F86BF /* NotificationServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceInterface.swift; sourceTree = "<group>"; };
 		827CF4E02C105781008F86BF /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -118,6 +117,7 @@
 		828101932C10B66D008B1DFC /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		828101952C10BFF9008B1DFC /* Helper+PopToRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+PopToRootView.swift"; sourceTree = "<group>"; };
 		828461552C11DC2400860239 /* StepListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepListView.swift; sourceTree = "<group>"; };
+		828461572C12AC2800860239 /* FooterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterInfo.swift; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
@@ -195,7 +195,6 @@
 				98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */,
 				827CF4D42C0CBB04008F86BF /* PersistentDataService.swift */,
 				827CF4E02C105781008F86BF /* NotificationService.swift */,
-				827CF4D82C0CC0AF008F86BF /* OldCameraService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -220,6 +219,7 @@
 				82A0C7A92C03179400686604 /* TableListView.swift */,
 				827CF4E62C1085F0008F86BF /* TableListViewCell.swift */,
 				828461552C11DC2400860239 /* StepListView.swift */,
+				828461572C12AC2800860239 /* FooterInfo.swift */,
 				828101932C10B66D008B1DFC /* ToastView.swift */,
 			);
 			path = Component;
@@ -492,7 +492,6 @@
 				827CF4E72C1085F0008F86BF /* TableListViewCell.swift in Sources */,
 				820F92812C0ABCC300E103F3 /* Media.swift in Sources */,
 				827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */,
-				827CF4D92C0CC0AF008F86BF /* OldCameraService.swift in Sources */,
 				827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */,
 				827CF4DF2C105718008F86BF /* NotificationServiceInterface.swift in Sources */,
 				1EB454512BFDE7EA004E99AD /* ImageSaver.swift in Sources */,
@@ -512,6 +511,7 @@
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */,
 				98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */,
+				828461582C12AC2800860239 /* FooterInfo.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
 				820F92832C0ABCDC00E103F3 /* Member.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,

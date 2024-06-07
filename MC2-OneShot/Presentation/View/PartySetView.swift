@@ -61,22 +61,21 @@ private struct TitleView: View {
     
     @Binding private(set) var titleText: String
     
+    private let textLimited = 12
+    
     var body: some View {
         Section {
             TextField("제목", text: $titleText)
                 .onChange(of: titleText) { _, text in
-                    if text.count > 12 { titleText.removeLast() }
+                    if text.count >= textLimited {
+                        titleText.removeLast()
+                    }
                 }
         } footer: {
-            HStack{
-                Image(symbol: .exclamationmarkCircle)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                
-                Text("제목은 12자 이내로 작성 가능해요.")
-                    .pretendard(.regular, 12)
-            }
+            FooterInfo(
+                symbol: .exclamationmarkCircle,
+                content: "제목은 \(textLimited)자 이내로 작성 가능해요."
+            )
         }
         .padding(4)
     }
@@ -90,18 +89,18 @@ private struct NotiCycleView: View {
     
     var body: some View {
         Section {
-            HStack {
-                Text("알람 주기")
-                    .pretendard(.regular, 17)
-                    .foregroundStyle(.shotFF)
-                
-                Spacer()
-                
-                Menu {
-                    ForEach(NotiCycle.allCases, id: \.rawValue) { notiCycle in
-                        Button("\(notiCycle.rawValue)분") { self.notiCycle = notiCycle }
-                    }
-                } label: {
+            Menu {
+                ForEach(NotiCycle.allCases, id: \.rawValue) { notiCycle in
+                    Button("\(notiCycle.rawValue)분") { self.notiCycle = notiCycle }
+                }
+            } label: {
+                HStack {
+                    Text("알람 주기")
+                        .pretendard(.regular, 17)
+                        .foregroundStyle(.shotFF)
+                    
+                    Spacer()
+                    
                     HStack {
                         Text("\(notiCycle.rawValue)분")
                             .pretendard(.regular, 17)
@@ -112,26 +111,16 @@ private struct NotiCycleView: View {
                 }
             }
         } footer: {
-            VStack(alignment: .leading){
-                HStack{
-                    Image(symbol: .questionmarkCircle)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 14, height: 14)
-                    
-                    Text("알림 주기마다 PUSH 알림을 보내드려요.")
-                        .pretendard(.regular, 12)
-                }
+            VStack(alignment: .leading) {
+                FooterInfo(
+                    symbol: .questionmarkCircle,
+                    content: "\(notiCycle.rawValue)분마다 PUSH 알림을 보내드려요."
+                )
                 
-                HStack{
-                    Image(symbol: .exclamationmarkCircle)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 14, height: 14)
-                    
-                    Text("무음모드를 해제해 주세요!")
-                        .pretendard(.regular, 12)
-                }
+                FooterInfo(
+                    symbol: .exclamationmarkCircle,
+                    content: "무음모드를 해제해 주세요!"
+                )
             }
         }
         .padding(4)
@@ -148,11 +137,12 @@ private struct MemberListView: View {
     @State private var isCameraViewPresented = false
     
     private let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 4)
+    private let memberLimited = 8
     
     var body: some View {
         Section {
             VStack(alignment: .leading) {
-                Text("사람 추가")
+                Text("일행 추가")
                     .pretendard(.regular, 17)
                     .foregroundStyle(.shotFF)
                     .padding(.top, 6)
@@ -170,41 +160,42 @@ private struct MemberListView: View {
                         }
                     }
                     
-                    if partyUseCase.members.count < 8 {
-                        Button {
-                            isCameraViewPresented.toggle()
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 60)
-                                    .foregroundStyle(.shot33)
-                                
-                                Image(symbol: .plus)
-                                    .resizable()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundStyle(.shot6D)
-                            }
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .fullScreenCover(isPresented: $isCameraViewPresented) {
-                            MemberCameraView()
-                        }
+                    if partyUseCase.members.count < memberLimited {
+                        AddMemberButton()
                     }
                 }
                 .padding(.bottom, 8)
             }
         } footer: {
-            HStack {
-                Image(symbol: .cameraCircle)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                
-                Text("술자리를 함께하는 일행의 사진을 찍어봐요!")
-                    .pretendard(.regular, 12)
-            }
+            FooterInfo(
+                symbol: .cameraCircle,
+                content: "술자리를 함께하는 일행의 사진을 찍어봐요!"
+            )
         }
         .padding(4)
+    }
+    
+    /// Member 추가 버튼
+    @ViewBuilder
+    private func AddMemberButton() -> some View {
+        Button {
+            isCameraViewPresented.toggle()
+        } label: {
+            ZStack {
+                Circle()
+                    .frame(width: 60)
+                    .foregroundStyle(.shot33)
+                
+                Image(symbol: .plus)
+                    .resizable()
+                    .frame(width: 32, height: 32)
+                    .foregroundStyle(.shot6D)
+            }
+        }
+        .buttonStyle(BorderlessButtonStyle())
+        .fullScreenCover(isPresented: $isCameraViewPresented) {
+            MemberCameraView()
+        }
     }
 }
 
