@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - ToastView
+
 struct ToastView: View {
     var message: String
     

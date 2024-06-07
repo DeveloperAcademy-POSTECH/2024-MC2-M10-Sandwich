@@ -7,7 +7,10 @@
 
 import SwiftUI
 
+// MARK: - ShutdownPopupView
+
 struct ShutdownPopupView: View {
+    
     @State var content: String = ""
     
     @Binding var isHelpMessagePresented: Bool
@@ -20,7 +23,7 @@ struct ShutdownPopupView: View {
                 .foregroundStyle(.shot25).opacity(0.95)
                 .overlay {
                     VStack(spacing: 0) {
-                        HStack{
+                        HStack {
                             Image(symbol: .exclamationmarkCircle)
                                 .pretendard(.semiBold, 17)
                                 .foregroundStyle(.shotFF)
@@ -60,6 +63,10 @@ struct ShutdownPopupView: View {
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
-    ShutdownPopupView( isHelpMessagePresented: .constant(true))
+    ShutdownPopupView(isHelpMessagePresented: .constant(true))
 }
+#endif

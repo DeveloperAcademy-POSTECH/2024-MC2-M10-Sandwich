@@ -94,25 +94,3 @@ extension Party {
         }
     }
 }
-
-
-// MARK: - [Party] 계산 속성
-
-extension [Party] {
-    
-    /// 날짜를 기준으로 정렬한 Party 배열을 반환합니다.
-    var sortedPartys: [Party] {
-        return self.sorted { $0.startDate < $1.startDate }
-    }
-    
-    /// 마지막(현재 진행 중인) 파티를 반환합니다.
-    var lastParty: Party? {
-        return sortedPartys.last
-    }
-    
-    /// 마지막(현재 진행 중인) 파티가 진행 중인 여부를 반환합니다.
-    var isLastParyLive: Bool {
-        if let party = lastParty { return party.isLive }
-        return false
-    }
-}

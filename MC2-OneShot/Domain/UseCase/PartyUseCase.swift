@@ -317,7 +317,7 @@ extension PartyUseCase {
     
     /// 현재 STEP이 몇번째인지 반환하는 계산 속성
     private var currentStep: Int {
-        guard let currentParty = partys.lastParty else { return 0 }
+        guard let currentParty = partys.last else { return 0 }
         return currentParty.stepList.count
     }
     

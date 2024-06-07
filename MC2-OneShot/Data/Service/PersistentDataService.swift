@@ -26,7 +26,7 @@ extension PersistentDataService {
     
     /// 현재 파티가 라이브 중인지 확인합니다.
     func isPartyLive() -> Bool {
-        return fetchPartys().lastParty?.isLive ?? false
+        return fetchPartys().last?.isLive ?? false
     }
     
     /// 현재 진행 중인 STEP을 반환합니다.
