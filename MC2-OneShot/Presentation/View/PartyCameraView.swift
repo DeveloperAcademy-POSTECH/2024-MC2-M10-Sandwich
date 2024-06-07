@@ -26,13 +26,7 @@ struct PartyCameraView: View {
                 Spacer().frame(height: 48)
                 CameraBottomView(isShotDisabled: $isShotDisabled)
             }
-            .navigationDestination(for: CameraPathType.self) { path in
-                switch path {
-                case let .partyList(party):
-                    PartyListView(party: party)
-                        .toolbarRole(.editor)
-                }
-            }
+            .cameraPathDestination()
         }
         .disabled(isShotDisabled)
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
@@ -57,27 +51,9 @@ private struct CameraHeaderView: View {
         ZStack {
             if cameraUseCase.state.isCaptureMode {
                 HStack {
-                    Button{
-                        partyUseCase.presentCameraView(to: false)
-                    } label: {
-                        Image(symbol: .chevronDown)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(.shotFF)
-                            .padding(.leading,16)
-                    }
-                    
+                    DismissButton()
                     Spacer()
-                    
-                    Button {
-                        HapticManager.shared.notification(type: .warning)
-                        isFinishPopupPresented.toggle()
-                    } label: {
-                        Text("술자리 종료")
-                            .pretendard(.semiBold, 16)
-                            .foregroundColor(.shotGreen)
-                    }
+                    FinishPartyButton()
                 }
                 .padding(.horizontal)
                 .padding(.top,12)
@@ -90,8 +66,34 @@ private struct CameraHeaderView: View {
                 .foregroundStyle(.shotFF)
                 .presentationBackground(.black.opacity(0.7))
         }
-        .transaction { transaction in
-            transaction.disablesAnimations = true
+        .transaction { $0.disablesAnimations = true }
+    }
+    
+    /// 홈 화면으로 돌아가는 버튼
+    @ViewBuilder
+    private func DismissButton() -> some View {
+        Button{
+            partyUseCase.presentCameraView(to: false)
+        } label: {
+            Image(symbol: .chevronDown)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
+                .foregroundColor(.shotFF)
+                .padding(.leading,16)
+        }
+    }
+    
+    /// 술자리 종료 버튼
+    @ViewBuilder
+    private func FinishPartyButton() -> some View {
+        Button {
+            HapticManager.shared.notification(type: .warning)
+            isFinishPopupPresented.toggle()
+        } label: {
+            Text("술자리 종료")
+                .pretendard(.semiBold, 16)
+                .foregroundColor(.shotGreen)
         }
     }
 }
@@ -105,49 +107,56 @@ private struct CameraMiddleView: View {
     @Environment(CameraPathModel.self) private var cameraPathModel
     
     var body: some View {
-        Group {
+        VStack {
             ZStack {
-                cameraUseCase.preview
-                    .ignoresSafeArea()
-                    .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
-                    .aspectRatio(1, contentMode: .fit)
-                    .cornerRadius(15)
-                    .padding(.top, 36)
-                
+                CameraPreview()
                 if cameraUseCase.state.isPhotoDataPrepare {
-                    Image(uiImage: cameraUseCase.state.photoData?.image ?? UIImage(resource: .appLogo))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
-                        .aspectRatio(1, contentMode: .fit)
-                        .cornerRadius(15)
-                        .padding(.top, 36)
+                    PhotoPreview()
                 }
             }
-            
-            if cameraUseCase.state.isCaptureMode {
-                Button {
-                    if let lastParty = partyUseCase.partys.last {
-                        cameraPathModel.paths.append(.partyList(party: lastParty))
-                    }
-                } label: {
-                    HStack {
-                        Text(partyUseCase.partys.last?.title ?? "제목입니당")
-                            .pretendard(.bold, 20)
-                            .foregroundColor(.shotFF)
-                        
-                        Image(symbol: .chevronRight)
-                            .foregroundColor(.shotFF)
-                    }
-                }
-            }
-            
-            else {
+            ListButton()
+        }
+    }
+    
+    /// 카메라 미리보기 뷰
+    @ViewBuilder
+    private func CameraPreview() -> some View {
+        cameraUseCase.preview
+            .ignoresSafeArea()
+            .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
+            .aspectRatio(1, contentMode: .fit)
+            .cornerRadius(15)
+            .padding(.top, 36)
+    }
+    
+    /// 사진 미리보기 뷰
+    @ViewBuilder
+    private func PhotoPreview() -> some View {
+        Image(uiImage: cameraUseCase.state.photoData?.image ?? UIImage(resource: .appLogo))
+            .resizable()
+            .scaledToFill()
+            .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
+            .aspectRatio(1, contentMode: .fit)
+            .cornerRadius(15)
+            .padding(.top, 36)
+    }
+    
+    /// 리스트 바로가기 버튼
+    @ViewBuilder
+    private func ListButton() -> some View {
+        Button {
+            guard let currentParty = partyUseCase.partys.last else { return }
+            cameraPathModel.paths.append(.partyList(party: currentParty))
+        } label: {
+            HStack {
                 Text(partyUseCase.partys.last?.title ?? "제목입니당")
                     .pretendard(.bold, 20)
-                    .foregroundColor(.shotFF)
+                
+                if cameraUseCase.state.isCaptureMode { Image(symbol: .chevronRight) }
             }
+            .foregroundColor(.shotFF)
         }
+        .disabled(!cameraUseCase.state.isCaptureMode)
     }
 }
 
@@ -163,57 +172,60 @@ private struct CameraBottomView: View {
     var body: some View {
         ZStack {
             HStack {
-                // 촬영 전
                 if cameraUseCase.state.isCaptureMode {
-                    Button {
-                        cameraUseCase.toggleFlashMode()
-                    } label: {
-                        if cameraUseCase.state.isFlashMode {
-                            Image(symbol: .bolt)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
-                                .foregroundColor(.shotFF)
-                        } else {
-                            Image(symbol: .boltSlash)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
-                                .foregroundColor(.shotFF)
-                        }
-                    }
-                    
+                    FlashButton()
                     Spacer()
-                    
-                    Button {
-                        cameraUseCase.toggleFrontBack()
-                    } label: {
-                        Image(symbol: .frontBackToggle)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 32, height: 32)
-                            .foregroundColor(.shotFF)
-                    }
-                }
-                
-                // 촬영 후
-                else {
-                    Button {
-                        cameraUseCase.retakePhoto()
-                    } label: {
-                        Text("다시찍기")
-                            .foregroundColor(.shotFF)
-                            .pretendard(.extraBold, 20)
-                    }
-                    
-                    Spacer()
+                    FrontBackButton()
+                } else {
+                    RetakeButton()
                 }
             }
             .padding(.horizontal, 36)
             
             CaptureButtonView(isShotDisabled: $isShotDisabled)
-                .padding(.top, 15)
         }
+    }
+    
+    /// 플래시 버튼
+    @ViewBuilder
+    private func FlashButton() -> some View {
+        Button {
+            cameraUseCase.toggleFlashMode()
+        } label: {
+            Image(symbol: cameraUseCase.state.isFlashMode ? .bolt : .boltSlash)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 32, height: 32)
+                .foregroundColor(.shotFF)
+        }
+    }
+    
+    /// 전면/후면 카메라 전환 버튼
+    @ViewBuilder
+    private func FrontBackButton() -> some View {
+        Button {
+            cameraUseCase.toggleFrontBack()
+        } label: {
+            Image(symbol: .frontBackToggle)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 32, height: 32)
+                .foregroundColor(.shotFF)
+        }
+    }
+    
+    /// 사진 촬영 이후 재촬영 버튼
+    @ViewBuilder
+    private func RetakeButton() -> some View {
+        Button {
+            cameraUseCase.retakePhoto()
+        } label: {
+            Text("다시찍기")
+                .foregroundColor(.shotFF)
+                .pretendard(.extraBold, 20)
+        }
+        
+        Spacer()
     }
 }
 
@@ -229,43 +241,58 @@ private struct CaptureButtonView: View {
     var body: some View {
         Button {
             delayButton()
-            
-            // 카메라 촬영 모드
-            if cameraUseCase.state.isCaptureMode {
-                cameraUseCase.capturePhoto()
-            }
-            
-            // 사진 전송 모드
-            else {
-                if let photo = cameraUseCase.fetchPhotoForSave() {
-                    partyUseCase.savePhoto(photo)
-                    cameraUseCase.retakePhoto()
-                }
-            }
+            cameraUseCase.state.isCaptureMode ?
+            capturePhoto() : uploadPhoto()
         } label: {
             ZStack {
                 if cameraUseCase.state.isCaptureMode {
-                    Circle()
-                        .fill(Color.shotFF)
-                        .frame(width: 80, height: 80)
-                    
-                    Circle()
-                        .fill(Color.clear)
-                        .frame(width: 96, height: 96)
-                        .overlay(Circle().stroke(Color.shotGreen, lineWidth: 4))
+                    CaptureButton()
                 } else {
-                    Circle()
-                        .fill(Color.shotGreen)
-                        .frame(width: 96, height: 96)
-                    
-                    Image(symbol: .arrowUpForward)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 36)
-                        .foregroundColor(.shot00)
+                    UploadButton()
                 }
             }
             .padding(.bottom, 15)
+        }
+        .padding(.top, 15)
+    }
+    
+    /// 카메라 촬영 버튼
+    @ViewBuilder
+    private func CaptureButton() -> some View {
+        Circle()
+            .fill(Color.shotFF)
+            .frame(width: 80, height: 80)
+        
+        Circle()
+            .fill(Color.clear)
+            .frame(width: 96, height: 96)
+            .overlay(Circle().stroke(Color.shotGreen, lineWidth: 4))
+    }
+    
+    /// 사진 업로드 버튼
+    @ViewBuilder
+    private func UploadButton() -> some View {
+        Circle()
+            .fill(Color.shotGreen)
+            .frame(width: 96, height: 96)
+        
+        Image(symbol: .arrowUpForward)
+            .resizable()
+            .scaledToFit()
+            .frame(height: 36)
+            .foregroundColor(.shot00)
+    }
+    
+    /// 사진을 촬영합니다.
+    private func capturePhoto() {
+        cameraUseCase.capturePhoto()
+    }
+    
+    /// 사진을 업로드합니다.
+    private func uploadPhoto() {
+        if let photo = cameraUseCase.fetchPhotoForSave() {
+            partyUseCase.savePhoto(photo)
+            cameraUseCase.retakePhoto()
         }
     }
     
@@ -303,14 +330,24 @@ private struct StepInfoView: View {
                 .padding(.bottom, 2)
             }
             
-            Text("STEP \(partyUseCase.partys.last?.stepList.count.intformatter ?? "01")")
+            Text(stepLabel)
                 .pretendard(.extraBold, 20)
                 .foregroundColor(.shotFF)
             
-            Text("\(partyUseCase.partys.last?.notiCycle ?? 30)min")
+            Text(notiCycleLabel)
                 .pretendard(.bold, 15)
                 .foregroundColor(.shot6D)
         }
+    }
+    
+    /// Step에 표시할 텍스트 정보를 반환합니다.
+    private var stepLabel: String {
+        return "STEP \(partyUseCase.partys.last?.stepList.count.intformatter ?? "01")"
+    }
+    
+    /// NotiCycle에 표시할 텍스트 정보를 반환합니다.
+    private var notiCycleLabel: String {
+        return "\(partyUseCase.partys.last?.notiCycle ?? 30)min"
     }
 }
 
