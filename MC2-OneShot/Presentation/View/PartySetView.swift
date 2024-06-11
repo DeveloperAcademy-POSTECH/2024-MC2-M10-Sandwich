@@ -7,16 +7,15 @@
 
 import SwiftUI
 
+// MARK: - PartySetView
+
 struct PartySetView: View {
     
-    @EnvironmentObject private var homePathModel: HomePathModel
-    @EnvironmentObject private var persistentDataManager: PersistentDataManager
+    @Environment(PartyUseCase.self) private var partyUseCase
+    @Environment(\.dismiss) private var dismiss
     
     @State private var titleText: String = ""
-    @State private var notiCycle: NotiCycle = .min30
-    @State var membersInfo: [Member] = []
-    
-    @Binding var isPartySetViewPresented: Bool
+    @State private var notiCycle: NotiCycle = NotiCycle.allCases.first ?? .min30
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -30,7 +29,7 @@ struct PartySetView: View {
             List {
                 TitleView(titleText: $titleText)
                 NotiCycleView(notiCycle: $notiCycle)
-                MemberListView(membersInfo: $membersInfo)
+                MemberListView()
             }
             
             Spacer()
@@ -40,82 +39,110 @@ struct PartySetView: View {
                 buttonType: titleText.isEmpty
                 ? .disabled : .primary
             ) {
-                goStep()
+                dismiss()
+                partyUseCase.startParty(
+                    Party(
+                        title: titleText,
+                        startDate: .now,
+                        notiCycle: notiCycle.rawValue,
+                        memberList: partyUseCase.members
+                    )
+                )
             }
             .padding(16)
         }
-    }
-    
-    /// GO STEP! 버튼 클릭 시 호출되는 함수입니다.
-    func goStep() {
-        
-        HapticManager.shared.notification(type: .success)
-        
-        let today = Date.now
-        
-        // 1. 영구 저장 데이터에 새로운 파티 데이터 생성
-        persistentDataManager.createParty(
-            title: titleText,
-            startDate: today,
-            notiCycle: notiCycle,
-            memberList: membersInfo
-        )
-        
-        // 2. 파티 서비스 시작
-        PartyService.shared.startParty(
-            startDate: today,
-            notiCycle: notiCycle
-        )
-        
-        // 3. 화면 띄우기
-        isPartySetViewPresented = false
+        .onDisappear { partyUseCase.resetPartySetting() }
     }
 }
 
 // MARK: - TitleView
+
 private struct TitleView: View {
     
-    @Binding var titleText: String
+    @Binding private(set) var titleText: String
+    
+    private let textLimited = 12
     
     var body: some View {
         Section {
             TextField("제목", text: $titleText)
                 .onChange(of: titleText) { _, text in
-                    if text.count > 12 {
+                    if text.count >= textLimited {
                         titleText.removeLast()
                     }
                 }
         } footer: {
-            HStack{
-                Image(systemName: "exclamationmark.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                Text("제목은 12자 이내로 작성 가능해요.")
-                    .pretendard(.regular, 12)
-            }
+            FooterInfo(
+                symbol: .exclamationmarkCircle,
+                content: "제목은 \(textLimited)자 이내로 작성 가능해요."
+            )
         }
         .padding(4)
     }
 }
 
+// MARK: - NotiCycleView
+
+private struct NotiCycleView: View {
+    
+    @Binding private(set) var notiCycle: NotiCycle
+    
+    var body: some View {
+        Section {
+            Menu {
+                ForEach(NotiCycle.allCases, id: \.rawValue) { notiCycle in
+                    Button("\(notiCycle.rawValue)분") { self.notiCycle = notiCycle }
+                }
+            } label: {
+                HStack {
+                    Text("알람 주기")
+                        .pretendard(.regular, 17)
+                        .foregroundStyle(.shotFF)
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Text("\(notiCycle.rawValue)분")
+                            .pretendard(.regular, 17)
+                        
+                        Image(symbol: .chevronUpDown)
+                    }
+                    .foregroundStyle(.shotFF).opacity(0.6)
+                }
+            }
+        } footer: {
+            VStack(alignment: .leading) {
+                FooterInfo(
+                    symbol: .questionmarkCircle,
+                    content: "\(notiCycle.rawValue)분마다 PUSH 알림을 보내드려요."
+                )
+                
+                FooterInfo(
+                    symbol: .exclamationmarkCircle,
+                    content: "무음모드를 해제해 주세요!"
+                )
+            }
+        }
+        .padding(4)
+        .onAppear { UIApplication.shared.hideKeyboard() }
+    }
+}
+
 // MARK: - MemberListView
+
 private struct MemberListView: View {
     
-    @State private var isCameraViewPresented = false
-    @Binding var membersInfo: [Member]
+    @Environment(PartyUseCase.self) private var partyUseCase
     
-    let columns: [GridItem] = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+    @State private var isCameraViewPresented = false
+    
+    private let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 4)
+    private let memberLimited = 8
     
     var body: some View {
         Section {
             VStack(alignment: .leading) {
-                Text("사람 추가")
+                Text("일행 추가")
                     .pretendard(.regular, 17)
                     .foregroundStyle(.shotFF)
                     .padding(.top, 6)
@@ -124,7 +151,7 @@ private struct MemberListView: View {
                     .frame(height: 16)
                 
                 LazyVGrid(columns: columns, spacing: 30) {
-                    ForEach(membersInfo, id: \.self) { member in
+                    ForEach(partyUseCase.members) { member in
                         if let image = UIImage(data: member.profileImageData) {
                             Image(uiImage: image)
                                 .resizable()
@@ -133,103 +160,58 @@ private struct MemberListView: View {
                         }
                     }
                     
-                    // + 버튼을 조건부로 표시
-                    if membersInfo.count < 8 {
-                        Button {
-                            isCameraViewPresented.toggle()
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 60)
-                                    .foregroundStyle(.shot33)
-                                Image(systemName: "plus")
-                                    .resizable()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundStyle(.shot6D)
-                            }
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .fullScreenCover(isPresented: $isCameraViewPresented) {
-                            MemberCameraView(isCameraViewPresented: $isCameraViewPresented, membersInfo: $membersInfo)
-                        }
+                    if partyUseCase.members.count < memberLimited {
+                        AddMemberButton()
                     }
                 }
                 .padding(.bottom, 8)
             }
         } footer: {
-            // footer 변경
-            HStack {
-                Image(systemName: "camera.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                Text("술자리를 함께하는 일행의 사진을 찍어봐요!")
-                    .pretendard(.regular, 12)
-            }
+            FooterInfo(
+                symbol: .cameraCircle,
+                content: "술자리를 함께하는 일행의 사진을 찍어봐요!"
+            )
         }
         .padding(4)
     }
-}
-
-// MARK: - NotiCycleView
-private struct NotiCycleView: View {
     
-    @Binding var notiCycle: NotiCycle
-    
-    var body: some View {
-        Section {
-            HStack {
-                Text("알람 주기")
+    /// Member 추가 버튼
+    @ViewBuilder
+    private func AddMemberButton() -> some View {
+        Button {
+            isCameraViewPresented.toggle()
+        } label: {
+            ZStack {
+                Circle()
+                    .frame(width: 60)
+                    .foregroundStyle(.shot33)
                 
-                Spacer()
-                
-                Menu {
-                    ForEach(NotiCycle.allCases, id: \.rawValue) { notiCycle in
-                        Button("\(notiCycle.rawValue)분") { self.notiCycle = notiCycle }
-                    }
-                } label: {
-                    HStack {
-                        Text("\(notiCycle.rawValue)분")
-                            .pretendard(.regular, 17)
-                        
-                        Image(systemName: "chevron.up.chevron.down")
-                    }
-                    .foregroundStyle(.shotFF).opacity(0.6)
-                }
+                Image(symbol: .plus)
+                    .resizable()
+                    .frame(width: 32, height: 32)
+                    .foregroundStyle(.shot6D)
             }
         }
-        
-    footer: {
-        
-        // 인포 문구 추가
-        VStack(alignment: .leading){
-            HStack{
-                Image(systemName: "questionmark.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                Text("알림 주기마다 PUSH 알림을 보내드려요.")
-                    .pretendard(.regular, 12)
-            }
-            
-            HStack{
-                Image(systemName: "exclamationmark.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 14, height: 14)
-                Text("무음모드를 해제해 주세요!")
-                    .pretendard(.regular, 12)
-            }
+        .buttonStyle(BorderlessButtonStyle())
+        .fullScreenCover(isPresented: $isCameraViewPresented) {
+            MemberCameraView()
         }
-    } 
-    .padding(4)
-    .onAppear (perform : UIApplication.shared.hideKeyboard)
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
-    PartySetView(
-        isPartySetViewPresented: .constant(true)
-    )
-    .modelContainer(MockModelContainer.mockModelContainer)
+    PartySetView()
+        .modelContainer(MockModelContainer.mock)
+        .environment(
+            PartyUseCase(
+                dataService: PersistentDataService(
+                    modelContext: MockModelContainer.mock.mainContext
+                ),
+                notificationService: NotificationService()
+            )
+        )
 }
+#endif

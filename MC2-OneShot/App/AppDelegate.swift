@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - AppDelegate
+
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -16,6 +18,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 // MARK: - UNUserNotificationCenterDelegate
+
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
     /// Foreground(앱이 켜진 상태)에서도 알림이 오도록 설정

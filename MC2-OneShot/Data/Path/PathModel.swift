@@ -8,7 +8,7 @@
 import Foundation
 
 /// PathModel 인터페이스
-protocol PathModel: ObservableObject {
+protocol PathModel {
     associatedtype PathType: Hashable
     var paths: [PathType] { get }
 }

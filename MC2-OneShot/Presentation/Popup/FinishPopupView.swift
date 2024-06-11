@@ -8,10 +8,12 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - FinishPopupView
+
 struct FinishPopupView: View {
     
-    @Binding var isFinishPopupPresented: Bool
-    @Binding var isPartyEnd: Bool
+    @Environment(PartyUseCase.self) private var partyUseCase
+    @Environment(\.dismiss) private var dismiss
     
     var memberList: [Member]
     
@@ -21,7 +23,16 @@ struct FinishPopupView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(.shot25)
-                    .frame(width: min(ScreenSize.screenWidth, ScreenSize.screenHeigh) * 0.9, height: min(ScreenSize.screenWidth, ScreenSize.screenHeigh) * 0.9)
+                    .frame(
+                        width: min(
+                            ScreenSize.screenWidth,
+                            ScreenSize.screenHeigh
+                        ) * 0.9,
+                        height: min(
+                            ScreenSize.screenWidth,
+                            ScreenSize.screenHeigh
+                        ) * 0.9
+                    )
                     .padding()
                 
                 VStack(spacing: 0) {
@@ -68,17 +79,17 @@ struct FinishPopupView: View {
                             title: "더 마시기",
                             buttonType: .secondary
                         ) {
-                            isFinishPopupPresented.toggle()
+                            dismiss()
                         }
                         
                         ActionButton(
                             title: "끝내기",
                             buttonType: .primary
                         ) {
+                            UIView.setAnimationsEnabled(false)
+                            dismiss()
                             HapticManager.shared.notification(type: .success)
-                            PartyService.shared.endParty()
-                            isFinishPopupPresented = false
-                            isPartyEnd = true
+                            partyUseCase.finishParty(isShutdown: false)
                         }
                     }
                     .padding(.horizontal, 33)
@@ -86,13 +97,22 @@ struct FinishPopupView: View {
                 }
             }
         }
+        .onDisappear {
+            UIView.setAnimationsEnabled(true)
+        }
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
-    FinishPopupView(
-        isFinishPopupPresented: .constant(true),
-        isPartyEnd: .constant(false),
-        memberList: []
+    FinishPopupView(memberList: [])
+    .environment(
+        PartyUseCase(
+            dataService: PersistentDataService(modelContext: MockModelContainer.mock.mainContext),
+            notificationService: NotificationService()
+        )
     )
 }
+#endif

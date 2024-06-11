@@ -7,19 +7,14 @@
 
 import SwiftUI
 
-struct MemberPopupView: View {
+// MARK: - MemberPopupView
 
+struct MemberPopupView: View {
     
-    let columns: [GridItem] = [
-        GridItem(.flexible(), spacing: 20),
-        GridItem(.flexible(), spacing: 20),
-        GridItem(.flexible(), spacing: 20),
-        GridItem(.flexible(), spacing: 20)
-    ]
+    @Binding private(set) var isMemberPopupPresented: Bool
     
-    @Binding var isMemberPopupPresented: Bool
-    
-    var memberList: [Member]
+    let memberList: [Member]
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 4)
     
     var body: some View {
         VStack(spacing: 0) {
@@ -30,7 +25,7 @@ struct MemberPopupView: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        Image(systemName: "person.fill")
+                        Image(symbol: .person)
                             .pretendard(.bold, 17)
                             .foregroundStyle(.shotGreen)
                         
@@ -57,16 +52,14 @@ struct MemberPopupView: View {
                     .padding(.top, 36)
                     .padding(.bottom, 30)
                     
-                    
                     ActionButton(
                         title: "닫기",
                         buttonType: .popupfinish
                     ) {
-                                isMemberPopupPresented.toggle()
+                        isMemberPopupPresented.toggle()
                     }
                     .frame(width: 329, height: 50)
                     .padding(.horizontal, 16)
-                    
                 }
             }
         }
@@ -74,7 +67,10 @@ struct MemberPopupView: View {
     }
 }
 
+// MARK: - Preview
 
+#if DEBUG
 #Preview {
     MemberPopupView(isMemberPopupPresented: .constant(true), memberList: [])
 }
+#endif

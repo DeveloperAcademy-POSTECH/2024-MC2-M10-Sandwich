@@ -6,80 +6,86 @@
 //
 
 import SwiftUI
-import SwiftData
+
+// MARK: - CommentPopupView
 
 struct CommentPopupView: View {
-    @Binding var isCommentPopupPresented: Bool
-    @State var content: String = ""
+    
     @FocusState private var focusField: Field?
+    
+    @State private var content: String = ""
+    
+    @Binding var isCommentPopupPresented: Bool
+    
+    let party: Party
     
     enum Field: Hashable {
         case content
     }
     
-    var party: Party
-    
-    init(isCommentPopupPresented: Binding<Bool>, party: Party) {
-        self._isCommentPopupPresented = isCommentPopupPresented
-        self._content = State(initialValue: party.comment ?? "")
-        self.party = party
-    }
-    
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 15)
-                    .frame(width: 361, height: 361)
-                    .foregroundStyle(.shot25)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Image(symbol: .textBubble)
+                    .pretendard(.semiBold, 15)
+                    .foregroundStyle(.shotGreen)
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack {
-                        Image(systemName: "text.bubble.fill")
-                            .pretendard(.semiBold, 15)
-                            .foregroundStyle(.shotGreen)
-                        
-                        Text("기억 남기기")
-                            .pretendard(.bold, 17)
-                            .foregroundStyle(.shotFF)
-                    }
-//                    .padding(16)
-                    .padding(.horizontal,16)
-                    .padding(.top, 16)
-                    .padding(.bottom, 12)
-                    
-                    TextField("이곳을 클릭하여 술자리의 기억을 남겨주세요!", text: $content, axis: .vertical)
-                    .padding()
-                    .frame(width: 329, height: 239, alignment: .topLeading)
-                    .background(RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.shot1E))
+                Text("기억 남기기")
+                    .pretendard(.bold, 17)
                     .foregroundStyle(.shotFF)
-                    .pretendard(.regular, 16)
-                    .multilineTextAlignment(.leading)
-                    .padding(.horizontal, 16)
-                    .focused($focusField, equals: .content)
-                    .onTapGesture {
-                        focusField = .content
-                    }
-                    
-                    ActionButton(
-                        title: "닫기",
-                        buttonType: .popupfinish
-                    ) {
-                        party.comment = content
-                        isCommentPopupPresented.toggle()
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 16)
-                    .padding(.top, 8)
-                }
-                .padding(.horizontal, 16)
             }
+            .padding(.horizontal,16)
+            .padding(.top, 16)
+            .padding(.bottom, 16)
+            
+            TextField("이곳을 클릭하여 술자리의 기억을 남겨주세요!", text: $content, axis: .vertical)
+                .frame(maxWidth: .infinity)
+                .frame(height: 240, alignment: .topLeading)
+                .padding(16)
+                .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.shot1E))
+                .foregroundStyle(.shotFF)
+                .padding(.horizontal, 16)
+                .pretendard(.regular, 16)
+                .multilineTextAlignment(.leading)
+                .focused($focusField, equals: .content)
+                .onTapGesture { focusField = .content }
+            
+            ActionButton(
+                title: "닫기",
+                buttonType: .popupfinish
+            ) {
+                party.comment = content
+                isCommentPopupPresented.toggle()
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 16)
+            .padding(.top, 16)
         }
-        .padding(16)
-        .onAppear (perform : UIApplication.shared.hideKeyboard)
+        .background(RoundedRectangle(cornerRadius: 16).foregroundStyle(.shot25))
+        .padding(.horizontal, 16)
+        .onAppear { UIApplication.shared.hideKeyboard() }
     }
 }
 
+// MARK: - Preview
+
+#if DEBUG
 #Preview {
-    CommentPopupView(isCommentPopupPresented: .constant(true), party: Party(title: "포항공대대애앵앵", startDate: Date(), notiCycle: 60, memberList: []))
+    struct Container: View {
+        var body: some View {
+            CommentPopupView(
+                isCommentPopupPresented: .constant(true),
+                party: Party(
+                    title: "포항공대대애앵앵",
+                    startDate: .now,
+                    notiCycle: 60,
+                    memberList: []
+                )
+            )
+        }
+    }
+    
+    return Container()
+        .modelContainer(MockModelContainer.mock)
 }
+#endif
