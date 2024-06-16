@@ -260,7 +260,7 @@ private struct CaptureButtonView: View {
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
-                    modelContext: MockModelContainer.mock.mainContext
+                    modelContext: ModelContainerCoordinator.mock.mainContext
                 ),
                 notificationService: NotificationService()
             )

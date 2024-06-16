@@ -2,51 +2,12 @@
 //  Party.swift
 //  MC2-OneShot
 //
-//  Created by 김민준 on 6/1/24.
+//  Created by 김민준 on 6/16/24.
 //
 
-import Foundation
 import UIKit
-import SwiftData
 
-// MARK: - Party
-
-//@Model
-//class Party: Identifiable {
-//    @Attribute(.unique) let id: UUID
-//    
-//    let title: String
-//    let startDate: Date
-//    let notiCycle: Int
-//    @Relationship(deleteRule: .cascade) var stepList: [Step]
-//    
-//    var isLive: Bool
-//    var isShutdown: Bool
-//    
-//    @Relationship(deleteRule: .cascade) var memberList: [Member]
-//    var comment: String?
-//    
-//    init(
-//        title: String,
-//        startDate: Date,
-//        notiCycle: Int,
-//        stepList: [Step] = [Step()],
-//        isLive: Bool = true,
-//        isShutdown: Bool = false,
-//        memberList: [Member],
-//        comment: String? = nil
-//    ) {
-//        self.id = UUID()
-//        self.title = title
-//        self.startDate = startDate
-//        self.notiCycle = notiCycle
-//        self.stepList = stepList
-//        self.isLive = isLive
-//        self.isShutdown = isShutdown
-//        self.memberList = memberList
-//        self.comment = comment
-//    }
-//}
+typealias Party = OneShotSchemaV2.Party
 
 // MARK: - Party 계산 속성
 

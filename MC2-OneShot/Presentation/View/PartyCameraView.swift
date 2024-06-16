@@ -359,7 +359,7 @@ private struct StepInfoView: View {
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
-                    modelContext: MockModelContainer.mock.mainContext
+                    modelContext: ModelContainerCoordinator.mock.mainContext
                 ),
                 notificationService: NotificationService()
             )

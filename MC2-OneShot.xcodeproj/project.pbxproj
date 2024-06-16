@@ -16,10 +16,6 @@
 		1EFADD732BF6E34B00E333AD /* CustomSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */; };
 		82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */; };
 		82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82016BF62BF7034A00BF01CF /* NotiCycle.swift */; };
-		820F927D2C0ABC6F00E103F3 /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F927C2C0ABC6F00E103F3 /* Party.swift */; };
-		820F927F2C0ABC9500E103F3 /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F927E2C0ABC9500E103F3 /* Step.swift */; };
-		820F92812C0ABCC300E103F3 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92802C0ABCC300E103F3 /* Media.swift */; };
-		820F92832C0ABCDC00E103F3 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92822C0ABCDC00E103F3 /* Member.swift */; };
 		820F92872C0AF6D100E103F3 /* CameraServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820F92862C0AF6D100E103F3 /* CameraServiceInterface.swift */; };
 		8224EA432C0C4597003EB372 /* CameraUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8224EA422C0C4597003EB372 /* CameraUseCase.swift */; };
 		825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 825F0BDF2BF486BE001B416A /* ActionButton.swift */; };
@@ -56,11 +52,14 @@
 		8287C0932C1EF8AE000C8C3E /* SchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0922C1EF8AE000C8C3E /* SchemaV1.swift */; };
 		8287C0952C1EF9CC000C8C3E /* MigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0942C1EF9CC000C8C3E /* MigrationPlan.swift */; };
 		8287C0972C1EFA89000C8C3E /* SchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0962C1EFA89000C8C3E /* SchemaV2.swift */; };
-		8287C0992C1F0106000C8C3E /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0982C1F0106000C8C3E /* SwiftData.swift */; };
+		8287C09D2C1F05F4000C8C3E /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C09C2C1F05F4000C8C3E /* Party.swift */; };
+		8287C09F2C1F0614000C8C3E /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C09E2C1F0614000C8C3E /* Step.swift */; };
+		8287C0A12C1F0625000C8C3E /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0A02C1F0625000C8C3E /* Media.swift */; };
+		8287C0A32C1F062F000C8C3E /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0A22C1F062F000C8C3E /* Member.swift */; };
+		8287C0A52C1F083F000C8C3E /* ModelContainerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0A42C1F083F000C8C3E /* ModelContainerCoordinator.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
-		82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B49BE12BF88A7B00119628 /* MockModelContainer.swift */; };
 		98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */; };
 		98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
@@ -88,10 +87,6 @@
 		1EFADD722BF6E34B00E333AD /* CustomSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CustomSound.mp3; sourceTree = "<group>"; };
 		82016BEA2BF4A52400BF01CF /* Helper+DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+DateFormatter.swift"; sourceTree = "<group>"; };
 		82016BF62BF7034A00BF01CF /* NotiCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiCycle.swift; sourceTree = "<group>"; };
-		820F927C2C0ABC6F00E103F3 /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
-		820F927E2C0ABC9500E103F3 /* Step.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
-		820F92802C0ABCC300E103F3 /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
-		820F92822C0ABCDC00E103F3 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		820F92862C0AF6D100E103F3 /* CameraServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraServiceInterface.swift; sourceTree = "<group>"; };
 		8224EA422C0C4597003EB372 /* CameraUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraUseCase.swift; sourceTree = "<group>"; };
 		825F0BDF2BF486BE001B416A /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
@@ -129,11 +124,14 @@
 		8287C0922C1EF8AE000C8C3E /* SchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV1.swift; sourceTree = "<group>"; };
 		8287C0942C1EF9CC000C8C3E /* MigrationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationPlan.swift; sourceTree = "<group>"; };
 		8287C0962C1EFA89000C8C3E /* SchemaV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV2.swift; sourceTree = "<group>"; };
-		8287C0982C1F0106000C8C3E /* SwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
+		8287C09C2C1F05F4000C8C3E /* Party.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
+		8287C09E2C1F0614000C8C3E /* Step.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
+		8287C0A02C1F0625000C8C3E /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		8287C0A22C1F062F000C8C3E /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
+		8287C0A42C1F083F000C8C3E /* ModelContainerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerCoordinator.swift; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
-		82B49BE12BF88A7B00119628 /* MockModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockModelContainer.swift; sourceTree = "<group>"; };
 		98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+ScreenSize.swift"; sourceTree = "<group>"; };
 		98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
@@ -208,10 +206,10 @@
 		8224EA652C0CAD7C003EB372 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
-				820F927C2C0ABC6F00E103F3 /* Party.swift */,
-				820F927E2C0ABC9500E103F3 /* Step.swift */,
-				820F92802C0ABCC300E103F3 /* Media.swift */,
-				820F92822C0ABCDC00E103F3 /* Member.swift */,
+				8287C09C2C1F05F4000C8C3E /* Party.swift */,
+				8287C09E2C1F0614000C8C3E /* Step.swift */,
+				8287C0A02C1F0625000C8C3E /* Media.swift */,
+				8287C0A22C1F062F000C8C3E /* Member.swift */,
 				827CF4D22C0CB5F1008F86BF /* CapturePhoto.swift */,
 				82016BF62BF7034A00BF01CF /* NotiCycle.swift */,
 			);
@@ -348,8 +346,7 @@
 		82A0C7A52C03132400686604 /* SwiftData */ = {
 			isa = PBXGroup;
 			children = (
-				8287C0982C1F0106000C8C3E /* SwiftData.swift */,
-				82B49BE12BF88A7B00119628 /* MockModelContainer.swift */,
+				8287C0A42C1F083F000C8C3E /* ModelContainerCoordinator.swift */,
 				8287C0942C1EF9CC000C8C3E /* MigrationPlan.swift */,
 				8287C0922C1EF8AE000C8C3E /* SchemaV1.swift */,
 				8287C0962C1EFA89000C8C3E /* SchemaV2.swift */,
@@ -492,7 +489,7 @@
 				8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */,
 				1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */,
 				82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */,
-				82B49BE22BF88A7B00119628 /* MockModelContainer.swift in Sources */,
+				8287C0A12C1F0625000C8C3E /* Media.swift in Sources */,
 				8264EA282BF2013000586FA0 /* PartyResultView.swift in Sources */,
 				8284615E2C12B6A800860239 /* PhotoSaveUseCase.swift in Sources */,
 				82016BF72BF7034A00BF01CF /* NotiCycle.swift in Sources */,
@@ -502,18 +499,18 @@
 				828101942C10B66D008B1DFC /* ToastView.swift in Sources */,
 				827CF4E52C107BAA008F86BF /* Helper+SFSymbol.swift in Sources */,
 				8284615A2C12B33600860239 /* PhotoSaveServiceInterface.swift in Sources */,
-				820F927F2C0ABC9500E103F3 /* Step.swift in Sources */,
+				8287C0A52C1F083F000C8C3E /* ModelContainerCoordinator.swift in Sources */,
 				82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */,
 				827CF4E72C1085F0008F86BF /* TableListViewCell.swift in Sources */,
-				820F92812C0ABCC300E103F3 /* Media.swift in Sources */,
 				8287C0952C1EF9CC000C8C3E /* MigrationPlan.swift in Sources */,
 				827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */,
-				8287C0992C1F0106000C8C3E /* SwiftData.swift in Sources */,
 				827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */,
+				8287C09D2C1F05F4000C8C3E /* Party.swift in Sources */,
 				827CF4DF2C105718008F86BF /* NotificationServiceInterface.swift in Sources */,
 				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
 				8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */,
+				8287C0A32C1F062F000C8C3E /* Member.swift in Sources */,
 				196B6A942BFED0E20043E196 /* Helper+BackSwipeGesture.swift in Sources */,
 				BFB534132BF3451B0013E9FE /* Helper+CustomFont.swift in Sources */,
 				19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */,
@@ -521,16 +518,15 @@
 				98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */,
 				828101962C10BFF9008B1DFC /* Helper+PopToRootView.swift in Sources */,
 				8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */,
+				8287C09F2C1F0614000C8C3E /* Step.swift in Sources */,
 				1EDF2C1A2BFD856C003291F4 /* Helper+HideKeyboard.swift in Sources */,
 				82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */,
-				820F927D2C0ABC6F00E103F3 /* Party.swift in Sources */,
 				8264EA342BF2021D00586FA0 /* PathModel.swift in Sources */,
 				98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */,
 				98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */,
 				828461582C12AC2800860239 /* FooterInfo.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
 				8287C0972C1EFA89000C8C3E /* SchemaV2.swift in Sources */,
-				820F92832C0ABCDC00E103F3 /* Member.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,
 				827CF4E92C108B16008F86BF /* Helper+NotificationTitle.swift in Sources */,

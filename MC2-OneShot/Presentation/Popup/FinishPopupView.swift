@@ -110,7 +110,7 @@ struct FinishPopupView: View {
     FinishPopupView(memberList: [])
     .environment(
         PartyUseCase(
-            dataService: PersistentDataService(modelContext: MockModelContainer.mock.mainContext),
+            dataService: PersistentDataService(modelContext: ModelContainerCoordinator.mock.mainContext),
             notificationService: NotificationService()
         )
     )

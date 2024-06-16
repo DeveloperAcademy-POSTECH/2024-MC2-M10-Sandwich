@@ -85,7 +85,7 @@ private struct StepListCellView: View {
                         .transition(.opacity)
                 }
             }
-            .animation(.easeInOut, value: photoSaveUseCase.state.isPhotoSaved)
+                .animation(.easeInOut, value: photoSaveUseCase.state.isPhotoSaved)
         )
     }
 }
@@ -270,6 +270,6 @@ private struct StepListCellImageSlider: View {
             memberList: []
         )
     )
-    .modelContainer(MockModelContainer.mock)
+    .modelContainer(ModelContainerCoordinator.mock)
 }
 #endif

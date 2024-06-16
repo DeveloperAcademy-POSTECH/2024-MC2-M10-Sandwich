@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 // MARK: - App
 
@@ -14,6 +13,8 @@ import SwiftData
 struct MC2_OneShotApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+    private let modelContainer = ModelContainerCoordinator.main
     
     var body: some Scene {
         WindowGroup {
@@ -25,26 +26,5 @@ struct MC2_OneShotApp: App {
             )
         }
         .modelContainer(modelContainer)
-    }
-}
-
-// MARK: - SwiftData
-
-extension MC2_OneShotApp {
-    
-    /// SwiftData ModelContainer 생성
-    private var modelContainer: ModelContainer {
-        
-        let schema = Schema([Party.self])
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        
-        do {
-            return try ModelContainer(
-                for: schema,
-                migrationPlan: OneShotMigrationPlan.self,
-                configurations: [configuration]
-            )
-        }
-        catch { fatalError("ModelContainer 생성 실패: \(error.localizedDescription)") }
     }
 }

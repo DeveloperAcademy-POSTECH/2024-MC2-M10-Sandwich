@@ -263,11 +263,11 @@ private struct ShutdownInfoButtonView: View {
 #Preview {
     PartyResultView(rootView: .camera)
         .environment(HomePathModel())
-        .modelContainer(MockModelContainer.mock)
+        .modelContainer(ModelContainerCoordinator.mock)
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
-                    modelContext: MockModelContainer.mock.mainContext
+                    modelContext: ModelContainerCoordinator.mock.mainContext
                 ),
                 notificationService: NotificationService()
             )

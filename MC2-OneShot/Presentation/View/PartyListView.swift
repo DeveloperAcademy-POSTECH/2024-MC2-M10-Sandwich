@@ -181,11 +181,11 @@ private struct CommentButton: View {
     }
     
     return Container()
-        .modelContainer(MockModelContainer.mock)
+        .modelContainer(ModelContainerCoordinator.mock)
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
-                    modelContext: MockModelContainer.mock.mainContext
+                    modelContext: ModelContainerCoordinator.mock.mainContext
                 ),
                 notificationService: NotificationService()
             )
