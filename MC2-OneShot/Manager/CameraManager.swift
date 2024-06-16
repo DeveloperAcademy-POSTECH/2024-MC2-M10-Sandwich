@@ -1,9 +1,3 @@
-//
-//  CameraManager.swift
-//  MC2-OneShot
-//
-//  Created by 정혜정 on 5/17/24.
-//
 import SwiftUI
 import AVFoundation
 
@@ -100,22 +94,22 @@ class CameraManager: NSObject, ObservableObject {
     
     // 이미지 좌우반전
     func flipImageHorizontally(_ image: UIImage) -> UIImage? {
-            UIGraphicsBeginImageContext(image.size)
-            guard let context = UIGraphicsGetCurrentContext() else { return nil }
-            
-            context.translateBy(x: image.size.width / 2, y: image.size.height / 2)
-            
-            context.scaleBy(x: -1.0, y: 1.0)
-            
-            context.translateBy(x: -image.size.width / 2, y: -image.size.height / 2)
-            
-            image.draw(at: .zero)
-            
-            let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            return flippedImage
-        }
+        UIGraphicsBeginImageContext(image.size)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        
+        context.translateBy(x: image.size.width / 2, y: image.size.height / 2)
+        
+        context.scaleBy(x: -1.0, y: 1.0)
+        
+        context.translateBy(x: -image.size.width / 2, y: -image.size.height / 2)
+        
+        image.draw(at: .zero)
+        
+        let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return flippedImage
+    }
     
     // 세션 시작
     private func startSession() {
@@ -150,26 +144,67 @@ class CameraManager: NSObject, ObservableObject {
     }
 }
 
+extension UIImage {
+    // 이미지를 주어진 라디안 각도로 회전
+    func rotate(radians: CGFloat) -> UIImage? {
+        var newSize = CGRect(origin: CGPoint.zero, size: self.size).applying(CGAffineTransform(rotationAngle: radians)).size
+        
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
+        let context = UIGraphicsGetCurrentContext()!
+        
+        
+        context.translateBy(x: newSize.width / 2, y: newSize.height / 2)
+        
+        context.rotate(by: radians)
+        self.draw(in: CGRect(x: -self.size.width / 2, y: -self.size.height / 2, width: self.size.width, height: self.size.height))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+}
+
 // 사진 캡처 델리게이트
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        
         let currentPosition = videoDeviceInput.device.position
         
         guard let imageData = photo.fileDataRepresentation() else { return }
         
-        if currentPosition == .front {
-            if let image = UIImage(data: imageData) {
-                self.recentImage = flipImageHorizontally(image) // 최근 사진 반영
+        if let image = UIImage(data: imageData) {
+            // 현재 디바이스 방향을 가져옴
+            let deviceOrientation = UIDevice.current.orientation
+            let radians: CGFloat
+            
+            // 디바이스 방향에 따라 회전 각도 설정
+            switch deviceOrientation {
+            case .landscapeLeft:
+                radians = currentPosition == .front ? .pi / 2 : -.pi / 2
+            case .landscapeRight:
+                radians = currentPosition == .front ? -.pi / 2 : .pi / 2
+            case .portraitUpsideDown:
+                radians = .pi
+            default:
+                radians = 0
             }
-        } else {
-            if let image = UIImage(data: imageData) {
-                self.recentImage = image // 최근 사진 반영
+            
+            // 이미지 회전 적용
+            var finalImage = image.rotate(radians: radians) ?? image
+            
+            // 전면 카메라일 경우 이미지 좌우 반전
+            if currentPosition == .front {
+                finalImage = flipImageHorizontally(finalImage) ?? finalImage
             }
+            
+            self.recentImage = finalImage
         }
             
-            print("Capture 끝!")
-        }
+        print("Capture 끝!")
+    }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         

@@ -28,7 +28,6 @@ struct CameraPreviewView: UIViewRepresentable {
         view.backgroundColor = .black
         view.videoPreviewLayer.videoGravity = .resizeAspectFill
         view.videoPreviewLayer.cornerRadius = 0
-        view.videoPreviewLayer.connection?.videoRotationAngle = 90 // 나중에 수정할 것!
         
         return view
     }
