@@ -204,9 +204,33 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
             return
         }
         
+        // 현재 화면 위치(전면/후면)를 가져옴
         let devicePosition = input.device.position
-        if devicePosition == .front { self.recentPhoto = flipImageHorizontally(uiImage) }
-        else { self.recentPhoto = CapturePhoto(image: uiImage) }
+        // 현재 디바이스 방향(각도)을 가져옴
+        let deviceOrientation = UIDevice.current.orientation
+        let radians: CGFloat
+        
+        // 디바이스 방향에 따라 회전 각도 설정
+        switch deviceOrientation {
+        case .landscapeLeft:
+            radians = devicePosition == .front ? .pi / 2 : -.pi / 2
+        case .landscapeRight:
+            radians = devicePosition == .front ? -.pi / 2 : .pi / 2
+        case .portraitUpsideDown:
+            radians = .pi
+        default:
+            radians = 0
+        }
+        
+        // 이미지 회전 적용
+        var finalImage = uiImage.rotate(radians: radians) ?? uiImage
+        
+        // 전면 카메라일 경우 이미지 좌우 반전
+        if devicePosition == .front {
+            recentPhoto = flipImageHorizontally(finalImage)
+        }
+        
+        self.recentPhoto = CapturePhoto(image:finalImage)
         
         photoDataPrepare?(recentPhoto)
     }
@@ -323,5 +347,32 @@ extension CameraService {
         }
         
         return nil
+    }
+}
+
+// MARK: - UIImage Additional Method
+
+extension UIImage {
+    
+    // 이미지를 주어진 라디안 각도로 회전
+    func rotate(radians: CGFloat) -> UIImage? {
+        var newSize = CGRect(origin: CGPoint.zero, size: self.size).applying(CGAffineTransform(rotationAngle: radians)).size
+        
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
+        let context = UIGraphicsGetCurrentContext()!
+        
+        
+        context.translateBy(x: newSize.width / 2, y: newSize.height / 2)
+        
+        context.rotate(by: radians)
+        self.draw(in: CGRect(x: -self.size.width / 2, y: -self.size.height / 2, width: self.size.width, height: self.size.height))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
     }
 }
