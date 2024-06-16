@@ -11,14 +11,11 @@ import SwiftUI
 
 struct StepListView: View {
     
-    @Environment(PartyUseCase.self) private var partyUseCase
-    
     @State private var photoSaveUseCase = PhotoSaveUseCase(photoSaveService: PhotoSaveService())
     
     let party: Party
     
     var body: some View {
-        @Bindable var state = partyUseCase.state
         Group {
             ScrollView {
                 ForEach(Array(party.sortedStepList.enumerated()), id: \.element) {
@@ -29,9 +26,6 @@ struct StepListView: View {
                         startDate: party.startDate
                     )
                 }
-            }
-            .fullScreenCover(isPresented: $state.isResultViewPresented) {
-                PartyResultView(rootView: .list)
             }
         }
         .environment(photoSaveUseCase)
