@@ -227,7 +227,7 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
         
         // 전면 카메라일 경우 이미지 좌우 반전
         if devicePosition == .front {
-            recentPhoto = flipImageHorizontally(finalImage)
+            finalImage = flipImageHorizontally(finalImage)?.image ?? uiImage
         }
         
         self.recentPhoto = CapturePhoto(image:finalImage)
