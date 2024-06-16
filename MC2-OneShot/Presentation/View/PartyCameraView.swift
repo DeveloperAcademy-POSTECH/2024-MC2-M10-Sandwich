@@ -169,6 +169,9 @@ private struct CameraBottomView: View {
     
     @Binding private(set) var isShotDisabled: Bool
     
+    // 현재 디바이스 방향(각도)을 가져옴
+    let deviceOrientation = UIDevice.current.orientation
+    
     var body: some View {
         ZStack {
             HStack {
@@ -198,6 +201,7 @@ private struct CameraBottomView: View {
                 .frame(width: 32, height: 32)
                 .foregroundColor(.shotFF)
         }
+        .rotationEffect(rotationAngle(for: deviceOrientation))
     }
     
     /// 전면/후면 카메라 전환 버튼
@@ -212,6 +216,7 @@ private struct CameraBottomView: View {
                 .frame(width: 32, height: 32)
                 .foregroundColor(.shotFF)
         }
+        .rotationEffect(rotationAngle(for: deviceOrientation))
     }
     
     /// 사진 촬영 이후 재촬영 버튼
@@ -226,6 +231,20 @@ private struct CameraBottomView: View {
         }
         
         Spacer()
+    }
+    
+    // 디바이스 방향에 따른 회전 각도 계산 함수 추가
+    private func rotationAngle(for orientation: UIDeviceOrientation) -> Angle {
+        switch orientation {
+        case .landscapeLeft:
+            return .degrees(90)
+        case .landscapeRight:
+            return .degrees(-90)
+        case .portraitUpsideDown:
+            return .degrees(180)
+        default:
+            return .degrees(0)
+        }
     }
 }
 

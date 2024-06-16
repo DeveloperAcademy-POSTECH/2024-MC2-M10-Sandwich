@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 // MARK: - Camera Init
 
@@ -13,12 +14,31 @@ import SwiftUI
 final class CameraUseCase {
     
     private var cameraService: CameraServiceInterface
+    private var cancellable: AnyCancellable?
     
     private(set) var state: State
+    private(set) var orientation: UIDeviceOrientation = .unknown
     
     init(cameraService: CameraServiceInterface) {
         self.cameraService = cameraService
         self.state = State()
+        
+        // NotificationCenter를 통해 디바이스의 방향 변경 알림을 구독
+        let notificationCenter = NotificationCenter.default
+        cancellable = notificationCenter.publisher(for: UIDevice.orientationDidChangeNotification)
+            .compactMap { _ in
+                UIDevice.current.orientation
+            }
+            .assign(to: \.orientation, on: self)
+        
+        // 디바이스 방향 변경 알림을 활성
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+    }
+    
+    deinit {
+        // 디바이스 방향 변경 알림을 비활성
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        cancellable?.cancel()
     }
 }
 
