@@ -173,7 +173,7 @@ private struct MemberResultView: View {
                     }
                     
                     LazyVGrid(columns: columns, spacing: 18) {
-                        ForEach(currentParty.memberList) { member in
+                        ForEach(currentParty.sortedMemberList) { member in
                             if let image = UIImage(data: member.profileImageData) {
                                 Image(uiImage: image)
                                     .resizable()
