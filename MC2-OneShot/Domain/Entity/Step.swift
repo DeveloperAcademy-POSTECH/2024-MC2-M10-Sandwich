@@ -10,14 +10,14 @@ import SwiftData
 
 // MARK: - Step
 
-@Model
-class Step: Identifiable {
-    
-    let createDate: Date
-    @Relationship(deleteRule: .cascade) var mediaList: [Media]
-    
-    init(createDate: Date = .now, mediaList: [Media] = []) {
-        self.createDate = createDate
-        self.mediaList = mediaList
-    }
-}
+//@Model
+//class Step: Identifiable {
+//    
+//    let createDate: Date
+//    @Relationship(deleteRule: .cascade) var mediaList: [Media]
+//    
+//    init(createDate: Date = .now, mediaList: [Media] = []) {
+//        self.createDate = createDate
+//        self.mediaList = mediaList
+//    }
+//}

@@ -10,11 +10,13 @@ import SwiftData
 
 // MARK: - Member
 
-@Model
-class Member: Identifiable {
-    let profileImageData: Data
-    
-    init(profileImageData: Data) {
-        self.profileImageData = profileImageData
-    }
-}
+//@Model
+//class Member: Identifiable {
+//    let profileImageData: Data
+//    let captureDate: Date
+//    
+//    init(profileImageData: Data, captureDate: Date = .now) {
+//        self.profileImageData = profileImageData
+//        self.captureDate = captureDate
+//    }
+//}

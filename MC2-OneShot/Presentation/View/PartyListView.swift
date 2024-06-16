@@ -50,7 +50,7 @@ private struct HeaderView: View {
             } label: {
                 MemberInfoView(party: party)
             }
-            .disabled(party.memberList.isEmpty)
+            .disabled(party.sortedMemberList.isEmpty)
         }
         .padding(.top, 3)
         .padding(.bottom, 14)
@@ -58,7 +58,7 @@ private struct HeaderView: View {
         .fullScreenCover(isPresented: $isMemberPopupPresented) {
             MemberPopupView(
                 isMemberPopupPresented: $isMemberPopupPresented,
-                memberList: party.memberList
+                memberList: party.sortedMemberList
             )
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
@@ -74,8 +74,8 @@ private struct MemberInfoView: View {
     let party: Party
     
     var body: some View {
-        if (0...3).contains(party.memberList.count) {
-            ForEach(party.memberList.indices, id: \.self) { index in
+        if (0...3).contains(party.sortedMemberList.count) {
+            ForEach(party.sortedMemberList.indices, id: \.self) { index in
                 if let image = UIImage(data: party.memberList[index].profileImageData) {
                     Image(uiImage: image)
                         .resizable()
@@ -86,7 +86,7 @@ private struct MemberInfoView: View {
             }
         } else {
             ForEach(0..<2) { index in
-                if let image = UIImage(data: party.memberList[index].profileImageData) {
+                if let image = UIImage(data: party.sortedMemberList[index].profileImageData) {
                     Image(uiImage: image)
                         .resizable()
                         .frame (width: 32, height: 32)
@@ -100,7 +100,7 @@ private struct MemberInfoView: View {
                     .frame(width: 32)
                     .foregroundStyle(.shot00)
                 
-                Text("+\(party.memberList.count - 2)")
+                Text("+\(party.sortedMemberList.count - 2)")
                     .pretendard(.semiBold, 17)
                     .foregroundStyle(.shotC6)
             }

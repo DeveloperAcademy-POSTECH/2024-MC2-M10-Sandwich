@@ -38,7 +38,13 @@ extension MC2_OneShotApp {
         let schema = Schema([Party.self])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         
-        do { return try ModelContainer(for: schema, configurations: [configuration]) }
+        do {
+            return try ModelContainer(
+                for: schema,
+                migrationPlan: OneShotMigrationPlan.self,
+                configurations: [configuration]
+            )
+        }
         catch { fatalError("ModelContainer 생성 실패: \(error.localizedDescription)") }
     }
 }

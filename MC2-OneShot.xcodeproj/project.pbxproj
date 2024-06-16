@@ -53,6 +53,10 @@
 		8284615C2C12B3E500860239 /* PhotoSaveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8284615B2C12B3E500860239 /* PhotoSaveService.swift */; };
 		8284615E2C12B6A800860239 /* PhotoSaveUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8284615D2C12B6A800860239 /* PhotoSaveUseCase.swift */; };
 		828461602C12DC9100860239 /* Helper+Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8284615F2C12DC9100860239 /* Helper+Haptic.swift */; };
+		8287C0932C1EF8AE000C8C3E /* SchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0922C1EF8AE000C8C3E /* SchemaV1.swift */; };
+		8287C0952C1EF9CC000C8C3E /* MigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0942C1EF9CC000C8C3E /* MigrationPlan.swift */; };
+		8287C0972C1EFA89000C8C3E /* SchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0962C1EFA89000C8C3E /* SchemaV2.swift */; };
+		8287C0992C1F0106000C8C3E /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8287C0982C1F0106000C8C3E /* SwiftData.swift */; };
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
@@ -122,6 +126,10 @@
 		8284615B2C12B3E500860239 /* PhotoSaveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSaveService.swift; sourceTree = "<group>"; };
 		8284615D2C12B6A800860239 /* PhotoSaveUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSaveUseCase.swift; sourceTree = "<group>"; };
 		8284615F2C12DC9100860239 /* Helper+Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+Haptic.swift"; sourceTree = "<group>"; };
+		8287C0922C1EF8AE000C8C3E /* SchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV1.swift; sourceTree = "<group>"; };
+		8287C0942C1EF9CC000C8C3E /* MigrationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationPlan.swift; sourceTree = "<group>"; };
+		8287C0962C1EFA89000C8C3E /* SchemaV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV2.swift; sourceTree = "<group>"; };
+		8287C0982C1F0106000C8C3E /* SwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
@@ -340,7 +348,11 @@
 		82A0C7A52C03132400686604 /* SwiftData */ = {
 			isa = PBXGroup;
 			children = (
+				8287C0982C1F0106000C8C3E /* SwiftData.swift */,
 				82B49BE12BF88A7B00119628 /* MockModelContainer.swift */,
+				8287C0942C1EF9CC000C8C3E /* MigrationPlan.swift */,
+				8287C0922C1EF8AE000C8C3E /* SchemaV1.swift */,
+				8287C0962C1EFA89000C8C3E /* SchemaV2.swift */,
 			);
 			path = SwiftData;
 			sourceTree = "<group>";
@@ -476,6 +488,7 @@
 				827CF4DD2C0DE8E0008F86BF /* PartyUseCase.swift in Sources */,
 				828461602C12DC9100860239 /* Helper+Haptic.swift in Sources */,
 				8284615C2C12B3E500860239 /* PhotoSaveService.swift in Sources */,
+				8287C0932C1EF8AE000C8C3E /* SchemaV1.swift in Sources */,
 				8264EA302BF2016B00586FA0 /* MemberPopupView.swift in Sources */,
 				1E49DAA42BFC662200553A15 /* AppDelegate.swift in Sources */,
 				82016BEB2BF4A52400BF01CF /* Helper+DateFormatter.swift in Sources */,
@@ -493,7 +506,9 @@
 				82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */,
 				827CF4E72C1085F0008F86BF /* TableListViewCell.swift in Sources */,
 				820F92812C0ABCC300E103F3 /* Media.swift in Sources */,
+				8287C0952C1EF9CC000C8C3E /* MigrationPlan.swift in Sources */,
 				827CF4D32C0CB5F1008F86BF /* CapturePhoto.swift in Sources */,
+				8287C0992C1F0106000C8C3E /* SwiftData.swift in Sources */,
 				827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */,
 				827CF4DF2C105718008F86BF /* NotificationServiceInterface.swift in Sources */,
 				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
@@ -514,6 +529,7 @@
 				98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */,
 				828461582C12AC2800860239 /* FooterInfo.swift in Sources */,
 				8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */,
+				8287C0972C1EFA89000C8C3E /* SchemaV2.swift in Sources */,
 				820F92832C0ABCDC00E103F3 /* Member.swift in Sources */,
 				8264EA322BF2017300586FA0 /* ShutdownPopupView.swift in Sources */,
 				825F0BE02BF486BE001B416A /* ActionButton.swift in Sources */,

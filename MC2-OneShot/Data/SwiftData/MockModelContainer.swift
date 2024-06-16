@@ -14,6 +14,10 @@ struct MockModelContainer {
     /// 목업용으로 사용할 SwiftData ModelContainer
     static var mock: ModelContainer = {
         let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
-        return try! ModelContainer(for: Party.self, configurations: modelConfiguration)
+        return try! ModelContainer(
+            for: Party.self,
+            migrationPlan: OneShotMigrationPlan.self,
+            configurations: modelConfiguration
+        )
     }()
 }

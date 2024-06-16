@@ -11,42 +11,42 @@ import SwiftData
 
 // MARK: - Party
 
-@Model
-class Party: Identifiable {
-    @Attribute(.unique) let id: UUID
-    
-    let title: String
-    let startDate: Date
-    let notiCycle: Int
-    @Relationship(deleteRule: .cascade) var stepList: [Step]
-    
-    var isLive: Bool
-    var isShutdown: Bool
-    
-    @Relationship(deleteRule: .cascade) var memberList: [Member]
-    var comment: String?
-    
-    init(
-        title: String,
-        startDate: Date,
-        notiCycle: Int,
-        stepList: [Step] = [Step()],
-        isLive: Bool = true,
-        isShutdown: Bool = false,
-        memberList: [Member],
-        comment: String? = nil
-    ) {
-        self.id = UUID()
-        self.title = title
-        self.startDate = startDate
-        self.notiCycle = notiCycle
-        self.stepList = stepList
-        self.isLive = isLive
-        self.isShutdown = isShutdown
-        self.memberList = memberList
-        self.comment = comment
-    }
-}
+//@Model
+//class Party: Identifiable {
+//    @Attribute(.unique) let id: UUID
+//    
+//    let title: String
+//    let startDate: Date
+//    let notiCycle: Int
+//    @Relationship(deleteRule: .cascade) var stepList: [Step]
+//    
+//    var isLive: Bool
+//    var isShutdown: Bool
+//    
+//    @Relationship(deleteRule: .cascade) var memberList: [Member]
+//    var comment: String?
+//    
+//    init(
+//        title: String,
+//        startDate: Date,
+//        notiCycle: Int,
+//        stepList: [Step] = [Step()],
+//        isLive: Bool = true,
+//        isShutdown: Bool = false,
+//        memberList: [Member],
+//        comment: String? = nil
+//    ) {
+//        self.id = UUID()
+//        self.title = title
+//        self.startDate = startDate
+//        self.notiCycle = notiCycle
+//        self.stepList = stepList
+//        self.isLive = isLive
+//        self.isShutdown = isShutdown
+//        self.memberList = memberList
+//        self.comment = comment
+//    }
+//}
 
 // MARK: - Party 계산 속성
 
@@ -55,6 +55,11 @@ extension Party {
     /// StepList를 정렬 후 반환합니다.
     var sortedStepList: [Step] {
         return stepList.sorted { $0.createDate < $1.createDate }
+    }
+    
+    /// MemberList를 정렬 후 반환합니다.
+    var sortedMemberList: [Member] {
+        return memberList.sorted { $0.captureDate < $1.captureDate }
     }
     
     /// 리스트에 보여질 첫번째 썸네일 데이터를 반환합니다.

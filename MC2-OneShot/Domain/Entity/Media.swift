@@ -10,13 +10,13 @@ import SwiftData
 
 // MARK: - Media
 
-@Model
-class Media: Identifiable {
-    var fileData: Data
-    var captureDate: Date
-    
-    init(fileData: Data, captureDate: Date) {
-        self.fileData = fileData
-        self.captureDate = captureDate
-    }
-}
+//@Model
+//class Media: Identifiable {
+//    var fileData: Data
+//    var captureDate: Date
+//    
+//    init(fileData: Data, captureDate: Date) {
+//        self.fileData = fileData
+//        self.captureDate = captureDate
+//    }
+//}
