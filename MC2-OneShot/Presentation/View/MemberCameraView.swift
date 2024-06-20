@@ -117,19 +117,61 @@ private struct CameraBottomView: View {
     @Binding private(set) var isShotDisabled: Bool
     
     var body: some View {
-        ZStack {
-            HStack {
-                if cameraUseCase.state.isCaptureMode {
-                    FlashButton()
-                    Spacer()
-                    FrontBackButton()
-                } else {
-                    RetakeButton()
+        VStack{
+            if !cameraUseCase.state.isSelfieMode{
+                HStack{
+                    WideAngleButton()
+                    GeneralAngleButton()
                 }
             }
-            .padding(.horizontal, 36)
-            
-            CaptureButtonView(isShotDisabled: $isShotDisabled)
+            ZStack {
+                HStack {
+                    if cameraUseCase.state.isCaptureMode {
+                        FlashButton()
+                        Spacer()
+                        FrontBackButton()
+                    } else {
+                        RetakeButton()
+                    }
+                }
+                .padding(.horizontal, 36)
+                
+                CaptureButtonView(isShotDisabled: $isShotDisabled)
+            }
+        }
+    }
+    
+    /// 광각 버튼
+    @ViewBuilder
+    private func WideAngleButton() -> some View {
+        Button {
+            cameraUseCase.wideAngle()
+        } label: {
+            ZStack{
+                Circle()
+                    .frame(width: 26, height: 26)
+                    .foregroundColor(.shotFF)
+                
+                Text(".5")
+                    .foregroundColor(.black)
+            }
+        }
+    }
+    
+    /// 일반 각 버튼
+    @ViewBuilder
+    private func GeneralAngleButton() -> some View {
+        Button {
+            cameraUseCase.generalAngle()
+        } label: {
+            ZStack{
+                Circle()
+                    .frame(width: 26, height: 26)
+                    .foregroundColor(.shotFF)
+                
+                Text("1")
+                    .foregroundColor(.black)
+            }
         }
     }
     
