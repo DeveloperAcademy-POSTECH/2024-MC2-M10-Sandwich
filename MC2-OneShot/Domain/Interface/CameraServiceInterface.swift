@@ -15,4 +15,6 @@ protocol CameraServiceInterface {
     func fetchPhotoDataForSave() -> CapturePhoto?
     func toggleFrontBack()
     func toggleFlashMode()
+    func generalAngle()
+    func wideAngle()
 }
