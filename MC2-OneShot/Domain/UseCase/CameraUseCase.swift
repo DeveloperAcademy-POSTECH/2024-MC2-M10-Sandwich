@@ -33,6 +33,8 @@ extension CameraUseCase {
         var isSelfieMode: Bool = false
         var isPhotoDataPrepare: Bool = false
         var photoData: CapturePhoto?
+        var currentZoomFactor: CGFloat = 1.0 //😀
+        var lastScale: CGFloat = 1.0 //😀
     }
 }
 
@@ -104,4 +106,20 @@ extension CameraUseCase {
     func wideAngle() {
         cameraService.wideAngle()
     }
+    
+    /// 줌 배율을 조절합니다.
+    func zoom(factor: CGFloat) {
+        let delta = factor / state.lastScale
+        state.lastScale = factor
+        
+        let newScale = min(max(state.currentZoomFactor * delta, 1), 5)
+        cameraService.zoom(factor: newScale)
+        state.currentZoomFactor = newScale
+    }
+    
+    /// 줌 배율을 초기화합니다.
+    func zoomInitialize() {
+        state.lastScale = 1.0
+    }
+    
 }

@@ -17,4 +17,6 @@ protocol CameraServiceInterface {
     func toggleFlashMode()
     func generalAngle()
     func wideAngle()
+    func zoom(factor: CGFloat)
+    func zoomInitialize()
 }

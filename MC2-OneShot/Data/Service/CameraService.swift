@@ -167,6 +167,28 @@ extension CameraService {
             }
         }
     }
+    
+    /// 줌 배율을 조절합니다.
+    func zoom(factor: CGFloat) {
+        let zoomFactor = factor < 1 ? 1 : factor
+        let device = input.device
+        
+        do {
+            try device.lockForConfiguration()
+            device.videoZoomFactor = zoomFactor
+            device.unlockForConfiguration()
+        }
+        catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    /// 줌 배율을 초기화합니다.
+    func zoomInitialize() {
+        
+    }
+    
+    
 }
 
 // MARK: - AVCaptureSession 구현
