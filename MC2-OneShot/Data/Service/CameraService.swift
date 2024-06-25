@@ -148,6 +148,7 @@ extension CameraService {
                 UIDevice.current.orientation
             }
             .eraseToAnyPublisher()
+    }
       
     /// 일반 줌 배열로 전환합니다.
     func generalAngle() {
