@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import AVFoundation
 
 // MARK: - CameraService
@@ -29,6 +30,10 @@ final class CameraService: NSObject, CameraServiceInterface {
     
     /// 사진 데이터 준비 후 실행되는 Completion Handler
     private var photoDataPrepare: ((CapturePhoto?) -> Void)?
+    
+    deinit {
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+    }
 }
 
 // MARK: - Protocol Implementation
@@ -114,6 +119,35 @@ extension CameraService {
         } catch {
             print("플래시를 제어할 수 없습니다: \(error)")
         }
+    }
+    
+    /// 디바이스 회전 각도를 반환합니다.
+    func rotationAngle(orientation: UIDeviceOrientation) -> Angle {
+        switch orientation {
+        case .landscapeLeft:
+            return .degrees(90)
+        case .landscapeRight:
+            return .degrees(-90)
+        case .portraitUpsideDown:
+            return .degrees(180)
+        default:
+            return .degrees(0)
+        }
+    }
+    
+    /// 방향이 변경될 때마다 호출되는 Publisher를 반환합니다.
+    func orientationChange() -> AnyPublisher<UIDeviceOrientation, Never> {
+        let notificationCenter = NotificationCenter.default
+        
+        // 디바이스 방향 변경 알림을 활성
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        
+        return notificationCenter
+            .publisher(for: UIDevice.orientationDidChangeNotification)
+            .compactMap { _ in
+                UIDevice.current.orientation
+            }
+            .eraseToAnyPublisher()
     }
 }
 

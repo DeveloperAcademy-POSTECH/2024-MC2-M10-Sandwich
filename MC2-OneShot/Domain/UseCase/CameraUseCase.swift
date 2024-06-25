@@ -14,31 +14,34 @@ import Combine
 final class CameraUseCase {
     
     private var cameraService: CameraServiceInterface
-    private var cancellable: AnyCancellable?
     
     private(set) var state: State
-    private(set) var orientation: UIDeviceOrientation = .unknown
+    
+    private var cancellable = [AnyCancellable]()
     
     init(cameraService: CameraServiceInterface) {
         self.cameraService = cameraService
         self.state = State()
-        
-        // NotificationCenter를 통해 디바이스의 방향 변경 알림을 구독
-        let notificationCenter = NotificationCenter.default
-        cancellable = notificationCenter.publisher(for: UIDevice.orientationDidChangeNotification)
-            .compactMap { _ in
-                UIDevice.current.orientation
-            }
-            .assign(to: \.orientation, on: self)
-        
-        // 디바이스 방향 변경 알림을 활성
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        self.sink()
     }
+}
+
+// MARK: - Combine
+
+extension CameraUseCase {
     
-    deinit {
-        // 디바이스 방향 변경 알림을 비활성
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
-        cancellable?.cancel()
+    /// Publisher를 연결합니다.
+    private func sink() {
+        cameraService.orientationChange()
+            .assign(to: \.state.orientation, on: self)
+            .store(in: &cancellable)
+        
+        cameraService.orientationChange()
+            .sink {
+                self.state.rotation =
+                self.cameraService.rotationAngle(orientation: $0)
+            }
+            .store(in: &cancellable)
     }
 }
 
@@ -53,6 +56,8 @@ extension CameraUseCase {
         var isSelfieMode: Bool = false
         var isPhotoDataPrepare: Bool = false
         var photoData: CapturePhoto?
+        var rotation: Angle = .degrees(0)
+        var orientation: UIDeviceOrientation = .portrait
     }
 }
 
@@ -82,7 +87,8 @@ extension CameraUseCase {
         if state.isFlashMode && !state.isSelfieMode {
             cameraService.toggleFlashMode()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                [weak self] in
                 self?.cameraService.toggleFlashMode()
             }
         }
@@ -96,7 +102,8 @@ extension CameraUseCase {
     
     /// 방금 촬영한 사진을 반환합니다.
     func fetchPhotoForSave() -> CapturePhoto? {
-        guard let photoData = cameraService.fetchPhotoDataForSave() else {
+        guard let photoData = cameraService.fetchPhotoDataForSave()
+        else {
             print("사진 데이터 누락 저장 실패")
             return nil
         }
