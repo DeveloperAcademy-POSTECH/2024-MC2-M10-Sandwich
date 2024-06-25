@@ -121,4 +121,14 @@ extension CameraUseCase {
         cameraService.toggleFrontBack()
         state.isSelfieMode.toggle()
     }
+    
+    /// 일반 줌 배열 모드로 전환합니다.
+    func generalAngle() {
+        cameraService.generalAngle()
+    }
+    
+    /// 광각 모드를 전환합니다.
+    func wideAngle() {
+        cameraService.wideAngle()
+    }
 }

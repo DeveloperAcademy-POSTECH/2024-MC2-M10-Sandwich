@@ -18,4 +18,6 @@ protocol CameraServiceInterface {
     func toggleFlashMode()
     func rotationAngle(orientation: UIDeviceOrientation) -> Angle
     func orientationChange() -> AnyPublisher<UIDeviceOrientation, Never>
+    func generalAngle()
+    func wideAngle()
 }

@@ -148,6 +148,57 @@ extension CameraService {
                 UIDevice.current.orientation
             }
             .eraseToAnyPublisher()
+      
+    /// 일반 줌 배열로 전환합니다.
+    func generalAngle() {
+        guard let  generalAngleDevice = AVCaptureDevice.default(
+            .builtInWideAngleCamera, for: .video, position: .unspecified
+        ) else {
+            print("videoDevice 객체 생성 실패")
+            return
+        }
+        
+        sessionQueue.async { [weak self] in
+            do {
+                guard let self = self else { return }
+                
+                let newVideoDeviceInput = try AVCaptureDeviceInput(device: generalAngleDevice)
+                
+                session.beginConfiguration()
+                session.removeInput(input)
+                addInputToSession(input: newVideoDeviceInput)
+                input = newVideoDeviceInput
+                session.commitConfiguration()
+            } catch {
+                print("Error changing camera: \(error)")
+            }
+        }
+    }
+    
+    /// 광각 모드로 전환합니다.
+    func wideAngle() {
+        guard let  WideAngleDevice = AVCaptureDevice.default(
+            .builtInUltraWideCamera, for: .video, position: .unspecified
+        ) else {
+            print("videoDevice 객체 생성 실패")
+            return
+        }
+        
+        sessionQueue.async { [weak self] in
+            do {
+                guard let self = self else { return }
+                
+                let newVideoDeviceInput = try AVCaptureDeviceInput(device: WideAngleDevice)
+                
+                session.beginConfiguration()
+                session.removeInput(input)
+                addInputToSession(input: newVideoDeviceInput)
+                input = newVideoDeviceInput
+                session.commitConfiguration()
+            } catch {
+                print("Error changing camera: \(error)")
+            }
+        }
     }
 }
 

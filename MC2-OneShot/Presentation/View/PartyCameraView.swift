@@ -115,6 +115,12 @@ private struct CameraMiddleView: View {
                 }
             }
             ListButton()
+            if !cameraUseCase.state.isSelfieMode{
+                HStack{
+                    WideAngleButton()
+                    GeneralAngleButton()
+                }
+            }
         }
     }
     
@@ -157,6 +163,40 @@ private struct CameraMiddleView: View {
             .foregroundColor(.shotFF)
         }
         .disabled(!cameraUseCase.state.isCaptureMode)
+    }
+    
+    /// 광각 버튼
+    @ViewBuilder
+    private func WideAngleButton() -> some View {
+        Button {
+            cameraUseCase.wideAngle()
+        } label: {
+            ZStack{
+                Circle()
+                    .frame(width: 26, height: 26)
+                    .foregroundColor(.shotFF)
+                
+                Text(".5")
+                    .foregroundColor(.black)
+            }
+        }
+    }
+    
+    /// 일반 각 버튼
+    @ViewBuilder
+    private func GeneralAngleButton() -> some View {
+        Button {
+            cameraUseCase.generalAngle()
+        } label: {
+            ZStack{
+                Circle()
+                    .frame(width: 26, height: 26)
+                    .foregroundColor(.shotFF)
+                
+                Text("1")
+                    .foregroundColor(.black)
+            }
+        }
     }
 }
 
