@@ -134,9 +134,9 @@ private struct CameraMiddleView: View {
             .cornerRadius(15)
             .padding(.top, 36)
             .gesture(
-                MagnificationGesture()
-                    .onChanged { val in
-                        cameraUseCase.zoom(factor: val)
+                MagnifyGesture()
+                    .onChanged { value in
+                        cameraUseCase.zoom(factor: value.magnification)
                     }
                     .onEnded { _ in
                         cameraUseCase.zoomInitialize()
