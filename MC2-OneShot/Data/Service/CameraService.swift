@@ -169,9 +169,16 @@ extension CameraService {
     }
     
     /// 줌 배율을 조절합니다.
-    func zoom(factor: CGFloat) {
-        let zoomFactor = factor < 1 ? 1 : factor
+    func zoom(currentZoomFactor: CGFloat, delta: CGFloat) -> CGFloat {
         let device = input.device
+        
+        // 하드웨어 최대 줌 배율
+        // let maxZoomFactor = device.activeFormat.videoMaxZoomFactor
+        
+        let maxZoomFactor : CGFloat = 5
+        
+        let newScale = min(max(currentZoomFactor * delta, 1), maxZoomFactor)
+        let zoomFactor = newScale < 1 ? 1 : newScale
         
         do {
             try device.lockForConfiguration()
@@ -181,6 +188,8 @@ extension CameraService {
         catch {
             print(error.localizedDescription)
         }
+        
+        return newScale
     }
     
     /// 줌 배율을 초기화합니다.

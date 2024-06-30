@@ -111,10 +111,11 @@ extension CameraUseCase {
     func zoom(factor: CGFloat) {
         let delta = factor / state.lastScale
         state.lastScale = factor
-        
-        let newScale = min(max(state.currentZoomFactor * delta, 1), 5)
-        cameraService.zoom(factor: newScale)
-        state.currentZoomFactor = newScale
+    
+        state.currentZoomFactor = cameraService.zoom(
+            currentZoomFactor: state.currentZoomFactor,
+            delta: delta
+        )
     }
     
     /// 줌 배율을 초기화합니다.
