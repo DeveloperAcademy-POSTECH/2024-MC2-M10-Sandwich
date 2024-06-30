@@ -192,12 +192,6 @@ extension CameraService {
         return newScale
     }
     
-    /// 줌 배율을 초기화합니다.
-    func zoomInitialize() {
-        
-    }
-    
-    
 }
 
 // MARK: - AVCaptureSession 구현

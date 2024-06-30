@@ -18,5 +18,4 @@ protocol CameraServiceInterface {
     func generalAngle()
     func wideAngle()
     func zoom(currentZoomFactor: CGFloat, delta: CGFloat) -> CGFloat
-    func zoomInitialize()
 }

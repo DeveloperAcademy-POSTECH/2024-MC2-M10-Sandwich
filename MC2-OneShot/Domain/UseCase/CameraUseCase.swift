@@ -33,8 +33,8 @@ extension CameraUseCase {
         var isSelfieMode: Bool = false
         var isPhotoDataPrepare: Bool = false
         var photoData: CapturePhoto?
-        var currentZoomFactor: CGFloat = 1.0 //😀
-        var lastScale: CGFloat = 1.0 //😀
+        var currentZoomFactor: CGFloat = 1.0
+        var lastScale: CGFloat = 1.0
     }
 }
 
