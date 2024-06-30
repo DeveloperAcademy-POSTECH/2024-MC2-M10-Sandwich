@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 // MARK: - Camera Init
 
@@ -16,9 +17,31 @@ final class CameraUseCase {
     
     private(set) var state: State
     
+    private var cancellable = [AnyCancellable]()
+    
     init(cameraService: CameraServiceInterface) {
         self.cameraService = cameraService
         self.state = State()
+        self.sink()
+    }
+}
+
+// MARK: - Combine
+
+extension CameraUseCase {
+    
+    /// Publisher를 연결합니다.
+    private func sink() {
+        cameraService.orientationChange()
+            .assign(to: \.state.orientation, on: self)
+            .store(in: &cancellable)
+        
+        cameraService.orientationChange()
+            .sink {
+                self.state.rotation =
+                self.cameraService.rotationAngle(orientation: $0)
+            }
+            .store(in: &cancellable)
     }
 }
 
@@ -35,6 +58,8 @@ extension CameraUseCase {
         var photoData: CapturePhoto?
         var currentZoomFactor: CGFloat = 1.0
         var lastScale: CGFloat = 1.0
+        var rotation: Angle = .degrees(0)
+        var orientation: UIDeviceOrientation = .portrait
     }
 }
 
@@ -64,7 +89,8 @@ extension CameraUseCase {
         if state.isFlashMode && !state.isSelfieMode {
             cameraService.toggleFlashMode()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                [weak self] in
                 self?.cameraService.toggleFlashMode()
             }
         }
@@ -78,7 +104,8 @@ extension CameraUseCase {
     
     /// 방금 촬영한 사진을 반환합니다.
     func fetchPhotoForSave() -> CapturePhoto? {
-        guard let photoData = cameraService.fetchPhotoDataForSave() else {
+        guard let photoData = cameraService.fetchPhotoDataForSave()
+        else {
             print("사진 데이터 누락 저장 실패")
             return nil
         }

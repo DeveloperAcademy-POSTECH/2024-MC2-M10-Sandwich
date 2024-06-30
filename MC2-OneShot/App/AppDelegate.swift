@@ -10,6 +10,14 @@ import SwiftUI
 // MARK: - AppDelegate
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    var window: UIWindow?
+
+    // (회전 적용했을 경우에도)앱이 항상 세로 모드로 고정
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self

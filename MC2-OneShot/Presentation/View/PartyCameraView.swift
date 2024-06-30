@@ -247,6 +247,8 @@ private struct CameraBottomView: View {
                 .frame(width: 32, height: 32)
                 .foregroundColor(.shotFF)
         }
+        .rotationEffect(cameraUseCase.state.rotation)
+        .animation(.easeInOut, value: cameraUseCase.state.orientation)
     }
     
     /// 전면/후면 카메라 전환 버튼
@@ -261,6 +263,8 @@ private struct CameraBottomView: View {
                 .frame(width: 32, height: 32)
                 .foregroundColor(.shotFF)
         }
+        .rotationEffect(cameraUseCase.state.rotation)
+        .animation(.easeInOut, value: cameraUseCase.state.orientation)
     }
     
     /// 사진 촬영 이후 재촬영 버튼
