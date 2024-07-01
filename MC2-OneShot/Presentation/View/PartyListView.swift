@@ -74,37 +74,39 @@ private struct MemberInfoView: View {
     let party: Party
     
     var body: some View {
-        if (0...3).contains(party.memberList.count) {
-            ForEach(party.memberList.indices, id: \.self) { index in
-                if let image = UIImage(data: party.memberList[index].profileImageData) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame (width: 32, height: 32)
-                        .clipShape(Circle())
-                        .padding(.trailing, 24*CGFloat(index))
+        ZStack(alignment: .trailing) {
+            if (0...3).contains(party.memberList.count) {
+                ForEach(party.memberList.indices, id: \.self) { index in
+                    if let image = UIImage(data: party.memberList[index].profileImageData) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .frame (width: 32, height: 32)
+                            .clipShape(Circle())
+                            .padding(.trailing, 24*CGFloat(index))
+                    }
                 }
-            }
-        } else {
-            ForEach(0..<2) { index in
-                if let image = UIImage(data: party.memberList[index].profileImageData) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame (width: 32, height: 32)
-                        .clipShape(Circle())
-                        .padding(.trailing, 24*CGFloat(index))
+            } else {
+                ForEach(0..<2) { index in
+                    if let image = UIImage(data: party.memberList[index].profileImageData) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .frame (width: 32, height: 32)
+                            .clipShape(Circle())
+                            .padding(.trailing, 24*CGFloat(index))
+                    }
                 }
-            }
-            
-            ZStack {
-                Circle()
-                    .frame(width: 32)
-                    .foregroundStyle(.shot00)
                 
-                Text("+\(party.memberList.count - 2)")
-                    .pretendard(.semiBold, 17)
-                    .foregroundStyle(.shotC6)
+                ZStack {
+                    Circle()
+                        .frame(width: 32)
+                        .foregroundStyle(.shot00)
+                    
+                    Text("+\(party.memberList.count - 2)")
+                        .pretendard(.semiBold, 17)
+                        .foregroundStyle(.shotC6)
+                }
+                .padding(.trailing, 24 * 2)
             }
-            .padding(.trailing, 24 * 2)
         }
     }
 }
