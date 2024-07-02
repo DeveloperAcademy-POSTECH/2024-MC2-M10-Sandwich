@@ -20,4 +20,5 @@ protocol CameraServiceInterface {
     func orientationChange() -> AnyPublisher<UIDeviceOrientation, Never>
     func generalAngle()
     func wideAngle()
+    func zoom(currentZoomFactor: CGFloat, delta: CGFloat) -> CGFloat
 }
