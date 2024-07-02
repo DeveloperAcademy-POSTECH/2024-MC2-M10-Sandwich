@@ -133,6 +133,15 @@ private struct CameraMiddleView: View {
             .aspectRatio(1, contentMode: .fit)
             .cornerRadius(15)
             .padding(.top, 36)
+            .gesture(
+                MagnifyGesture()
+                    .onChanged { value in
+                        cameraUseCase.zoom(factor: value.magnification)
+                    }
+                    .onEnded { _ in
+                        cameraUseCase.zoomInitialize()
+                    }
+            )
     }
     
     /// 사진 미리보기 뷰
