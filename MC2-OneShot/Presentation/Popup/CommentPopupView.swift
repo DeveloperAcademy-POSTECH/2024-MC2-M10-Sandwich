@@ -86,6 +86,6 @@ struct CommentPopupView: View {
     }
     
     return Container()
-        .modelContainer(MockModelContainer.mock)
+        .modelContainer(ModelContainerCoordinator.mock)
 }
 #endif
