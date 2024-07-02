@@ -204,11 +204,11 @@ private struct MemberListView: View {
 #if DEBUG
 #Preview {
     PartySetView()
-        .modelContainer(MockModelContainer.mock)
+        .modelContainer(ModelContainerCoordinator.mock)
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
-                    modelContext: MockModelContainer.mock.mainContext
+                    modelContext: ModelContainerCoordinator.mock.mainContext
                 ),
                 notificationService: NotificationService()
             )

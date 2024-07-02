@@ -68,7 +68,7 @@ struct TableListView: View {
 
 #if DEBUG
 #Preview {
-    let modelContainer = MockModelContainer.mock
+    let modelContainer = ModelContainerCoordinator.mock
     return TableListView()
         .environment(HomePathModel())
         .modelContainer(modelContainer)

@@ -23,11 +23,6 @@ struct SearchView: View {
                     .opacity(0.1)
             } else {
                 ListView(searchText: $searchText)
-                    .searchable(
-                        text: $searchText,
-                        placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "기억하고 싶은 술자리를 검색해 보세요"
-                    )
             }
         }
         .navigationTitle("검색하기")
@@ -43,6 +38,11 @@ struct SearchView: View {
                 }
             }
         }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "기억하고 싶은 술자리를 검색해 보세요"
+        )
     }
 }
 

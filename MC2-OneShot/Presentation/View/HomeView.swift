@@ -104,7 +104,7 @@ private struct PartyButton: View {
 
 #if DEBUG
 #Preview {
-    let modelContext = MockModelContainer.mock.mainContext
+    let modelContext = ModelContainerCoordinator.mock.mainContext
     
     return HomeView(
         partyUseCase: PartyUseCase(
@@ -113,6 +113,6 @@ private struct PartyButton: View {
         )
     )
     .environment(HomePathModel())
-    .modelContainer(MockModelContainer.mock)
+    .modelContainer(ModelContainerCoordinator.mock)
 }
 #endif

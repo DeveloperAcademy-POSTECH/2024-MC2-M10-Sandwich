@@ -173,7 +173,7 @@ private struct MemberResultView: View {
                     }
                     
                     LazyVGrid(columns: columns, spacing: 18) {
-                        ForEach(currentParty.memberList) { member in
+                        ForEach(currentParty.sortedMemberList) { member in
                             if let image = UIImage(data: member.profileImageData) {
                                 Image(uiImage: image)
                                     .resizable()
@@ -263,11 +263,11 @@ private struct ShutdownInfoButtonView: View {
 #Preview {
     PartyResultView(rootView: .camera)
         .environment(HomePathModel())
-        .modelContainer(MockModelContainer.mock)
+        .modelContainer(ModelContainerCoordinator.mock)
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
-                    modelContext: MockModelContainer.mock.mainContext
+                    modelContext: ModelContainerCoordinator.mock.mainContext
                 ),
                 notificationService: NotificationService()
             )

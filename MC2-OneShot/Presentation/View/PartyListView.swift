@@ -11,9 +11,12 @@ import SwiftUI
 
 struct PartyListView: View {
     
+    @Environment(PartyUseCase.self) private var partyUseCase
+    
     let party: Party
     
     var body: some View {
+        @Bindable var state = partyUseCase.state
         VStack(spacing: 0) {
             HeaderView(party: party)
             Divider()
@@ -25,6 +28,9 @@ struct PartyListView: View {
                 if party.isLive { FinishPartyButton(party: party) }
                 else { CommentButton(party: party) }
             }
+        }
+        .fullScreenCover(isPresented: $state.isResultViewPresented) {
+            PartyResultView(rootView: .list)
         }
     }
 }
@@ -50,7 +56,7 @@ private struct HeaderView: View {
             } label: {
                 MemberInfoView(party: party)
             }
-            .disabled(party.memberList.isEmpty)
+            .disabled(party.sortedMemberList.isEmpty)
         }
         .padding(.top, 3)
         .padding(.bottom, 14)
@@ -58,7 +64,7 @@ private struct HeaderView: View {
         .fullScreenCover(isPresented: $isMemberPopupPresented) {
             MemberPopupView(
                 isMemberPopupPresented: $isMemberPopupPresented,
-                memberList: party.memberList
+                memberList: party.sortedMemberList
             )
             .foregroundStyle(.shotFF)
             .presentationBackground(.black.opacity(0.7))
@@ -183,11 +189,11 @@ private struct CommentButton: View {
     }
     
     return Container()
-        .modelContainer(MockModelContainer.mock)
+        .modelContainer(ModelContainerCoordinator.mock)
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
-                    modelContext: MockModelContainer.mock.mainContext
+                    modelContext: ModelContainerCoordinator.mock.mainContext
                 ),
                 notificationService: NotificationService()
             )
