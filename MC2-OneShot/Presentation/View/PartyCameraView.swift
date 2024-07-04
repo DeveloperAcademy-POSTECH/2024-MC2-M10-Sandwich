@@ -239,7 +239,9 @@ private struct CameraBottomView: View {
     @ViewBuilder
     private func FlashButton() -> some View {
         Button {
-            cameraUseCase.toggleFlashMode()
+            if !cameraUseCase.state.isSelfieMode{
+                cameraUseCase.toggleFlashMode()
+            }
         } label: {
             Image(symbol: cameraUseCase.state.isFlashMode ? .bolt : .boltSlash)
                 .resizable()
