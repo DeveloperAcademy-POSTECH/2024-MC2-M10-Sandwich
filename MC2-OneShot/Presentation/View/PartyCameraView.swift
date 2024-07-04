@@ -22,8 +22,12 @@ struct PartyCameraView: View {
             VStack {
                 CameraHeaderView()
                 CameraMiddleView()
-                Spacer().frame(height: 48)
-                CameraBottomView(isShotDisabled: $isShotDisabled)
+                if !partyUseCase.state.isPartyShutdown {
+                    Spacer().frame(height: 48)
+                    CameraBottomView(isShotDisabled: $isShotDisabled)
+                } else {
+                    Spacer()
+                }
             }
             .cameraPathDestination()
         }
@@ -115,6 +119,10 @@ private struct CameraMiddleView: View {
                 CameraPreview()
                 if cameraUseCase.state.isPhotoDataPrepare {
                     PhotoPreview()
+                }
+                if partyUseCase.state.isPartyShutdown {
+                    Text("미션 시간이 지나 술자리가 종료되었어요!")
+                        .pretendard(.semiBold, 16)
                 }
             }
             ListButton()

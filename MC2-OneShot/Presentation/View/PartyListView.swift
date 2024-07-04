@@ -24,8 +24,7 @@ struct PartyListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                if party.isLive { FinishPartyButton(party: party) }
-                else { CommentButton(party: party) }
+                CommentButton(party: party)
             }
         }
     }

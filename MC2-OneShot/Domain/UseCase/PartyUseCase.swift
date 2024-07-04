@@ -89,6 +89,8 @@ extension PartyUseCase {
                 whenLastStepNotComplete(lastParty: lastParty) :
                 whenLastStepComplete(lastParty: lastParty)
             }
+            
+            state.isCameraViewPresented = true
         }
     }
     
@@ -140,6 +142,9 @@ extension PartyUseCase {
         
         // 상태 값 업데이트
         state.isResultViewPresented = true
+        
+        // Notification 예약 취소
+        cancelAllSchedule()
     }
     
     /// 선택한 파티를 삭제합니다.
@@ -258,8 +263,6 @@ extension PartyUseCase {
                 [weak self] in
                 self?.shutdownParty()
             }
-            
-            state.isCameraViewPresented = true
         }
         
         // 현재Step마지막 - 현재시간 > 0 : 초과일 때
@@ -287,8 +290,6 @@ extension PartyUseCase {
                 [weak self] in
                 self?.shutdownParty()
             }
-            
-            state.isCameraViewPresented = true
             
             // 이전 스텝 사진 찍고, 다시 들어와보니 이미 다음 스텝 진행중
             if restTime <= TimeInterval(stepTime) {
