@@ -16,7 +16,6 @@ struct PartyListView: View {
     let party: Party
     
     var body: some View {
-        @Bindable var state = partyUseCase.state
         VStack(spacing: 0) {
             HeaderView(party: party)
             Divider()

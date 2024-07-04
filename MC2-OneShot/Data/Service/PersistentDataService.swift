@@ -29,6 +29,11 @@ extension PersistentDataService {
         return fetchPartys().last?.isLive ?? false
     }
     
+    /// 현재 파티가 강제 종료되었는지 확인합니다.
+    func isPartyShutdown() -> Bool {
+        return fetchPartys().last?.isShutdown ?? false
+    }
+    
     /// 현재 진행 중인 STEP을 반환합니다.
     func currentStep() -> Step? {
         if let curreuntParty = fetchPartys().last,

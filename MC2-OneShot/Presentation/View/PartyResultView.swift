@@ -43,6 +43,7 @@ struct PartyResultView: View {
         }
         .scrollDisabled(true)
         .navigationBarBackButtonHidden(true)
+        .onDisappear { partyUseCase.resetPartySetting() }
     }
 }
 
@@ -233,9 +234,6 @@ private struct ShutdownInfoButtonView: View {
                 .presentationBackground(.black.opacity(0.7))
         }
         .transaction { $0.disablesAnimations = true }
-        .onAppear {
-            isShutdownMessagePresented.toggle()
-        }
     }
 }
 

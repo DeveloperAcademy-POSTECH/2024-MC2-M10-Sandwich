@@ -51,7 +51,6 @@ struct PartySetView: View {
             }
             .padding(16)
         }
-        .onDisappear { partyUseCase.resetPartySetting() }
     }
 }
 

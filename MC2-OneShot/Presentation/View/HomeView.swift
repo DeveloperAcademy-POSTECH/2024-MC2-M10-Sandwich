@@ -16,7 +16,6 @@ struct HomeView: View {
     @State private var isPartySetViewPresented = false
     
     var body: some View {
-        @Bindable var state = partyUseCase.state
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
                 HeaderView()
@@ -26,7 +25,13 @@ struct HomeView: View {
             .homePathDestination()
             .sheet(isPresented: $isPartySetViewPresented) { PartySetView() }
         }
-        .fullScreenCover(isPresented: $state.isCameraViewPresented) { PartyCameraView() }
+        .fullScreenCover(
+            isPresented: .init(
+                get: { partyUseCase.state.isCameraViewPresented },
+                set: { _ in })
+        ) {
+            PartyCameraView()
+        }
         .environment(partyUseCase)
         .environment(homePathModel)
         .onAppear{ partyUseCase.initialSetup() }

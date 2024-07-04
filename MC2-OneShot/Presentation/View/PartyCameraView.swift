@@ -18,7 +18,6 @@ struct PartyCameraView: View {
     @State private var isShotDisabled = false
     
     var body: some View {
-        @Bindable var state = partyUseCase.state
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
                 CameraHeaderView()
@@ -28,10 +27,14 @@ struct PartyCameraView: View {
             }
             .cameraPathDestination()
         }
-        .disabled(isShotDisabled)
-        .fullScreenCover(isPresented: $state.isResultViewPresented) {
+        .fullScreenCover(
+            isPresented: .init(
+                get: { partyUseCase.state.isResultViewPresented },
+                set: { _ in })
+        ) {
             PartyResultView()
         }
+        .disabled(isShotDisabled)
         .environment(cameraUseCase)
         .environment(cameraPathModel)
         .onAppear { cameraUseCase.requestPermission() }
