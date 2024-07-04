@@ -30,7 +30,7 @@ struct PartyCameraView: View {
         }
         .disabled(isShotDisabled)
         .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView(rootView: .camera)
+            PartyResultView()
         }
         .environment(cameraUseCase)
         .environment(cameraPathModel)

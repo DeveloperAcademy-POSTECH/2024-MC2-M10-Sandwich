@@ -29,9 +29,6 @@ struct PartyListView: View {
                 else { CommentButton(party: party) }
             }
         }
-        .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView(rootView: .list)
-        }
     }
 }
 
