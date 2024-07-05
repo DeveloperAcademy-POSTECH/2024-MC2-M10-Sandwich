@@ -13,6 +13,8 @@ struct PartyResultView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     /// 현재 파티를 반환합니다.
     private var currentParty: Party {
         if let lastParty = partyUseCase.partys.last { return lastParty }
@@ -39,7 +41,10 @@ struct PartyResultView: View {
                     .padding(.top, -20)
             }
             
-            ActionButtonView(currentParty: currentParty)
+            ActionButtonView(
+                isCameraViewPresented: $isCameraViewPresented,
+                currentParty: currentParty
+            )
         }
         .scrollDisabled(true)
         .navigationBarBackButtonHidden(true)
@@ -186,6 +191,8 @@ private struct ActionButtonView: View {
     @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(HomePathModel.self) private var homePathModel
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     let currentParty: Party
     
     var body: some View {
@@ -194,15 +201,14 @@ private struct ActionButtonView: View {
                 title: "홈으로 돌아가기",
                 buttonType: .secondary
             ) {
-                partyUseCase.presentCameraView(to: false)
-                NavigationHelper.popToRootView()
+                isCameraViewPresented = false
             }
             
             ActionButton(
                 title: "술자리 다시보기",
                 buttonType: .primary
             ) {
-                partyUseCase.presentCameraView(to: false)
+                isCameraViewPresented = false
                 homePathModel.paths.append(.partyList(party: currentParty))
             }
         }
@@ -241,7 +247,7 @@ private struct ShutdownInfoButtonView: View {
 
 #if DEBUG
 #Preview {
-    PartyResultView()
+    PartyResultView(isCameraViewPresented: .constant(true))
         .environment(HomePathModel())
         .modelContainer(ModelContainerCoordinator.mock)
         .environment(

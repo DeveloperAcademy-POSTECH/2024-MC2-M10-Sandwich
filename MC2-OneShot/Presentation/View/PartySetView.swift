@@ -17,6 +17,8 @@ struct PartySetView: View {
     @State private var titleText: String = ""
     @State private var notiCycle: NotiCycle = NotiCycle.allCases.first ?? .min30
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Spacer()
@@ -48,6 +50,7 @@ struct PartySetView: View {
                         memberList: partyUseCase.members
                     )
                 )
+                isCameraViewPresented.toggle()
             }
             .padding(16)
         }
@@ -202,7 +205,7 @@ private struct MemberListView: View {
 
 #if DEBUG
 #Preview {
-    PartySetView()
+    PartySetView(isCameraViewPresented: .constant(false))
         .modelContainer(ModelContainerCoordinator.mock)
         .environment(
             PartyUseCase(

@@ -54,7 +54,6 @@ extension PartyUseCase {
         
         var isPartyLive: Bool
         var isPartyShutdown: Bool
-        var isCameraViewPresented: Bool
         var isResultViewPresented: Bool
         
         init(
@@ -67,7 +66,6 @@ extension PartyUseCase {
             self.notiCycle = notiCycle
             self.isPartyLive = isPartyLive
             self.isPartyShutdown = isShutdown
-            self.isCameraViewPresented = false
             self.isResultViewPresented = false
         }
     }
@@ -89,8 +87,6 @@ extension PartyUseCase {
                 whenLastStepNotComplete(lastParty: lastParty) :
                 whenLastStepComplete(lastParty: lastParty)
             }
-            
-            state.isCameraViewPresented = true
         }
     }
     
@@ -101,7 +97,6 @@ extension PartyUseCase {
         state.isPartyLive = true
         state.startDate = party.startDate
         state.notiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
-        state.isCameraViewPresented = true
         partys = dataService.fetchPartys()
         whenPartyStart()
     }
@@ -311,11 +306,6 @@ extension PartyUseCase {
 // MARK: - Presentaion
 
 extension PartyUseCase {
-    
-    /// CameraView를 컨트롤합니다.
-    func presentCameraView(to bool: Bool) {
-        state.isCameraViewPresented = bool
-    }
     
     /// ResultView를 컨트롤합니다.
     func presentResultView(to bool: Bool) {

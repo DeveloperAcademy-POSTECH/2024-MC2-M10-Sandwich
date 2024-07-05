@@ -17,10 +17,12 @@ struct PartyCameraView: View {
     @State private var cameraPathModel: CameraPathModel = .init()
     @State private var isShotDisabled = false
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
-                CameraHeaderView()
+                CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
                 CameraMiddleView()
                 if !partyUseCase.state.isPartyShutdown {
                     Spacer().frame(height: 48)
@@ -36,12 +38,17 @@ struct PartyCameraView: View {
                 get: { partyUseCase.state.isResultViewPresented },
                 set: { _ in })
         ) {
-            PartyResultView()
+            PartyResultView(isCameraViewPresented: $isCameraViewPresented)
         }
         .disabled(isShotDisabled)
         .environment(cameraUseCase)
         .environment(cameraPathModel)
         .onAppear { cameraUseCase.requestPermission() }
+        .onChange(of: isCameraViewPresented) { _, value in
+            if !value {
+                cameraUseCase.cancelSubscriptions()
+            }
+        }
     }
 }
 
@@ -53,6 +60,8 @@ private struct CameraHeaderView: View {
     @Environment(CameraUseCase.self) private var cameraUseCase
     
     @State private var isFinishPopupPresented = false
+    
+    @Binding private(set) var isCameraViewPresented: Bool
     
     var body: some View {
         ZStack {
@@ -80,7 +89,7 @@ private struct CameraHeaderView: View {
     @ViewBuilder
     private func DismissButton() -> some View {
         Button{
-            partyUseCase.presentCameraView(to: false)
+            isCameraViewPresented = false
         } label: {
             Image(symbol: .chevronDown)
                 .resizable()
@@ -419,7 +428,7 @@ private struct StepInfoView: View {
 
 #if DEBUG
 #Preview {
-    PartyCameraView()
+    PartyCameraView(isCameraViewPresented: .constant(true))
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(
