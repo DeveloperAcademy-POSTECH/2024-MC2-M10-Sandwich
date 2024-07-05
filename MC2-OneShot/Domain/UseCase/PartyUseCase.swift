@@ -95,6 +95,7 @@ extension PartyUseCase {
         HapticManager.shared.notification(type: .success)
         dataService.createParty(party)
         state.isPartyLive = true
+        state.isPartyShutdown = false
         state.startDate = party.startDate
         state.notiCycle = NotiCycle(rawValue: party.notiCycle) ?? .min30
         partys = dataService.fetchPartys()
