@@ -133,6 +133,7 @@ extension PartyUseCase {
         
         // 데이터 업데이트
         currentParty.isLive = false
+        state.isPartyLive = false
         if lastStep.mediaList.isEmpty { dataService.deleteStep(lastStep) }
         partys = dataService.fetchPartys()
         
