@@ -13,7 +13,7 @@ struct CommentPopupView: View {
     
     @FocusState private var focusField: Field?
     
-    @State private var content: String = ""
+    @State private var content: String
     
     @Binding var isCommentPopupPresented: Bool
     
@@ -21,6 +21,15 @@ struct CommentPopupView: View {
     
     enum Field: Hashable {
         case content
+    }
+    
+    init(
+        isCommentPopupPresented: Binding<Bool>,
+        party: Party
+    ) {
+        self._isCommentPopupPresented = isCommentPopupPresented
+        self.party = party
+        self.content = party.comment ?? ""
     }
     
     var body: some View {
@@ -38,17 +47,21 @@ struct CommentPopupView: View {
             .padding(.top, 16)
             .padding(.bottom, 16)
             
-            TextField("이곳을 클릭하여 술자리의 기억을 남겨주세요!", text: $content, axis: .vertical)
-                .frame(maxWidth: .infinity)
-                .frame(height: 240, alignment: .topLeading)
-                .padding(16)
-                .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.shot1E))
-                .foregroundStyle(.shotFF)
-                .padding(.horizontal, 16)
-                .pretendard(.regular, 16)
-                .multilineTextAlignment(.leading)
-                .focused($focusField, equals: .content)
-                .onTapGesture { focusField = .content }
+            TextField(
+                "이곳을 클릭하여 술자리의 기억을 남겨주세요!",
+                text: $content,
+                axis: .vertical
+            )
+            .frame(maxWidth: .infinity)
+            .frame(height: 240, alignment: .topLeading)
+            .padding(16)
+            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.shot1E))
+            .foregroundStyle(.shotFF)
+            .padding(.horizontal, 16)
+            .pretendard(.regular, 16)
+            .multilineTextAlignment(.leading)
+            .focused($focusField, equals: .content)
+            .onTapGesture { focusField = .content }
             
             ActionButton(
                 title: "닫기",
