@@ -65,15 +65,15 @@ private struct CameraHeaderView: View {
     
     var body: some View {
         ZStack {
-            if cameraUseCase.state.isCaptureMode {
-                HStack {
+            HStack {
+                if cameraUseCase.state.isCaptureMode {
                     DismissButton()
-                    Spacer()
-                    FinishPartyButton()
                 }
-                .padding(.horizontal)
-                .padding(.top,12)
+                Spacer()
+                FinishPartyButton()
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
             
             StepInfoView()
         }
@@ -96,7 +96,7 @@ private struct CameraHeaderView: View {
                 .scaledToFit()
                 .frame(width: 24, height: 24)
                 .foregroundColor(.shotFF)
-                .padding(.leading,16)
+                .padding(.leading, 16)
         }
     }
     
@@ -126,33 +126,37 @@ private struct CameraMiddleView: View {
         VStack {
             ZStack {
                 CameraPreview()
-                if cameraUseCase.state.isPhotoDataPrepare {
-                    PhotoPreview()
-                }
+                
                 if partyUseCase.state.isPartyShutdown {
                     Text("미션 시간이 지나 술자리가 종료되었어요!")
                         .pretendard(.semiBold, 16)
                 }
             }
             ListButton()
-            if !cameraUseCase.state.isSelfieMode{
-                HStack{
+            if !cameraUseCase.state.isSelfieMode {
+                HStack {
                     WideAngleButton()
                     GeneralAngleButton()
                 }
             }
         }
+        .zIndex(-1)
     }
     
     /// 카메라 미리보기 뷰
     @ViewBuilder
     private func CameraPreview() -> some View {
         cameraUseCase.preview
-            .ignoresSafeArea()
+            .overlay(alignment: .center) {
+                if cameraUseCase.state.isPhotoDataPrepare {
+                    PhotoPreview()
+                }
+            }
             .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
             .aspectRatio(1, contentMode: .fit)
             .cornerRadius(15)
             .padding(.top, 36)
+            .clipped()
             .gesture(
                 MagnifyGesture()
                     .onChanged { value in
@@ -170,10 +174,6 @@ private struct CameraMiddleView: View {
         Image(uiImage: cameraUseCase.state.photoData?.image ?? UIImage(resource: .appLogo))
             .resizable()
             .scaledToFill()
-            .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
-            .aspectRatio(1, contentMode: .fit)
-            .cornerRadius(15)
-            .padding(.top, 36)
     }
     
     /// 리스트 바로가기 버튼
