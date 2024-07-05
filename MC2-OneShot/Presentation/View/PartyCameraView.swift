@@ -24,12 +24,8 @@ struct PartyCameraView: View {
             VStack {
                 CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
                 CameraMiddleView()
-                if !partyUseCase.state.isPartyShutdown {
-                    Spacer().frame(height: 48)
-                    CameraBottomView(isShotDisabled: $isShotDisabled)
-                } else {
-                    Spacer()
-                }
+                Spacer()
+                CameraBottomView(isShotDisabled: $isShotDisabled)
             }
             .cameraPathDestination()
         }
@@ -77,6 +73,7 @@ private struct CameraHeaderView: View {
             
             StepInfoView()
         }
+        .padding(.top, 24)
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
             FinishPopupView(memberList: partyUseCase.partys.last?.memberList ?? [])
                 .foregroundStyle(.shotFF)
@@ -133,7 +130,9 @@ private struct CameraMiddleView: View {
                 }
             }
             ListButton()
-            if !cameraUseCase.state.isSelfieMode {
+            if !cameraUseCase.state.isSelfieMode
+                && cameraUseCase.state.isCaptureMode
+                && !partyUseCase.state.isPartyShutdown {
                 HStack {
                     WideAngleButton()
                     GeneralAngleButton()
@@ -240,19 +239,22 @@ private struct CameraBottomView: View {
     
     var body: some View {
         ZStack {
-            HStack {
-                if cameraUseCase.state.isCaptureMode {
-                    FlashButton()
-                    Spacer()
-                    FrontBackButton()
-                } else {
-                    RetakeButton()
+            if !partyUseCase.state.isPartyShutdown {
+                HStack {
+                    if cameraUseCase.state.isCaptureMode {
+                        FlashButton()
+                        Spacer()
+                        FrontBackButton()
+                    } else {
+                        RetakeButton()
+                    }
                 }
+                .padding(.horizontal, 36)
+                
+                CaptureButtonView(isShotDisabled: $isShotDisabled)
             }
-            .padding(.horizontal, 36)
-            
-            CaptureButtonView(isShotDisabled: $isShotDisabled)
         }
+        .padding(.bottom, 16)
     }
     
     /// 플래시 버튼
