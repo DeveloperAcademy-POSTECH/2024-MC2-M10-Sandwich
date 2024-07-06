@@ -64,32 +64,40 @@ struct FinishPopupView: View {
                         }
                     }
                     
-                    Text("술자리를 정말로 끝낼까요?")
-                        .pretendard(.semiBold, 17)
-                        .foregroundStyle(.shotFF)
-                        .padding(.top, 20)
+                    Text(
+                        partyUseCase.state.isPartyShutdown
+                        ? "술자리 파티를 정리할까요?"
+                        : "술자리를 정말로 끝낼까요?"
+                    )
+                    .pretendard(.semiBold, 17)
+                    .foregroundStyle(.shotFF)
+                    .padding(.top, 20)
                     
-                    Text("진짜루? 진쨔류? 진짤루?!")
-                        .pretendard(.semiBold, 14)
-                        .foregroundStyle(.shot7B)
-                        .padding(.top, 6)
+                    Text(
+                        partyUseCase.state.isPartyShutdown
+                        ? "취했으면 어쩔수 없는거죠!"
+                        : "진짜루? 진쨔류? 진짤루?!"
+                    )
+                    .pretendard(.semiBold, 14)
+                    .foregroundStyle(.shot7B)
+                    .padding(.top, 6)
                     
                     HStack(spacing: 8) {
                         ActionButton(
-                            title: "더 마시기",
+                            title: partyUseCase.state.isPartyShutdown ? "취소" : "더 마시기",
                             buttonType: .secondary
                         ) {
                             dismiss()
                         }
                         
                         ActionButton(
-                            title: "끝내기",
+                            title: partyUseCase.state.isPartyShutdown ? "정리하기" : "끝내기",
                             buttonType: .primary
                         ) {
                             UIView.setAnimationsEnabled(false)
                             dismiss()
                             HapticManager.shared.notification(type: .success)
-                            partyUseCase.finishParty(isShutdown: false)
+                            partyUseCase.finishParty()
                         }
                     }
                     .padding(.horizontal, 33)
@@ -108,11 +116,11 @@ struct FinishPopupView: View {
 #if DEBUG
 #Preview {
     FinishPopupView(memberList: [])
-    .environment(
-        PartyUseCase(
-            dataService: PersistentDataService(modelContext: ModelContainerCoordinator.mock.mainContext),
-            notificationService: NotificationService()
+        .environment(
+            PartyUseCase(
+                dataService: PersistentDataService(modelContext: ModelContainerCoordinator.mock.mainContext),
+                notificationService: NotificationService()
+            )
         )
-    )
 }
 #endif

@@ -17,7 +17,7 @@ final class CameraUseCase {
     
     private(set) var state: State
     
-    private var cancellable = [AnyCancellable]()
+    private var cancellable = Set<AnyCancellable>()
     
     init(cameraService: CameraServiceInterface) {
         self.cameraService = cameraService
@@ -42,6 +42,11 @@ extension CameraUseCase {
                 self.cameraService.rotationAngle(orientation: $0)
             }
             .store(in: &cancellable)
+    }
+    
+    /// 구독중인 옵저버를 모두 취소합니다.
+    func cancelSubscriptions() {
+        cancellable.forEach { $0.cancel() }
     }
 }
 
@@ -149,5 +154,4 @@ extension CameraUseCase {
     func zoomInitialize() {
         state.lastScale = 1.0
     }
-    
 }
