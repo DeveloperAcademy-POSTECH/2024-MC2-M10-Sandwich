@@ -152,8 +152,16 @@ private struct CameraMiddleView: View {
             }
             .overlay(alignment: .center) {
                 if partyUseCase.state.isPartyShutdown {
-                    Text("미션 시간이 지나 술자리가 종료되었어요!")
-                        .pretendard(.semiBold, 16)
+                    ZStack {
+                        Rectangle()
+                            .background(.ultraThinMaterial)
+                        
+                        Text("😵‍💫 미션 시간이 지나\n술자리가 종료되었어요!")
+                            .pretendard(.bold, 20)
+                            .foregroundStyle(.shotFF)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(6)
+                    }
                 }
             }
             .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
