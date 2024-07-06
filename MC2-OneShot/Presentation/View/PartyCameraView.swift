@@ -17,24 +17,35 @@ struct PartyCameraView: View {
     @State private var cameraPathModel: CameraPathModel = .init()
     @State private var isShotDisabled = false
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     var body: some View {
-        @Bindable var state = partyUseCase.state
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
-                CameraHeaderView()
+                CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
+                Spacer().frame(height: 16)
                 CameraMiddleView()
-                Spacer().frame(height: 48)
+                Spacer()
                 CameraBottomView(isShotDisabled: $isShotDisabled)
             }
             .cameraPathDestination()
         }
-        .disabled(isShotDisabled)
-        .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView(rootView: .camera)
+        .fullScreenCover(
+            isPresented: .init(
+                get: { partyUseCase.state.isResultViewPresented },
+                set: { _ in })
+        ) {
+            PartyResultView(isCameraViewPresented: $isCameraViewPresented)
         }
+        .disabled(isShotDisabled)
         .environment(cameraUseCase)
         .environment(cameraPathModel)
         .onAppear { cameraUseCase.requestPermission() }
+        .onChange(of: isCameraViewPresented) { _, value in
+            if !value {
+                cameraUseCase.cancelSubscriptions()
+            }
+        }
     }
 }
 
@@ -47,20 +58,23 @@ private struct CameraHeaderView: View {
     
     @State private var isFinishPopupPresented = false
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     var body: some View {
         ZStack {
-            if cameraUseCase.state.isCaptureMode {
-                HStack {
+            HStack {
+                if cameraUseCase.state.isCaptureMode {
                     DismissButton()
-                    Spacer()
-                    FinishPartyButton()
                 }
-                .padding(.horizontal)
-                .padding(.top,12)
+                Spacer()
+                FinishPartyButton()
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
             
             StepInfoView()
         }
+        .padding(.top, 12)
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
             FinishPopupView(memberList: partyUseCase.partys.last?.memberList ?? [])
                 .foregroundStyle(.shotFF)
@@ -73,14 +87,14 @@ private struct CameraHeaderView: View {
     @ViewBuilder
     private func DismissButton() -> some View {
         Button{
-            partyUseCase.presentCameraView(to: false)
+            isCameraViewPresented = false
         } label: {
             Image(symbol: .chevronDown)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 24, height: 24)
                 .foregroundColor(.shotFF)
-                .padding(.leading,16)
+                .padding(.leading, 16)
         }
     }
     
@@ -108,31 +122,53 @@ private struct CameraMiddleView: View {
     
     var body: some View {
         VStack {
-            ZStack {
+            ZStack(alignment: .bottom) {
                 CameraPreview()
-                if cameraUseCase.state.isPhotoDataPrepare {
-                    PhotoPreview()
+                
+                if !cameraUseCase.state.isSelfieMode
+                    && cameraUseCase.state.isCaptureMode
+                    && !partyUseCase.state.isPartyShutdown {
+                    HStack(spacing: 6) {
+                        WideAngleButton()
+                        GeneralAngleButton()
+                    }
+                    .padding(.bottom, 12)
                 }
             }
+            
             ListButton()
-            if !cameraUseCase.state.isSelfieMode{
-                HStack{
-                    WideAngleButton()
-                    GeneralAngleButton()
-                }
-            }
         }
+        .zIndex(-1)
     }
     
     /// 카메라 미리보기 뷰
     @ViewBuilder
     private func CameraPreview() -> some View {
         cameraUseCase.preview
-            .ignoresSafeArea()
+            .overlay(alignment: .center) {
+                if cameraUseCase.state.isPhotoDataPrepare {
+                    PhotoPreview()
+                }
+            }
+            .overlay(alignment: .center) {
+                if partyUseCase.state.isPartyShutdown {
+                    ZStack {
+                        Rectangle()
+                            .background(.ultraThinMaterial)
+                        
+                        Text("😵‍💫 미션 시간이 지나\n술자리가 종료되었어요!")
+                            .pretendard(.bold, 20)
+                            .foregroundStyle(.shotFF)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(6)
+                    }
+                }
+            }
             .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
             .aspectRatio(1, contentMode: .fit)
             .cornerRadius(15)
             .padding(.top, 36)
+            .clipped()
             .gesture(
                 MagnifyGesture()
                     .onChanged { value in
@@ -150,10 +186,6 @@ private struct CameraMiddleView: View {
         Image(uiImage: cameraUseCase.state.photoData?.image ?? UIImage(resource: .appLogo))
             .resizable()
             .scaledToFill()
-            .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
-            .aspectRatio(1, contentMode: .fit)
-            .cornerRadius(15)
-            .padding(.top, 36)
     }
     
     /// 리스트 바로가기 버튼
@@ -182,11 +214,13 @@ private struct CameraMiddleView: View {
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 26, height: 26)
-                    .foregroundColor(.shotFF)
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(.shot00)
+                    .opacity(0.3)
                 
                 Text(".5")
-                    .foregroundColor(.black)
+                    .pretendard(.medium, 13)
+                    .foregroundColor(.shotFF)
             }
         }
     }
@@ -199,11 +233,13 @@ private struct CameraMiddleView: View {
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 26, height: 26)
-                    .foregroundColor(.shotFF)
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(.shot00)
+                    .opacity(0.3)
                 
-                Text("1")
-                    .foregroundColor(.black)
+                Text("1x")
+                    .pretendard(.medium, 13)
+                    .foregroundColor(.shotFF)
             }
         }
     }
@@ -220,19 +256,22 @@ private struct CameraBottomView: View {
     
     var body: some View {
         ZStack {
-            HStack {
-                if cameraUseCase.state.isCaptureMode {
-                    FlashButton()
-                    Spacer()
-                    FrontBackButton()
-                } else {
-                    RetakeButton()
+            if !partyUseCase.state.isPartyShutdown {
+                HStack {
+                    if cameraUseCase.state.isCaptureMode {
+                        FlashButton()
+                        Spacer()
+                        FrontBackButton()
+                    } else {
+                        RetakeButton()
+                    }
                 }
+                .padding(.horizontal, 36)
+                
+                CaptureButtonView(isShotDisabled: $isShotDisabled)
             }
-            .padding(.horizontal, 36)
-            
-            CaptureButtonView(isShotDisabled: $isShotDisabled)
         }
+        .padding(.bottom, 16)
     }
     
     /// 플래시 버튼
@@ -410,7 +449,7 @@ private struct StepInfoView: View {
 
 #if DEBUG
 #Preview {
-    PartyCameraView()
+    PartyCameraView(isCameraViewPresented: .constant(true))
         .environment(
             PartyUseCase(
                 dataService: PersistentDataService(

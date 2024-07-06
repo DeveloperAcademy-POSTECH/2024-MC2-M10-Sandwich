@@ -13,14 +13,7 @@ struct PartyResultView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
     
-    /// 현재 PartyResultView가 어떤 View에서 Present 되었는지 확인하는 변수
-    let rootView: RootView
-    
-    /// 현재 PartyResultView가 어떤 View에서 Present 되었는지 확인용 열거형
-    enum RootView {
-        case list
-        case camera
-    }
+    @Binding private(set) var isCameraViewPresented: Bool
     
     /// 현재 파티를 반환합니다.
     private var currentParty: Party {
@@ -49,12 +42,13 @@ struct PartyResultView: View {
             }
             
             ActionButtonView(
-                currentParty: currentParty,
-                rootView: rootView
+                isCameraViewPresented: $isCameraViewPresented,
+                currentParty: currentParty
             )
         }
         .scrollDisabled(true)
         .navigationBarBackButtonHidden(true)
+        .onDisappear { partyUseCase.resetPartySetting() }
     }
 }
 
@@ -197,8 +191,9 @@ private struct ActionButtonView: View {
     @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(HomePathModel.self) private var homePathModel
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     let currentParty: Party
-    private(set) var rootView: PartyResultView.RootView
     
     var body: some View {
         HStack(spacing: 8) {
@@ -206,21 +201,15 @@ private struct ActionButtonView: View {
                 title: "홈으로 돌아가기",
                 buttonType: .secondary
             ) {
-                rootView == .camera ?
-                partyUseCase.presentCameraView(to: false) :
-                partyUseCase.presentResultView(to: false)
-                NavigationHelper.popToRootView()
+                isCameraViewPresented = false
             }
             
-            if rootView == .camera {
-                ActionButton(
-                    title: "술자리 다시보기",
-                    buttonType: .primary
-                ) {
-                    partyUseCase.presentCameraView(to: false)
-                    NavigationHelper.popToRootView()
-                    homePathModel.paths.append(.partyList(party: currentParty))
-                }
+            ActionButton(
+                title: "술자리 다시보기",
+                buttonType: .primary
+            ) {
+                isCameraViewPresented = false
+                homePathModel.paths.append(.partyList(party: currentParty))
             }
         }
         .padding()
@@ -251,9 +240,6 @@ private struct ShutdownInfoButtonView: View {
                 .presentationBackground(.black.opacity(0.7))
         }
         .transaction { $0.disablesAnimations = true }
-        .onAppear {
-            isShutdownMessagePresented.toggle()
-        }
     }
 }
 
@@ -261,7 +247,7 @@ private struct ShutdownInfoButtonView: View {
 
 #if DEBUG
 #Preview {
-    PartyResultView(rootView: .camera)
+    PartyResultView(isCameraViewPresented: .constant(true))
         .environment(HomePathModel())
         .modelContainer(ModelContainerCoordinator.mock)
         .environment(
