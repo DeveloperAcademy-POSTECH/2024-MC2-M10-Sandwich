@@ -23,6 +23,7 @@ struct PartyCameraView: View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
                 CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
+                Spacer().frame(height: 16)
                 CameraMiddleView()
                 Spacer()
                 CameraBottomView(isShotDisabled: $isShotDisabled)
@@ -73,7 +74,7 @@ private struct CameraHeaderView: View {
             
             StepInfoView()
         }
-        .padding(.top, 24)
+        .padding(.top, 12)
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
             FinishPopupView(memberList: partyUseCase.partys.last?.memberList ?? [])
                 .foregroundStyle(.shotFF)
@@ -121,23 +122,21 @@ private struct CameraMiddleView: View {
     
     var body: some View {
         VStack {
-            ZStack {
+            ZStack(alignment: .bottom) {
                 CameraPreview()
                 
-                if partyUseCase.state.isPartyShutdown {
-                    Text("미션 시간이 지나 술자리가 종료되었어요!")
-                        .pretendard(.semiBold, 16)
+                if !cameraUseCase.state.isSelfieMode
+                    && cameraUseCase.state.isCaptureMode
+                    && !partyUseCase.state.isPartyShutdown {
+                    HStack(spacing: 6) {
+                        WideAngleButton()
+                        GeneralAngleButton()
+                    }
+                    .padding(.bottom, 12)
                 }
             }
+            
             ListButton()
-            if !cameraUseCase.state.isSelfieMode
-                && cameraUseCase.state.isCaptureMode
-                && !partyUseCase.state.isPartyShutdown {
-                HStack {
-                    WideAngleButton()
-                    GeneralAngleButton()
-                }
-            }
         }
         .zIndex(-1)
     }
@@ -149,6 +148,12 @@ private struct CameraMiddleView: View {
             .overlay(alignment: .center) {
                 if cameraUseCase.state.isPhotoDataPrepare {
                     PhotoPreview()
+                }
+            }
+            .overlay(alignment: .center) {
+                if partyUseCase.state.isPartyShutdown {
+                    Text("미션 시간이 지나 술자리가 종료되었어요!")
+                        .pretendard(.semiBold, 16)
                 }
             }
             .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
@@ -201,11 +206,13 @@ private struct CameraMiddleView: View {
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 26, height: 26)
-                    .foregroundColor(.shotFF)
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(.shot00)
+                    .opacity(0.3)
                 
                 Text(".5")
-                    .foregroundColor(.black)
+                    .pretendard(.medium, 13)
+                    .foregroundColor(.shotFF)
             }
         }
     }
@@ -218,11 +225,13 @@ private struct CameraMiddleView: View {
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 26, height: 26)
-                    .foregroundColor(.shotFF)
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(.shot00)
+                    .opacity(0.3)
                 
-                Text("1")
-                    .foregroundColor(.black)
+                Text("1x")
+                    .pretendard(.medium, 13)
+                    .foregroundColor(.shotFF)
             }
         }
     }
