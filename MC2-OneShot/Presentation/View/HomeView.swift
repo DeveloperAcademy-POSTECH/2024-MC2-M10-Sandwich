@@ -14,22 +14,34 @@ struct HomeView: View {
     @State private(set) var partyUseCase: PartyUseCase
     @State private var homePathModel: HomePathModel = .init()
     @State private var isPartySetViewPresented = false
+    @State private var isCameraViewPresented = false
     
     var body: some View {
-        @Bindable var state = partyUseCase.state
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
                 HeaderView()
                 ListView()
-                PartyButton(isPartySetViewPresented: $isPartySetViewPresented)
+                PartyButton(
+                    isPartySetViewPresented: $isPartySetViewPresented,
+                    isCameraViewPresented: $isCameraViewPresented
+                )
             }
             .homePathDestination()
-            .sheet(isPresented: $isPartySetViewPresented) { PartySetView() }
+            .sheet(isPresented: $isPartySetViewPresented) {
+                PartySetView(isCameraViewPresented: $isCameraViewPresented)
+            }
         }
-        .fullScreenCover(isPresented: $state.isCameraViewPresented) { PartyCameraView() }
+        .fullScreenCover(isPresented: $isCameraViewPresented) {
+            PartyCameraView(isCameraViewPresented: $isCameraViewPresented)
+        }
         .environment(partyUseCase)
         .environment(homePathModel)
-        .onAppear{ partyUseCase.initialSetup() }
+        .onAppear {
+            partyUseCase.initialSetup()
+            if partyUseCase.state.isPartyLive {
+                isCameraViewPresented.toggle()
+            }
+        }
     }
 }
 
@@ -85,7 +97,9 @@ private struct ListView: View {
 private struct PartyButton: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
+    
     @Binding private(set) var isPartySetViewPresented: Bool
+    @Binding private(set) var isCameraViewPresented: Bool
     
     var body: some View {
         ActionButton(
@@ -93,7 +107,7 @@ private struct PartyButton: View {
             buttonType: partyUseCase.state.isPartyLive ? .popupfinish : .primary
         ) {
             partyUseCase.state.isPartyLive ?
-            partyUseCase.presentCameraView(to: true) :
+            isCameraViewPresented.toggle() :
             isPartySetViewPresented.toggle()
         }
         .padding(.horizontal, 16)

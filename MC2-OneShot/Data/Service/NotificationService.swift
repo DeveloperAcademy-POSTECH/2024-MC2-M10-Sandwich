@@ -66,8 +66,6 @@ extension NotificationService {
         
         let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
-        print("dateComponents: ", dateComponents)
-        
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)

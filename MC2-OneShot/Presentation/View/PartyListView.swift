@@ -16,7 +16,6 @@ struct PartyListView: View {
     let party: Party
     
     var body: some View {
-        @Bindable var state = partyUseCase.state
         VStack(spacing: 0) {
             HeaderView(party: party)
             Divider()
@@ -25,12 +24,8 @@ struct PartyListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                if party.isLive { FinishPartyButton(party: party) }
-                else { CommentButton(party: party) }
+                CommentButton(party: party)
             }
-        }
-        .fullScreenCover(isPresented: $state.isResultViewPresented) {
-            PartyResultView(rootView: .list)
         }
     }
 }
