@@ -226,6 +226,7 @@ private struct CameraBottomView: View {
     @ViewBuilder
     private func FrontBackButton() -> some View {
         Button {
+            delayButton()
             cameraUseCase.toggleFrontBack()
             isFlashDisabled = cameraUseCase.state.isSelfieMode
         } label: {
@@ -251,6 +252,14 @@ private struct CameraBottomView: View {
         }
         
         Spacer()
+    }
+    
+    /// 버튼을 누른 뒤 버튼을 잠시 비활성화 합니다.
+    private func delayButton() {
+        isShotDisabled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            isShotDisabled = false
+        }
     }
 }
 
@@ -321,7 +330,7 @@ private struct CaptureButtonView: View {
         }
     }
     
-    /// 사진 촬영 직후 버튼을 잠시 비활성화 합니다.
+    /// 버튼을 누른 뒤 버튼을 잠시 비활성화 합니다.
     private func delayButton() {
         isShotDisabled = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
