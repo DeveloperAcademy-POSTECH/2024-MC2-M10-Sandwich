@@ -16,6 +16,7 @@ struct PartyCameraView: View {
     @State private var cameraUseCase = CameraUseCase(cameraService: CameraService())
     @State private var cameraPathModel: CameraPathModel = .init()
     @State private var isShotDisabled = false
+    @State private var isFlashDisabled = false
     
     var body: some View {
         @Bindable var state = partyUseCase.state
@@ -24,7 +25,7 @@ struct PartyCameraView: View {
                 CameraHeaderView()
                 CameraMiddleView()
                 Spacer().frame(height: 48)
-                CameraBottomView(isShotDisabled: $isShotDisabled)
+                CameraBottomView(isFlashDisabled: $isFlashDisabled, isShotDisabled: $isShotDisabled)
             }
             .cameraPathDestination()
         }
@@ -34,7 +35,10 @@ struct PartyCameraView: View {
         }
         .environment(cameraUseCase)
         .environment(cameraPathModel)
-        .onAppear { cameraUseCase.requestPermission() }
+        .onAppear { 
+            cameraUseCase.requestPermission()
+            isFlashDisabled = cameraUseCase.state.isSelfieMode
+        }
     }
 }
 
@@ -216,6 +220,7 @@ private struct CameraBottomView: View {
     @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(CameraUseCase.self) private var cameraUseCase
     
+    @Binding private(set) var isFlashDisabled: Bool
     @Binding private(set) var isShotDisabled: Bool
     
     var body: some View {
@@ -243,14 +248,31 @@ private struct CameraBottomView: View {
                 cameraUseCase.toggleFlashMode()
             }
         } label: {
-            Image(symbol: cameraUseCase.state.isFlashMode ? .bolt : .boltSlash)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 32, height: 32)
-                .foregroundColor(.shotFF)
+            if cameraUseCase.state.isSelfieMode {
+                Image(symbol: .boltSlash)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 32, height: 32)
+                    .foregroundColor(.shotFF.opacity(0.5))
+            } else {
+                if cameraUseCase.state.isFlashMode {
+                    Image(symbol: .bolt)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.shotFF)
+                } else {
+                    Image(symbol: .boltSlash)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.shotFF)
+                }
+            }
         }
         .rotationEffect(cameraUseCase.state.rotation)
         .animation(.easeInOut, value: cameraUseCase.state.orientation)
+        .disabled(isFlashDisabled)
     }
     
     /// 전면/후면 카메라 전환 버튼
@@ -258,6 +280,7 @@ private struct CameraBottomView: View {
     private func FrontBackButton() -> some View {
         Button {
             cameraUseCase.toggleFrontBack()
+            isFlashDisabled = cameraUseCase.state.isSelfieMode
         } label: {
             Image(symbol: .frontBackToggle)
                 .resizable()
