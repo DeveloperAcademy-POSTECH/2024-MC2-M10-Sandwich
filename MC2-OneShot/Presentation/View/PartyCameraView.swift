@@ -72,7 +72,10 @@ private struct CameraHeaderView: View {
                     DismissButton()
                 }
                 Spacer()
-                FinishPartyButton()
+                
+                if !partyUseCase.state.isPartyShutdown {
+                    FinishPartyButton()
+                }
             }
             .padding(.horizontal, 16)
             .padding(.top, 12)
@@ -274,6 +277,20 @@ private struct CameraBottomView: View {
                 .padding(.horizontal, 36)
                 
                 CaptureButtonView(isShotDisabled: $isShotDisabled)
+            } else {
+                VStack {
+                    Spacer()
+                    
+                    ActionButton(
+                        title: "술자리 정리하기",
+                        buttonType: .primary,
+                        tapAction: {
+                            HapticManager.shared.notification(type: .success)
+                            partyUseCase.finishParty()
+                        }
+                    )
+                    .padding(.horizontal, 16)
+                }
             }
         }
     }
