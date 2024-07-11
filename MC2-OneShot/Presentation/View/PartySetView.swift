@@ -196,7 +196,10 @@ private struct MemberListView: View {
         }
         .buttonStyle(BorderlessButtonStyle())
         .fullScreenCover(isPresented: $isCameraViewPresented) {
-            MemberCameraView()
+            CameraView(
+                isCameraViewPresented: $isCameraViewPresented,
+                cameraMode: .member
+            )
         }
     }
 }

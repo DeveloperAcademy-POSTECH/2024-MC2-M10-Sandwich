@@ -1,5 +1,5 @@
 //
-//  PartyCameraView.swift
+//  CameraView.swift
 //  MC2-OneShot
 //
 //  Created by 김민준 on 5/13/24.
@@ -9,7 +9,12 @@ import SwiftUI
 
 // MARK: - PartyCameraView
 
-struct PartyCameraView: View {
+struct CameraView: View {
+    
+    enum CameraMode {
+        case party
+        case member
+    }
     
     @Environment(PartyUseCase.self) private var partyUseCase
     
@@ -20,16 +25,25 @@ struct PartyCameraView: View {
     
     @Binding private(set) var isCameraViewPresented: Bool
     
+    let cameraMode: CameraMode
+    
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
                 Spacer().frame(height: 16)
-                CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
+                CameraHeaderView(
+                    isCameraViewPresented: $isCameraViewPresented,
+                    cameraMode: cameraMode
+                )
                 Spacer().frame(height: 46)
-                CameraMiddleView()
+                CameraMiddleView(cameraMode: cameraMode)
                 Spacer().frame(height: 48)
 
-                CameraBottomView(isFlashDisabled: $isFlashDisabled, isShotDisabled: $isShotDisabled)
+                CameraBottomView(
+                    isFlashDisabled: $isFlashDisabled,
+                    isShotDisabled: $isShotDisabled,
+                    cameraMode: cameraMode
+                )
                 
                 Spacer()
             }
@@ -65,6 +79,8 @@ private struct CameraHeaderView: View {
     
     @Binding private(set) var isCameraViewPresented: Bool
     
+    let cameraMode: CameraView.CameraMode
+    
     var body: some View {
         ZStack {
             HStack {
@@ -73,14 +89,20 @@ private struct CameraHeaderView: View {
                 }
                 Spacer()
                 
-                if !partyUseCase.state.isPartyShutdown {
+                if !partyUseCase.state.isPartyShutdown && cameraMode != .member {
                     FinishPartyButton()
                 }
             }
             .padding(.horizontal, 16)
             .padding(.top, 12)
             
-            StepInfoView()
+            if cameraMode == .party {
+                StepInfoView()
+            } else {
+                Text("참가자 프로필 촬영")
+                    .pretendard(.bold, 17)
+                    .padding(.top, 12)
+            }
         }
         .padding(.top, 12)
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
@@ -134,6 +156,8 @@ private struct CameraMiddleView: View {
     @Environment(CameraPathModel.self) private var cameraPathModel
     
     @State private var cameraAngleMode: CameraAngleMode = .general
+    
+    let cameraMode: CameraView.CameraMode
     
     var body: some View {
         VStack {
@@ -218,6 +242,7 @@ private struct CameraMiddleView: View {
             .foregroundColor(.shotFF)
         }
         .disabled(!cameraUseCase.state.isCaptureMode)
+        .opacity(cameraMode == .party ? 1 : 0)
     }
     
     /// 광각 버튼
@@ -279,6 +304,8 @@ private struct CameraBottomView: View {
     @Binding private(set) var isFlashDisabled: Bool
     @Binding private(set) var isShotDisabled: Bool
     
+    let cameraMode: CameraView.CameraMode
+    
     var body: some View {
         ZStack {
             if !partyUseCase.state.isPartyShutdown {
@@ -293,7 +320,10 @@ private struct CameraBottomView: View {
                 }
                 .padding(.horizontal, 36)
                 
-                CaptureButtonView(isShotDisabled: $isShotDisabled)
+                CaptureButtonView(
+                    isShotDisabled: $isShotDisabled,
+                    cameraMode: cameraMode
+                )
             } else {
                 VStack {
                     Spacer()
@@ -397,11 +427,13 @@ private struct CaptureButtonView: View {
     
     @Binding private(set) var isShotDisabled: Bool
     
+    let cameraMode: CameraView.CameraMode
+    
     var body: some View {
         Button {
             delayButton()
             cameraUseCase.state.isCaptureMode ?
-            capturePhoto() : uploadPhoto()
+            capturePhoto() : cameraMode == .party ? uploadPhoto() :  saveMemberPhoto()
         } label: {
             ZStack {
                 if cameraUseCase.state.isCaptureMode {
@@ -451,6 +483,14 @@ private struct CaptureButtonView: View {
     private func uploadPhoto() {
         if let photo = cameraUseCase.fetchPhotoForSave() {
             partyUseCase.saveStepPhoto(photo)
+            cameraUseCase.retakePhoto()
+        }
+    }
+    
+    /// 멤버 사진을 저장합니다.
+    private func saveMemberPhoto() {
+        if let photo = cameraUseCase.fetchPhotoForSave() {
+            partyUseCase.saveMemberPhoto(photo)
             cameraUseCase.retakePhoto()
         }
     }
@@ -514,14 +554,17 @@ private struct StepInfoView: View {
 
 #if DEBUG
 #Preview {
-    PartyCameraView(isCameraViewPresented: .constant(true))
-        .environment(
-            PartyUseCase(
-                dataService: PersistentDataService(
-                    modelContext: ModelContainerCoordinator.mock.mainContext
-                ),
-                notificationService: NotificationService()
-            )
+    CameraView(
+        isCameraViewPresented: .constant(true),
+        cameraMode: .member
+    )
+    .environment(
+        PartyUseCase(
+            dataService: PersistentDataService(
+                modelContext: ModelContainerCoordinator.mock.mainContext
+            ),
+            notificationService: NotificationService()
         )
+    )
 }
 #endif

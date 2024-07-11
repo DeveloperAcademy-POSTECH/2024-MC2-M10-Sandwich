@@ -35,7 +35,10 @@ struct HomeView: View {
             }
         }
         .fullScreenCover(isPresented: $isCameraViewPresented) {
-            PartyCameraView(isCameraViewPresented: $isCameraViewPresented)
+            CameraView(
+                isCameraViewPresented: $isCameraViewPresented,
+                cameraMode: .party
+            )
         }
         .environment(partyUseCase)
         .environment(homePathModel)
