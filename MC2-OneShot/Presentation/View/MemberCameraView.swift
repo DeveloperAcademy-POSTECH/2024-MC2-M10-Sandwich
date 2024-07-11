@@ -7,25 +7,27 @@
 
 import SwiftUI
 
-import SwiftUI
-
 // MARK: - MemberCameraView
 
 struct MemberCameraView: View {
     
     @State private var cameraUseCase = CameraUseCase(cameraService: CameraService())
     @State private var isShotDisabled = false
+    @State private var isFlashDisabled = false
     
     var body: some View {
         VStack {
             CameraHeaderView()
             CameraMiddleView()
             Spacer().frame(height: 48)
-            CameraBottomView(isShotDisabled: $isShotDisabled)
+            CameraBottomView(isFlashDisabled: $isFlashDisabled, isShotDisabled: $isShotDisabled)
         }
         .disabled(isShotDisabled)
         .environment(cameraUseCase)
-        .onAppear { cameraUseCase.requestPermission() }
+        .onAppear {
+            cameraUseCase.requestPermission()
+            isFlashDisabled = cameraUseCase.state.isSelfieMode
+        }
     }
 }
 
@@ -76,10 +78,18 @@ private struct CameraMiddleView: View {
     @Environment(CameraUseCase.self) private var cameraUseCase
     
     var body: some View {
-        ZStack {
-            CameraPreview()
-            if cameraUseCase.state.isPhotoDataPrepare {
-                PhotoPreview()
+        VStack {
+            ZStack {
+                CameraPreview()
+                if cameraUseCase.state.isPhotoDataPrepare {
+                    PhotoPreview()
+                }
+            }
+            if !cameraUseCase.state.isSelfieMode {
+                HStack{
+                    WideAngleButton()
+                    GeneralAngleButton()
+                }
             }
         }
     }
@@ -115,40 +125,6 @@ private struct CameraMiddleView: View {
             .cornerRadius(15)
             .padding(.top, 36)
     }
-}
-
-// MARK: - CameraBottomView
-
-private struct CameraBottomView: View {
-    
-    @Environment(CameraUseCase.self) private var cameraUseCase
-    
-    @Binding private(set) var isShotDisabled: Bool
-    
-    var body: some View {
-        VStack{
-            if !cameraUseCase.state.isSelfieMode{
-                HStack{
-                    WideAngleButton()
-                    GeneralAngleButton()
-                }
-            }
-            ZStack {
-                HStack {
-                    if cameraUseCase.state.isCaptureMode {
-                        FlashButton()
-                        Spacer()
-                        FrontBackButton()
-                    } else {
-                        RetakeButton()
-                    }
-                }
-                .padding(.horizontal, 36)
-                
-                CaptureButtonView(isShotDisabled: $isShotDisabled)
-            }
-        }
-    }
     
     /// 광각 버튼
     @ViewBuilder
@@ -183,26 +159,76 @@ private struct CameraBottomView: View {
             }
         }
     }
+}
+
+// MARK: - CameraBottomView
+
+private struct CameraBottomView: View {
+    
+    @Environment(CameraUseCase.self) private var cameraUseCase
+    
+    @Binding private(set) var isFlashDisabled: Bool
+    @Binding private(set) var isShotDisabled: Bool
+    
+    var body: some View {
+        ZStack {
+            HStack {
+                if cameraUseCase.state.isCaptureMode {
+                    FlashButton()
+                    Spacer()
+                    FrontBackButton()
+                } else {
+                    RetakeButton()
+                }
+            }
+            .padding(.horizontal, 36)
+            
+            CaptureButtonView(isShotDisabled: $isShotDisabled)
+        }
+    }
     
     /// 플래시 버튼
     @ViewBuilder
     private func FlashButton() -> some View {
         Button {
-            cameraUseCase.toggleFlashMode()
+            if !cameraUseCase.state.isSelfieMode{
+                cameraUseCase.toggleFlashMode()
+            }
         } label: {
-            Image(symbol: cameraUseCase.state.isFlashMode ? .bolt : .boltSlash)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 32, height: 32)
-                .foregroundColor(.shotFF)
+            if cameraUseCase.state.isSelfieMode {
+                Image(symbol: .boltSlash)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 32, height: 32)
+                    .foregroundColor(.shotFF.opacity(0.5))
+            } else {
+                if cameraUseCase.state.isFlashMode {
+                    Image(symbol: .bolt)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.shotFF)
+                } else {
+                    Image(symbol: .boltSlash)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.shotFF)
+                }
+            }
         }
+        .rotationEffect(cameraUseCase.state.rotation)
+        .animation(.easeInOut, value: cameraUseCase.state.orientation)
+        .disabled(isFlashDisabled)
     }
     
     /// 전면/후면 카메라 전환 버튼
     @ViewBuilder
     private func FrontBackButton() -> some View {
         Button {
+            delayButton()
             cameraUseCase.toggleFrontBack()
+            isFlashDisabled = cameraUseCase.state.isSelfieMode
         } label: {
             Image(symbol: .frontBackToggle)
                 .resizable()
@@ -210,6 +236,8 @@ private struct CameraBottomView: View {
                 .frame(width: 32, height: 32)
                 .foregroundColor(.shotFF)
         }
+        .rotationEffect(cameraUseCase.state.rotation)
+        .animation(.easeInOut, value: cameraUseCase.state.orientation)
     }
     
     /// 사진 촬영 이후 재촬영 버튼
@@ -224,6 +252,14 @@ private struct CameraBottomView: View {
         }
         
         Spacer()
+    }
+    
+    /// 버튼을 누른 뒤 버튼을 잠시 비활성화 합니다.
+    private func delayButton() {
+        isShotDisabled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            isShotDisabled = false
+        }
     }
 }
 
@@ -294,7 +330,7 @@ private struct CaptureButtonView: View {
         }
     }
     
-    /// 사진 촬영 직후 버튼을 잠시 비활성화 합니다.
+    /// 버튼을 누른 뒤 버튼을 잠시 비활성화 합니다.
     private func delayButton() {
         isShotDisabled = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
