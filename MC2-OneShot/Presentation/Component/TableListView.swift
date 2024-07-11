@@ -17,6 +17,8 @@ struct TableListView: View {
     @State private var isShowAlert = false
     @State private var selectedParty: Party?
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     var body: some View {
         List(partyUseCase.partys.reversed()) { party in
             TableListCellView(
@@ -28,7 +30,11 @@ struct TableListView: View {
                 notiCycle: party.notiCycle
             )
             .onTapGesture {
-                homePathModel.paths.append(.partyList(party: party))
+                if party.isLive {
+                    isCameraViewPresented.toggle()
+                } else {
+                    homePathModel.paths.append(.partyList(party: party))
+                }
             }
             .swipeActions {
                 Button {
@@ -69,7 +75,7 @@ struct TableListView: View {
 #if DEBUG
 #Preview {
     let modelContainer = ModelContainerCoordinator.mock
-    return TableListView()
+    return TableListView(isCameraViewPresented: .constant(false))
         .environment(HomePathModel())
         .modelContainer(modelContainer)
 }

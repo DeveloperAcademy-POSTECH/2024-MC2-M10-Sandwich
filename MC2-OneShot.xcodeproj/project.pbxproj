@@ -24,7 +24,7 @@
 		8264EA142BF2000A00586FA0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8264EA132BF2000A00586FA0 /* Assets.xcassets */; };
 		8264EA172BF2000A00586FA0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8264EA162BF2000A00586FA0 /* Preview Assets.xcassets */; };
 		8264EA242BF200E200586FA0 /* PartySetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA232BF200E200586FA0 /* PartySetView.swift */; };
-		8264EA262BF200EB00586FA0 /* PartyCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA252BF200EB00586FA0 /* PartyCameraView.swift */; };
+		8264EA262BF200EB00586FA0 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA252BF200EB00586FA0 /* CameraView.swift */; };
 		8264EA282BF2013000586FA0 /* PartyResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA272BF2013000586FA0 /* PartyResultView.swift */; };
 		8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA292BF2014200586FA0 /* PartyListView.swift */; };
 		8264EA2C2BF2015C00586FA0 /* FinishPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8264EA2B2BF2015C00586FA0 /* FinishPopupView.swift */; };
@@ -64,7 +64,6 @@
 		98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
 		BF2E72C32BF3472C008A2D1F /* Colorsets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */; };
-		BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7C8E832C01F300005638A2 /* MemberCameraView.swift */; };
 		BFB534072BF342840013E9FE /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB533FE2BF342830013E9FE /* Pretendard-Light.otf */; };
 		BFB534082BF342840013E9FE /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB533FF2BF342830013E9FE /* Pretendard-Thin.otf */; };
 		BFB534092BF342840013E9FE /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BFB534002BF342830013E9FE /* Pretendard-Bold.otf */; };
@@ -96,7 +95,7 @@
 		8264EA132BF2000A00586FA0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8264EA162BF2000A00586FA0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8264EA232BF200E200586FA0 /* PartySetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartySetView.swift; sourceTree = "<group>"; };
-		8264EA252BF200EB00586FA0 /* PartyCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyCameraView.swift; sourceTree = "<group>"; };
+		8264EA252BF200EB00586FA0 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		8264EA272BF2013000586FA0 /* PartyResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyResultView.swift; sourceTree = "<group>"; };
 		8264EA292BF2014200586FA0 /* PartyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartyListView.swift; sourceTree = "<group>"; };
 		8264EA2B2BF2015C00586FA0 /* FinishPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishPopupView.swift; sourceTree = "<group>"; };
@@ -136,7 +135,6 @@
 		98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
 		BF2E72C22BF3472C008A2D1F /* Colorsets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colorsets.xcassets; sourceTree = "<group>"; };
-		BF7C8E832C01F300005638A2 /* MemberCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCameraView.swift; sourceTree = "<group>"; };
 		BFB533FE2BF342830013E9FE /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
 		BFB533FF2BF342830013E9FE /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		BFB534002BF342830013E9FE /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
@@ -325,8 +323,7 @@
 				8264EA112BF2000900586FA0 /* HomeView.swift */,
 				19A1DAF42BF88ADA00C53D8C /* SearchView.swift */,
 				8264EA232BF200E200586FA0 /* PartySetView.swift */,
-				8264EA252BF200EB00586FA0 /* PartyCameraView.swift */,
-				BF7C8E832C01F300005638A2 /* MemberCameraView.swift */,
+				8264EA252BF200EB00586FA0 /* CameraView.swift */,
 				8264EA292BF2014200586FA0 /* PartyListView.swift */,
 				8264EA272BF2013000586FA0 /* PartyResultView.swift */,
 			);
@@ -481,7 +478,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				827CF4D52C0CBB04008F86BF /* PersistentDataService.swift in Sources */,
-				8264EA262BF200EB00586FA0 /* PartyCameraView.swift in Sources */,
+				8264EA262BF200EB00586FA0 /* CameraView.swift in Sources */,
 				827CF4DD2C0DE8E0008F86BF /* PartyUseCase.swift in Sources */,
 				828461602C12DC9100860239 /* Helper+Haptic.swift in Sources */,
 				8284615C2C12B3E500860239 /* PhotoSaveService.swift in Sources */,
@@ -507,7 +504,6 @@
 				827CF4D72C0CBB35008F86BF /* PersistentDataServiceInterface.swift in Sources */,
 				8287C09D2C1F05F4000C8C3E /* Party.swift in Sources */,
 				827CF4DF2C105718008F86BF /* NotificationServiceInterface.swift in Sources */,
-				BF7C8E842C01F300005638A2 /* MemberCameraView.swift in Sources */,
 				8264EA2A2BF2014200586FA0 /* PartyListView.swift in Sources */,
 				8264EA102BF2000900586FA0 /* MC2_OneShotApp.swift in Sources */,
 				8287C0A32C1F062F000C8C3E /* Member.swift in Sources */,
@@ -671,19 +667,21 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = OneShot;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "이 앱은 술자리를 함께하는 일행의 모습을 기록하고, STEP별 술자리 사진을 찍기 위해 카메라에 접근합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "이 앱은 사진을 저장하기 위해 사진 라이브러리에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown UISupportedInterfaceOrientations~ipad UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UISupportedInterfaceOrientations~ipad";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UISupportedInterfaceOrientations~ipad";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -709,19 +707,21 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MC2-OneShot/App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = OneShot;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "이 앱은 술자리를 함께하는 일행의 모습을 기록하고, STEP별 술자리 사진을 찍기 위해 카메라에 접근합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "이 앱은 사진을 저장하기 위해 사진 라이브러리에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown UISupportedInterfaceOrientations~ipad UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UISupportedInterfaceOrientations~ipad";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UISupportedInterfaceOrientations~ipad";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sandwich.MC2-OneShot2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

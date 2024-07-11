@@ -350,13 +350,17 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
     func photoOutput(
         _ output: AVCapturePhotoOutput,
         willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings
-    ) { AudioServicesDisposeSystemSoundID(1108) }
+    ) {
+        // AudioServicesDisposeSystemSoundID(1108)
+    }
     
     /// 카메라 촬영음 음소거
     func photoOutput(
         _ output: AVCapturePhotoOutput,
         didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings
-    ) { AudioServicesDisposeSystemSoundID(1108) }
+    ) {
+        // AudioServicesDisposeSystemSoundID(1108)
+    }
 }
 
 // MARK: - Camera Preview 구현

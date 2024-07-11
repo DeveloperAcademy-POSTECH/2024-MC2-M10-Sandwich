@@ -1,5 +1,5 @@
 //
-//  PartyCameraView.swift
+//  CameraView.swift
 //  MC2-OneShot
 //
 //  Created by 김민준 on 5/13/24.
@@ -9,7 +9,12 @@ import SwiftUI
 
 // MARK: - PartyCameraView
 
-struct PartyCameraView: View {
+struct CameraView: View {
+    
+    enum CameraMode {
+        case party
+        case member
+    }
     
     @Environment(PartyUseCase.self) private var partyUseCase
     
@@ -20,14 +25,27 @@ struct PartyCameraView: View {
     
     @Binding private(set) var isCameraViewPresented: Bool
     
+    let cameraMode: CameraMode
+    
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
-                CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
                 Spacer().frame(height: 16)
-                CameraMiddleView()
+                CameraHeaderView(
+                    isCameraViewPresented: $isCameraViewPresented,
+                    cameraMode: cameraMode
+                )
+                Spacer().frame(height: 46)
+                CameraMiddleView(cameraMode: cameraMode)
                 Spacer().frame(height: 48)
-                CameraBottomView(isFlashDisabled: $isFlashDisabled, isShotDisabled: $isShotDisabled)
+
+                CameraBottomView(
+                    isFlashDisabled: $isFlashDisabled,
+                    isShotDisabled: $isShotDisabled,
+                    cameraMode: cameraMode
+                )
+                
+                Spacer()
             }
             .cameraPathDestination()
         }
@@ -61,6 +79,8 @@ private struct CameraHeaderView: View {
     
     @Binding private(set) var isCameraViewPresented: Bool
     
+    let cameraMode: CameraView.CameraMode
+    
     var body: some View {
         ZStack {
             HStack {
@@ -68,12 +88,21 @@ private struct CameraHeaderView: View {
                     DismissButton()
                 }
                 Spacer()
-                FinishPartyButton()
+                
+                if !partyUseCase.state.isPartyShutdown && cameraMode != .member {
+                    FinishPartyButton()
+                }
             }
             .padding(.horizontal, 16)
             .padding(.top, 12)
             
-            StepInfoView()
+            if cameraMode == .party {
+                StepInfoView()
+            } else {
+                Text("참가자 프로필 촬영")
+                    .pretendard(.bold, 17)
+                    .padding(.top, 12)
+            }
         }
         .padding(.top, 12)
         .fullScreenCover(isPresented: $isFinishPopupPresented) {
@@ -117,9 +146,18 @@ private struct CameraHeaderView: View {
 
 private struct CameraMiddleView: View {
     
+    enum CameraAngleMode {
+        case general
+        case wide
+    }
+    
     @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(CameraUseCase.self) private var cameraUseCase
     @Environment(CameraPathModel.self) private var cameraPathModel
+    
+    @State private var cameraAngleMode: CameraAngleMode = .general
+    
+    let cameraMode: CameraView.CameraMode
     
     var body: some View {
         VStack {
@@ -168,7 +206,6 @@ private struct CameraMiddleView: View {
             .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
             .aspectRatio(1, contentMode: .fit)
             .cornerRadius(15)
-            .padding(.top, 36)
             .clipped()
             .gesture(
                 MagnifyGesture()
@@ -205,44 +242,55 @@ private struct CameraMiddleView: View {
             .foregroundColor(.shotFF)
         }
         .disabled(!cameraUseCase.state.isCaptureMode)
+        .opacity(cameraMode == .party ? 1 : 0)
     }
     
     /// 광각 버튼
     @ViewBuilder
     private func WideAngleButton() -> some View {
         Button {
+            cameraAngleMode = .wide
             cameraUseCase.wideAngle()
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 28, height: 28)
+                    .frame(width: 30, height: 30)
                     .foregroundColor(.shot00)
-                    .opacity(0.3)
+                    .opacity(0.4)
                 
-                Text(".5")
-                    .pretendard(.medium, 13)
-                    .foregroundColor(.shotFF)
+                Text(".5x")
+                    .foregroundColor(cameraAngleMode == .wide ? .shotGreen : .shotFF)
+                    .pretendard(
+                        cameraAngleMode == .wide ? .bold : .medium,
+                        cameraAngleMode == .wide ? 12 : 10
+                    )
             }
         }
+        .disabled(cameraAngleMode == .wide)
     }
     
     /// 일반 각 버튼
     @ViewBuilder
     private func GeneralAngleButton() -> some View {
         Button {
+            cameraAngleMode = .general
             cameraUseCase.generalAngle()
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 28, height: 28)
+                    .frame(width: 30, height: 30)
                     .foregroundColor(.shot00)
-                    .opacity(0.3)
+                    .opacity(0.4)
                 
                 Text("1x")
-                    .pretendard(.medium, 13)
-                    .foregroundColor(.shotFF)
+                    .foregroundColor(cameraAngleMode == .general ? .shotGreen : .shotFF)
+                    .pretendard(
+                        cameraAngleMode == .general ? .bold : .medium,
+                        cameraAngleMode == .general ? 12 : 10
+                    )
             }
         }
+        .disabled(cameraAngleMode == .general)
     }
 }
 
@@ -255,6 +303,8 @@ private struct CameraBottomView: View {
     
     @Binding private(set) var isFlashDisabled: Bool
     @Binding private(set) var isShotDisabled: Bool
+    
+    let cameraMode: CameraView.CameraMode
     
     var body: some View {
         ZStack {
@@ -270,10 +320,26 @@ private struct CameraBottomView: View {
                 }
                 .padding(.horizontal, 36)
                 
-                CaptureButtonView(isShotDisabled: $isShotDisabled)
+                CaptureButtonView(
+                    isShotDisabled: $isShotDisabled,
+                    cameraMode: cameraMode
+                )
+            } else {
+                VStack {
+                    Spacer()
+                    
+                    ActionButton(
+                        title: "술자리 정리하기",
+                        buttonType: .primary,
+                        tapAction: {
+                            HapticManager.shared.notification(type: .success)
+                            partyUseCase.finishParty()
+                        }
+                    )
+                    .padding(.horizontal, 16)
+                }
             }
         }
-        .padding(.bottom, 16)
     }
     
     /// 플래시 버튼
@@ -361,11 +427,13 @@ private struct CaptureButtonView: View {
     
     @Binding private(set) var isShotDisabled: Bool
     
+    let cameraMode: CameraView.CameraMode
+    
     var body: some View {
         Button {
             delayButton()
             cameraUseCase.state.isCaptureMode ?
-            capturePhoto() : uploadPhoto()
+            capturePhoto() : cameraMode == .party ? uploadPhoto() :  saveMemberPhoto()
         } label: {
             ZStack {
                 if cameraUseCase.state.isCaptureMode {
@@ -415,6 +483,14 @@ private struct CaptureButtonView: View {
     private func uploadPhoto() {
         if let photo = cameraUseCase.fetchPhotoForSave() {
             partyUseCase.saveStepPhoto(photo)
+            cameraUseCase.retakePhoto()
+        }
+    }
+    
+    /// 멤버 사진을 저장합니다.
+    private func saveMemberPhoto() {
+        if let photo = cameraUseCase.fetchPhotoForSave() {
+            partyUseCase.saveMemberPhoto(photo)
             cameraUseCase.retakePhoto()
         }
     }
@@ -478,14 +554,17 @@ private struct StepInfoView: View {
 
 #if DEBUG
 #Preview {
-    PartyCameraView(isCameraViewPresented: .constant(true))
-        .environment(
-            PartyUseCase(
-                dataService: PersistentDataService(
-                    modelContext: ModelContainerCoordinator.mock.mainContext
-                ),
-                notificationService: NotificationService()
-            )
+    CameraView(
+        isCameraViewPresented: .constant(true),
+        cameraMode: .member
+    )
+    .environment(
+        PartyUseCase(
+            dataService: PersistentDataService(
+                modelContext: ModelContainerCoordinator.mock.mainContext
+            ),
+            notificationService: NotificationService()
         )
+    )
 }
 #endif
