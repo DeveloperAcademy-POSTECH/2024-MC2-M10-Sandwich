@@ -23,11 +23,15 @@ struct PartyCameraView: View {
     var body: some View {
         NavigationStack(path: $cameraPathModel.paths) {
             VStack {
-                CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
                 Spacer().frame(height: 16)
+                CameraHeaderView(isCameraViewPresented: $isCameraViewPresented)
+                Spacer().frame(height: 46)
                 CameraMiddleView()
                 Spacer().frame(height: 48)
+
                 CameraBottomView(isFlashDisabled: $isFlashDisabled, isShotDisabled: $isShotDisabled)
+                
+                Spacer()
             }
             .cameraPathDestination()
         }
@@ -168,7 +172,6 @@ private struct CameraMiddleView: View {
             .frame(width: ScreenSize.screenWidth, height: ScreenSize.screenWidth)
             .aspectRatio(1, contentMode: .fit)
             .cornerRadius(15)
-            .padding(.top, 36)
             .clipped()
             .gesture(
                 MagnifyGesture()
@@ -273,7 +276,6 @@ private struct CameraBottomView: View {
                 CaptureButtonView(isShotDisabled: $isShotDisabled)
             }
         }
-        .padding(.bottom, 16)
     }
     
     /// 플래시 버튼

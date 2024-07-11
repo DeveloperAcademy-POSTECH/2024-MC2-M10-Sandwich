@@ -20,11 +20,14 @@ struct HomeView: View {
         NavigationStack(path: $homePathModel.paths) {
             VStack(alignment: .leading) {
                 HeaderView()
-                ListView()
-                PartyButton(
-                    isPartySetViewPresented: $isPartySetViewPresented,
-                    isCameraViewPresented: $isCameraViewPresented
-                )
+                ListView(isCameraViewPresented: $isCameraViewPresented)
+                
+                if !partyUseCase.state.isPartyLive {
+                    PartyButton(
+                        isPartySetViewPresented: $isPartySetViewPresented,
+                        isCameraViewPresented: $isCameraViewPresented
+                    )
+                }
             }
             .homePathDestination()
             .sheet(isPresented: $isPartySetViewPresented) {
@@ -81,13 +84,15 @@ private struct ListView: View {
     
     @Environment(PartyUseCase.self) private var partyUseCase
     
+    @Binding private(set) var isCameraViewPresented: Bool
+    
     var body: some View {
         ZStack {
             Image(.firstInfo)
                 .padding(.bottom, 48)
                 .opacity(partyUseCase.partys.isEmpty ? 1 : 0)
             
-            TableListView()
+            TableListView(isCameraViewPresented: $isCameraViewPresented)
         }
     }
 }
