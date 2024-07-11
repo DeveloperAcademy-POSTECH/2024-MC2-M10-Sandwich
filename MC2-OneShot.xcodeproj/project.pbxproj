@@ -60,7 +60,6 @@
 		82A0C79F2C030CBA00686604 /* HomePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C79E2C030CBA00686604 /* HomePath.swift */; };
 		82A0C7A12C030CE000686604 /* CameraPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A02C030CE000686604 /* CameraPath.swift */; };
 		82A0C7AA2C03179400686604 /* TableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A0C7A92C03179400686604 /* TableListView.swift */; };
-		82B155F32C3FC40C00BF777C /* MemberCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B155F22C3FC40C00BF777C /* MemberCameraView.swift */; };
 		98387E542C0578AE006970F6 /* Helper+ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */; };
 		98BA9D4E2BF6DF4200BEEDCC /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */; };
 		98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */; };
@@ -132,7 +131,6 @@
 		82A0C79E2C030CBA00686604 /* HomePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePath.swift; sourceTree = "<group>"; };
 		82A0C7A02C030CE000686604 /* CameraPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPath.swift; sourceTree = "<group>"; };
 		82A0C7A92C03179400686604 /* TableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableListView.swift; sourceTree = "<group>"; };
-		82B155F22C3FC40C00BF777C /* MemberCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberCameraView.swift; sourceTree = "<group>"; };
 		98387E532C0578AE006970F6 /* Helper+ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+ScreenSize.swift"; sourceTree = "<group>"; };
 		98BA9D4D2BF6DF4200BEEDCC /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
 		98E4917F2BF5F36D00AD105F /* Helper+IntFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Helper+IntFormatter.swift"; sourceTree = "<group>"; };
@@ -326,7 +324,6 @@
 				19A1DAF42BF88ADA00C53D8C /* SearchView.swift */,
 				8264EA232BF200E200586FA0 /* PartySetView.swift */,
 				8264EA252BF200EB00586FA0 /* CameraView.swift */,
-				82B155F22C3FC40C00BF777C /* MemberCameraView.swift */,
 				8264EA292BF2014200586FA0 /* PartyListView.swift */,
 				8264EA272BF2013000586FA0 /* PartyResultView.swift */,
 			);
@@ -512,7 +509,6 @@
 				8287C0A32C1F062F000C8C3E /* Member.swift in Sources */,
 				196B6A942BFED0E20043E196 /* Helper+BackSwipeGesture.swift in Sources */,
 				BFB534132BF3451B0013E9FE /* Helper+CustomFont.swift in Sources */,
-				82B155F32C3FC40C00BF777C /* MemberCameraView.swift in Sources */,
 				19A1DAF52BF88ADA00C53D8C /* SearchView.swift in Sources */,
 				828461562C11DC2400860239 /* StepListView.swift in Sources */,
 				98E491802BF5F36E00AD105F /* Helper+IntFormatter.swift in Sources */,
