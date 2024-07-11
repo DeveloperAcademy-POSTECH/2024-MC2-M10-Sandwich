@@ -124,9 +124,16 @@ private struct CameraHeaderView: View {
 
 private struct CameraMiddleView: View {
     
+    enum CameraAngleMode {
+        case general
+        case wide
+    }
+    
     @Environment(PartyUseCase.self) private var partyUseCase
     @Environment(CameraUseCase.self) private var cameraUseCase
     @Environment(CameraPathModel.self) private var cameraPathModel
+    
+    @State private var cameraAngleMode: CameraAngleMode = .general
     
     var body: some View {
         VStack {
@@ -217,38 +224,48 @@ private struct CameraMiddleView: View {
     @ViewBuilder
     private func WideAngleButton() -> some View {
         Button {
+            cameraAngleMode = .wide
             cameraUseCase.wideAngle()
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 28, height: 28)
+                    .frame(width: 30, height: 30)
                     .foregroundColor(.shot00)
-                    .opacity(0.3)
+                    .opacity(0.4)
                 
-                Text(".5")
-                    .pretendard(.medium, 13)
-                    .foregroundColor(.shotFF)
+                Text(".5x")
+                    .foregroundColor(cameraAngleMode == .wide ? .shotGreen : .shotFF)
+                    .pretendard(
+                        cameraAngleMode == .wide ? .bold : .medium,
+                        cameraAngleMode == .wide ? 12 : 10
+                    )
             }
         }
+        .disabled(cameraAngleMode == .wide)
     }
     
     /// 일반 각 버튼
     @ViewBuilder
     private func GeneralAngleButton() -> some View {
         Button {
+            cameraAngleMode = .general
             cameraUseCase.generalAngle()
         } label: {
             ZStack{
                 Circle()
-                    .frame(width: 28, height: 28)
+                    .frame(width: 30, height: 30)
                     .foregroundColor(.shot00)
-                    .opacity(0.3)
+                    .opacity(0.4)
                 
                 Text("1x")
-                    .pretendard(.medium, 13)
-                    .foregroundColor(.shotFF)
+                    .foregroundColor(cameraAngleMode == .general ? .shotGreen : .shotFF)
+                    .pretendard(
+                        cameraAngleMode == .general ? .bold : .medium,
+                        cameraAngleMode == .general ? 12 : 10
+                    )
             }
         }
+        .disabled(cameraAngleMode == .general)
     }
 }
 
